@@ -84,6 +84,6 @@ class NestudioComponent extends Component
 
     public function render()
     {
-        return view('livewire.Nestudio-component');
+        return view('livewire.nestudio-component');
     }
 }
