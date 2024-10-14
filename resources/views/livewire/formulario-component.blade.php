@@ -400,42 +400,33 @@
             {{-- evidenciaPDF --}}
             <div class="relative">
                 <label for="dropzone-file"
-                    class="mx-auto cursor-pointer flex w-full max-w-lg flex-col items-center rounded-xl border-2 border-dashed border-blue-400 bg-white p-6 text-center">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-blue-500" fill="none"
-                        viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    class="mx-auto cursor-pointer flex w-full max-w-lg flex-col items-center rounded-xl border-2 border-dashed p-6 text-center
+                    @if($uploaded) border-green-400 bg-green-50 text-green-500 @else border-blue-400 bg-white text-blue-500 @endif">
+                    
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10"
+                        fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"
+                        @if($uploaded) class="text-green-500" @else class="text-blue-500" @endif>
                         <path stroke-linecap="round" stroke-linejoin="round"
                             d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
                     </svg>
-
-                    <h2 class="mt-4 text-xl font-medium text-gray-700 tracking-wide">Anexa documentos de soporte
+            
+                    <h2 class="mt-4 text-xl font-medium tracking-wide
+                    @if($uploaded) text-green-700 @else text-gray-700 @endif">
+                    @if($uploaded) Anexo subido @else Anexa documentos de soporte @endif 
                     </h2>
-
-                    <p class="mt-2 text-gray-500 tracking-wide">Fornatos permitidos: .7z .csv .doc .docm .docx
-                        .dotm
-                        .dotx .flv .gif .tif .tiff .jpg .jpeg .mp3 .pdf .png .pot .potx .pps .ppsm .ppsx .ppt .pptx
-                        .rar
-                        .swf .xls .xlsm .xlsx .zip
+            
+                    <p class="mt-2 tracking-wide
+                    @if($uploaded) text-green-500 @else text-gray-500 @endif">
+                        Formatos permitidos: .7z .csv .doc .docm .docx .dotm .dotx .flv .gif .tif .tiff .jpg .jpeg .mp3 .pdf .png .pot .potx .pps .ppsm .ppsx .ppt .pptx .rar .swf .xls .xlsm .xlsx .zip
                     </p>
-
+            
                     <input id="dropzone-file" type="file" wire:model="evidenciaPDF" multiple class="hidden" />
-                    <!-- Ícono de pregunta -->
-                    <div class="ml-1 tooltip">
-                        <a href="#" class="hover:text-gray-400">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                stroke-width="1.5" stroke="currentColor" class="w-4 h-4 inline-block">
-                                <path stroke-linecap="round" stroke-linejoin="round"
-                                    d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 5.25h.008v.008H12v-.008Z" />
-                            </svg>
-                        </a>
-                        <div
-                            class="absolute left-auto top-auto z-10 w-48 p-2 mt-2 text-sm text-gray-700 bg-white border border-gray-300 rounded shadow-lg invisible tooltip-item">
-                            Agregue aquí el anexo obligatorio. {{-- jhon aqui no se bien que texto poner --}}
-                        </div>
-                    </div>
+                    
                     @error('evidenciaPDF')
                         <span class="text-red-500">{{ $message }}</span>
                     @enderror
-            </div>
+                </label>
+            </div>            
 
             <div class="mb-2 mt-4 underline text-center">
                 <h2 class="text-lg">Términos y Condiciones de datos personales*</h2>
