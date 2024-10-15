@@ -81,7 +81,7 @@ class User extends Authenticatable
 
     public function tipoSolicitante()
     {
-        return $this->belongsTo(TSolicitante::class, 'id_tipoSolicitante');
+        return $this->belongsTo(Tsolicitante::class, 'id_tipoSolicitante');
     }
 
     public function tipoDocumento()

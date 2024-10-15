@@ -89,7 +89,7 @@
                     :value="old('numeroIdentificacion')" required autofocus autocomplete="numeroIdentificacion" />
             </div>
 
-            <div x-data="geoData()" class="p-4 bg-gray-100">
+            <div x-data="geoData" class="p-4 bg-gray-100">
                 <x-label value="{{ __('Ciudad de Expedicion') }}" class="block text-center" />
                 <div class="mb-4">
                     <label for="country" class="block text-sm font-medium text-gray-700">País</label>
