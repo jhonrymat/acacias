@@ -38,6 +38,8 @@ class FormularioComponent extends Component
     public $id_barrio = '';
     public $direccion = '';
     public $evidenciaPDF = [];
+    
+    public $uploaded = false;
     public $terminos = '';
     public $observaciones = '';
 
@@ -115,7 +117,11 @@ class FormularioComponent extends Component
         $this->reset();
     }
 
-
+    // funcion para cambiar los colores de la evidencia pdf
+    public function updatedEvidenciaPDF()
+    {
+        $this->uploaded = true;
+    }
 
     public function render()
     {
