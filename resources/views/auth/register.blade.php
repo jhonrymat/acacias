@@ -307,7 +307,7 @@
                     :value="old('numeroIdentificacion')" required autofocus autocomplete="numeroIdentificacion" />
             </div>
 
-            <div x-data="geoData" class="p-4 bg-gray-100">
+            <div x-data="geoData()" class="p-4 bg-gray-100">
                 <x-label value="{{ __('Ciudad de Expedicion') }}" class="block text-center" />
                 
                 <div class="mb-4 relative">
@@ -559,7 +559,7 @@
                     selectedCity: null,
 
                     async init() {
-                        const response = await fetch('http://api.geonames.org/countryInfoJSON?username=andres293&lang=es');
+                        const response = await fetch('https://secure.geonames.org/countryInfoJSON?username=andres293&lang=es');
                         const data = await response.json();
                         this.countries = data.geonames.sort((a, b) => a.countryName.localeCompare(b.countryName));
                     },
@@ -569,7 +569,7 @@
                         if (!country) return;
 
                         const response = await fetch(
-                            `http://api.geonames.org/childrenJSON?geonameId=${country.geonameId}&username=andres293&lang=es`
+                            `https://secure.geonames.org/childrenJSON?geonameId=${country.geonameId}&username=andres293&lang=es`
                         );
                         const data = await response.json();
                         this.departments = data.geonames.sort((a, b) => a.name.localeCompare(b.name));
@@ -584,7 +584,7 @@
 
                         // Usa el geonameId del departamento para realizar la solicitud a la API
                         const response = await fetch(
-                            `http://api.geonames.org/childrenJSON?geonameId=${department.geonameId}&username=andres293&lang=es`
+                            `https://secure.geonames.org/childrenJSON?geonameId=${department.geonameId}&username=andres293&lang=es`
                         );
                         const data = await response.json();
 
