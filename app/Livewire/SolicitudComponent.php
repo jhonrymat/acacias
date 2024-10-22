@@ -27,6 +27,7 @@ class SolicitudComponent extends Component
     public $ubicacion;
     public $evidenciaPDF;
     public $existingPDF;
+    public $estado_id;
     public $showForm = false;
 
 
@@ -38,10 +39,11 @@ class SolicitudComponent extends Component
         'barrio_id' => 'required|exists:barrios,id',
         'direccion_id' => 'required|exists:direcciones,id',
         'ubicacion' => 'required|string|max:100',
-        'evidenciaPDF' => 'nullable|file|mimes:pdf|max:10240' // Máximo 10MB
+        'evidenciaPDF' => 'nullable|file|mimes:pdf|max:10240', // Máximo 10MB,
+        'estado_id' =>'required|exists:estados,id', // Estado debe ser 0, 1, o 2
     ];
 
-    protected $listeners = ['edit', 'delete'];
+    protected $listeners = ['edit', 'delete','UpdatedEstado'];
 
 
 
@@ -66,7 +68,8 @@ class SolicitudComponent extends Component
                 'barrio_id' => $this->barrio_id,
                 'direccion_id' => $this->direccion_id,
                 'ubicacion' => $this->ubicacion,
-                'evidenciaPDF' => $filePath
+                'evidenciaPDF' => $filePath,
+                'estado_id' => $this->estado,
             ]);
         } else {
             $filePath = $this->evidenciaPDF ? $this->evidenciaPDF->store('evidencias') : null;
@@ -78,7 +81,9 @@ class SolicitudComponent extends Component
                 'barrio_id' => $this->barrio_id,
                 'direccion_id' => $this->direccion_id,
                 'ubicacion' => $this->ubicacion,
-                'evidenciaPDF' => $filePath
+                'evidenciaPDF' => $filePath,
+                'estado_id' => $this->estado,
+
             ]);
         }
 
@@ -86,6 +91,8 @@ class SolicitudComponent extends Component
         $this->showForm = false;
         $this->dispatch('Updated');
     }
+    
+
 
     public function edit($Id)
     {
@@ -100,6 +107,7 @@ class SolicitudComponent extends Component
             $this->direccion_id = $solicitud->direccion_id;
             $this->ubicacion = $solicitud->ubicacion;
             $this->existingPDF = $solicitud->evidenciaPDF;
+            $this->estado_id = $solicitud->estado;
             $this->showForm = true;
         }
     }
@@ -129,7 +137,9 @@ class SolicitudComponent extends Component
         $this->ubicacion = null;
         $this->evidenciaPDF = null;
         $this->existingPDF = null;
+        $this->estado_id = null;
     }
+     
 
 //datos del model
 
