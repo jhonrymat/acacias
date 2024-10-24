@@ -77,7 +77,7 @@
                         </x-nav-link>
                     @endrole
                     @role('validador')
-                        <x-nav-link href="{{ route('versolicitudes') }}" :active="request()->routeIs('versolicitudes')">
+                        <x-nav-link href="{{ route('solicitudes') }}" :active="request()->routeIs('solicitudes')">
                             {{ __('solicitudes') }}
                         </x-nav-link>
                     @endrole

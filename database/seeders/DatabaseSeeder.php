@@ -20,7 +20,7 @@ class DatabaseSeeder extends Seeder
         $this->call(TdocumentosSeeder::class);
         $this->call(TsolicitanteSeeder::class);
         $this->call(BarrioSeeder::class);
-
+        $this->call(EstadoSeeder::class);
         $this->call(RolesAndPermissionsTenantSeeder::class);
 
 
