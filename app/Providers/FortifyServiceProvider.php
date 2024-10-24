@@ -44,8 +44,8 @@ class FortifyServiceProvider extends ServiceProvider
                 'tdocumentos' => Tdocumento::all(), // Pasar los barrios a la vista
                 'nestudios' => Nestudio::all(), // Pasar los barrios a la vista
                 'generos' => Genero::all(), // Pasar los barrios a la vista
-                'ocupaciones' => Ocupacion::all(), // Pasar los barrios a la vista
-                'poblaciones' => Poblacion::all(), // Pasar los barrios a la vista
+                'ocupaciones' => Ocupacion::all()->sortBy('nombreOcupacion'), // Pasar los barrios a la vista en orden alfabético
+                'poblaciones' => Poblacion::all()->sortBy('nombrePoblacion'), // Pasar los barrios a la vista en orden alfabético
 
             ]);
         });
