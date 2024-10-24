@@ -56,14 +56,10 @@ class RolesAndPermissionsTenantSeeder extends Seeder
             'versolicitudes',
         ];
         $permissionsValidador =[
-            'documento',
-            'genero',
-            'nestudio',
-            'tsolicitante',
-            'barrio',
             'solicitudes',
             'formulario',
             'versolicitudes',
+
 
         ];
 

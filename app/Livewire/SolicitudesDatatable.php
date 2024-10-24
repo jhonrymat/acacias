@@ -36,29 +36,30 @@ class SolicitudesDatatable extends DataTableComponent
         return Solicitud::query()->where('user_id', $userId); // Filtra las solicitudes solo para el usuario autenticado
     }
 
-    protected function getIconByExtension($filePath)
+    public function getIconByExtension($file)
     {
-        $extension = strtolower(pathinfo($filePath, PATHINFO_EXTENSION));
+        $extension = pathinfo($file, PATHINFO_EXTENSION);
 
         switch ($extension) {
             case 'pdf':
-                return 'fa-file-pdf'; // Ícono para archivos PDF
+                return 'fa-file-pdf';
             case 'doc':
             case 'docx':
-                return 'fa-file-word'; // Ícono para archivos Word
+                return 'fa-file-word';
             case 'xls':
             case 'xlsx':
-                return 'fa-file-excel'; // Ícono para archivos Excel
-            case 'jpg':
-            case 'jpeg':
-            case 'png':
-            case 'gif':
-                return 'fa-file-image'; // Ícono para imágenes
-            case 'zip':
-            case 'rar':
-                return 'fa-file-archive'; // Ícono para archivos comprimidos
+                return 'fa-file-excel';
+                case 'jpg':
+                    case 'jpeg':
+                    case 'png':
+                    case 'gif':
+                        return 'fa-file-image'; // Ícono para imágenes
+                    case 'zip':
+                    case 'rar':
+                        return 'fa-file-archive'; // Ícono para archivos comprimidos
+                   
             default:
-                return 'fa-file'; // Ícono genérico para otros tipos de archivos
+                return 'fa-file';
         }
     }
 
@@ -88,6 +89,7 @@ class SolicitudesDatatable extends DataTableComponent
                 ->sortable()
                 ->searchable()
                 ->collapseOnMobile(),
+
             Column::make("Anexos", "evidenciaPDF")
                 ->format(function ($value, $row) {
                     $files = json_decode($value); // Convierte el valor JSON a un array
@@ -95,8 +97,7 @@ class SolicitudesDatatable extends DataTableComponent
                         return implode(' ', array_map(function ($file) {
                             $icon = $this->getIconByExtension($file);
                             $fileName = basename($file); // Obtener el nombre del archivo
-                            return "<a href='/storage/$file' target='_blank' title='$fileName'><i class='fas $icon fa-2x' style='color: blue';></i></a>" ;
-
+                            return "<a href='/storage/$file' target='_blank' title='$fileName'><i class='fas $icon fa-2x' style='color: blue';></i> $fileName</a>";
                         }, $files));
                     }
                     return 'Sin archivos';

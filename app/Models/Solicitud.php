@@ -16,6 +16,7 @@ class Solicitud extends Model
         'id_barrio',
         'direccion',
         'evidenciaPDF',
+        'estado_id',
         'observaciones',
         'terminos',
     ];
@@ -38,6 +39,10 @@ class Solicitud extends Model
     public function direccion()
     {
         return $this->belongsTo(Direccion::class, 'direccion');
+    }
+    public function estado()
+    {
+        return $this->belongsTo(Estado::class, 'estado_id');
     }
 
 
