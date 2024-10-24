@@ -64,7 +64,7 @@ class RolesAndPermissionsTenantSeeder extends Seeder
             'solicitudes',
             'formulario',
             'versolicitudes',
-            
+
         ];
 
         // Crear los permisos
@@ -88,7 +88,7 @@ class RolesAndPermissionsTenantSeeder extends Seeder
             ]);
         }
 
-        
+
 
 
         // Asignar todos los permisos al rol de administrador
@@ -143,14 +143,14 @@ class RolesAndPermissionsTenantSeeder extends Seeder
             ]
         );
             // Crear el usuario user
-        $validador = User::firstOrCreate(
-            ['email' => 'validador@gmail.com'],
+        $validador1 = User::firstOrCreate(
+            ['email' => 'validador1@gmail.com'],
             [
-                'name' => 'jonathan',
+                'name' => 'Validador1',
                 'nombre_2' => 'Fabian',
                 'apellido_1' => 'cruz',
                 'apellido_2' => 'Rincon',
-                'telefonoContacto' => '3145687894',
+                'telefonoContacto' => '3145687891',
                 'id_tipoSolicitante' => 1,
                 'id_tipoDocumento' => 1,
                 'numeroIdentificacion' => '1111111111',
@@ -165,10 +165,56 @@ class RolesAndPermissionsTenantSeeder extends Seeder
             ]
         );
 
+        $validador2 = User::firstOrCreate(
+            ['email' => 'validador2@gmail.com'],
+            [
+                'name' => 'Validador2',
+                'nombre_2' => 'Fabian',
+                'apellido_1' => 'cruz',
+                'apellido_2' => 'Rincon',
+                'telefonoContacto' => '3145687892',
+                'id_tipoSolicitante' => 1,
+                'id_tipoDocumento' => 1,
+                'numeroIdentificacion' => '2222222222',
+                'ciudadExpedicion' => 'acacias',
+                'fechaNacimiento' => '1980-01-12 00:00:00',
+                'id_nivelEstudio' => 1,
+                'id_genero' => 1,
+                'id_ocupacion' => 1,
+                'id_poblacion' => 1,
+                'password' => Hash::make('1q2w3e4r'),
+                'email_verified_at' => now(),
+            ]
+        );
+
+        $validador3 = User::firstOrCreate(
+            ['email' => 'validador3@gmail.com'],
+            [
+                'name' => 'Validador3',
+                'nombre_2' => 'Fabian',
+                'apellido_1' => 'cruz',
+                'apellido_2' => 'Rincon',
+                'telefonoContacto' => '3145687893',
+                'id_tipoSolicitante' => 1,
+                'id_tipoDocumento' => 1,
+                'numeroIdentificacion' => '3333333333',
+                'ciudadExpedicion' => 'acacias',
+                'fechaNacimiento' => '1980-01-12 00:00:00',
+                'id_nivelEstudio' => 1,
+                'id_genero' => 1,
+                'id_ocupacion' => 1,
+                'id_poblacion' => 1,
+                'password' => Hash::make('1q2w3e4r'),
+                'email_verified_at' => now(),
+            ]
+        );
+
         // Asignar el rol de administrador al usuario
         $admin->assignRole('admin');
         $user->assignRole('user');
-        $validador->assignRole('validador');
+        $validador1->assignRole('validador');
+        $validador2->assignRole('validador');
+        $validador3->assignRole('validador');
 
 
     }
