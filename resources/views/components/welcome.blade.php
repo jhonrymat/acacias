@@ -13,8 +13,8 @@
     </p>
 </div>
 
-<div class="bg-gray-200 bg-opacity-25 grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8 p-6 lg:p-8">
-    <div>
+<div class="bg-gray-200 bg-opacity-25 border-t-2 border-green-custom grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8 p-6 lg:p-8">
+    <div class="md:border-r-2 md:border-green-custom max-md:border-b-2 max-md:border-green-custom">
         <div class="flex items-center">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
                 <path stroke-linecap="round" stroke-linejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" />
@@ -32,7 +32,7 @@
 
     </div>
 
-    <div>
+    <div class="max-md:border-b-2 max-md:border-green-custom">
         <div class="flex items-center">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 12h16.5m-16.5 3.75h16.5M3.75 19.5h16.5M5.625 4.5h12.75a1.875 1.875 0 0 1 0 3.75H5.625a1.875 1.875 0 0 1 0-3.75Z" />
@@ -67,7 +67,7 @@
     </p>
 </div>
 
-<div class="bg-gray-200 bg-opacity-25 p-6 lg:p-8">
+<div class="bg-gray-200 border-t-2 border-green-custom bg-opacity-25 p-6 lg:p-8">
     Naveguen entre las opciones de la parte superior de la página para poder modificar: cruds, solicitudes, gestión de roles, gestión por el usuario. <br> que tenga un buen dia :)
 
 
