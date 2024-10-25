@@ -397,36 +397,46 @@
 
 
 
-            {{-- evidenciaPDF --}}
-            <div class="relative">
-                <label for="dropzone-file"
-                    class="mx-auto cursor-pointer flex w-full max-w-lg flex-col items-center rounded-xl border-2 border-dashed p-6 text-center
-                    @if($uploaded) border-green-400 bg-green-50 text-green-500 @else border-blue-400 bg-white text-blue-500 @endif">
-                    
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10"
-                        fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"
-                        @if($uploaded) class="text-green-500" @else class="text-blue-500" @endif>
-                        <path stroke-linecap="round" stroke-linejoin="round"
-                            d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
-                    </svg>
-            
-                    <h2 class="mt-4 text-xl font-medium tracking-wide
-                    @if($uploaded) text-green-700 @else text-gray-700 @endif">
-                    @if($uploaded) Anexo subido @else Anexa documentos de soporte @endif 
-                    </h2>
-            
-                    <p class="mt-2 tracking-wide
-                    @if($uploaded) text-green-500 @else text-gray-500 @endif">
-                        Formatos permitidos: .7z .csv .doc .docm .docx .dotm .dotx .flv .gif .tif .tiff .jpg .jpeg .mp3 .pdf .png .pot .potx .pps .ppsm .ppsx .ppt .pptx .rar .swf .xls .xlsm .xlsx .zip
-                    </p>
-            
-                    <input id="dropzone-file" type="file" wire:model="evidenciaPDF" multiple class="hidden" />
-                    
-                    @error('evidenciaPDF')
-                        <span class="text-red-500">{{ $message }}</span>
-                    @enderror
-                </label>
-            </div>            
+            <div class="mb-4">
+                <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                    for="accion_comunal_input">Subir Acción Comunal</label>
+                <input wire:model="accion_comunal"
+                    class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+                    aria-describedby="accion_comunal_input_help" id="accion_comunal_input" type="file">
+                <p class="mt-1 text-sm text-gray-500 dark:text-gray-300" id="accion_comunal_input_help">PDF, PNG, JPG
+                    (MAX. 10MB).</p>
+            </div>
+
+            <div class="mb-4">
+                <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                    for="electoral_input">Subir Certificado Electoral</label>
+                <input wire:model="electoral"
+                    class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+                    aria-describedby="electoral_input_help" id="electoral_input" type="file">
+                <p class="mt-1 text-sm text-gray-500 dark:text-gray-300" id="electoral_input_help">PDF, PNG, JPG (MAX.
+                    10MB).</p>
+            </div>
+
+            <div class="mb-4">
+                <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" for="sisben_input">Subir
+                    Certificado Sisben</label>
+                <input wire:model="sisben"
+                    class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+                    aria-describedby="sisben_input_help" id="sisben_input" type="file">
+                <p class="mt-1 text-sm text-gray-500 dark:text-gray-300" id="sisben_input_help">PDF, PNG, JPG (MAX.
+                    10MB).</p>
+            </div>
+
+            <div class="mb-4">
+                <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" for="cedula_input">Subir
+                    Cédula</label>
+                <input wire:model="cedula"
+                    class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+                    aria-describedby="cedula_input_help" id="cedula_input" type="file">
+                <p class="mt-1 text-sm text-gray-500 dark:text-gray-300" id="cedula_input_help">PDF, PNG, JPG (MAX.
+                    10MB).</p>
+            </div>
+
 
             <div class="mb-2 mt-4 underline text-center">
                 <h2 class="text-lg">Términos y Condiciones de datos personales*</h2>

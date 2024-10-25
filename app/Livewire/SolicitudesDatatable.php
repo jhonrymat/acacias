@@ -43,75 +43,103 @@ class SolicitudesDatatable extends DataTableComponent
         switch ($extension) {
             case 'pdf':
                 return 'fa-file-pdf';
-            case 'doc':
-            case 'docx':
-                return 'fa-file-word';
-            case 'xls':
-            case 'xlsx':
-                return 'fa-file-excel';
-                case 'jpg':
-                    case 'jpeg':
-                    case 'png':
-                    case 'gif':
-                        return 'fa-file-image'; // Ícono para imágenes
-                    case 'zip':
-                    case 'rar':
-                        return 'fa-file-archive'; // Ícono para archivos comprimidos
-                   
+            case 'jpg':
+            case 'jpeg':
+            case 'png':
+            case 'gif':
+                return 'fa-file-image'; // Ícono para imágenes
             default:
                 return 'fa-file';
         }
     }
+
+    public function formatFileLink($file)
+    {
+        if ($file) {
+            $icon = $this->getIconByExtension($file);
+            $fileName = basename($file); // Obtener el nombre del archivo
+
+            // Definir color basado en la extensión del archivo
+            $color = 'blue'; // Valor por defecto
+            $extension = pathinfo($file, PATHINFO_EXTENSION);
+
+            if ($extension === 'pdf') {
+                $color = 'red'; // Cambiar a rojo para PDF
+            } elseif (in_array($extension, ['jpg', 'jpeg', 'png', 'gif'])) {
+                $color = 'blue'; // Cambiar a azul para imágenes
+            }
+
+            return "<a href='/storage/$file' target='_blank' title='$fileName'>
+                    <i class='fas $icon fa-2x' style='color: $color;'></i>$fileName
+                </a>";
+        }
+        return 'Sin archivo';
+    }
+
 
     public function columns(): array
     {
         return [
             Column::make("Id", "id")
                 ->sortable()
-                ->searchable(),
+                ->searchable()
+                ->collapseAlways(),
             Column::make("Usuario", "user_id")
                 ->format(fn($value, $row) => $row->user ? $row->user->name : 'Usuario no asignado')
                 ->sortable()
                 ->searchable(),
-            Column::make("# Identificación", "numeroIdentificacion")
+            Column::make("Identificación", "numeroIdentificacion")
                 ->sortable()
                 ->searchable()
                 ->collapseOnMobile(),
-            Column::make("Barrio", "barrio.nombreBarrio")
+            Column::make("id_barrio")
+            ->format(fn($value, $row) => strtolower($row->barrio->zona) . ' ' . ucfirst($row->barrio->nombreBarrio) . ' - ' . $row->barrio->tipoUnidad . ' ' . $row->barrio->codigoNumero)
                 ->sortable()
                 ->searchable()
-                ->collapseOnMobile(),
+                ->collapseAlways(),
+
             Column::make("Direccion", "direccion")
                 ->sortable()
                 ->searchable()
-                ->collapseOnMobile(),
+                ->collapseAlways(),
             Column::make("Creado", "created_at")
                 ->sortable()
                 ->searchable()
                 ->collapseOnMobile(),
 
-            Column::make("Anexos", "evidenciaPDF")
-                ->format(function ($value, $row) {
-                    $files = json_decode($value); // Convierte el valor JSON a un array
-                    if (is_array($files)) {
-                        return implode(' ', array_map(function ($file) {
-                            $icon = $this->getIconByExtension($file);
-                            $fileName = basename($file); // Obtener el nombre del archivo
-                            return "<a href='/storage/$file' target='_blank' title='$fileName'><i class='fas $icon fa-2x' style='color: blue';></i> $fileName</a>";
-                        }, $files));
-                    }
-                    return 'Sin archivos';
-                })
+            // Agregar columnas para los nuevos archivos (accion_comunal, electoral, sisben, cedula)
+            Column::make("Comunal", "accion_comunal")
+                ->format(fn($value, $row) => $this->formatFileLink($row->accion_comunal))
                 ->html() // Importante: Permite la interpretación del HTML en la columna
                 ->sortable()
                 ->searchable()
-                ->collapseOnMobile(),
+                ->collapseAlways(),
+
+            Column::make("Electoral", "electoral")
+                ->format(fn($value, $row) => $this->formatFileLink($row->electoral))
+                ->html() // Permite la interpretación del HTML en la columna
+                ->sortable()
+                ->searchable()
+                ->collapseAlways(),
+
+            Column::make("_Sisben_", "sisben")
+                ->format(fn($value, $row) => $this->formatFileLink($row->sisben))
+                ->html() // Permite la interpretación del HTML en la columna
+                ->sortable()
+                ->searchable()
+                ->collapseAlways(),
+
+            Column::make("_Cédula_", "cedula")
+                ->format(fn($value, $row) => $this->formatFileLink($row->cedula))
+                ->html() // Permite la interpretación del HTML en la columna
+                ->sortable()
+                ->searchable()
+                ->collapseAlways(),
 
             Column::make("Acciones")
                 ->label(
                     fn($row) => view('livewire.view', ['row' => $row])
-                )
-                ->collapseOnMobile(),
+                ),
         ];
     }
 }

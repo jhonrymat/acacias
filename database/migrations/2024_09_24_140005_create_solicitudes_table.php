@@ -18,7 +18,11 @@ return new class extends Migration
             $table->unsignedBigInteger('id_barrio');
 
             $table->string('direccion', 100);
-            $table->text('evidenciaPDF');
+            // evidencias archivos
+            $table->text('accion_comunal')->nullable();
+            $table->text('electoral')->nullable();
+            $table->text('sisben')->nullable();
+            $table->text('cedula')->nullable();
             //estados
             $table->unsignedBigInteger('estado_id')->default(1); //1 nuevo-2 aprobada- 3 rechazada
             // observaciones
@@ -30,7 +34,7 @@ return new class extends Migration
             $table->foreign('user_id')->references('id')->on('users');
             $table->foreign('id_barrio')->references('id')->on('barrios');
             $table->foreign('estado_id')->references('id')->on('estados');
-            
+
         });
 
     }

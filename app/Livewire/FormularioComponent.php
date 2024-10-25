@@ -37,9 +37,11 @@ class FormularioComponent extends Component
     public $numeroIdentificacion = '';
     public $id_barrio = '';
     public $direccion = '';
-    public $evidenciaPDF = [];
-    
-    public $uploaded = false;
+    public $accion_comunal = '';
+    public $electoral = '';
+    public $sisben = '';
+    public $cedula = '';
+
     public $terminos = '';
     public $observaciones = '';
 
@@ -51,8 +53,10 @@ class FormularioComponent extends Component
         'numeroIdentificacion' => 'required|string|min:3',
         'id_barrio' => 'required',
         'direccion' => 'required|string|min:3',
-        'evidenciaPDF' => 'required', // Asegúrate de que el array esté presente
-        'evidenciaPDF.*' => 'file|mimes:pdf,jpeg,png,jpg,doc,docx|max:10240', // Valida cada archivo individualmente
+        'accion_comunal' => 'file|mimes:pdf,jpeg,png,jpg|max:10240', // Valida cada archivo individualmente
+        'electoral' => 'file|mimes:pdf,jpeg,png,jpg|max:10240', // Valida cada archivo individualmente
+        'sisben' => 'file|mimes:pdf,jpeg,png,jpg|max:10240', // Valida cada archivo individualmente
+        'cedula' => 'file|mimes:pdf,jpeg,png,jpg|max:10240', // Valida cada archivo individualmente
         'terminos' => 'required',
         'observaciones' => 'required|string',
     ];
@@ -62,10 +66,14 @@ class FormularioComponent extends Component
         'id_barrio.required' => 'El campo barrio es obligatorio.',
         'direccion.required' => 'El campo dirección es obligatorio.',
         'direccion.min' => 'El campo dirección debe tener al menos 3 caracteres.',
-        'evidenciaPDF.required' => 'El campo evidencia es obligatorio.',
-        'evidenciaPDF.file' => 'El campo evidencia debe ser un archivo.',
-        'evidenciaPDF.mimes' => 'El campo evidencia debe ser un archivo de tipo: pdf, jpeg, png, jpg, doc, docx.',
-        'evidenciaPDF.max' => 'El campo evidencia no debe ser mayor a 10MB.',
+        'accion_comunal.mimes' => 'El campo evidencia debe ser un archivo de tipo: pdf, jpeg, png, jpg',
+        'accion_comunal.max' => 'El campo evidencia no debe ser mayor a 10MB.',
+        'electoral.mimes' => 'El campo evidencia debe ser un archivo de tipo: pdf, jpeg, png, jpg',
+        'electoral.max' => 'El campo evidencia no debe ser mayor a 10MB.',
+        'sisben.mimes' => 'El campo evidencia debe ser un archivo de tipo: pdf, jpeg, png, jpg',
+        'sisben.max' => 'El campo evidencia no debe ser mayor a 10MB.',
+        'cedula.mimes' => 'El campo evidencia debe ser un archivo de tipo: pdf, jpeg, png, jpg',
+        'cedula.max' => 'El campo evidencia no debe ser mayor a 10MB.',
         'terminos.required' => 'El campo términos es obligatorio.',
         'observaciones.required' => 'El campo observaciones es obligatorio.',
         'observaciones.string' => 'El campo observaciones debe ser una cadena de texto.',
@@ -76,52 +84,58 @@ class FormularioComponent extends Component
         // Validate form data
         $validatedData = $this->validate();
 
-        // Si hay archivos adjuntos
-        if ($this->evidenciaPDF) {
-            // Crear un array para almacenar las rutas de los archivos
-            $evidenciaPDFPaths = [];
+        // Procesar cada archivo individualmente
+        $files = [
+            'accion_comunal' => $this->accion_comunal,
+            'electoral' => $this->electoral,
+            'sisben' => $this->sisben,
+            'cedula' => $this->cedula,
+        ];
 
-            // Recorrer cada archivo y guardarlo
-            foreach ($this->evidenciaPDF as $anexo) {
+        // Crear un array para almacenar las rutas de los archivos procesados
+        $filePaths = [];
+
+        foreach ($files as $key => $file) {
+            if ($file) {
                 // Obtener el nombre original del archivo
-                $originalName = $anexo->getClientOriginalName();
-
+                $originalName = $file->getClientOriginalName();
                 // Obtener la extensión del archivo
-                $extension = $anexo->getClientOriginalExtension();
-
+                $extension = $file->getClientOriginalExtension();
                 // Crear un nombre único: nombre original + fecha y hora
                 $fileName = pathinfo($originalName, PATHINFO_FILENAME) . '_' . now()->format('Ymd_His') . '.' . $extension;
-
-                // Guardar el archivo en la carpeta 'evidenciaPDF' y obtener su ruta
-                $path = $anexo->storeAs('evidenciaPDF', $fileName, 'public');
-
-                // Almacenar la ruta del archivo
-                $evidenciaPDFPaths[] = $path;
+                // Guardar el archivo en la carpeta específica según el tipo de archivo
+                $path = $file->storeAs($key, $fileName, 'public');
+                // Almacenar la ruta del archivo en el array
+                $filePaths[$key] = $path;
+            } else {
+                $filePaths[$key] = null; // No se subió archivo
             }
         }
-        // Create a new solicitud
+
+        // Crear una nueva solicitud y guardar las rutas de los archivos en la base de datos
         Solicitud::create([
             'user_id' => auth()->id(),
             'numeroIdentificacion' => $this->numeroIdentificacion,
-            'id_barrio' => $this->id_barrio, // Assuming barrio is 1 for now, replace with actual value
+            'id_barrio' => $this->id_barrio,
             'direccion' => $this->direccion,
-            'evidenciaPDF' => json_encode($evidenciaPDFPaths),  // Guardar las rutas de los archivos en la base de datos
+            'accion_comunal' => $filePaths['accion_comunal'],
+            'electoral' => $filePaths['electoral'],
+            'sisben' => $filePaths['sisben'],
+            'cedula' => $filePaths['cedula'],
             'observaciones' => $this->observaciones,
             'terminos' => $this->terminos,
         ]);
 
-        // Show success message
+        // Mostrar mensaje de éxito
         session()->flash('message', 'Solicitud creada exitosamente.');
 
-        // Optionally, reset the form
+        // Resetear el formulario
         $this->reset();
     }
 
-    // funcion para cambiar los colores de la evidencia pdf
-    public function updatedEvidenciaPDF()
-    {
-        $this->uploaded = true;
-    }
+
+
+
 
     public function render()
     {

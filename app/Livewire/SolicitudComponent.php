@@ -18,17 +18,12 @@ class SolicitudComponent extends Component
             abort(403, 'No tienes acceso a esta página.');
         }
     }
-    public $solicitud_id;
-    public $fechaSolicitud;
-    public $numeroIdentificacion_id;
-    public $fechaActual;
-    public $barrio_id;
-    public $direccion_id;
-    public $ubicacion;
-    public $evidenciaPDF;
-    public $existingPDF;
-    public $estado_id;
-    public $showForm = false;
+    public $nombreCompleto, $email, $telefonoContacto, $id_tipoSolicitante, $id_tipoDocumento,
+    $numeroIdentificacion, $ciudadExpedicion, $fechaNacimiento, $solicitud_id,
+    $fechaSolicitud, $id_nivelEstudio, $id_genero, $id_ocupacion, $id_poblacion,
+    $numeroIdentificacion_id, $fechaActual, $barrio_id, $direccion_id, $ubicacion,
+    $accion_comunal, $electoral, $sisben, $cedula, $estado_id, $showForm = false;
+
 
 
 
@@ -43,9 +38,27 @@ class SolicitudComponent extends Component
         'estado_id' =>'required|exists:estados,id', // Estado debe ser 0, 1, o 2
     ];
 
-    protected $listeners = ['edit', 'delete','UpdatedEstado'];
+    protected $listeners = ['edit', 'delete','UpdatedEstado', 'view'];
 
+    public function view($Id)
+    {
 
+        $user = User::find($Id);
+        // Concatenando los nombres
+        $this->nombreCompleto = $user->name . ' ' . $user->nombre_2 . ' ' . $user->apellido_1 . ' ' . $user->apellido_2;
+        $this->email = $user->email;
+        $this->telefonoContacto = $user->telefonoContacto;
+        $this->id_tipoSolicitante = $user->tipoSolicitante->tipoSolicitante;
+        $this->id_tipoDocumento = $user->tipoDocumento->tipoDocumento;
+        $this->numeroIdentificacion = $user->numeroIdentificacion;
+        $this->ciudadExpedicion = $user->ciudadExpedicion;
+        $this->fechaNacimiento = $user->fechaNacimiento;
+        $this->id_nivelEstudio = $user->nivelEstudio->nivelEstudio;
+        $this->id_genero = $user->genero->nombreGenero;
+        $this->id_ocupacion = $user->ocupacion->nombreOcupacion;
+        $this->id_poblacion = $user->poblacion->nombrePoblacion;
+        $this->showForm = true;
+    }
 
 
     public function save()
@@ -57,8 +70,6 @@ class SolicitudComponent extends Component
 
             if ($this->evidenciaPDF) {
                 $filePath = $this->evidenciaPDF->store('evidencias'); // Almacena el archivo PDF
-            } else {
-                $filePath = $this->existingPDF;
             }
 
             $solicitud->update([
@@ -91,7 +102,7 @@ class SolicitudComponent extends Component
         $this->showForm = false;
         $this->dispatch('Updated');
     }
-    
+
 
 
     public function edit($Id)
@@ -106,7 +117,6 @@ class SolicitudComponent extends Component
             $this->barrio_id = $solicitud->barrio_id;
             $this->direccion_id = $solicitud->direccion_id;
             $this->ubicacion = $solicitud->ubicacion;
-            $this->existingPDF = $solicitud->evidenciaPDF;
             $this->estado_id = $solicitud->estado;
             $this->showForm = true;
         }
@@ -136,10 +146,9 @@ class SolicitudComponent extends Component
         $this->direccion_id = null;
         $this->ubicacion = null;
         $this->evidenciaPDF = null;
-        $this->existingPDF = null;
         $this->estado_id = null;
     }
-     
+
 
 //datos del model
 
@@ -149,8 +158,6 @@ class SolicitudComponent extends Component
 
          return view('livewire.solicitud-component', [
             'solicitudes' => Solicitud::with('barrio', 'direccion'), // Paginación de 10 elementos
-
-
         ]);
     }
 }
