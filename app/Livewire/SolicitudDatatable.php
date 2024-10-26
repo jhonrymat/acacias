@@ -3,6 +3,7 @@
 namespace App\Livewire;
 
 use App\Models\Solicitud;
+use App\Models\Historial_solicitud_estado;
 use Illuminate\Support\Facades\Storage;
 use Rappasoft\LaravelLivewireTables\Views\Column;
 use Rappasoft\LaravelLivewireTables\DataTableComponent;
@@ -22,6 +23,7 @@ class SolicitudDatatable extends DataTableComponent
         $this->setDefaultSort('id', 'desc');
         $this->setSingleSortingStatus(false);
     }
+
 
     public function getIconByExtension($file)
     {

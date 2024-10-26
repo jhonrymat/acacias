@@ -65,7 +65,9 @@
                         <x-nav-link class="hidden sm:flex mr-6" href="{{ route('solicitudes') }}" :active="request()->routeIs('solicitudes')">
                             {{ __('solicitudes') }}
                         </x-nav-link>
-
+                        <x-nav-link href="{{ route('historial.solicitudes') }}" :active="request()->routeIs('historial.solicitudes')">
+                            {{ __('Historial') }}
+                        </x-nav-link>
 
                     @endrole
                     @role('user')
@@ -79,6 +81,9 @@
                     @role('validador')
                         <x-nav-link href="{{ route('solicitudes') }}" :active="request()->routeIs('solicitudes')">
                             {{ __('solicitudes') }}
+                        </x-nav-link>
+                        <x-nav-link href="{{ route('historial.solicitudes') }}" :active="request()->routeIs('historial.solicitudes')">
+                            {{ __('Historial') }}
                         </x-nav-link>
                     @endrole
             </div>
@@ -240,8 +245,10 @@
             <x-responsive-nav-link href="{{ route('solicitudes') }}" :active="request()->routeIs('solicitudes')">
                 {{ __('solicitudes') }}
             </x-responsive-nav-link>
+            <x-responsive-nav-link href="{{ route('historial.solicitudes') }}" :active="request()->routeIs('historial.solicitudes')">
+                {{ __('Historial') }}
+            </x-responsive-nav-link>
         </div>
-
     @endrole
 
     @role('validador')
@@ -250,7 +257,11 @@
             <x-responsive-nav-link href="{{ route('versolicitudes') }}" :active="request()->routeIs('versolicitudes')">
                 {{ __('solicitudes') }}
             </x-responsive-nav-link>
+            <x-responsive-nav-link href="{{ route('historial.solicitudes') }}" :active="request()->routeIs('historial.solicitudes')">
+                {{ __('Historial') }}
+            </x-responsive-nav-link>
         </div>
+        
     @endrole
 
         <!-- Responsive Settings Options -->

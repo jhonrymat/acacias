@@ -25,6 +25,8 @@ return new class extends Migration
             $table->text('cedula')->nullable();
             //estados
             $table->unsignedBigInteger('estado_id')->default(1); //1 nuevo-2 aprobada- 3 rechazada
+            $table->unsignedBigInteger('actualizado_por')->nullable(); // Agregamos el campo updated_by
+            $table->foreign('actualizado_por')->references('id')->on('users')->onDelete('set null');
             // observaciones
             $table->string('observaciones', 255);
             $table->boolean('terminos');
