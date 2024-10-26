@@ -3,6 +3,7 @@
 namespace App\Livewire;
 
 use App\Models\Solicitud;
+use App\Models\Historial_solicitud_estado;
 use Illuminate\Support\Facades\Storage;
 use Rappasoft\LaravelLivewireTables\Views\Column;
 use Rappasoft\LaravelLivewireTables\DataTableComponent;
@@ -37,6 +38,10 @@ class SolicitudDatatable extends DataTableComponent
               
               $solicitud->update(['estado_id' => $nuevoEstado]);
               $this->dispatch('Updated');
+              $solicitud->estado_id = $nuevoEstado;
+                $solicitud->actualizado_por = auth()->id(); // Registrar el ID del usuario que cambia el estado
+                $solicitud->save();
+
           }
       }
 

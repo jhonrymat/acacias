@@ -145,7 +145,7 @@ class SolicitudComponent extends Component
 
     public function render()
     {
-
+        
 
          return view('livewire.solicitud-component', [
             'solicitudes' => Solicitud::with('barrio', 'direccion'), // Paginación de 10 elementos
