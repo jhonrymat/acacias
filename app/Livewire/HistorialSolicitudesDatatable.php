@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Auth;
 use Rappasoft\LaravelLivewireTables\Views\Column;
 use Rappasoft\LaravelLivewireTables\DataTableComponent;
 
-class HistorialSolicitudes extends DataTableComponent
+class HistorialSolicitudesDatatable extends DataTableComponent
 {
     protected $model = Solicitud::class;
     public array $perPageAccepted = [10, 20, 50, 100];

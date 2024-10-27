@@ -65,7 +65,7 @@
                         <x-nav-link class="hidden sm:flex mr-6" href="{{ route('solicitudes') }}" :active="request()->routeIs('solicitudes')">
                             {{ __('solicitudes') }}
                         </x-nav-link>
-                        <x-nav-link href="{{ route('historial.solicitudes') }}" :active="request()->routeIs('historial.solicitudes')">
+                        <x-nav-link href="{{ route('historial') }}" :active="request()->routeIs('historial')">
                             {{ __('Historial') }}
                         </x-nav-link>
 
@@ -78,11 +78,11 @@
                             {{ __('solicitudes') }}
                         </x-nav-link>
                     @endrole
-                    @role('validador')
+                    @hasanyrole('validador1|validador2')
                         <x-nav-link href="{{ route('solicitudes') }}" :active="request()->routeIs('solicitudes')">
                             {{ __('solicitudes') }}
                         </x-nav-link>
-                        <x-nav-link href="{{ route('historial.solicitudes') }}" :active="request()->routeIs('historial.solicitudes')">
+                        <x-nav-link href="{{ route('historial') }}" :active="request()->routeIs('historial')">
                             {{ __('Historial') }}
                         </x-nav-link>
                     @endrole
@@ -222,7 +222,7 @@
                 {{ __('Dashboard') }}
             </x-responsive-nav-link>
         </div>
-    
+
     @role('user')
     <div :class="{'block': open, 'hidden': ! open}" class="hidden sm:hidden">
         <div class="pt-2 pb-3 space-y-1">
@@ -238,30 +238,30 @@
             </x-responsive-nav-link>
         </div>
     @endrole
-    
+
     @role('admin')
     <div :class="{'block': open, 'hidden': ! open}" class="hidden sm:hidden">
         <div class="pt-2 pb-3 space-y-1">
             <x-responsive-nav-link href="{{ route('solicitudes') }}" :active="request()->routeIs('solicitudes')">
                 {{ __('solicitudes') }}
             </x-responsive-nav-link>
-            <x-responsive-nav-link href="{{ route('historial.solicitudes') }}" :active="request()->routeIs('historial.solicitudes')">
+            <x-responsive-nav-link href="{{ route('historial') }}" :active="request()->routeIs('historial')">
                 {{ __('Historial') }}
             </x-responsive-nav-link>
         </div>
     @endrole
 
-    @role('validador')
+    @hasanyrole('validador1|validador2')
     <div :class="{'block': open, 'hidden': ! open}" class="hidden sm:hidden">
         <div class="pt-2 pb-3 space-y-1">
             <x-responsive-nav-link href="{{ route('versolicitudes') }}" :active="request()->routeIs('versolicitudes')">
                 {{ __('solicitudes') }}
             </x-responsive-nav-link>
-            <x-responsive-nav-link href="{{ route('historial.solicitudes') }}" :active="request()->routeIs('historial.solicitudes')">
+            <x-responsive-nav-link href="{{ route('historial') }}" :active="request()->routeIs('historial')">
                 {{ __('Historial') }}
             </x-responsive-nav-link>
         </div>
-        
+
     @endrole
 
         <!-- Responsive Settings Options -->

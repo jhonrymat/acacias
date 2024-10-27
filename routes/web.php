@@ -14,7 +14,7 @@ use App\Livewire\TdocumentoComponent;
 use Illuminate\Support\Facades\Route;
 use App\Livewire\SolicitudesComponent;
 use App\Livewire\TipoSolicitanteComponent;
-use App\Livewire\HistorialSolicitudes;
+use App\Livewire\HistorialComponent;
 
 
 Route::get('/', function () {
@@ -44,4 +44,4 @@ Route::get('ocupacion', OcupacionComponent::class)->name('ocupacion');
 Route::get('poblacion', PoblacionComponent::class)->name('poblacion');
 Route::get('versolicitudes', SolicitudesComponent::class)->name('versolicitudes');
 Route::get('user-roles', UserRoleComponent::class)->name('user-roles');
-Route::get('historial-solicitudes', HistorialSolicitudes::class)->name('historial.solicitudes');
+Route::get('historial', HistorialComponent::class)->name('historial');
