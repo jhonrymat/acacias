@@ -92,8 +92,9 @@ class SolicitudesDatatable extends DataTableComponent
                 ->sortable()
                 ->searchable()
                 ->collapseOnMobile(),
+
             Column::make("id_barrio")
-            ->format(fn($value, $row) => strtolower($row->barrio->zona) . ' ' . ucfirst($row->barrio->nombreBarrio) . ' - ' . $row->barrio->tipoUnidad . ' ' . $row->barrio->codigoNumero)
+                ->format(fn($value, $row) => strtolower($row->barrio->zona) . ' ' . ucfirst($row->barrio->nombreBarrio) . ' - ' . $row->barrio->tipoUnidad . ' ' . $row->barrio->codigoNumero)
                 ->sortable()
                 ->searchable()
                 ->collapseAlways(),
@@ -135,11 +136,25 @@ class SolicitudesDatatable extends DataTableComponent
                 ->sortable()
                 ->searchable()
                 ->collapseAlways(),
-
-            Column::make("Acciones")
-                ->label(
-                    fn($row) => view('livewire.view', ['row' => $row])
-                ),
+            Column::make("Estado", "estado.nombreEstado")
+                ->sortable()
+                ->searchable()
+                ->collapseOnMobile()
+                ->format(function ($value, $row) {
+                    switch ($value) {
+                        case 'Pendiente':
+                            return '<span style="background-color: #FFC107; color: white; padding: 4px 8px; text-align: center; border-radius: 5px;">Pendiente</span>';
+                        case 'Aprobada':
+                            return '<span style="background-color: #28A745; color: white; padding: 4px 8px; text-align: center; border-radius: 5px;">Aprobada</span>';
+                        case 'Rechazada':
+                            return '<span style="background-color: #DC3545; color: white; padding: 4px 8px; text-align: center; border-radius: 5px;">Rechazada</span>';
+                        case 'En proceso':
+                            return '<span style="background-color: #17A2B8; color: white; padding: 4px 8px; text-align: center; border-radius: 5px;">En proceso</span>';
+                        default:
+                            return '<span style="background-color: #6c757d; color: white; padding: 4px 8px; text-align: center; border-radius: 5px;">' . $value . '</span>';
+                    }
+                })
+                ->html(), // Activa la renderización del HTML
         ];
     }
 }

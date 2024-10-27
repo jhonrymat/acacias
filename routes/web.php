@@ -1,11 +1,13 @@
 <?php
 
+use App\Livewire\UserComponent;
 use App\Livewire\RolesComponent;
 use App\Livewire\BarrioComponent;
 use App\Livewire\GeneroComponent;
 use App\Livewire\NestudioComponent;
 use App\Livewire\PermisosComponent;
 use App\Livewire\UserRoleComponent;
+use App\Livewire\HistorialComponent;
 use App\Livewire\OcupacionComponent;
 use App\Livewire\PoblacionComponent;
 use App\Livewire\SolicitudComponent;
@@ -14,7 +16,6 @@ use App\Livewire\TdocumentoComponent;
 use Illuminate\Support\Facades\Route;
 use App\Livewire\SolicitudesComponent;
 use App\Livewire\TipoSolicitanteComponent;
-use App\Livewire\HistorialComponent;
 
 
 Route::get('/', function () {
@@ -29,19 +30,21 @@ Route::middleware([
     Route::get('/dashboard', function () {
         return view('dashboard');
     })->name('dashboard');
+    Route::middleware(['can:documento'])->get('documento', TdocumentoComponent::class)->name('documento');
+    Route::middleware(['can:genero'])->get('genero', GeneroComponent::class)->name('genero');
+    Route::middleware(['can:nestudio'])->get('nestudio', NestudioComponent::class)->name('nestudio');
+    Route::middleware(['can:tsolicitante'])->get('tsolicitante', TipoSolicitanteComponent::class)->name('tsolicitante');
+    Route::middleware(['can:barrio'])->get('barrio', BarrioComponent::class)->name('barrio');
+    Route::middleware(['can:solicitudes'])->get('solicitudes', SolicitudComponent::class)->name('solicitudes');
+    Route::middleware(['can:roles'])->get('roles', RolesComponent::class)->name('roles');
+    Route::middleware(['can:permisos'])->get('permisos', PermisosComponent::class)->name('permisos');
+    Route::middleware(['can:formulario'])->get('formulario', FormularioComponent::class)->name('formulario');
+    Route::middleware(['can:ocupacion'])->get('ocupacion', OcupacionComponent::class)->name('ocupacion');
+    Route::middleware(['can:poblacion'])->get('poblacion', PoblacionComponent::class)->name('poblacion');
+    Route::middleware(['can:versolicitudes'])->get('versolicitudes', SolicitudesComponent::class)->name('versolicitudes');
+    Route::middleware(['can:user-roles'])->get('user-roles', UserRoleComponent::class)->name('user-roles');
+    Route::middleware(['can:historial'])->get('historial', HistorialComponent::class)->name('historial');
+    // ruta para obtener todos los usuarios de la base de datos
+    Route::middleware(['can:users'])->get('users', UserComponent::class)->name('users');
 });
 
-Route::get('documento', TdocumentoComponent::class)->name('documento');
-Route::get('genero', GeneroComponent::class)->name('genero');
-Route::get('nestudio', NestudioComponent::class)->name('nestudio');
-Route::get('tsolicitante', TipoSolicitanteComponent::class)->name('tsolicitante');
-Route::get('barrio', BarrioComponent::class)->name('barrio');
-Route::get('solicitudes', SolicitudComponent::class)->name('solicitudes');
-Route::get('roles', RolesComponent::class)->name('roles');
-Route::get('permisos', PermisosComponent::class)->name('permisos');
-Route::get('formulario', FormularioComponent::class)->name('formulario');
-Route::get('ocupacion', OcupacionComponent::class)->name('ocupacion');
-Route::get('poblacion', PoblacionComponent::class)->name('poblacion');
-Route::get('versolicitudes', SolicitudesComponent::class)->name('versolicitudes');
-Route::get('user-roles', UserRoleComponent::class)->name('user-roles');
-Route::get('historial', HistorialComponent::class)->name('historial');

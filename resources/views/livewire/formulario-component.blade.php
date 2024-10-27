@@ -6,18 +6,43 @@
                 <strong class="font-bold">{{ session('message') }}</strong>
             </div>
         @endif
+        @if (session()->has('error'))
+            <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative" role="alert">
+                <strong class="font-bold">{{ session('error') }}</strong>
+            </div>
+        @endif
+        <div class="bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 p-4 rounded-md shadow-md mb-4">
+            <h2 class="font-bold text-lg">⚠️ Importante: Veracidad de la Información</h2>
+            <p class="mt-2">
+                Al completar esta solicitud para obtener un <strong>certificado de residencia</strong>, usted declara
+                que la información proporcionada es <strong>fiel y verdadera</strong>. La presentación de datos falsos,
+                como una dirección incorrecta o un documento adulterado, no solo invalida su solicitud, sino que también
+                constituye una <strong>falta grave de acuerdo con la normativa legal vigente</strong>.
+            </p>
+            <p class="mt-2">
+                <strong>Advertencia:</strong> Según el <em>Artículo 289 del Código Penal Colombiano</em>, la falsedad en
+                documento público es un delito que puede conllevar sanciones penales, incluyendo penas de prisión.
+                Asegúrese de que todos los datos ingresados sean correctos y verificables para evitar sanciones y
+                garantizar un proceso ágil.
+            </p>
+            <p class="mt-4 font-semibold text-center">¡Su honestidad es esencial para mantener la integridad de este
+                proceso!</p>
+        </div>
         <form wire:submit.prevent="save" enctype="multipart/form-data">
             @csrf
-            <div class="mb-2 underline text-center">
-                <h2 class="text-lg">Información de la solicitud</h2>
+            <div class="mt-8 mb-6 text-center">
+                <h2 class="text-2xl font-extrabold text-gray-800 uppercase tracking-wide">
+                    Solicitud de Certificado de Residencia
+                </h2>
+                <p class="text-sm text-gray-600 mt-1">Complete este formulario para iniciar su solicitud</p>
             </div>
+
+
             <style>
                 .tooltip:hover .tooltip-item {
                     visibility: visible;
                 }
             </style>
-
-
 
             <!-- Número de identificación tomado de 'user' => $user, y no poder editar -->
             <div class="mb-4 relative">
@@ -361,7 +386,8 @@
                     class="block mt-1 w-full border border-gray-300 rounded-lg">
                     <option value="" selected>Selecciona un barrio</option>
                     @foreach ($barrios as $barrio)
-                        <option value="{{ $barrio->id }}">{{ $barrio->nombreBarrio }}</option>
+                        <option value="{{ $barrio->id }}">{{ $barrio->zona }} - {{ $barrio->nombreBarrio }} -
+                            {{ $barrio->tipoUnidad }} {{ $barrio->codigoNumero }}</option>
                     @endforeach
                 </select>
                 @error('id_barrio')
@@ -397,77 +423,104 @@
 
 
 
-            <div class="mb-4">
-                <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                    for="accion_comunal_input">Subir Acción Comunal</label>
-                <input wire:model="accion_comunal"
-                    class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
-                    aria-describedby="accion_comunal_input_help" id="accion_comunal_input" type="file">
-                <p class="mt-1 text-sm text-gray-500 dark:text-gray-300" id="accion_comunal_input_help">PDF, PNG, JPG
-                    (MAX. 10MB).</p>
+            <!-- Contenedor para los Archivos Adjuntos Opcionales -->
+            <div class="p-6 mb-8 border border-blue-300 rounded-lg bg-blue-50">
+                <h3 class="text-lg font-semibold text-blue-800 mb-4">Archivos Adjuntos (Opcional)</h3>
+                <p class="text-sm text-blue-700 mb-6">
+                    Los siguientes anexos son opcionales y pueden ayudar a agilizar el proceso de su solicitud. Si no
+                    tiene estos documentos, aún puede completar y enviar el formulario.
+                </p>
+
+                <!-- Subir Acción Comunal -->
+                <div class="mb-4">
+                    <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                        for="accion_comunal_input">
+                        Subir Acción Comunal
+                    </label>
+                    <input wire:model="accion_comunal"
+                        class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+                        aria-describedby="accion_comunal_input_help" id="accion_comunal_input" type="file">
+                    <p class="mt-1 text-xs text-gray-500 dark:text-gray-300" id="accion_comunal_input_help">PDF, PNG,
+                        JPG (MAX. 10MB).</p>
+                </div>
+
+                <!-- Subir Certificado Electoral -->
+                <div class="mb-4">
+                    <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" for="electoral_input">
+                        Subir Certificado Electoral
+                    </label>
+                    <input wire:model="electoral"
+                        class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+                        aria-describedby="electoral_input_help" id="electoral_input" type="file">
+                    <p class="mt-1 text-xs text-gray-500 dark:text-gray-300" id="electoral_input_help">PDF, PNG, JPG
+                        (MAX. 10MB).</p>
+                </div>
+
+                <!-- Subir Certificado Sisben -->
+                <div class="mb-4">
+                    <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" for="sisben_input">
+                        Subir Certificado Sisben
+                    </label>
+                    <input wire:model="sisben"
+                        class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+                        aria-describedby="sisben_input_help" id="sisben_input" type="file">
+                    <p class="mt-1 text-xs text-gray-500 dark:text-gray-300" id="sisben_input_help">PDF, PNG, JPG
+                        (MAX. 10MB).</p>
+                </div>
+
+                <!-- Subir Cédula -->
+                <div class="mb-4">
+                    <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" for="cedula_input">
+                        Subir Cédula
+                    </label>
+                    <input wire:model="cedula"
+                        class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+                        aria-describedby="cedula_input_help" id="cedula_input" type="file">
+                    <p class="mt-1 text-xs text-gray-500 dark:text-gray-300" id="cedula_input_help">PDF, PNG, JPG
+                        (MAX. 10MB).</p>
+                </div>
             </div>
 
-            <div class="mb-4">
-                <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                    for="electoral_input">Subir Certificado Electoral</label>
-                <input wire:model="electoral"
-                    class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
-                    aria-describedby="electoral_input_help" id="electoral_input" type="file">
-                <p class="mt-1 text-sm text-gray-500 dark:text-gray-300" id="electoral_input_help">PDF, PNG, JPG (MAX.
-                    10MB).</p>
+
+
+            <!-- Título de Términos y Condiciones -->
+            <div class="mt-8 mb-6 text-center">
+                <h2 class="text-2xl font-extrabold text-gray-800 uppercase tracking-wide">
+                    Términos y Condiciones de Datos Personales*
+                </h2>
             </div>
 
-            <div class="mb-4">
-                <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" for="sisben_input">Subir
-                    Certificado Sisben</label>
-                <input wire:model="sisben"
-                    class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
-                    aria-describedby="sisben_input_help" id="sisben_input" type="file">
-                <p class="mt-1 text-sm text-gray-500 dark:text-gray-300" id="sisben_input_help">PDF, PNG, JPG (MAX.
-                    10MB).</p>
-            </div>
-
-            <div class="mb-4">
-                <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" for="cedula_input">Subir
-                    Cédula</label>
-                <input wire:model="cedula"
-                    class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
-                    aria-describedby="cedula_input_help" id="cedula_input" type="file">
-                <p class="mt-1 text-sm text-gray-500 dark:text-gray-300" id="cedula_input_help">PDF, PNG, JPG (MAX.
-                    10MB).</p>
-            </div>
-
-
-            <div class="mb-2 mt-4 underline text-center">
-                <h2 class="text-lg">Términos y Condiciones de datos personales*</h2>
-            </div>
-
-
-            {{-- Términos y Condiciones de datos personales --}}
-            <div class="mb-2 mt-4">
-                <div class="mt-1 block w-full border border-gray-300 rounded-lg bg-gray-300 bg-opacity-30">
+            <!-- Sección de Términos y Condiciones con Checkbox -->
+            <div class="mb-8">
+                <div class="flex items-start space-x-2 p-4 border border-green-500 rounded-lg bg-green-50">
                     <input type="checkbox" wire:model="terminos"
-                        class="w-5 h-5 text-indigo-800 border-gray-300 rounded">
-                    <span class="ml-2">Acepto las condiciones establecidas en la política de tratamiento de
-                        información de la Alcaldía de Acacias: Políticas de Protección de Datos Personales.</span>
+                        class="w-6 h-6 text-green-600 border-green-500 rounded focus:ring-green-400">
+                    <span class="text-green-700 leading-snug font-semibold">
+                        Acepto las condiciones establecidas en la política de tratamiento de información de la Alcaldía
+                        de Acacias: <a href="#" class="text-green-700 underline hover:text-green-800">Políticas
+                            de Protección de Datos Personales</a>.
+                    </span>
                 </div>
                 @error('terminos')
-                    <span class="text-red-500">{{ $message }}</span>
+                    <span class="text-red-500 text-sm mt-2 block">{{ $message }}</span>
                 @enderror
             </div>
 
-
-            <div class="flex justify-end">
+            <!-- Botón de Enviar -->
+            <div class="flex justify-end mt-8 mb-12">
                 <button type="submit"
-                    class="flex items-center justify-center px-3 py-2 space-x-2 text-sm tracking-wide text-white capitalize transition-colors duration-200 transform bg-indigo-500 rounded-md hover:bg-indigo-600 focus:outline-none focus:bg-indigo-500 focus:ring focus:ring-indigo-300 focus:ring-opacity-50">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 20 20" fill="currentColor">
+                    class="flex items-center justify-center px-6 py-3 space-x-3 text-lg font-semibold text-white uppercase transition duration-300 transform bg-blue-600 rounded-lg shadow-lg hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-300">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" viewBox="0 0 20 20" fill="currentColor">
                         <path fill-rule="evenodd"
                             d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z"
                             clip-rule="evenodd" />
                     </svg>
-                    <span>Crear tramite</span>
+                    <span>Crear trámite</span>
                 </button>
             </div>
+
         </form>
     </div>
+    <x-sweet-alert-good></x-sweet-alert-good>
+
 </div>
