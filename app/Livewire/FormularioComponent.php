@@ -5,6 +5,7 @@ namespace App\Livewire;
 use App\Models\User;
 use App\Models\Barrio;
 use App\Models\Genero;
+use Livewire\Attributes\Title;
 use Livewire\Component;
 use App\Models\Nestudio;
 use App\Models\Solicitud;
@@ -81,6 +82,22 @@ class FormularioComponent extends Component
 
     public function save()
     {
+
+        $userId = auth()->id();
+
+        // Verificar si el usuario tiene una solicitud pendiente
+        if (Solicitud::hasPendingRequest($userId)) {
+            // session()->flash('error', 'No puedes crear otra solicitud mientras tengas una en estado Pendiente.');
+            $this->dispatch('sweet-alert-good', icon: 'info', title: 'Existe una solicitud pendiente.', text: 'No puedes crear otra solicitud mientras tengas una en estado Pendiente.', footer: '<a href="versolicitudes">Ver mis solicitudes</a>');
+            return;
+        }
+
+        // Verificar si el usuario tiene una solicitud aprobada que no esté cerca de expirar
+        if (Solicitud::hasApprovedRequest($userId) && !Solicitud::isApprovedRequestExpiring($userId)) {
+            $this->dispatch('sweet-alert-good', icon: 'info', title: 'Existe una solicitud aprobada.', text: 'No puedes crear otra solicitud hasta que tu solicitud aprobada esté cerca de expirar.', footer: '<a href="versolicitudes">Ver mis solicitudes</a>');
+            return;
+        }
+
         // Validate form data
         $validatedData = $this->validate();
 
@@ -114,7 +131,7 @@ class FormularioComponent extends Component
 
         // Crear una nueva solicitud y guardar las rutas de los archivos en la base de datos
         Solicitud::create([
-            'user_id' => auth()->id(),
+            'user_id' => $userId,
             'numeroIdentificacion' => $this->numeroIdentificacion,
             'id_barrio' => $this->id_barrio,
             'direccion' => $this->direccion,
@@ -124,10 +141,13 @@ class FormularioComponent extends Component
             'cedula' => $filePaths['cedula'],
             'observaciones' => $this->observaciones,
             'terminos' => $this->terminos,
+            'estado_id' => 1, // Estado inicial de 'Pendiente'
         ]);
 
         // Mostrar mensaje de éxito
-        session()->flash('message', 'Solicitud creada exitosamente.');
+        // session()->flash('message', 'Solicitud creada exitosamente.');
+        $this->dispatch('sweet-alert-good', icon: 'success', title: 'Solicitud creada exitosamente.', text: 'Tu solicitud ha sido enviada correctamente.', footer: '<a href="versolicitudes">Ver mis solicitudes</a>');
+
 
         // Resetear el formulario
         $this->reset();

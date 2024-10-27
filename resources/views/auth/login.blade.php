@@ -64,10 +64,12 @@
                         </div>
 
                         <div class="flex justify-center mt-6">
-                            <x-button class="w-full">
+                            <x-button class="w-full flex justify-center items-center">
                                 {{ __('Acceder') }}
                             </x-button>
                         </div>
+
+
                     </form>
 
                     {{-- Enlace para registrarse --}}

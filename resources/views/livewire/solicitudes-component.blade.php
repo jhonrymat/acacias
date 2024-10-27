@@ -1,7 +1,9 @@
 <div class="w-3/4 mx-auto py-6">
-
-
-
+    <div class="flex justify-end my-4"> <!-- Alinea a la derecha y agrega espaciado vertical -->
+        <button wire:click="$dispatch('view')" class="px-4 py-2 bg-blue-500 text-white rounded">
+            Mis datos
+        </button>
+    </div>
     <!-- Componente de tabla -->
     @livewire('solicitudes-datatable')
 
@@ -117,7 +119,7 @@
         </div>
     </div>
 
-    
+
 
 
 </div>
