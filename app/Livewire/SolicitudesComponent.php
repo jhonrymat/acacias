@@ -23,6 +23,7 @@ class SolicitudesComponent extends Component
 
     public $showForm = false; // Control para mostrar/ocultar el modal
     // variabble para mostrar los datos de user en modal
+
     public $name;
 
 
@@ -57,6 +58,8 @@ class SolicitudesComponent extends Component
         $this->id_poblacion = $user->poblacion->nombrePoblacion;
         $this->showForm = true;
     }
+
+
 
     public function render()
     {

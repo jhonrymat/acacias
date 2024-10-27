@@ -2,10 +2,11 @@
 namespace App\Livewire;
 
 use App\Models\User;
-use App\Models\Solicitud;
-use App\Models\Direccion;
 use App\Models\Barrio;
+use App\Models\Estado;
 use Livewire\Component;
+use App\Models\Direccion;
+use App\Models\Solicitud;
 use Livewire\WithFileUploads; // Para manejar la subida de archivos
 
 class SolicitudComponent extends Component
@@ -22,23 +23,16 @@ class SolicitudComponent extends Component
     $numeroIdentificacion, $ciudadExpedicion, $fechaNacimiento, $solicitud_id,
     $fechaSolicitud, $id_nivelEstudio, $id_genero, $id_ocupacion, $id_poblacion,
     $numeroIdentificacion_id, $fechaActual, $barrio_id, $direccion_id, $ubicacion,
-    $accion_comunal, $electoral, $sisben, $cedula, $estado_id, $showForm = false;
+    $accion_comunal, $electoral, $sisben, $cedula, $estado_id, $showForm = false, $showValidar = false;
 
 
 
 
     protected $rules = [
-        'fechaSolicitud' => 'required|date',
-        'numeroIdentificacion_id' => 'required|string|max:50',
-        'fechaActual' => 'required|date',
-        'barrio_id' => 'required|exists:barrios,id',
-        'direccion_id' => 'required|exists:direcciones,id',
-        'ubicacion' => 'required|string|max:100',
-        'evidenciaPDF' => 'nullable|file|mimes:pdf|max:10240', // Máximo 10MB,
-        'estado_id' =>'required|exists:estados,id', // Estado debe ser 0, 1, o 2
+        'estado_id' => 'required|exists:estados,id', // Validación para el estado
     ];
 
-    protected $listeners = ['edit', 'delete','UpdatedEstado', 'view'];
+    protected $listeners = ['edit', 'delete', 'view', 'procesar'];
 
     public function view($Id)
     {
@@ -60,6 +54,14 @@ class SolicitudComponent extends Component
         $this->showForm = true;
     }
 
+    // enviar datos a modal procesar para que el validador 1 cambie el estado
+    public function procesar($Id)
+    {
+        $solicitud = Solicitud::find($Id);
+        $this->solicitud_id = $solicitud->id;
+        $this->showValidar = true;
+    }
+
 
     public function save()
     {
@@ -68,38 +70,13 @@ class SolicitudComponent extends Component
         if ($this->solicitud_id) {
             $solicitud = Solicitud::find($this->solicitud_id);
 
-            if ($this->evidenciaPDF) {
-                $filePath = $this->evidenciaPDF->store('evidencias'); // Almacena el archivo PDF
-            }
 
             $solicitud->update([
-                'fechaSolicitud' => $this->fechaSolicitud,
-                'numeroIdentificacion_id' => $this->numeroIdentificacion_id,
-                'fechaActual' => $this->fechaActual,
-                'barrio_id' => $this->barrio_id,
-                'direccion_id' => $this->direccion_id,
-                'ubicacion' => $this->ubicacion,
-                'evidenciaPDF' => $filePath,
-                'estado_id' => $this->estado,
-            ]);
-        } else {
-            $filePath = $this->evidenciaPDF ? $this->evidenciaPDF->store('evidencias') : null;
-
-            Solicitud::create([
-                'fechaSolicitud' => $this->fechaSolicitud,
-                'numeroIdentificacion_id' => $this->numeroIdentificacion_id,
-                'fechaActual' => $this->fechaActual,
-                'barrio_id' => $this->barrio_id,
-                'direccion_id' => $this->direccion_id,
-                'ubicacion' => $this->ubicacion,
-                'evidenciaPDF' => $filePath,
-                'estado_id' => $this->estado,
-
+                'estado_id' => $this->estado_id,
             ]);
         }
 
-        $this->resetFields();
-        $this->showForm = false;
+        $this->showValidar = false;
         $this->dispatch('Updated');
     }
 
@@ -123,11 +100,6 @@ class SolicitudComponent extends Component
     }
 
 
-    public function create()
-    {
-        $this->resetFields();
-        $this->showForm = true;
-    }
 
     public function delete($Id)
     {
@@ -136,28 +108,19 @@ class SolicitudComponent extends Component
         $this->dispatch('Updated');
     }
 
-    public function resetFields()
-    {
-        $this->solicitud_id = null;
-        $this->fechaSolicitud = null;
-        $this->numeroIdentificacion_id = null;
-        $this->fechaActual = null;
-        $this->barrio_id = null;
-        $this->direccion_id = null;
-        $this->ubicacion = null;
-        $this->evidenciaPDF = null;
-        $this->estado_id = null;
-    }
 
 
-//datos del model
+
+    //datos del model
 
     public function render()
     {
+        // estados, solo pasar los estados con id 1, 2 y 3
+        $estados = Estado::whereIn('id', [1, 2, 3])->get();
 
-
-         return view('livewire.solicitud-component', [
+        return view('livewire.solicitud-component', [
             'solicitudes' => Solicitud::with('barrio', 'direccion'), // Paginación de 10 elementos
+            'estados' => $estados,
         ]);
     }
 }

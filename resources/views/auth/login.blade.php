@@ -32,7 +32,7 @@
                         </div>
                     @endif
 
-                    <h2 class="text-center text-2xl font-bold text-gray-800">Certificador de residencia Acacías</h2>
+                    <h2 class="text-center text-2xl font-bold text-blue-custom">Certificador de residencia Acacías</h2>
                     <p class="text-center text-gray-600">Ingresa tus datos para iniciar sesión</p>
 
                     <form method="POST" action="{{ route('login') }}" class="mt-8 space-y-6">
@@ -71,9 +71,10 @@
                     </form>
 
                     {{-- Enlace para registrarse --}}
-                    <div class="mt-6 text-center">
-                        <a class="text-sm text-gray-600 hover:text-gray-900" href="{{ route('register') }}">
-                            {{ __('¿No tienes cuenta? Regístrate') }}
+                    <div class="mt-6 flex justify-center text-sm">
+                        <p>¿No tienes cuenta?</p>
+                        <a class=" text-green-custom hover:text-gray-900" href="{{ route('register') }}">
+                            {{ __('Regístrate') }}
                         </a>
                     </div>
                 </x-authentication-card>

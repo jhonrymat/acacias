@@ -1,13 +1,10 @@
 <?php
 
 namespace App\Livewire;
-
 use App\Models\Solicitud;
-use Illuminate\Support\Facades\Storage;
-use Rappasoft\LaravelLivewireTables\Views\Column;
+use Illuminate\Support\Facades\Auth;
 use Rappasoft\LaravelLivewireTables\DataTableComponent;
-use Rappasoft\LaravelLivewireTables\Views\Columns\LinkColumn;
-use Rappasoft\LaravelLivewireTables\Views\Columns\ButtonGroupColumn;
+use Rappasoft\LaravelLivewireTables\Views\Column;
 
 class SolicitudDatatable extends DataTableComponent
 {
@@ -22,6 +19,24 @@ class SolicitudDatatable extends DataTableComponent
         $this->setDefaultSort('id', 'desc');
         $this->setSingleSortingStatus(false);
     }
+
+    public function builder(): \Illuminate\Database\Eloquent\Builder
+    {
+        // Obtener la consulta base de Solicitud
+        $query = Solicitud::query();
+
+        // Filtrar según el rol del usuario autenticado
+        if (Auth::user()->hasRole('validador1')) {
+            // Estado pendiente
+            $query->where('estado_id', 1);
+        } elseif (Auth::user()->hasRole('validador2')) {
+            // Estado aprobada
+            $query->where('estado_id', 2);
+        }
+
+        return $query;
+    }
+
 
     public function getIconByExtension($file)
     {

@@ -1,1 +1,1 @@
-<img class="rounded-full block h-9 w-auto" src="{{ asset('images/logo-web-192x192.png') }}" alt="Logo">
+<img class="block w-40" src="{{ asset('images/logo-web.png') }}" alt="Logo">
