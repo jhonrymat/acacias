@@ -74,3 +74,48 @@
 
 </div>
 @endrole
+
+
+@role('validador1')
+
+<div class="p-6 lg:p-8 bg-white border-b border-gray-200">
+    <x-application-logo class="" />     {{--las clases aca no me quieren funcionar --}}
+
+    <h1 class="mt-8 text-2xl font-medium text-gray-900">
+        Bienvenido validador1 a Maddicert!
+    </h1>
+
+    <p class="mt-6 text-gray-500 leading-relaxed">
+        Nos alegra que estén aquí. En esta plataforma, podrán gestionar y obtener sus certificados de residencia de una manera rápida, sencilla y sin complicaciones. Nuestro objetivo es hacer el proceso lo más eficiente posible, para que puedan dedicar su tiempo a lo que realmente importa.
+    </p>
+</div>
+
+<div class="bg-gray-200 border-t-2 border-green-custom bg-opacity-25 p-6 lg:p-8">
+    Naveguen entre las opciones de la parte superior de la página para poder modificar: cruds, solicitudes, gestión de roles, gestión por el usuario. <br> que tenga un buen dia :))
+
+
+
+</div>
+@endrole
+
+@role('validador2')
+
+<div class="p-6 lg:p-8 bg-white border-b border-gray-200">
+    <x-application-logo class="" />     {{--las clases aca no me quieren funcionar --}}
+
+    <h1 class="mt-8 text-2xl font-medium text-gray-900">
+        Bienvenido validador2 a Maddicert!
+    </h1>
+
+    <p class="mt-6 text-gray-500 leading-relaxed">
+        Nos alegra que estén aquí. En esta plataforma, podrán gestionar y obtener sus certificados de residencia de una manera rápida, sencilla y sin complicaciones. Nuestro objetivo es hacer el proceso lo más eficiente posible, para que puedan dedicar su tiempo a lo que realmente importa.
+    </p>
+</div>
+
+<div class="bg-gray-200 border-t-2 border-green-custom bg-opacity-25 p-6 lg:p-8">
+    Naveguen entre las opciones de la parte superior de la página para poder modificar: cruds, solicitudes, gestión de roles, gestión por el usuario. <br> que tenga un buen dia :))
+
+
+
+</div>
+@endrole
