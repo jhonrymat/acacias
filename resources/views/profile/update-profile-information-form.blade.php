@@ -1,10 +1,10 @@
 <x-form-section submit="updateProfileInformation">
     <x-slot name="title">
-        {{ __('Profile Information') }}
+        {{ __('Información del perfil') }}
     </x-slot>
 
     <x-slot name="description">
-        {{ __('Update your account profile information and email address.') }}
+        {{ __('Actualice la información del perfil de su cuenta y su dirección de correo electrónico.') }}
     </x-slot>
 
     <x-slot name="form">
