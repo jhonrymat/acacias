@@ -27,7 +27,7 @@ class EstadoSeeder extends Seeder
                 'color' => '#DC3545'
             ],
             [
-                'nombreEstado' => 'En proceso',
+                'nombreEstado' => 'En revision',
                 'descripcion' => 'La solicitud está siendo revisada o procesada actualmente',
                 'color' => '#17A2B8'
             ],

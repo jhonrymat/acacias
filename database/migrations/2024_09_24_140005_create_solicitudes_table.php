@@ -26,7 +26,7 @@ return new class extends Migration
             //estados
             $table->unsignedBigInteger('estado_id')->default(1); //1 nuevo-2 aprobada- 3 rechazada
             $table->unsignedBigInteger('actualizado_por')->nullable(); // Agregamos el campo updated_by
-            $table->foreign('actualizado_por')->references('id')->on('users')->onDelete('set null');
+            $table->unsignedBigInteger('Validador2_id')->nullable();
             // observaciones
             $table->string('observaciones', 255);
             $table->boolean('terminos');
@@ -36,6 +36,8 @@ return new class extends Migration
             $table->foreign('user_id')->references('id')->on('users');
             $table->foreign('id_barrio')->references('id')->on('barrios');
             $table->foreign('estado_id')->references('id')->on('estados');
+            $table->foreign('actualizado_por')->references('id')->on('users');
+            $table->foreign('Validador2_id')->references('id')->on('users');
 
         });
 

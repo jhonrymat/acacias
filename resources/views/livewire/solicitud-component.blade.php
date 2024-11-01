@@ -117,23 +117,13 @@
     </div>
 
     {{-- modal para validar la solicitud se va a llamar validar , por el momento solo va a tener un select que va a permitir cambien el estado de la solicitud --}}
-    <div x-data="{ showModal: @entangle('showValidar') }" x-cloak>
-        <!-- Overlay para el modal -->
+    <div x-data="validationModal" x-cloak>
         <div x-show="showModal" class="fixed inset-0 bg-gray-800 bg-opacity-70 flex items-center justify-center">
             <div
                 class="bg-white w-11/12 sm:max-w-lg md:max-w-3xl lg:max-w-5xl p-6 rounded-lg shadow-lg max-h-screen overflow-y-auto">
-                <!-- Encabezado del modal -->
                 <div class="flex justify-between items-center mb-2">
                     <h2 class="text-xl font-bold">Validar Solicitud</h2>
-                    <button @click="showModal = false" class="text-gray-500 hover:text-gray-700">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2"
-                            stroke="currentColor" class="w-6 h-6">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
-                        </svg>
-                    </button>
                 </div>
-
-                <!-- Formulario -->
 
                 <form wire:submit.prevent="save">
                     <div class="border p-3 rounded-lg">
@@ -142,21 +132,21 @@
                             <label for="estado" class="block text-xs font-medium">Estado</label>
                             <select wire:model="estado_id" id="estado"
                                 class="mt-1 block w-full border-gray-300 rounded text-sm px-2 py-1">
-                                {{-- recorrer $estados --}}
                                 @foreach ($estados as $estado)
-                                    <option value="{{ $estado->id }}">{{ $estado->nombreEstado }} - {{ $estado->descripcion }}</option>
+                                    <option value="{{ $estado->id }}">{{ $estado->nombreEstado }} -
+                                        {{ $estado->descripcion }}</option>
                                 @endforeach
                             </select>
                         </div>
-                        {{-- enviar id de la solicitud --}}
-                        <input type="hidden" wire:model="solicitud_id" id="solicitud_id" value="{{ $solicitud_id }}">
+                        <input type="hidden" wire:model="solicitud_id" id="solicitud_id"
+                            value="{{ $solicitud_id }}">
                     </div>
 
                     <div class="flex justify-end space-x-2">
-                        <!-- Botón para cerrar el modal -->
-                        <button type="button" @click="showModal = false"
+                        <!-- Botón para liberar la solicitud -->
+                        <button type="button" wire:click.prevent="confirmLiberar"
                             class="px-4 py-2 bg-gray-500 text-white rounded">
-                            Cancelar
+                            Liberar
                         </button>
                         <!-- Botón para guardar el formulario -->
                         <button type="submit" class="px-4 py-2 bg-blue-500 text-white rounded">
@@ -168,10 +158,30 @@
         </div>
     </div>
 
+
     <style>
         [x-cloak] {
             display: none !important;
         }
     </style>
+    <script>
+        document.addEventListener('alpine:init', () => {
+            Alpine.data('validationModal', () => ({
+                showModal: @entangle('showValidar'),
 
+                init() {
+                    // Detectar cuando se está revisando la solicitud y el modal está abierto
+                    window.addEventListener('beforeunload', (e) => {
+                        if (this
+                            .showModal) { // Solo mostrar advertencia si el modal está visible
+                            e.preventDefault();
+                            e.returnValue = ''; // Mostrar mensaje de advertencia
+                        }
+                    });
+                }
+            }));
+        });
+    </script>
+    <x-sweet-alert-good></x-sweet-alert-good>
+    <x-confirm></x-confirm>
 </div>

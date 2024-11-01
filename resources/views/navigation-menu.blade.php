@@ -90,8 +90,12 @@
                             </x-slot>
                         </x-dropdown>
                     </div>
-                    <x-nav-link class="hidden sm:flex" href="{{ route('users') }}" :active="request()->routeIs('users')">
-                        {{ __('Usuarios') }}
+                    <x-nav-link class="hidden sm:flex" href="{{ route('ciudadanos') }}" :active="request()->routeIs('ciudadanos')">
+                        {{ __('Ciudadanos') }}
+                    </x-nav-link>
+                    <x-nav-link class="hidden sm:flex" href="{{ route('validadores') }}" :active="request()->routeIs('validadores')">
+                        {{ __('Validadores') }}
+
                     </x-nav-link>
                 @endrole
                 @role('user')
@@ -268,7 +272,7 @@
                 @role('admin')
     <div :class="{ 'block': open, 'hidden': !open }" class="hidden sm:hidden">
         <div class="pt-2 pb-3 space-y-1">
-            
+
             <!-- Enlace directo a "Historial" -->
             <x-responsive-nav-link href="{{ route('historial') }}" :active="request()->routeIs('historial')">
                 {{ __('Historial') }}
