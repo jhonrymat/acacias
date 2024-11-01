@@ -1,10 +1,10 @@
 <x-form-section submit="updateProfileInformation">
     <x-slot name="title">
-        {{ __('Profile Information') }}
+        {{ __('Información del perfil') }}
     </x-slot>
 
     <x-slot name="description">
-        {{ __('Update your account profile information and email address.') }}
+        {{ __('Actualice la información del perfil de su cuenta y su dirección de correo electrónico.') }}
     </x-slot>
 
     <x-slot name="form">
@@ -233,15 +233,51 @@
                 <span class="text-red-500">{{ $message }}</span>
             @enderror
         </div>
+        {{-- mostrar el codigo del usuario si es validador1 o 2 y no permitirlo editar ni enviar al componentes solo es para visualizacion --}}
+        @if (auth()->user()->hasRole('validador1') || auth()->user()->hasRole('validador2'))
+            <div class="col-span-6 sm:col-span-4">
+                <x-label for="codigo" value="{{ __('Código') }}" />
+                <x-input id="codigo" type="text" class="mt-1 block w-full" wire:model.defer="state.codigo"
+                    autocomplete="codigo" readonly />
+                <x-input-error for="codigo" class="mt-2" />
+            </div>
+        @endif
+
+
+        {{-- permitir agregar firma solo si el rol es validador2 --}}
+        <!-- Campo para cargar firma, solo visible si el usuario tiene rol validador2 -->
+        @if (auth()->user()->hasRole('validador2'))
+            <div class="col-span-6 sm:col-span-4">
+                <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" for="firma_input">
+                    Subir firma para firmar los certificados
+                </label>
+                <input wire:model="state.firma"
+                    class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+                    aria-describedby="firma_input_help" id="firma_input" type="file">
+                <p class="mt-1 text-xs text-gray-500 dark:text-gray-300" id="firma_input_help">PNG, JPG (MAX. 10MB).
+                </p>
+
+                <!-- Vista previa de la firma cargada -->
+                @if ($this->user->firma)
+                    <div class="mt-2">
+                        <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" for="firma_input">
+                            Firma cargada
+                        </label>
+                        <img src="{{ Storage::url($this->user->firma) }}" alt="Firma del usuario"
+                            class="h-20 w-auto rounded-md">
+                    </div>
+                @endif
+            </div>
+        @endif
     </x-slot>
 
     <x-slot name="actions">
         <x-action-message class="me-3" on="saved">
-            {{ __('Saved.') }}
+            {{ __('Guardado.') }}
         </x-action-message>
 
         <x-button wire:loading.attr="disabled" wire:target="photo">
-            {{ __('Save') }}
+            {{ __('Guardar') }}
         </x-button>
     </x-slot>
 </x-form-section>

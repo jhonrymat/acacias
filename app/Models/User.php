@@ -41,7 +41,9 @@ class User extends Authenticatable
         'id_nivelEstudio',
         'id_genero',
         'id_ocupacion',
-        'id_poblacion'
+        'id_poblacion',
+        'codigo',
+        'firma'
     ];
 
     /**

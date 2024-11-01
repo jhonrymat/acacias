@@ -30,6 +30,10 @@ return new class extends Migration
             $table->rememberToken();
             $table->foreignId('current_team_id')->nullable();
             $table->string('profile_photo_path', 2048)->nullable();
+            $table->string('codigo', 100)->nullable();
+            //texto de ruta de firma
+            $table->text('firma')->nullable();
+
             $table->timestamps();
 
             // Relaciones de clave foránea

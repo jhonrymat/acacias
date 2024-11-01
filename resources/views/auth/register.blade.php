@@ -12,7 +12,7 @@
 
             <div class="relative">
                 <div class="flex items-center">
-                    <x-label for="name" value="Primer nombre" />
+                    <x-label for="name" value="Primer Nombre" />
                     
                     <!-- Ícono de pregunta -->
                     <div class="ml-1 tooltip" x-data="{ open: false }">
@@ -36,7 +36,7 @@
             {{-- nombre_2 --}}
             <div class="relative">
                 <div class="flex items-center">
-                <x-label for="nombre_2" value="Segundo nombre" />
+                <x-label for="nombre_2" value="Segundo Nombre" />
                     
                     <!-- Ícono de pregunta -->
                     <div class="ml-1 tooltip" x-data="{ open: false }">
@@ -60,7 +60,7 @@
             {{-- apellido_1 --}}
             <div class="relative">
                 <div class="flex items-center">
-                <x-label for="apellido_1" value="Primer apellido" />
+                <x-label for="apellido_1" value="Primer Apellido" />
                     
                     <!-- Ícono de pregunta -->
                     <div class="ml-1 tooltip" x-data="{ open: false }">
@@ -84,7 +84,7 @@
             {{-- apellido_2 --}}
             <div class="relative">
                 <div class="flex items-center">
-                <x-label for="apellido_2" value="Según apellido" />
+                <x-label for="apellido_2" value="Segundo Apellido" />
                     
                     <!-- Ícono de pregunta -->
                     <div class="ml-1 tooltip" x-data="{ open: false }">
@@ -108,7 +108,7 @@
 
             <div class="mt-4 relative">
                 <div class="flex items-center">
-                <x-label for="email" value="Correo electrónico" />
+                <x-label for="email" value="Correo Electrónico" />
                     
                     <!-- Ícono de pregunta -->
                     <div class="ml-1 tooltip" x-data="{ open: false }">
@@ -219,7 +219,7 @@
                         <div x-show="open" class="absolute left-5 top-0 z-10 w-48 p-2 mt-2 text-sm text-gray-700 bg-white border border-gray-300 rounded shadow-lg"
                              x-transition.opacity
                              @mouseenter="open = true" @mouseleave="open = false">
-                            Ingresas tu o fecha de nacimiento.
+                            Ingresas tu fecha de nacimiento.
                         </div>
                     </div>
                 </div>
@@ -431,7 +431,7 @@
             {{-- id_genero de la tabla generos --}}
             <div class="relative">
                 <div class="flex items-center">
-                <x-label for="id_genero" value="{{ __('Genero') }}" />
+                <x-label for="id_genero" value="{{ __('Género') }}" />
                 <!-- Ícono de pregunta -->
                     <div class="ml-1 tooltip" x-data="{ open: false }">
                         <a href="#" class="hover:text-gray-400" @mouseenter="open = true" @mouseleave="open = false">
@@ -458,7 +458,7 @@
             {{-- id_ocupacion de la tabla ocupacion --}}
             <div class="relative">
                 <div class="flex items-center">
-                <x-label for="id_ocupacion" value="{{ __('Ocupacion') }}" />
+                <x-label for="id_ocupacion" value="{{ __('Ocupación') }}" />
                 <!-- Ícono de pregunta -->
                     <div class="ml-1 tooltip" x-data="{ open: false }">
                         <a href="#" class="hover:text-gray-400" @mouseenter="open = true" @mouseleave="open = false">
@@ -486,8 +486,9 @@
         
             <div class="relative">
                 <div class="flex items-center">
-                    <x-label for="id_poblacion" value="{{ __('Población') }}" />
-                    <!-- Ícono de pregunta -->
+                <x-label for="id_poblacion" value="{{ __('Población') }}" />
+                <!-- Ícono de pregunta -->
+
                     <div class="ml-1 tooltip" x-data="{ open: false }">
                         <a href="#" class="hover:text-gray-400" @mouseenter="open = true" @mouseleave="open = false">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 inline-block">
@@ -547,7 +548,7 @@
                 </a>
 
                 <x-button class="ml-4">
-                    {{ __('Register') }}
+                    {{ __('Registrar') }}
                 </x-button>
             </div>
         </form>

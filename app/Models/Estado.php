@@ -16,4 +16,10 @@ class Estado extends Model
     {
         return $this->hasMany(Solicitud::class, 'estado_id');
     }
+
+     // Método para obtener el ID del estado "en revisión"
+     public static function enRevisionId()
+     {
+         return self::where('nombreEstado', 'en revision')->value('id');
+     }
 }

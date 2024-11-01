@@ -8,12 +8,6 @@ use App\Models\Poblacion;
 class PoblacionComponent extends Component
 {
 
-    public function mount()
-    {
-        if (!auth()->user()->can('solicitudes')) {
-            abort(403, 'No tienes acceso a esta página.');
-        }
-    }
 
     public $id_poblacion;  // Cambiar $id a $ocupacion_id para evitar conflictos
     public $nombrePoblacion;

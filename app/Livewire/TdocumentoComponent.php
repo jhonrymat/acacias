@@ -6,12 +6,7 @@ use Livewire\Component;
 
 class TdocumentoComponent extends Component
 {
-    public function mount()
-    {
-        if (!auth()->user()->can('solicitudes')) {
-            abort(403, 'No tienes acceso a esta página.');
-        }
-    }
+   
     public $documento_id;  // Cambiar $id a $documento_id
     public $tipoDocumento;
     public $showForm = false; // Control para mostrar/ocultar el formulario
