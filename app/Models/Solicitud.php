@@ -21,6 +21,7 @@ class Solicitud extends Model
         'sisben',
         'cedula',
         'estado_id',
+        'actualizado_por',
         'observaciones',
         'terminos',
     ];

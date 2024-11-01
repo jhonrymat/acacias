@@ -52,7 +52,8 @@ class RolesAndPermissionsTenantSeeder extends Seeder
             'roles',
             'permisos',
             'user-roles',
-            'users'
+            'ciudadanos',
+            'validadores'
         ];
         $permissionsUser = [
             'formulario',
@@ -61,7 +62,6 @@ class RolesAndPermissionsTenantSeeder extends Seeder
 
         $permissionsValidador =[
             'solicitudes',
-            'formulario',
             'versolicitudes',
             'historial',
         ];
@@ -143,17 +143,17 @@ class RolesAndPermissionsTenantSeeder extends Seeder
             ]
         );
             // Crear el usuario user
-        $validador1 = User::firstOrCreate(
-            ['email' => 'validador1@gmail.com'],
+        $validador1n1 = User::firstOrCreate(
+            ['email' => 'validador1n1@gmail.com'],
             [
-                'name' => 'Validador1',
+                'name' => 'Validador1n1',
                 'nombre_2' => 'Fabian',
                 'apellido_1' => 'cruz',
                 'apellido_2' => 'Rincon',
-                'telefonoContacto' => '3145687891',
+                'telefonoContacto' => '3145687888',
                 'id_tipoSolicitante' => 1,
                 'id_tipoDocumento' => 1,
-                'numeroIdentificacion' => '1111111111',
+                'numeroIdentificacion' => '1111111188',
                 'ciudadExpedicion' => 'acacias',
                 'fechaNacimiento' => '1980-01-12 00:00:00',
                 'id_nivelEstudio' => 1,
@@ -162,6 +162,30 @@ class RolesAndPermissionsTenantSeeder extends Seeder
                 'id_poblacion' => 1,
                 'password' => Hash::make('1q2w3e4r'),
                 'email_verified_at' => now(),
+                'codigo' => '001',
+            ]
+        );
+
+        $validador1n2 = User::firstOrCreate(
+            ['email' => 'validador1n2@gmail.com'],
+            [
+                'name' => 'Validador1n2',
+                'nombre_2' => 'santiago',
+                'apellido_1' => 'rivera',
+                'apellido_2' => 'zapata',
+                'telefonoContacto' => '3145687899',
+                'id_tipoSolicitante' => 1,
+                'id_tipoDocumento' => 1,
+                'numeroIdentificacion' => '1111111199',
+                'ciudadExpedicion' => 'acacias',
+                'fechaNacimiento' => '1980-01-12 00:00:00',
+                'id_nivelEstudio' => 1,
+                'id_genero' => 1,
+                'id_ocupacion' => 1,
+                'id_poblacion' => 1,
+                'password' => Hash::make('1q2w3e4r'),
+                'email_verified_at' => now(),
+                'codigo' => '002',
             ]
         );
 
@@ -184,13 +208,15 @@ class RolesAndPermissionsTenantSeeder extends Seeder
                 'id_poblacion' => 1,
                 'password' => Hash::make('1q2w3e4r'),
                 'email_verified_at' => now(),
+                'codigo' => '003',
             ]
         );
 
         // Asignar el rol de administrador al usuario
         $admin->assignRole('admin');
         $user->assignRole('user');
-        $validador1->assignRole('validador1');
+        $validador1n1->assignRole('validador1');
+        $validador1n2->assignRole('validador1');
         $validador2->assignRole('validador2');
 
 

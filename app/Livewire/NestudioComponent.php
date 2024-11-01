@@ -7,12 +7,7 @@ use Livewire\Component;
 class NestudioComponent extends Component
 {
 
-    public function mount()
-    {
-        if (!auth()->user()->can('solicitudes')) {
-            abort(403, 'No tienes acceso a esta página.');
-        }
-    }
+    
     public $estudio_id;  // Cambiar $id a $estudio_id para evitar conflictos
     public $nivelEstudio;
     public $showForm = false; // Control para mostrar/ocultar el formulario
