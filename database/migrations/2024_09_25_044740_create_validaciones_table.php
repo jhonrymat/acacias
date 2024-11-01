@@ -14,17 +14,22 @@ return new class extends Migration
         Schema::create('validaciones', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('id_solicitud');
-            $table->timestamp('fechaValidacion');
-            $table->boolean('validacionSalud')->default(false);
-            $table->string('evidenciaSalud', 255)->nullable();
-            $table->boolean('validacionElecciones')->default(false);
-            $table->string('evidenciaElecciones', 255)->nullable();
-            $table->boolean('validacionJuntas')->default(false);
-            $table->string('evidenciaJuntas', 255)->nullable();
+            // columna estado1
+            $table->string('validacion1', 255)->nullable();
+            // columna estado2
+            $table->string('validacion2', 255)->nullable();
+            // adjunto JAComunal
+            $table->text('JAComunal')->nullable();
+
+            $table->text('notas')->nullable();
+            // permitir visualizacion de ciudadano, booleano
+            $table->boolean('visible')->default(false);
+
             $table->timestamps();
 
             // Relación con solicitudes
             $table->foreign('id_solicitud')->references('id')->on('solicitudes');
+
         });
 
     }

@@ -3,13 +3,15 @@
 namespace App\Actions\Fortify;
 
 use App\Models\User;
-use Illuminate\Contracts\Auth\MustVerifyEmail;
-use Illuminate\Support\Facades\Validator;
+use Livewire\WithFileUploads;
 use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Laravel\Fortify\Contracts\UpdatesUserProfileInformation;
 
 class UpdateUserProfileInformation implements UpdatesUserProfileInformation
 {
+
     /**
      * Validate and update the given user's profile information.
      *
@@ -33,6 +35,10 @@ class UpdateUserProfileInformation implements UpdatesUserProfileInformation
             'id_ocupacion' => ['required'],
             'id_poblacion' => ['required'],
             'email' => ['required', 'email', 'max:255', Rule::unique('users')->ignore($user->id)],
+            // la firma no es obligatoria, debe ser un archivo de imagen
+            'firma' => ['nullable', 'mimes:jpg,jpeg,png'],
+            // codigo
+            'codigo' => ['nullable', 'string', 'max:255'],
             'photo' => ['nullable', 'mimes:jpg,jpeg,png', 'max:1024'],
         ])->validateWithBag('updateProfileInformation');
 
@@ -40,11 +46,14 @@ class UpdateUserProfileInformation implements UpdatesUserProfileInformation
             $user->updateProfilePhoto($input['photo']);
         }
 
-        if ($input['email'] !== $user->email &&
-            $user instanceof MustVerifyEmail) {
+        if (
+            $input['email'] !== $user->email &&
+            $user instanceof MustVerifyEmail
+        ) {
             $this->updateVerifiedUser($user, $input);
+
         } else {
-            $user->forceFill([
+            $userData = [
                 'name' => $input['name'],
                 'nombre_2' => $input['nombre_2'],
                 'apellido_1' => $input['apellido_1'],
@@ -60,7 +69,28 @@ class UpdateUserProfileInformation implements UpdatesUserProfileInformation
                 'id_ocupacion' => $input['id_ocupacion'],
                 'id_poblacion' => $input['id_poblacion'],
                 'email' => $input['email'],
-            ])->save();
+            ];
+
+            // Verificar si el usuario tiene el rol validador2 y se ha subido una firma
+            if ($user->role === 'validador2' && isset($input['firma'])) {
+                // Obtener el archivo de la firma
+                $file = $input['firma'];
+
+                if ($file) {
+                    // Obtener el nombre original del archivo
+                    $originalName = $file->getClientOriginalName();
+                    // Obtener la extensión del archivo
+                    $extension = $file->getClientOriginalExtension();
+                    // Crear un nombre único: nombre original + fecha y hora
+                    $fileName = pathinfo($originalName, PATHINFO_FILENAME) . '_' . now()->format('Ymd_His') . '.' . $extension;
+                    // Guardar el archivo en la carpeta "validador2"
+                    $path = $file->storeAs('validador2', $fileName, 'public');
+                    // Almacenar la ruta de la firma en el array $userData
+                    $userData['firma'] = $path;
+                }
+            }
+
+            $user->forceFill($userData)->save();
         }
     }
 

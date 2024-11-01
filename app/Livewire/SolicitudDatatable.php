@@ -18,6 +18,14 @@ class SolicitudDatatable extends DataTableComponent
         $this->setPrimaryKey('id');
         $this->setDefaultSort('id', 'desc');
         $this->setSingleSortingStatus(false);
+        // Configurar el mensaje personalizado según el rol
+        if (Auth::user()->hasRole('validador1')) {
+            $this->setEmptyMessage("No hay solicitudes pendientes de revisión. Como Validador 1.");
+        } elseif (Auth::user()->hasRole('validador2')) {
+            $this->setEmptyMessage("No hay solicitudes en espera de aprobación final. Como Validador 2.");
+        } else {
+            $this->setEmptyMessage("No hay registros para mostrar.");
+        }
     }
 
     public function builder(): \Illuminate\Database\Eloquent\Builder
@@ -27,8 +35,8 @@ class SolicitudDatatable extends DataTableComponent
 
         // Filtrar según el rol del usuario autenticado
         if (Auth::user()->hasRole('validador1')) {
-            // Estado pendiente
-            $query->where('estado_id', 1);
+            // Mostrar solicitudes con estado "Pendiente" o "En revisión"
+            $query->whereIn('estado_id', [1, 4]);
         } elseif (Auth::user()->hasRole('validador2')) {
             // Estado aprobada
             $query->where('estado_id', 2);

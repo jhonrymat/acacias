@@ -6,12 +6,7 @@ use Livewire\Component;
 
 class GeneroComponent extends Component
 {
-    public function mount()
-    {
-        if (!auth()->user()->can('solicitudes')) {
-            abort(403, 'No tienes acceso a esta página.');
-        }
-    }
+   
     public $genero_id;  // Cambiar $id a $genero_id para evitar conflictos
     public $nombreGenero;
     public $showForm = false; // Control para mostrar/ocultar el formulario

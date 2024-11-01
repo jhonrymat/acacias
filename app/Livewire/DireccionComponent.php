@@ -8,12 +8,7 @@ use Livewire\Component;
 
 class DireccionComponent extends Component
 {
-    public function mount()
-    {
-        if (!auth()->user()->can('solicitudes')) {
-            abort(403, 'No tienes acceso a esta página.');
-        }
-    }
+   
     public $tipoViaPrimaria, $numeroViaPrincipal, $letraViaPrincipal, $bis, $letraBis, $cuadranteViaPrincipal;
     public $numeroViaGeneradora, $letraViaGeneradora, $numeroPlaca, $cuadranteViaGeneradora;
     public $barrio_id; // Selección del barrio

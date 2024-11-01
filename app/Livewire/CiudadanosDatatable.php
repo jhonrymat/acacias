@@ -2,11 +2,12 @@
 
 namespace App\Livewire;
 
-use Rappasoft\LaravelLivewireTables\DataTableComponent;
-use Rappasoft\LaravelLivewireTables\Views\Column;
 use App\Models\User;
+use Illuminate\Support\Facades\Auth;
+use Rappasoft\LaravelLivewireTables\Views\Column;
+use Rappasoft\LaravelLivewireTables\DataTableComponent;
 
-class UsersDatatable extends DataTableComponent
+class CiudadanosDatatable extends DataTableComponent
 {
     protected $model = User::class;
 
@@ -20,6 +21,22 @@ class UsersDatatable extends DataTableComponent
             'users.apellido_1 as apellido_1',
             'users.apellido_2 as apellido_2',
         ]);
+    }
+
+    public function builder(): \Illuminate\Database\Eloquent\Builder
+    {
+        // Obtener la consulta base de Solicitud
+        $query = User::query();
+
+        // Filtrar según el rol del usuario autenticado
+        if (Auth::user()->hasRole('admin')) {
+            // Mostrar solos los usuarios con el rol de user
+            $query->whereHas('roles', function ($query) {
+                $query->where('name', 'user');
+            });
+        }
+
+        return $query;
     }
 
     public function columns(): array

@@ -1,6 +1,5 @@
 <?php
 
-use App\Livewire\UserComponent;
 use App\Livewire\RolesComponent;
 use App\Livewire\BarrioComponent;
 use App\Livewire\GeneroComponent;
@@ -11,10 +10,12 @@ use App\Livewire\HistorialComponent;
 use App\Livewire\OcupacionComponent;
 use App\Livewire\PoblacionComponent;
 use App\Livewire\SolicitudComponent;
+use App\Livewire\CiudadanosComponent;
 use App\Livewire\FormularioComponent;
 use App\Livewire\TdocumentoComponent;
 use Illuminate\Support\Facades\Route;
 use App\Livewire\SolicitudesComponent;
+use App\Livewire\ValidadoresComponent;
 use App\Livewire\TipoSolicitanteComponent;
 
 
@@ -44,7 +45,12 @@ Route::middleware([
     Route::middleware(['can:versolicitudes'])->get('versolicitudes', SolicitudesComponent::class)->name('versolicitudes');
     Route::middleware(['can:user-roles'])->get('user-roles', UserRoleComponent::class)->name('user-roles');
     Route::middleware(['can:historial'])->get('historial', HistorialComponent::class)->name('historial');
-    // ruta para obtener todos los usuarios de la base de datos
-    Route::middleware(['can:users'])->get('users', UserComponent::class)->name('users');
+    // ruta para obtener todos los ciudadanos de la base de datos
+    Route::middleware(['can:ciudadanos'])->get('ciudadanos', CiudadanosComponent::class)->name('ciudadanos');
+    Route::middleware(['can:validadores'])->get('validadores', ValidadoresComponent::class)->name('validadores');
+    //ruta para la politica de proteccion de datos
+    Route::get('proteccion', function () {
+        return view('pages/politicas-proteccion-datos');
+    })->name('proteccion');
 });
 

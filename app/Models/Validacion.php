@@ -9,9 +9,11 @@ class Validacion extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'id_solicitud', 'fechaValidacion', 'validacionSalud',
-        'evidenciaSalud', 'validacionElecciones', 'evidenciaElecciones',
-        'validacionJuntas', 'evidenciaJuntas'
+        'validacion1',
+        'validacion2',
+        'JAComunal',
+        'notas',
+        'visible',
     ];
 
     public function solicitud()

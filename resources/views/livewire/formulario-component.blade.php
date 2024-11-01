@@ -435,7 +435,7 @@
                 <div class="mb-4">
                     <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                         for="accion_comunal_input">
-                        Subir Acción Comunal
+                        Subir Certificación de la junta de acción Comunal
                     </label>
                     <input wire:model="accion_comunal"
                         class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
@@ -447,7 +447,7 @@
                 <!-- Subir Certificado Electoral -->
                 <div class="mb-4">
                     <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" for="electoral_input">
-                        Subir Certificado Electoral
+                        Subir Certificado Electoral (Antiguedad minima de 12 meses)
                     </label>
                     <input wire:model="electoral"
                         class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
@@ -459,7 +459,7 @@
                 <!-- Subir Certificado Sisben -->
                 <div class="mb-4">
                     <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" for="sisben_input">
-                        Subir Certificado Sisben
+                        Subir Constancia de Sisben
                     </label>
                     <input wire:model="sisben"
                         class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
@@ -497,7 +497,7 @@
                         class="w-6 h-6 text-green-600 border-green-500 rounded focus:ring-green-400">
                     <span class="text-green-700 leading-snug font-semibold">
                         Acepto las condiciones establecidas en la política de tratamiento de información de la Alcaldía
-                        de Acacias: <a href="#" class="text-green-700 underline hover:text-green-800">Políticas
+                        de Acacias: <a href="/proteccion" target="_blank" class="text-green-700 underline hover:text-green-800">Políticas
                             de Protección de Datos Personales</a>.
                     </span>
                 </div>
