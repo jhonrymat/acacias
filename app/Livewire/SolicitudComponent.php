@@ -73,6 +73,7 @@ class SolicitudComponent extends Component
 
             $solicitud->update([
                 'estado_id' => $this->estado_id,
+                'actualizado_por' => auth()->id() 
             ]);
         }
 
