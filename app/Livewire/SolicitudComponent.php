@@ -7,7 +7,7 @@ use App\Models\Estado;
 use Livewire\Component;
 use App\Models\Direccion;
 use App\Models\Solicitud;
-use Livewire\WithFileUploads; // Para manejar la subida de archivos
+use Livewire\WithFileUploads; 
 
 class SolicitudComponent extends Component
 {
@@ -58,9 +58,72 @@ class SolicitudComponent extends Component
     public function procesar($Id)
     {
         $solicitud = Solicitud::find($Id);
+
+        // Obtener el ID de los estados "Pendiente" y "En revisión"
+        $pendienteId = 1; // ID de "Pendiente" (ajústalo según el estado real)
+        $enRevisionId = 4;
+
+        // Verificar si la solicitud ya ha cambiado de estado a algo diferente a "Pendiente" o "En revisión"
+        if ($solicitud->estado_id != $pendienteId && $solicitud->estado_id != $enRevisionId) {
+            $this->dispatch('sweet-alert-good', icon: 'info', title: 'Solicitud ya procesada.', text: 'Esta solicitud ya fue aprobada, rechazada o procesada por otro validador.');
+            $this->dispatch('Updated');
+            return;
+        }
+
+        // Verificar si la solicitud está en revisión por otro validador
+        if ($solicitud->estado_id == $enRevisionId && $solicitud->actualizado_por !== auth()->id()) {
+            $this->dispatch('sweet-alert-good', icon: 'info', title: 'Solicitud en revisión.', text: 'No puedes validar la solicitud actual, ya se encuentra en revisión por otro validador.');
+            $this->dispatch('Updated');
+            return;
+        }
+
+        // Si la solicitud está en revisión por el mismo validador, permitir el acceso sin actualizar el estado
+        if ($solicitud->estado_id == $enRevisionId && $solicitud->actualizado_por === auth()->id()) {
+            $this->solicitud_id = $solicitud->id;
+            $this->showValidar = true;
+            $this->dispatch('Updated');
+            return;
+        }
+
+        // Bloquear la solicitud al validador actual si no está en revisión o si no está bloqueada aún
+        $solicitud->update([
+            'estado_id' => $enRevisionId,
+            'actualizado_por' => auth()->id() // Bloquea la solicitud para el usuario actual
+        ]);
+
         $this->solicitud_id = $solicitud->id;
         $this->showValidar = true;
     }
+
+    public function confirmLiberar()
+    {
+        // Emitir un evento a JavaScript para solicitar confirmación
+        $this->dispatch('confirm',
+            title: '¿Estás seguro?',
+            text: '¿En serio quieres liberar la solicitud actual? Tu progreso se perderá.',
+            confirmButtonText: 'Sí, liberar',
+            cancelButtonText: 'Cancelar'
+        );
+    }
+
+    public function liberar()
+    {
+        if ($this->solicitud_id) {
+            $solicitud = Solicitud::find($this->solicitud_id);
+
+            // Cambiar el estado a pendiente y eliminar el bloqueo del validador
+            $solicitud->update([
+                'estado_id' => 1, // Estado "Pendiente"
+                'actualizado_por' => null
+            ]);
+
+            $this->solicitud_id = null;
+            $this->showValidar = false;
+            $this->dispatch('Updated');
+            $this->dispatch('sweet-alert-good', icon: 'info', title: 'Solicitud liberada', text: 'Has liberado la solicitud. Ahora otros validadores pueden revisarla.');
+        }
+    }
+
 
 
     public function save()

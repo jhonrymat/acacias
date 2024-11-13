@@ -70,23 +70,27 @@ class UpdateUserProfileInformation implements UpdatesUserProfileInformation
                 'id_poblacion' => $input['id_poblacion'],
                 'email' => $input['email'],
             ];
-
             // Verificar si el usuario tiene el rol validador2 y se ha subido una firma
-            if ($user->role === 'validador2' && isset($input['firma'])) {
-                // Obtener el archivo de la firma
-                $file = $input['firma'];
+            if (isset($input['firma'])) {
+                try {
+                    // Obtener el archivo de la firma
+                    $file = $input['firma'];
 
-                if ($file) {
-                    // Obtener el nombre original del archivo
-                    $originalName = $file->getClientOriginalName();
-                    // Obtener la extensión del archivo
-                    $extension = $file->getClientOriginalExtension();
-                    // Crear un nombre único: nombre original + fecha y hora
-                    $fileName = pathinfo($originalName, PATHINFO_FILENAME) . '_' . now()->format('Ymd_His') . '.' . $extension;
-                    // Guardar el archivo en la carpeta "validador2"
-                    $path = $file->storeAs('validador2', $fileName, 'public');
-                    // Almacenar la ruta de la firma en el array $userData
-                    $userData['firma'] = $path;
+                    if ($file) {
+                        // Obtener el nombre original del archivo
+                        $originalName = $file->getClientOriginalName();
+                        // Obtener la extensión del archivo
+                        $extension = $file->getClientOriginalExtension();
+                        // Crear un nombre único: nombre original + fecha y hora
+                        $fileName = pathinfo($originalName, PATHINFO_FILENAME) . '_' . now()->format('Ymd_His') . '.' . $extension;
+                        // Guardar el archivo en la carpeta "validador2"
+                        $path = $file->storeAs('validador2', $fileName, 'public');
+                        // Almacenar la ruta de la firma en el array $userData
+                        $userData['firma'] = $path;
+                    }
+                } catch (\Exception $e) {
+                    // En caso de error, mostrar un mensaje de error
+                    session()->flash('error', 'Error al subir la firma');
                 }
             }
 

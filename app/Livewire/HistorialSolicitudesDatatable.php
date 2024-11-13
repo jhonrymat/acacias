@@ -30,11 +30,11 @@ class HistorialSolicitudesDatatable extends DataTableComponent
     public function builder(): Builder
     {
         return Solicitud::query()
-            ->where('estado_id', 2) // Solo estados aceptada o rechazada
-            ->orWhere('estado_id',3)
-            ->where('actualizado_por', auth()->id()) // Solo las actualizadas por el usuario actual
-            ->with(['user', 'barrio', 'direccion']); // Carga las relaciones
+            ->where('actualizado_por', auth()->id()) // Filtramos por el usuario actual
+            ->whereIn('estado_id', [2, 3]) // Filtramos por estados específicos
+            ->with(['user', 'barrio', 'direccion']); // Cargamos relaciones solo cuando sean necesarias
     }
+
 
     public function columns(): array
     {

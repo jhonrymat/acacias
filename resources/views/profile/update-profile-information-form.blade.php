@@ -82,8 +82,9 @@
         <!-- Email -->
         <div class="col-span-6 sm:col-span-4">
             <x-label for="email" value="{{ __('Email') }}" />
+            {{-- evitar que editen el correo --}}
             <x-input id="email" type="email" class="mt-1 block w-full" wire:model.defer="state.email"
-                autocomplete="username" />
+                autocomplete="username" disabled/>
             <x-input-error for="email" class="mt-2" />
 
             @if (Laravel\Fortify\Features::enabled(Laravel\Fortify\Features::emailVerification()) &&
@@ -159,7 +160,7 @@
         <div class="col-span-6 sm:col-span-4">
             <x-label for="numeroIdentificacion" value="{{ __('Numero de Identificación') }}" />
             <x-input id="numeroIdentificacion" type="text" class="mt-1 block w-full"
-                wire:model.defer="state.numeroIdentificacion" autocomplete="numeroIdentificacion" />
+                wire:model.defer="state.numeroIdentificacion" autocomplete="numeroIdentificacion" disabled/>
             <x-input-error for="numeroIdentificacion" class="mt-2" />
         </div>
         {{-- ciudadExpedicion --}}
@@ -256,6 +257,9 @@
                     aria-describedby="firma_input_help" id="firma_input" type="file">
                 <p class="mt-1 text-xs text-gray-500 dark:text-gray-300" id="firma_input_help">PNG, JPG (MAX. 10MB).
                 </p>
+                <div wire:loading wire:target="state.firma" class="mt-2 text-sm text-blue-600">
+                    Cargando la firma, por favor espera...
+                </div>
 
                 <!-- Vista previa de la firma cargada -->
                 @if ($this->user->firma)

@@ -366,7 +366,7 @@
             {{-- barrio --}}
             <div class="mb-4 relative">
                 <div class="flex items-center">
-                    <x-label for="id_barrio" class="block text-sm font-medium">Barrio</x-label>
+                    <x-label for="id_barrio" class="block text-sm font-medium">Barrio o Vereda</x-label>
                     <!-- Ícono de pregunta -->
                     <div class="ml-1 tooltip">
                         <a href="#" class="hover:text-gray-400">
@@ -378,15 +378,15 @@
                         </a>
                         <div
                             class="absolute left-5 top-0 z-10 w-48 p-2 mt-2 text-sm text-gray-700 bg-white border border-gray-300 rounded shadow-lg invisible tooltip-item">
-                            Seleccione el barrio de donde vive.
+                            Seleccione el barrio o vereda de donde vive.
                         </div>
                     </div>
                 </div>
                 <select name="id_barrio" id="id_barrio" wire:model="id_barrio"
                     class="block mt-1 w-full border border-gray-300 rounded-lg">
-                    <option value="" selected>Selecciona un barrio</option>
+                    <option value="" selected>Selecciona un barrio o vereda</option>
                     @foreach ($barrios as $barrio)
-                        <option value="{{ $barrio->id }}">{{ $barrio->zona }} - {{ $barrio->nombreBarrio }} -
+                        <option value="{{ $barrio->id }}"> {{ $barrio->nombreBarrio }} - {{ $barrio->zona }} -
                             {{ $barrio->tipoUnidad }} {{ $barrio->codigoNumero }}</option>
                     @endforeach
                 </select>

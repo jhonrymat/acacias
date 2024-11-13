@@ -20,6 +20,6 @@ class Estado extends Model
      // Método para obtener el ID del estado "en revisión"
      public static function enRevisionId()
      {
-         return self::where('nombreEstado', 'en revision')->value('id');
+         return self::where('nombreEstado', 'En revision')->value('id');
      }
 }

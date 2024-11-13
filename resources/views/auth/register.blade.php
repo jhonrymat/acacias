@@ -13,7 +13,7 @@
             <div class="relative">
                 <div class="flex items-center">
                     <x-label for="name" value="Primer Nombre" />
-                    
+
                     <!-- Ícono de pregunta -->
                     <div class="ml-1 tooltip" x-data="{ open: false }">
                         <a href="#" class="hover:text-gray-400" @mouseenter="open = true" @mouseleave="open = false">
@@ -37,7 +37,7 @@
             <div class="relative">
                 <div class="flex items-center">
                 <x-label for="nombre_2" value="Segundo Nombre" />
-                    
+
                     <!-- Ícono de pregunta -->
                     <div class="ml-1 tooltip" x-data="{ open: false }">
                         <a href="#" class="hover:text-gray-400" @mouseenter="open = true" @mouseleave="open = false">
@@ -55,13 +55,13 @@
                     </div>
                 </div>
                 <x-input id="nombre_2" class="block mt-1 w-full" type="text" name="nombre_2" :value="old('nombre_2')"
-                    required autofocus autocomplete="nombre_2" />
+                    autofocus autocomplete="nombre_2" />
             </div>
             {{-- apellido_1 --}}
             <div class="relative">
                 <div class="flex items-center">
                 <x-label for="apellido_1" value="Primer Apellido" />
-                    
+
                     <!-- Ícono de pregunta -->
                     <div class="ml-1 tooltip" x-data="{ open: false }">
                         <a href="#" class="hover:text-gray-400" @mouseenter="open = true" @mouseleave="open = false">
@@ -85,7 +85,7 @@
             <div class="relative">
                 <div class="flex items-center">
                 <x-label for="apellido_2" value="Segundo Apellido" />
-                    
+
                     <!-- Ícono de pregunta -->
                     <div class="ml-1 tooltip" x-data="{ open: false }">
                         <a href="#" class="hover:text-gray-400" @mouseenter="open = true" @mouseleave="open = false">
@@ -103,13 +103,13 @@
                     </div>
                 </div>
                 <x-input id="apellido_2" class="block mt-1 w-full" type="text" name="apellido_2" :value="old('apellido_2')"
-                    required autofocus autocomplete="apellido_2" />
+                    autofocus autocomplete="apellido_2" />
             </div>
 
             <div class="mt-4 relative">
                 <div class="flex items-center">
                 <x-label for="email" value="Correo Electrónico" />
-                    
+
                     <!-- Ícono de pregunta -->
                     <div class="ml-1 tooltip" x-data="{ open: false }">
                         <a href="#" class="hover:text-gray-400" @mouseenter="open = true" @mouseleave="open = false">
@@ -206,7 +206,7 @@
             <div class="relative">
                 <div class="flex items-center">
                 <x-label for="fechaNacimiento" value="{{ __('Fecha de Nacimiento') }}" />
-                
+
                 <!-- Ícono de pregunta -->
                     <div class="ml-1 tooltip" x-data="{ open: false }">
                         <a href="#" class="hover:text-gray-400" @mouseenter="open = true" @mouseleave="open = false">
@@ -231,7 +231,7 @@
             <div class="relative">
                 <div class="flex items-center">
                 <x-label for="id_tipoSolicitante" value="{{ __('Tipo de Solicitante') }}" />
-                
+
                 <!-- Ícono de pregunta -->
                     <div class="ml-1 tooltip" x-data="{ open: false }">
                         <a href="#" class="hover:text-gray-400" @mouseenter="open = true" @mouseleave="open = false">
@@ -255,7 +255,7 @@
                     @endforeach
                 </select>
             </div>
-            
+
             {{-- id_tipoDocumento select de la tabla tdocumentos --}}
             <div class="relative">
                 <div class="flex items-center">
@@ -288,7 +288,7 @@
             <div class="relative">
                 <div class="flex items-center">
                 <x-label for="numeroIdentificacion" value="{{ __('Numero de Identificacion') }}" />
-                
+
                 <!-- Ícono de pregunta -->
                     <div class="ml-1 tooltip" x-data="{ open: false }">
                         <a href="#" class="hover:text-gray-400" @mouseenter="open = true" @mouseleave="open = false">
@@ -311,11 +311,11 @@
 
             <div x-data="geoData()" class="p-4 bg-gray-100">
                 <x-label value="{{ __('Ciudad de Expedicion') }}" class="block text-center" />
-                
+
                 <div class="mb-4 relative">
                 <div class="flex items-center">
                     <label for="country" class="block text-sm font-medium text-gray-700">País</label>
-                    
+
                 <!-- Ícono de pregunta -->
                     <div class="ml-1 tooltip" x-data="{ open: false }">
                         <a href="#" class="hover:text-gray-400" @mouseenter="open = true" @mouseleave="open = false">
@@ -342,9 +342,9 @@
                 </div>
 
                 <div class="mb-4 relative" x-show="departments.length > 0">
-                <div class="flex items-center"> 
+                <div class="flex items-center">
                     <label for="department" class="block text-sm font-medium text-gray-700">Departamento</label>
-                    
+
                 <!-- Ícono de pregunta -->
                     <div class="ml-1 tooltip" x-data="{ open: false }">
                         <a href="#" class="hover:text-gray-400" @mouseenter="open = true" @mouseleave="open = false">
@@ -373,7 +373,7 @@
                 <div class="mb-4 relative"  x-show="cities.length > 0">
                 <div class="flex items-center">
                     <label for="city" class="block text-sm font-medium text-gray-700">Ciudad</label>
-                        
+
                 <!-- Ícono de pregunta -->
                     <div class="ml-1 tooltip" x-data="{ open: false }">
                         <a href="#" class="hover:text-gray-400" @mouseenter="open = true" @mouseleave="open = false">

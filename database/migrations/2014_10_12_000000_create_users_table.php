@@ -13,7 +13,7 @@ return new class extends Migration
             $table->string('name');
             $table->string('nombre_2', 100)->nullable();
             $table->string('apellido_1', 100);
-            $table->string('apellido_2', 100);
+            $table->string('apellido_2', 100)->nullable();
             $table->string('email')->unique();
             $table->string('telefonoContacto', 20)->unique();
             $table->unsignedBigInteger('id_tipoSolicitante');

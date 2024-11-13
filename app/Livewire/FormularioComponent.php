@@ -161,7 +161,7 @@ class FormularioComponent extends Component
     {
         // Obtener el usuario autenticado
         $user = User::find(auth()->id());
-        $barrios = Barrio::all();
+        $barrios = Barrio::orderBy('nombreBarrio', 'asc')->get();
 
         // Asignar el valor de numeroIdentificacion a la propiedad pública del componente
         if (!$this->numeroIdentificacion) {
