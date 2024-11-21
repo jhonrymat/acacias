@@ -31,6 +31,12 @@ class Solicitud extends Model
         return $this->belongsTo(User::class, 'user_id');
     }
 
+    // Relación con el usuario que actualizó
+    public function actualizador()
+    {
+        return $this->belongsTo(User::class, 'actualizado_por');
+    }
+
     public function barrio()
     {
         return $this->belongsTo(Barrio::class, 'id_barrio');

@@ -9,6 +9,7 @@ use App\Models\Direccion;
 use App\Models\Solicitud;
 use App\Models\Validacion;
 use Livewire\WithFileUploads;
+use Illuminate\Support\Facades\Auth;
 
 class SolicitudComponent extends Component
 {
@@ -24,7 +25,8 @@ class SolicitudComponent extends Component
     $numeroIdentificacion, $ciudadExpedicion, $fechaNacimiento, $solicitud_id,
     $fechaSolicitud, $id_nivelEstudio, $id_genero, $id_ocupacion, $id_poblacion,
     $numeroIdentificacion_id, $fechaActual, $barrio_id, $direccion_id, $ubicacion,
-    $accion_comunal, $electoral, $sisben, $cedula, $estado_id, $estado_id2, $JAComunal, $detalles, $visible = false, $showForm = false, $showValidar = false;
+    $accion_comunal, $electoral, $sisben, $cedula, $estado_id, $estado_id2, $JAComunal, $detalles, $visible = false, $showForm = false, $showAdditional = false, $showValidar = false,
+    $validacion1, $validacion2, $notas, $nombre, $validador, $Id;
 
 
 
@@ -50,7 +52,7 @@ class SolicitudComponent extends Component
 
 
 
-    protected $listeners = ['edit', 'delete', 'view', 'procesar'];
+    protected $listeners = ['edit', 'delete', 'view', 'procesar', 'see', 'validar', 'rechazar'];
 
     public function view($Id)
     {
@@ -72,6 +74,82 @@ class SolicitudComponent extends Component
         $this->id_ocupacion = $user->ocupacion->nombreOcupacion;
         $this->id_poblacion = $user->poblacion->nombrePoblacion;
         $this->showForm = true;
+    }
+
+    public function see($Id)
+    {
+        // Obtener la solicitud por su ID
+        $solicitud = Solicitud::find($Id);
+
+        // Obtener la primera validación relacionada con la solicitud (si existe)
+        $validacion = $solicitud->validaciones()->first();
+        // obtener el nombre del estado de $validacion->validacion2;
+        $estado = Estado::find($validacion->validacion2);
+        //obtener el nombre del validador $solicitud->actualizado_por
+        $validador = User::find($solicitud->actualizado_por);
+
+
+        if (!$validacion) {
+            $this->dispatch('sweet-alert-good', icon: 'info', title: 'Sin validaciones.', text: 'No se encontraron validaciones para esta solicitud.');
+        }
+
+        // Asignar valores de la validación a las propiedades
+        $this->validacion1 = $validacion->validacion1;
+        $this->validacion2 = $estado->nombreEstado;
+        $this->JAComunal = $validacion->JAComunal;
+        $this->notas = $validacion->notas;
+        $this->visible = $validacion->visible;
+        $this->cedula = $solicitud->numeroIdentificacion;
+        $this->nombre = $solicitud->user->name;
+        $this->validador = $validador->name;
+
+
+        $this->showAdditional = true;
+    }
+
+    public function validar($Id)
+    {
+        $this->Id = $Id;
+        $this->dispatch('alert',
+            icon : 'info',
+            title : '¿Estás seguro?',
+            text : 'Vas a confirmar la solicitud'
+        );
+    }
+
+    public function validarsweet(){
+        Solicitud::find($this->Id)->update([
+            'estado_id' => 5,
+            'Validador2_id' => Auth::id()
+        ]);
+
+        $this->dispatch('Updated');
+
+        $this->dispatch('sweet-alert-good', icon: 'success', title: 'Muy bien..!', text: 'Solicitud aprobada con exito.');
+
+    }
+
+
+    public function rechazar($Id)
+    {
+        $this->Id = $Id;
+        $this->dispatch('2alert',
+            icon : 'info',
+            title : '¿Estás seguro?',
+            text : 'Vas a rechazar esta solicitud'
+        );
+    }
+
+    public function rechazarsweet(){
+        Solicitud::find($this->Id)->update([
+            'estado_id' => 3,
+            'Validador2_id' => Auth::id()
+        ]);
+
+        $this->dispatch('Updated');
+
+        $this->dispatch('sweet-alert-good', icon: 'success', title: 'Muy bien..!', text: 'Solicitud rechazada con exito.');
+
     }
 
     // enviar datos a modal procesar para que el validador 1 cambie el estado
@@ -170,9 +248,11 @@ class SolicitudComponent extends Component
                     'notas' => $this->detalles,
                     'visible' => $this->visible,
                 ]);
-                \Log::info('Validación creada con éxito.');
+                $this->dispatch('sweet-alert-good', icon: 'success', title: 'Validación creada con éxito', text: 'La validación se ha guardado correctamente.');
+
             } catch (\Exception $e) {
-                \Log::error('Error al guardar validación: ' . $e->getMessage());
+                $this->dispatch('sweet-alert-good', icon: 'info', title: 'Error', text: 'Error al guardar la validación.');
+
             }
         }
 
