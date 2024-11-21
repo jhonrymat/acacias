@@ -41,7 +41,8 @@ class HistorialSolicitudesDatatable extends DataTableComponent
         return [
             Column::make("Id", "id")
                 ->sortable()
-                ->searchable(),
+                ->searchable()
+                ->collapseAlways(),
             Column::make("Usuario", "user.name")
                 ->sortable()
                 ->searchable(),
@@ -51,35 +52,39 @@ class HistorialSolicitudesDatatable extends DataTableComponent
                 ->collapseOnMobile(),
             Column::make("Barrio", "barrio.nombreBarrio")
                 ->sortable()
-                ->searchable(),
+                ->searchable()
+                ->collapseAlways(),
             Column::make("Dirección", "direccion")
                 ->sortable()
-                ->searchable(),
-            Column::make("Estado", "estado_id")
-                ->format(function ($value, $row) {
-                    $clase = match ((int)$value) {
-                        2 => 'bg-blue-500 text-black',
-                        3 => 'bg-red-500 text-white',
-                        default => 'bg-gray-500 text-white',
-                    };
-                    $texto = match ((int)$value) {
-                        2 => 'Aceptada',
-                        3 => 'Rechazada',
-                        default => 'Desconocido',
-                    };
-                    return <<<HTML
-                        <span class="px-4 py-2 text-sm rounded cursor-pointer $clase">
-                            $texto
-                        </span>
-                    HTML;
-                })
-                ->html()
+                ->searchable()
+                ->collapseAlways(),
+            Column::make("Estado", "estado.nombreEstado")
                 ->sortable()
-                ->searchable(),
+                ->searchable()
+                ->collapseOnMobile()
+                ->format(function ($value, $row) {
+                    switch ($value) {
+                        case 'Pendiente':
+                            return '<span style="background-color: #FFC107; color: white; padding: 4px 8px; text-align: center; border-radius: 5px;">Pendiente</span>';
+                        case 'Aprobada':
+                            return '<span style="background-color: #28A745; color: white; padding: 4px 8px; text-align: center; border-radius: 5px;">Aprobada</span>';
+                        case 'Rechazada':
+                            return '<span style="background-color: #DC3545; color: white; padding: 4px 8px; text-align: center; border-radius: 5px;">Rechazada</span>';
+                        case 'En proceso':
+                            return '<span style="background-color: #17A2B8; color: white; padding: 4px 8px; text-align: center; border-radius: 5px;">En proceso</span>';
+                        default:
+                            return '<span style="background-color: #6c757d; color: white; padding: 4px 8px; text-align: center; border-radius: 5px;">' . $value . '</span>';
+                    }
+                })
+                ->html(), // Activa la renderización del HTML
             Column::make("Fecha de Actualización", "updated_at")
                 ->sortable()
                 ->searchable()
                 ->collapseOnMobile(),
+            Column::make("Acciones")
+                ->label(
+                    fn($row) => view('livewire.viewValidation', ['row' => $row])
+                ),
         ];
     }
 }

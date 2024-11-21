@@ -2,12 +2,15 @@
 
 namespace App\Providers;
 
+use App\Models\Pais;
+use App\Models\Ciudad;
 use App\Models\Genero;
 use App\Models\Nestudio;
 use App\Models\Ocupacion;
 use App\Models\Poblacion;
 use App\Models\Tdocumento;
 use Illuminate\Support\Str;
+use App\Models\Departamento;
 use App\Models\Tsolicitante;
 use Illuminate\Http\Request;
 use Laravel\Fortify\Fortify;
@@ -46,7 +49,10 @@ class FortifyServiceProvider extends ServiceProvider
                 'generos' => Genero::all(), // Pasar los barrios a la vista
                 'ocupaciones' => Ocupacion::all()->sortBy('nombreOcupacion'), // Pasar los barrios a la vista en orden alfabético
                 'poblaciones' => Poblacion::all()->sortBy('nombrePoblacion'), // Pasar los barrios a la vista en orden alfabético
-
+                // pasar los pais a la vista en orden alfabético
+                'paises' => Pais::all()->sortBy('nombre')->values()->toArray(),
+                'departamentos' => Departamento::all()->sortBy('nombre')->values()->toArray(),
+                'ciudades' => Ciudad::all()->sortBy('nombre')->values()->toArray(),
             ]);
         });
 

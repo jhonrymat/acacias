@@ -126,21 +126,105 @@
                 </div>
 
                 <form wire:submit.prevent="save">
-                    <div class="border p-3 rounded-lg">
-                        <h3 class="text-lg font-semibold mb-3">Validar Solicitud</h3>
+                    <div class="border p-3 rounded-lg mb-3">
+                        <h3 class="text-lg font-semibold mb-3">Moverse a</h3>
                         <div class="mb-3">
-                            <label for="estado" class="block text-xs font-medium">Estado</label>
+                            <label for="estado" class="block text-xs font-medium">Primer filtro</label>
                             <select wire:model="estado_id" id="estado"
                                 class="mt-1 block w-full border-gray-300 rounded text-sm px-2 py-1">
+                                <option value="">Seleccione una opción</option>
+                                <option value="Finalizar">Finalizar</option>
+                                <option value="Avanzar">AVANZAR - Validar</option>
+                            </select>
+                            {{-- error --}}
+                            @error('estado_id')
+                                <span class="text-red-500">{{ $message }}</span>
+                            @enderror
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="numeroIdentificacion_id" class="block text-xs font-medium">Numero de
+                            identificación</label>
+                        <input type="text" wire:model="numeroIdentificacion_id" id="numeroIdentificacion_id"
+                            class="mt-1 block w-full border-gray-300 rounded text-sm px-2 py-1" disabled>
+                        {{-- error --}}
+                        @error('numeroIdentificacion_id')
+                            <span class="text-red-500">{{ $message }}</span>
+                        @enderror
+                    </div>
+
+                    <div class="border p-3 rounded-lg mb-3">
+                        <h3 class="text-lg font-semibold mb-3">Estado de certificado</h3>
+                        <div class="mb-3">
+                            <label for="estado" class="block text-xs font-medium">Segundo filtro</label>
+                            <select wire:model="estado_id2" id="estado2"
+                                class="mt-1 block w-full border-gray-300 rounded text-sm px-2 py-1">
+                                <option value="">Seleccione una opción de estado</option>
                                 @foreach ($estados as $estado)
                                     <option value="{{ $estado->id }}">{{ $estado->nombreEstado }} -
                                         {{ $estado->descripcion }}</option>
                                 @endforeach
                             </select>
+                            {{-- error --}}
+                            @error('estado_id2')
+                                <span class="text-red-500">{{ $message }}</span>
+                            @enderror
                         </div>
                         <input type="hidden" wire:model="solicitud_id" id="solicitud_id"
                             value="{{ $solicitud_id }}">
                     </div>
+
+                    <!-- Copia registro JAC -->
+                    <div class="mb-4">
+                        <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" for="jac_input">
+                            Copia registro J.A.C
+                        </label>
+                        <input wire:model="JAComunal"
+                            class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+                            aria-describedby="JAComunal_input_help" id="JAComunal_input" type="file">
+                        <p class="mt-1 text-xs text-gray-500 dark:text-gray-300" id="JAComunal_input_help">Adjunte
+                            copia de
+                            registro de los libros de afiliados a la JAC (Si aplica). PDF, PNG,
+                            JPG (MAX. 10MB).</p>
+                        {{-- error --}}
+                        @error('JAComunal')
+                            <span class="text-red-500">{{ $message }}</span>
+                        @enderror
+                    </div>
+
+                    {{-- input text area, detalles --}}
+                    <div class="mb-4">
+                        <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" for="detalles">
+                            Observaciones
+                        </label>
+                        <textarea wire:model="detalles"
+                            class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+                            aria-describedby="detalles_help" id="detalles" rows="3"></textarea>
+                        <p class="mt-1 text-xs text-gray-500 dark:text-gray-300" id="detalles_help">Detalles
+                            adicionales sobre la solicitud.</p>
+                        {{-- error --}}
+                        @error('detalles')
+                            <span class="text-red-500">{{ $message }}</span>
+                        @enderror
+                    </div>
+                    {{-- un check en don de diga, permitir visualización de la observación al ciudadano --}}
+                    <div class="mb-4 p-4 bg-gray-100 border border-gray-300 rounded-md">
+                        <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" for="visible">
+                            Habilitar visualización
+                        </label>
+                        <div class="flex items-center">
+                            <input wire:model="visible" type="checkbox" id="visible" name="visible"
+                                value="1" class="mr-2">
+                            <label for="visible" class="text-sm text-gray-700 dark:text-gray-300">
+                                Permitir visualización de la observación al ciudadano
+                            </label>
+                            {{-- error --}}
+                            @error('visible')
+                                <span class="text-red-500">{{ $message }}</span>
+                            @enderror
+                        </div>
+                    </div>
+
 
                     <div class="flex justify-end space-x-2">
                         <!-- Botón para liberar la solicitud -->
