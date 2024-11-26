@@ -5,6 +5,7 @@ namespace App\Livewire;
 use App\Models\User;
 use Livewire\Component;
 use App\Models\Solicitud;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class SolicitudesComponent extends Component
 {
@@ -21,13 +22,14 @@ class SolicitudesComponent extends Component
     public $id_ocupacion;
     public $id_poblacion;
 
+
     public $showForm = false; // Control para mostrar/ocultar el modal
     // variabble para mostrar los datos de user en modal
 
     public $name;
 
 
-    protected $listeners = ['view'];
+    protected $listeners = ['view', 'generarPDF', 'viewPDF'];
 
     public function mount()
     {
@@ -59,7 +61,62 @@ class SolicitudesComponent extends Component
         $this->showForm = true;
     }
 
+    public function generarPDF($Id)
+    {
+        $solicitud = Solicitud::findOrFail($Id);
 
+        // Validar el estado de la solicitud
+        if ($solicitud->estado_id !== 5) {
+            session()->flash('error', 'La solicitud no está aprobada.');
+            return;
+        }
+
+        // Datos dinámicos para la plantilla
+        $data = [
+            'id' => $solicitud->id,
+            'solicitante' => trim(
+                $solicitud->user->name
+                . ' '
+                . ($solicitud->user->nombre_2 ?? '')
+                . ' '
+                . $solicitud->user->apellido_1
+                . ' '
+                . ($solicitud->user->apellido_2 ?? '')
+            ),
+            'cedula' => $solicitud->numeroIdentificacion,
+            'direccion' => $solicitud->direccion,
+            'cargo' => $solicitud->validador2->cargo,
+            'validador' => trim(
+                $solicitud->validador2->name
+                . ' '
+                . ($solicitud->validador2->nombre_2 ?? '')
+                . ' '
+                . $solicitud->validador2->apellido_1
+                . ' '
+                . ($solicitud->validador2->apellido_2 ?? '')
+            ),
+            'firma' => $solicitud->validador2->firma,
+            'ciudad_expedicion' => $solicitud->user->ciudadExpedicion,
+            'barrio_vereda' => $solicitud->barrio->nombreBarrio,
+            'tipo_unidad' => $solicitud->barrio->tipoUnidad,
+            'codigo_numero' => $solicitud->barrio->codigoNumero,
+            'zona' => $solicitud->barrio->zona,
+            'estado' => $solicitud->estado->nombreEstado,
+            'numero_certificado' => $solicitud->numeroIdentificacion,
+            'fecha_emision' => $solicitud->fecha_emision->translatedFormat('d \\de m \\de Y'),
+            'vigencia_inicio' => now()->translatedFormat('d \\de m \\de Y'),
+            'vigencia_fin' => now()->addYear()->translatedFormat('d \\de m \\de Y'),
+            'verificacion_url' => 'https://acacias.gov.co/gfiles/consultaTramite/',
+        ];
+
+        // Generar el PDF
+        $pdf = Pdf::loadView('certificados.certificado', $data);
+
+        // Descargar el archivo
+        return response()->streamDownload(function () use ($pdf) {
+            echo $pdf->output();
+        }, 'certificado_residencia.pdf');
+    }
 
     public function render()
     {

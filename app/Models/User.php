@@ -8,10 +8,11 @@ use Laravel\Jetstream\HasProfilePhoto;
 use Spatie\Permission\Traits\HasRoles;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Fortify\TwoFactorAuthenticatable;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
-class User extends Authenticatable
+class User extends Authenticatable implements MustVerifyEmail
 {
     use HasApiTokens;
     use HasFactory;
@@ -43,7 +44,8 @@ class User extends Authenticatable
         'id_ocupacion',
         'id_poblacion',
         'codigo',
-        'firma'
+        'firma',
+        'cargo'
     ];
 
     /**
@@ -116,4 +118,10 @@ class User extends Authenticatable
     {
         return $this->hasMany(Solicitud::class);
     }
+
+     // Verificar si el usuario tiene un perfil completo
+     public function hasCompleteProfile()
+     {
+         return !empty($this->cargo) && !empty($this->firma);
+     }
 }

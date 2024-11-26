@@ -55,7 +55,7 @@
                     </div>
                 </div>
                 <x-input id="nombre_2" class="block mt-1 w-full" type="text" name="nombre_2" :value="old('nombre_2')"
-                    required autofocus autocomplete="nombre_2" />
+                    autofocus autocomplete="nombre_2" />
             </div>
             {{-- apellido_1 --}}
             <div class="relative">
@@ -103,7 +103,7 @@
                     </div>
                 </div>
                 <x-input id="apellido_2" class="block mt-1 w-full" type="text" name="apellido_2" :value="old('apellido_2')"
-                    required autofocus autocomplete="apellido_2" />
+                    autofocus autocomplete="apellido_2" />
             </div>
 
             <div class="mt-4 relative">
@@ -309,96 +309,96 @@
                     :value="old('numeroIdentificacion')" required autofocus autocomplete="numeroIdentificacion" />
             </div>
 
-            <div x-data="geoData()" class="p-4 bg-gray-100">
+            <div x-data="locationForm()" class="p-4 bg-gray-100">
                 <x-label value="{{ __('Ciudad de Expedicion') }}" class="block text-center" />
 
+                <!-- Select País -->
                 <div class="mb-4 relative">
-                <div class="flex items-center">
                     <label for="country" class="block text-sm font-medium text-gray-700">País</label>
-
-                <!-- Ícono de pregunta -->
-                    <div class="ml-1 tooltip" x-data="{ open: false }">
-                        <a href="#" class="hover:text-gray-400" @mouseenter="open = true" @mouseleave="open = false">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                stroke-width="1.5" stroke="currentColor" class="w-4 h-4 inline-block">
-                                <path stroke-linecap="round" stroke-linejoin="round"
-                                    d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 5.25h.008v.008H12v-.008Z" />
-                            </svg>
-                        </a>
-                        <div x-show="open" class="absolute left-5 top-0 z-10 w-48 p-2 mt-2 text-sm text-gray-700 bg-white border border-gray-300 rounded shadow-lg"
-                             x-transition.opacity
-                             @mouseenter="open = true" @mouseleave="open = false">
-                            Selecciona un país.
-                        </div>
-                    </div>
-                </div>
-                    <select id="country" name="country" x-model="selectedCountry" @change="fetchDepartments"
-                        class="mt-1 block w-full p-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-                        <option value="">Seleccione un país</option>
-                        <template x-for="country in countries" :key="country.geonameId">
-                            <option :value="country.countryName" x-text="country.countryName"></option>
+                    <select name="country" id="country" class="block mt-1 w-full" x-model="selectedCountry" @change="loadDepartments()">
+                        <option value="" selected>Selecciona un país</option>
+                        <template x-for="pais in countries" :key="pais.id">
+                            <option :value="pais.id" x-text="pais.nombre"></option>
                         </template>
                     </select>
                 </div>
 
+                <!-- Select Departamento -->
                 <div class="mb-4 relative" x-show="departments.length > 0">
-                <div class="flex items-center">
                     <label for="department" class="block text-sm font-medium text-gray-700">Departamento</label>
-
-                <!-- Ícono de pregunta -->
-                    <div class="ml-1 tooltip" x-data="{ open: false }">
-                        <a href="#" class="hover:text-gray-400" @mouseenter="open = true" @mouseleave="open = false">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                stroke-width="1.5" stroke="currentColor" class="w-4 h-4 inline-block">
-                                <path stroke-linecap="round" stroke-linejoin="round"
-                                    d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 5.25h.008v.008H12v-.008Z" />
-                            </svg>
-                        </a>
-                        <div x-show="open" class="absolute left-5 top-0 z-10 w-48 p-2 mt-2 text-sm text-gray-700 bg-white border border-gray-300 rounded shadow-lg"
-                             x-transition.opacity
-                             @mouseenter="open = true" @mouseleave="open = false">
-                            Selecciona un departamento.
-                        </div>
-                    </div>
-                </div>
-                    <select id="department" name="department" x-model="selectedDepartment" @change="fetchCities"
-                        class="mt-1 block w-full p-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-                        <option value="">Seleccione un departamento</option>
-                        <template x-for="department in departments" :key="department.geonameId">
-                            <option :value="department.name" x-text="department.name"></option>
+                    <select name="department" id="department" class="block mt-1 w-full" x-model="selectedDepartment" @change="loadCities()">
+                        <option value="" selected>Selecciona un departamento</option>
+                        <template x-for="departamento in departments" :key="departamento.id">
+                            <option :value="departamento.id" x-text="departamento.nombre"></option>
                         </template>
                     </select>
                 </div>
 
-                <div class="mb-4 relative"  x-show="cities.length > 0">
-                <div class="flex items-center">
+                <!-- Select Ciudad -->
+                <div class="mb-4 relative" x-show="cities.length > 0">
                     <label for="city" class="block text-sm font-medium text-gray-700">Ciudad</label>
-
-                <!-- Ícono de pregunta -->
-                    <div class="ml-1 tooltip" x-data="{ open: false }">
-                        <a href="#" class="hover:text-gray-400" @mouseenter="open = true" @mouseleave="open = false">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                stroke-width="1.5" stroke="currentColor" class="w-4 h-4 inline-block">
-                                <path stroke-linecap="round" stroke-linejoin="round"
-                                    d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 5.25h.008v.008H12v-.008Z" />
-                            </svg>
-                        </a>
-                        <div x-show="open" class="absolute left-5 top-0 z-10 w-48 p-2 mt-2 text-sm text-gray-700 bg-white border border-gray-300 rounded shadow-lg"
-                             x-transition.opacity
-                             @mouseenter="open = true" @mouseleave="open = false">
-                            Selecciona una ciudad.
-                        </div>
-                    </div>
-                </div>
-                    <select id="city" name="city" x-model="selectedCity"
-                        class="mt-1 block w-full p-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-                        <option value="">Seleccione una ciudad</option>
-                        <template x-for="city in cities" :key="city.geonameId">
-                            <option :value="city.name" x-text="city.name"></option>
+                    <select name="city" id="city" class="block mt-1 w-full" x-model="selectedCity">
+                        <option value="" selected>Selecciona una ciudad</option>
+                        <template x-for="ciudad in cities" :key="ciudad.id">
+                            <option :value="ciudad.id" x-text="ciudad.nombre"></option>
                         </template>
                     </select>
                 </div>
             </div>
+
+            <script>
+                function locationForm() {
+                    const departamentos = Array.isArray(@json($departamentos)) ? @json($departamentos) : [];
+                    const ciudades = Array.isArray(@json($ciudades)) ? @json($ciudades) : [];
+                    const countries = Array.isArray(@json($paises)) ? @json($paises) : [];
+
+                    // Logs para depuración inicial
+                    console.log("Países:", countries);
+                    console.log("Departamentos:", departamentos);
+                    console.log("Ciudades:", ciudades);
+
+                    return {
+                        countries: countries,
+                        allDepartments: departamentos,
+                        allCities: ciudades,
+
+                        selectedCountry: '',
+                        selectedDepartment: '',
+                        selectedCity: '',
+                        departments: [],
+                        cities: [],
+
+                        loadDepartments() {
+                            console.log("Selected Country:", this.selectedCountry);
+                            if (this.selectedCountry === '1') {
+                                console.log("Filtrando departamentos para Colombia...");
+                                this.departments = this.allDepartments.filter(dep => dep.pais_id == this.selectedCountry);
+                                console.log("Departamentos filtrados:", this.departments);
+                            } else {
+                                console.log("País diferente a Colombia seleccionado. Reseteando departamentos y ciudades.");
+                                this.departments = [];
+                                this.cities = [];
+                            }
+                            this.selectedDepartment = '';
+                            this.selectedCity = '';
+                        },
+
+                        loadCities() {
+                            console.log("Selected Department:", this.selectedDepartment);
+                            this.cities = this.allCities.filter(city => city.departamento_id == this.selectedDepartment);
+                            console.log("Ciudades filtradas:", this.cities);
+                            this.selectedCity = '';
+                        }
+                    };
+                }
+            </script>
+
+
+
+
+
+
+
 
 
             {{-- id_nivelEstudio de la tabla nestudios --}}
@@ -552,53 +552,6 @@
                 </x-button>
             </div>
         </form>
-        <script>
-            function geoData() {
-                return {
-                    countries: [],
-                    departments: [],
-                    cities: [],
-                    selectedCountry: null,
-                    selectedDepartment: null,
-                    selectedCity: null,
 
-                    async init() {
-                        const response = await fetch('https://secure.geonames.org/countryInfoJSON?username=andres293&lang=es');
-                        const data = await response.json();
-                        this.countries = data.geonames.sort((a, b) => a.countryName.localeCompare(b.countryName));
-                    },
-
-                    async fetchDepartments() {
-                        const country = this.countries.find(c => c.countryName === this.selectedCountry);
-                        if (!country) return;
-
-                        const response = await fetch(
-                            `https://secure.geonames.org/childrenJSON?geonameId=${country.geonameId}&username=andres293&lang=es`
-                        );
-                        const data = await response.json();
-                        this.departments = data.geonames.sort((a, b) => a.name.localeCompare(b.name));
-                        this.selectedDepartment = null;
-                        this.cities = [];
-                    },
-
-                    async fetchCities() {
-                        // Busca el objeto del departamento utilizando el nombre almacenado en selectedDepartment
-                        const department = this.departments.find(d => d.name === this.selectedDepartment);
-                        if (!department) return;
-
-                        // Usa el geonameId del departamento para realizar la solicitud a la API
-                        const response = await fetch(
-                            `https://secure.geonames.org/childrenJSON?geonameId=${department.geonameId}&username=andres293&lang=es`
-                        );
-                        const data = await response.json();
-
-                        // Ordena las ciudades alfabéticamente y resetea la selección de ciudad
-                        this.cities = data.geonames.sort((a, b) => a.name.localeCompare(b.name));
-                        this.selectedCity = null;
-                    }
-
-                }
-            }
-        </script>
     </x-authentication-card>
 </x-guest-layout>

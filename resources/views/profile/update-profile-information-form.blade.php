@@ -82,8 +82,9 @@
         <!-- Email -->
         <div class="col-span-6 sm:col-span-4">
             <x-label for="email" value="{{ __('Email') }}" />
+            {{-- evitar que editen el correo --}}
             <x-input id="email" type="email" class="mt-1 block w-full" wire:model.defer="state.email"
-                autocomplete="username" />
+                autocomplete="username" disabled />
             <x-input-error for="email" class="mt-2" />
 
             @if (Laravel\Fortify\Features::enabled(Laravel\Fortify\Features::emailVerification()) &&
@@ -120,6 +121,16 @@
                 wire:model.defer="state.fechaNacimiento" autocomplete="fechaNacimiento" />
             <x-input-error for="fechaNacimiento" class="mt-2" />
         </div>
+        {{-- cargo --}}
+        {{-- mostrar solo si el rol es validador2 --}}
+        @if (auth()->user()->hasRole('validador2'))
+            <div class="col-span-6 sm:col-span-4">
+                <x-label for="cargo" value="{{ __('Cargo') }}" />
+                <x-input id="cargo" type="text" class="mt-1 block w-full" wire:model.defer="state.cargo"
+                    autocomplete="cargo" />
+                <x-input-error for="cargo" class="mt-2" />
+            </div>
+        @endif
 
         {{-- id_tipoSolicitante --}}
         <div class="col-span-6 sm:col-span-4">
@@ -159,7 +170,7 @@
         <div class="col-span-6 sm:col-span-4">
             <x-label for="numeroIdentificacion" value="{{ __('Numero de Identificación') }}" />
             <x-input id="numeroIdentificacion" type="text" class="mt-1 block w-full"
-                wire:model.defer="state.numeroIdentificacion" autocomplete="numeroIdentificacion" />
+                wire:model.defer="state.numeroIdentificacion" autocomplete="numeroIdentificacion" disabled />
             <x-input-error for="numeroIdentificacion" class="mt-2" />
         </div>
         {{-- ciudadExpedicion --}}
@@ -246,16 +257,22 @@
 
         {{-- permitir agregar firma solo si el rol es validador2 --}}
         <!-- Campo para cargar firma, solo visible si el usuario tiene rol validador2 -->
+        <!-- Campo para cargar firma -->
         @if (auth()->user()->hasRole('validador2'))
             <div class="col-span-6 sm:col-span-4">
                 <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" for="firma_input">
                     Subir firma para firmar los certificados
                 </label>
-                <input wire:model="state.firma"
+                <input wire:model.defer="state.firma"
                     class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
-                    aria-describedby="firma_input_help" id="firma_input" type="file">
+                    aria-describedby="firma_input_help" id="firma_input" type="file" accept=".jpg,.jpeg,.png"
+                    onchange="validateMimeType(this)">
                 <p class="mt-1 text-xs text-gray-500 dark:text-gray-300" id="firma_input_help">PNG, JPG (MAX. 10MB).
                 </p>
+
+                <div wire:loading wire:target="state.firma" class="mt-2 text-sm text-blue-600">
+                    Cargando la firma, por favor espera...
+                </div>
 
                 <!-- Vista previa de la firma cargada -->
                 @if ($this->user->firma)
@@ -267,8 +284,36 @@
                             class="h-20 w-auto rounded-md">
                     </div>
                 @endif
+
+                <!-- Mensaje de error en caso de MIME inválido -->
+                <div id="mime_error" class="mt-2 text-sm text-red-600" style="display: none;">
+                    El archivo debe ser una imagen válida (JPG o PNG).
+                </div>
             </div>
         @endif
+        <script>
+            function validateMimeType(input) {
+                const file = input.files[0];
+                const errorDiv = document.getElementById('mime_error');
+
+                // Limpiar mensaje de error
+                errorDiv.style.display = 'none';
+
+                if (file) {
+                    const validTypes = ['image/jpeg', 'image/png'];
+
+                    // Verificar si el archivo tiene un MIME type válido
+                    if (!validTypes.includes(file.type)) {
+                        errorDiv.textContent = 'El archivo debe ser una imagen JPG o PNG.';
+                        errorDiv.style.display = 'block';
+                        input.value = ''; // Limpiar input para evitar envío de archivo inválido
+                        return;
+                    }
+                }
+            }
+        </script>
+
+
     </x-slot>
 
     <x-slot name="actions">

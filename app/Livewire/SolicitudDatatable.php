@@ -15,7 +15,11 @@ class SolicitudDatatable extends DataTableComponent
 
     public function configure(): void
     {
-        $this->setPrimaryKey('id');
+        $this->setPrimaryKey('id')
+            ->setBulkActions([
+                'validarStatus' => 'Validar solicitudes',
+                'rechazarStatus' => 'Rechazar solicitudes',
+            ]);
         $this->setDefaultSort('id', 'desc');
         $this->setSingleSortingStatus(false);
         // Configurar el mensaje personalizado según el rol
@@ -27,6 +31,58 @@ class SolicitudDatatable extends DataTableComponent
             $this->setEmptyMessage("No hay registros para mostrar.");
         }
     }
+
+    public function validarStatus()
+    {
+        // Obtén las filas seleccionadas
+        $selectedRows = $this->getSelected();
+
+        // Verificar si hay filas seleccionadas
+        if (count($selectedRows) === 0) {
+            $this->dispatch('sweet-alert-good', icon: 'warning', title: 'Advertencia', text: 'Debe seleccionar al menos una fila.');
+            return;
+        }
+
+        Solicitud::whereIn('id', $selectedRows)->update([
+            'estado_id' => 5,
+            'fecha_emision' => now(),
+            'Validador2_id' => Auth::id()
+        ]);
+
+        $this->clearSelected();
+
+        $this->dispatch('sweet-alert-good', icon: 'success', title: 'Muy bien..!', text: 'Estado actualizado para las filas seleccionadas.');
+
+
+    }
+
+
+    public function rechazarStatus()
+    {
+        // Obtén las filas seleccionadas
+        $selectedRows = $this->getSelected();
+
+        if (count($selectedRows) === 0) {
+            $this->dispatch('sweet-alert-good', icon: 'warning', title: 'Advertencia', text: 'Debe seleccionar al menos una fila.');
+            return;
+        }
+        // Actualiza el estado de las filas seleccionadas
+        Solicitud::whereIn('id', $selectedRows)->update([
+            'estado_id' => 3,
+            'fecha_emision' => now(),
+            'Validador2_id' => Auth::id()
+        ]);
+
+        // Limpia la selección
+        $this->clearSelected();
+
+        // Opcional: envía un mensaje al usuario
+        $this->dispatch('sweet-alert-good', icon: 'info', title: 'solicitudes rechazadas con exito', text: 'Estado actualizado para las filas seleccionadas.');
+
+
+    }
+
+
 
     public function builder(): \Illuminate\Database\Eloquent\Builder
     {
@@ -94,6 +150,10 @@ class SolicitudDatatable extends DataTableComponent
             Column::make("Usuario", "user.name")
                 ->sortable()
                 ->searchable(),
+            // mostrar el nombre de actualizado_por
+            Column::make("Validado", "actualizador.name")
+                ->sortable()
+                ->searchable(),
             Column::make("Documento", "numeroIdentificacion")
                 ->sortable()
                 ->searchable()
@@ -106,7 +166,7 @@ class SolicitudDatatable extends DataTableComponent
             Column::make("Dirección", "direccion")
                 ->sortable()
                 ->searchable() // Relacionado con la tabla de direcciones
-                ->collapseOnMobile(),
+                ->collapseAlways(),
             // Agregar columnas para los nuevos archivos (accion_comunal, electoral, sisben, cedula)
             Column::make("Comunal", "accion_comunal")
                 ->format(fn($value, $row) => $this->formatFileLink($row->accion_comunal))

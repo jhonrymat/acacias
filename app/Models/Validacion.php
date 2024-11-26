@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Validacion extends Model
 {
+    protected $table = 'validaciones';
     use HasFactory;
     protected $fillable = [
         'validacion1',

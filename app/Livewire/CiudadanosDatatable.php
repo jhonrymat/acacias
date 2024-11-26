@@ -3,6 +3,7 @@
 namespace App\Livewire;
 
 use App\Models\User;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Rappasoft\LaravelLivewireTables\Views\Column;
 use Rappasoft\LaravelLivewireTables\DataTableComponent;
@@ -14,13 +15,6 @@ class CiudadanosDatatable extends DataTableComponent
     public function configure(): void
     {
         $this->setPrimaryKey('id');
-        // Select additional fields for concatenating the full name
-        $this->setAdditionalSelects([
-            'users.name as name',
-            'users.nombre_2 as nombre_2',
-            'users.apellido_1 as apellido_1',
-            'users.apellido_2 as apellido_2',
-        ]);
     }
 
     public function builder(): \Illuminate\Database\Eloquent\Builder
@@ -46,14 +40,29 @@ class CiudadanosDatatable extends DataTableComponent
                 ->sortable()
                 ->searchable()
                 ->collapseAlways(),
-            Column::make("Nombre completo")
-                ->label(fn($row) => "{$row->name} {$row->nombre_2} {$row->apellido_1} {$row->apellido_2}")
-                ->html(), // Enable HTML if needed
+            Column::make("primer nombre", "name")
+                ->sortable()
+                ->searchable(),
+            Column::make("segundo nombre", "nombre_2")
+                ->sortable()
+                ->searchable()
+                ->collapseAlways(),
+            Column::make("primer apellido", "apellido_1")
+                ->sortable()
+                ->searchable(),
+            Column::make("segundo apellido", "apellido_2")
+                ->sortable()
+                ->searchable()
+                ->collapseAlways(),
             Column::make("Email", "email")
-                ->sortable(),
+                ->searchable()
+                ->sortable()
+                ->collapseAlways(),
             Column::make("TelefonoContacto", "telefonoContacto")
+                ->searchable()
                 ->sortable(),
             Column::make("NumeroIdentificacion", "numeroIdentificacion")
+                ->searchable()
                 ->sortable(),
             Column::make("CiudadExpedicion", "ciudadExpedicion")
                 ->sortable()

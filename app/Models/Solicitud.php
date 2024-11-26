@@ -11,6 +11,9 @@ class Solicitud extends Model
     use HasFactory;
 
     protected $table = 'solicitudes';
+    protected $casts = [
+        'fecha_emision' => 'date',
+    ];
     protected $fillable = [
         'user_id',
         'numeroIdentificacion',
@@ -22,6 +25,8 @@ class Solicitud extends Model
         'cedula',
         'estado_id',
         'actualizado_por',
+        'Validador2_id',
+        'fecha_emision',
         'observaciones',
         'terminos',
     ];
@@ -29,6 +34,17 @@ class Solicitud extends Model
     public function user()
     {
         return $this->belongsTo(User::class, 'user_id');
+    }
+
+    public function validador2()
+    {
+        return $this->belongsTo(User::class, 'Validador2_id');
+    }
+
+    // Relación con el usuario que actualizó
+    public function actualizador()
+    {
+        return $this->belongsTo(User::class, 'actualizado_por');
     }
 
     public function barrio()
@@ -52,37 +68,58 @@ class Solicitud extends Model
 
 
     // Método para verificar si el usuario tiene una solicitud pendiente
-    public static function hasPendingRequest($userId)
+    public static function hasActiveRequest($userId)
     {
         return self::where('user_id', $userId)
-            ->where('estado_id', 1) // Asumiendo que el estado 1 es 'Pendiente'
+            ->whereIn('estado_id', [1, 2, 5]) // Estados restringidos: Pendiente, Aprobada, Emitida
             ->exists();
     }
 
-    // Método para verificar si el usuario tiene una solicitud aprobada
-    public static function hasApprovedRequest($userId)
-    {
-        return self::where('user_id', $userId)
-            ->where('estado_id', 2) // Asumiendo que el estado 2 es 'Aprobada'
-            ->exists();
-    }
 
     // Método para verificar si la solicitud aprobada está a punto de expirar (15 días antes de 6 meses)
-    public static function isApprovedRequestExpiring($userId)
+    public static function checkIfExpiring($userId)
     {
         $approvedRequest = self::where('user_id', $userId)
-            ->where('estado_id', 2) // Estado aprobado
-            ->latest('updated_at') // Ordena por la fecha de última actualización (ej. fecha de aprobación)
+            ->where('estado_id', 5) // Emitida
+            ->latest('fecha_emision')
             ->first();
 
         if ($approvedRequest) {
-            $expiryDate = Carbon::parse($approvedRequest->updated_at)->addMonths(6);
+            $expiryDate = Carbon::parse($approvedRequest->fecha_emision)->addMonths(6);
             return Carbon::now()->greaterThanOrEqualTo($expiryDate->subDays(15));
         }
 
         return false;
     }
 
+    public static function updateToExpiring($userId)
+    {
+        $approvedRequest = self::where('user_id', $userId)
+            ->where('estado_id', 5) // Emitida
+            ->latest('fecha_emision')
+            ->first();
+
+        if ($approvedRequest && self::checkIfExpiring($userId)) {
+            $approvedRequest->update(['estado_id' => 6]); // Por vencer
+            return true;
+        }
+
+        return false;
+    }
+
+    public static function canCreateRequest($userId)
+    {
+        // Verificar si el usuario tiene una solicitud activa
+        $hasActiveRequest = self::hasActiveRequest($userId);
+
+        // Verificar si alguna solicitud está por vencer
+        $isExpiring = self::checkIfExpiring($userId);
+
+        // Permitir crear una nueva solicitud si:
+        // - No tiene solicitudes activas
+        // - O tiene una solicitud emitida que está por vencer
+        return !$hasActiveRequest || $isExpiring;
+    }
 
 
 

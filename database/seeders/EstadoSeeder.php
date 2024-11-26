@@ -31,6 +31,21 @@ class EstadoSeeder extends Seeder
                 'descripcion' => 'La solicitud está siendo revisada o procesada actualmente',
                 'color' => '#17A2B8'
             ],
+            [
+                'nombreEstado' => 'Emitido',
+                'descripcion' => 'El cerificado fue emitido',
+                'color' => '#28A745'
+            ],
+            [
+                'nombreEstado' => 'Por vencer',
+                'descripcion' => 'El certificado está por vencer',
+                'color' => '#FFC107'
+            ],
+            [
+                'nombreEstado' => 'Vencido',
+                'descripcion' => 'El certificado ha vencido',
+                'color' => '#DC3545'
+            ],
         ];
 
         DB::table('estados')->insert($estados);

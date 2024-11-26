@@ -21,9 +21,9 @@ class CreateNewUser implements CreatesNewUsers
     {
         Validator::make($input, [
             'name' => ['required', 'string', 'max:255'],
-            'nombre_2' => ['required', 'string', 'max:255'],
+            'nombre_2' => ['string', 'max:255'],
             'apellido_1' => ['required', 'string', 'max:255'],
-            'apellido_2' => ['required', 'string', 'max:255'],
+            'apellido_2' => ['string', 'max:255'],
             'telefonoContacto' => ['required', 'string', 'max:255'],
             'fechaNacimiento' => ['required', 'string', 'max:255'],
             'id_tipoSolicitante' => ['required', 'string', 'max:255'],
@@ -46,9 +46,9 @@ class CreateNewUser implements CreatesNewUsers
 
         $user = User::create([
             'name' => $input['name'],
-            'nombre_2' => $input['nombre_2'],
+            'nombre_2' => $input['nombre_2'] ?? null,
             'apellido_1' => $input['apellido_1'],
-            'apellido_2' => $input['apellido_2'],
+            'apellido_2' => $input['apellido_2'] ?? null,
             'telefonoContacto' => $input['telefonoContacto'],
             'fechaNacimiento' => $input['fechaNacimiento'],
             'id_tipoSolicitante' => $input['id_tipoSolicitante'],

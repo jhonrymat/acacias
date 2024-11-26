@@ -155,6 +155,10 @@ class SolicitudesDatatable extends DataTableComponent
                     }
                 })
                 ->html(), // Activa la renderización del HTML
+            Column::make("Certificado")
+                ->label(
+                    fn($row) => view('livewire.view', ['row' => $row])
+                ),
         ];
     }
 }

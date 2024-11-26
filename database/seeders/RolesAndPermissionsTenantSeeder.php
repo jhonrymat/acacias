@@ -202,6 +202,7 @@ class RolesAndPermissionsTenantSeeder extends Seeder
                 'numeroIdentificacion' => '2222222222',
                 'ciudadExpedicion' => 'acacias',
                 'fechaNacimiento' => '1980-01-12 00:00:00',
+                'cargo' => 'Secretario Privado',
                 'id_nivelEstudio' => 1,
                 'id_genero' => 1,
                 'id_ocupacion' => 1,

@@ -22,6 +22,7 @@ class DatabaseSeeder extends Seeder
         $this->call(BarrioSeeder::class);
         $this->call(EstadoSeeder::class);
         $this->call(RolesAndPermissionsTenantSeeder::class);
+        $this->call(PaisesDepartamentosCiudadesSeeder::class);
 
 
     }

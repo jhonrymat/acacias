@@ -85,16 +85,9 @@ class FormularioComponent extends Component
 
         $userId = auth()->id();
 
-        // Verificar si el usuario tiene una solicitud pendiente
-        if (Solicitud::hasPendingRequest($userId)) {
-            // session()->flash('error', 'No puedes crear otra solicitud mientras tengas una en estado Pendiente.');
-            $this->dispatch('sweet-alert-good', icon: 'info', title: 'Existe una solicitud pendiente.', text: 'No puedes crear otra solicitud mientras tengas una en estado Pendiente.', footer: '<a href="versolicitudes">Ver mis solicitudes</a>');
-            return;
-        }
-
-        // Verificar si el usuario tiene una solicitud aprobada que no esté cerca de expirar
-        if (Solicitud::hasApprovedRequest($userId) && !Solicitud::isApprovedRequestExpiring($userId)) {
-            $this->dispatch('sweet-alert-good', icon: 'info', title: 'Existe una solicitud aprobada.', text: 'No puedes crear otra solicitud hasta que tu solicitud aprobada esté cerca de expirar.', footer: '<a href="versolicitudes">Ver mis solicitudes</a>');
+        // Verificar si el usuario puede crear una nueva solicitud
+        if (!Solicitud::canCreateRequest($userId)) {
+            $this->dispatch('sweet-alert-good', icon: 'info', title: 'Solicitud activa.', text: 'No puedes crear una nueva solicitud mientras tengas una activa, aprobada o pendiente.', footer: '<a href="versolicitudes">Ver mis solicitudes</a>');
             return;
         }
 
@@ -161,7 +154,7 @@ class FormularioComponent extends Component
     {
         // Obtener el usuario autenticado
         $user = User::find(auth()->id());
-        $barrios = Barrio::all();
+        $barrios = Barrio::orderBy('nombreBarrio', 'asc')->get();
 
         // Asignar el valor de numeroIdentificacion a la propiedad pública del componente
         if (!$this->numeroIdentificacion) {
