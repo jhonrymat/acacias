@@ -41,6 +41,11 @@ class EstadoSeeder extends Seeder
                 'descripcion' => 'El certificado está por vencer',
                 'color' => '#FFC107'
             ],
+            [
+                'nombreEstado' => 'Vencido',
+                'descripcion' => 'El certificado ha vencido',
+                'color' => '#DC3545'
+            ],
         ];
 
         DB::table('estados')->insert($estados);

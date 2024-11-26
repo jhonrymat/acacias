@@ -106,7 +106,7 @@
                     </x-nav-link>
                 @endrole
                 @hasanyrole('validador1|validador2')
-                    <x-nav-link class="hidden sm:flex" href="{{ route('solicitudes') }}" :active="request()->routeIs('solicitudes')">
+                    <x-nav-link class="mx-6 hidden sm:flex" href="{{ route('solicitudes') }}" :active="request()->routeIs('solicitudes')">
                         {{ __('solicitudes') }}
                     </x-nav-link>
                     <x-nav-link class="hidden sm:flex" href="{{ route('historial') }}" :active="request()->routeIs('historial')">

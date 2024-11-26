@@ -109,17 +109,33 @@ class SolicitudComponent extends Component
 
     public function validar($Id)
     {
+        // validar si el usuario cuenta con cargo y firma
+        $user = User::find(Auth::id());
+        if (!$user->hasCompleteProfile()) {
+            $this->dispatch(
+                'sweet-alert-good',
+                icon: 'info',
+                title: 'Falta información',
+                text: 'Debes completar tu información de cargo y firma para validar solicitudes.',
+                footer: '<a href="user/profile">Finalizar mi perfil de validador</a>'
+            );
+            return;
+        }
+
         $this->Id = $Id;
-        $this->dispatch('alert',
-            icon : 'info',
-            title : '¿Estás seguro?',
-            text : 'Vas a confirmar la solicitud'
+        $this->dispatch(
+            'alert',
+            icon: 'info',
+            title: '¿Estás seguro?',
+            text: 'Vas a confirmar la solicitud'
         );
     }
 
-    public function validarsweet(){
+    public function validarsweet()
+    {
         Solicitud::find($this->Id)->update([
             'estado_id' => 5,
+            'fecha_emision' => now(),
             'Validador2_id' => Auth::id()
         ]);
 
@@ -132,17 +148,32 @@ class SolicitudComponent extends Component
 
     public function rechazar($Id)
     {
+        // validar si el usuario cuenta con cargo y firma
+        $user = User::find(Auth::id());
+        if (!$user->hasCompleteProfile()) {
+            $this->dispatch(
+                'sweet-alert-good',
+                icon: 'info',
+                title: 'Falta información',
+                text: 'Debes completar tu información de cargo y firma para validar solicitudes.',
+                footer: '<a href="user/profile">Finalizar mi perfil de validador</a>'
+            );
+            return;
+        }
         $this->Id = $Id;
-        $this->dispatch('2alert',
-            icon : 'info',
-            title : '¿Estás seguro?',
-            text : 'Vas a rechazar esta solicitud'
+        $this->dispatch(
+            '2alert',
+            icon: 'info',
+            title: '¿Estás seguro?',
+            text: 'Vas a rechazar esta solicitud'
         );
     }
 
-    public function rechazarsweet(){
+    public function rechazarsweet()
+    {
         Solicitud::find($this->Id)->update([
             'estado_id' => 3,
+            'fecha_emision' => now(),
             'Validador2_id' => Auth::id()
         ]);
 

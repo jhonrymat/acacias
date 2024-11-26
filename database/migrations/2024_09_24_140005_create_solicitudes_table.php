@@ -16,18 +16,23 @@ return new class extends Migration
             $table->unsignedBigInteger('user_id');
             $table->string('numeroIdentificacion', 50);
             $table->unsignedBigInteger('id_barrio');
-
             $table->string('direccion', 100);
-            // evidencias archivos
+
+            // Evidencias archivos
             $table->text('accion_comunal')->nullable();
             $table->text('electoral')->nullable();
             $table->text('sisben')->nullable();
             $table->text('cedula')->nullable();
-            //estados
-            $table->unsignedBigInteger('estado_id')->default(1); //1 nuevo-2 aprobada- 3 rechazada
-            $table->unsignedBigInteger('actualizado_por')->nullable(); // Agregamos el campo updated_by
+
+            // Estados
+            $table->unsignedBigInteger('estado_id')->default(1); // 1 nuevo - 2 aprobada - 3 rechazada
+            $table->unsignedBigInteger('actualizado_por')->nullable(); // Usuario que actualizó
             $table->unsignedBigInteger('Validador2_id')->nullable();
-            // observaciones
+
+            // Fecha de emisión
+            $table->date('fecha_emision')->nullable();
+
+            // Observaciones
             $table->string('observaciones', 255);
             $table->boolean('terminos');
             $table->timestamps();
@@ -39,8 +44,9 @@ return new class extends Migration
             $table->foreign('actualizado_por')->references('id')->on('users');
             $table->foreign('Validador2_id')->references('id')->on('users');
 
+            // Crear índice en la columna estado_id
+            $table->index('estado_id', 'idx_estado_id');
         });
-
     }
 
     /**

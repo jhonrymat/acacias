@@ -21,6 +21,7 @@ return new class extends Migration
             $table->string('numeroIdentificacion', 50)->unique();
             $table->string('ciudadExpedicion', 100);
             $table->date('fechaNacimiento');
+            $table->string('cargo', 100)->nullable();
             $table->unsignedBigInteger('id_nivelEstudio')->nullable();
             $table->unsignedBigInteger('id_genero')->nullable();
             $table->unsignedBigInteger('id_ocupacion')->nullable(); // Cambiado de string a unsignedBigInteger

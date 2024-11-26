@@ -45,6 +45,7 @@ class SolicitudDatatable extends DataTableComponent
 
         Solicitud::whereIn('id', $selectedRows)->update([
             'estado_id' => 5,
+            'fecha_emision' => now(),
             'Validador2_id' => Auth::id()
         ]);
 
@@ -68,6 +69,7 @@ class SolicitudDatatable extends DataTableComponent
         // Actualiza el estado de las filas seleccionadas
         Solicitud::whereIn('id', $selectedRows)->update([
             'estado_id' => 3,
+            'fecha_emision' => now(),
             'Validador2_id' => Auth::id()
         ]);
 
