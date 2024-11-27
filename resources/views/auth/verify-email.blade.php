@@ -19,8 +19,8 @@
                 @csrf
 
                 <div>
-                    <x-button type="submit">
-                        {{ __('Reenviar correo de verificación') }}
+                    <x-button type="submit" class="px-3 py-1 text-sm">
+                        {{ __('Reenviar correo') }}
                     </x-button>
                 </div>
             </form>

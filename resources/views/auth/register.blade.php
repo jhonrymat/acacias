@@ -352,10 +352,6 @@
                     const ciudades = Array.isArray(@json($ciudades)) ? @json($ciudades) : [];
                     const countries = Array.isArray(@json($paises)) ? @json($paises) : [];
 
-                    // Logs para depuración inicial
-                    console.log("Países:", countries);
-                    console.log("Departamentos:", departamentos);
-                    console.log("Ciudades:", ciudades);
 
                     return {
                         countries: countries,
@@ -369,13 +365,10 @@
                         cities: [],
 
                         loadDepartments() {
-                            console.log("Selected Country:", this.selectedCountry);
                             if (this.selectedCountry === '1') {
-                                console.log("Filtrando departamentos para Colombia...");
                                 this.departments = this.allDepartments.filter(dep => dep.pais_id == this.selectedCountry);
-                                console.log("Departamentos filtrados:", this.departments);
+
                             } else {
-                                console.log("País diferente a Colombia seleccionado. Reseteando departamentos y ciudades.");
                                 this.departments = [];
                                 this.cities = [];
                             }
@@ -384,9 +377,7 @@
                         },
 
                         loadCities() {
-                            console.log("Selected Department:", this.selectedDepartment);
                             this.cities = this.allCities.filter(city => city.departamento_id == this.selectedDepartment);
-                            console.log("Ciudades filtradas:", this.cities);
                             this.selectedCity = '';
                         }
                     };

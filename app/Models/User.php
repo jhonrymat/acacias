@@ -119,9 +119,15 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->hasMany(Solicitud::class);
     }
 
-     // Verificar si el usuario tiene un perfil completo
-     public function hasCompleteProfile()
-     {
-         return !empty($this->cargo) && !empty($this->firma);
-     }
+    // Verificar si el usuario tiene un perfil completo
+    public function hasCompleteProfile()
+    {
+        return !empty($this->cargo) && !empty($this->firma);
+    }
+
+    public function sendEmailVerificationNotification()
+    {
+        $this->notify(new \App\Notifications\CustomVerifyEmail());
+    }
+
 }
