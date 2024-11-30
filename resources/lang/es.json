@@ -17,6 +17,7 @@
     "Log in": "Acceder",
     "Forgot your password?": "¿Olvidaste tu contraseña?",
     "Register": "Registro",
+    "Email Password Reset Link": "Enviar enlace para restablecer contraseña",
     "Name": "Nombre",
     "Confirm Password": "Confirmar contraseña",
     "Reset Password": "Restablecer contraseña",
@@ -45,5 +46,11 @@
     "Saved.": "Guardado.",
     "Save": "Guardar",
     "Log Out": "Cerrar sesión",
-    "Manage Account": "Gestionar cuenta"
+    "Manage Account": "Gestionar cuenta",
+    "passwords.reset": "¡Tu contraseña ha sido restablecida!",
+    "passwords.sent": "¡Hemos enviado un enlace para restablecer tu contraseña a tu correo electrónico!",
+    "passwords.throttled": "Por favor espera antes de intentar nuevamente.",
+    "passwords.token": "El token de restablecimiento de contraseña es inválido.",
+    "passwords.user": "No podemos encontrar un usuario con esa dirección de correo electrónico.",
+    "Whoops! Something went wrong.": "¡Ups! Algo salió mal."
 }

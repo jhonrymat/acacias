@@ -32,7 +32,7 @@
                         </div>
                     @endif
 
-                    <h2 class="text-center text-2xl font-bold text-blue-custom">Certificador de residencia Acacías</h2>
+                    <h2 class="text-center text-2xl font-bold text-blue-custom">Certificados de residencia Acacías</h2>
                     <p class="text-center text-gray-600">Ingresa tus datos para iniciar sesión</p>
 
                     <form method="POST" action="{{ route('login') }}" class="mt-8 space-y-6">
