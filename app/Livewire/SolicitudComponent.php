@@ -20,13 +20,15 @@ class SolicitudComponent extends Component
         if (!auth()->user()->can('solicitudes')) {
             abort(403, 'No tienes acceso a esta página.');
         }
+
+        $this->AllStatus = Estado::all()->toArray(); // Obtén todos los estados como un array
     }
     public $nombreCompleto, $email, $telefonoContacto, $id_tipoSolicitante, $id_tipoDocumento,
     $numeroIdentificacion, $ciudadExpedicion, $fechaNacimiento, $solicitud_id,
     $fechaSolicitud, $id_nivelEstudio, $id_genero, $id_ocupacion, $id_poblacion,
     $numeroIdentificacion_id, $fechaActual, $barrio_id, $direccion_id, $ubicacion,
     $accion_comunal, $electoral, $sisben, $cedula, $estado_id, $estado_id2, $JAComunal, $detalles, $visible = false, $showForm = false, $showAdditional = false, $showValidar = false,
-    $validacion1, $validacion2, $notas, $nombre, $validador, $Id;
+    $validacion1, $validacion2, $notas, $nombre, $validador, $Id, $AllStatus;
 
 
 
@@ -52,7 +54,7 @@ class SolicitudComponent extends Component
 
 
 
-    protected $listeners = ['edit', 'delete', 'view', 'procesar', 'see', 'validar', 'rechazar'];
+    protected $listeners = ['edit', 'delete', 'view', 'procesar', 'see', 'validar', 'rechazar','confirmSave' => 'handleSave'];
 
     public function view($Id)
     {
@@ -264,12 +266,21 @@ class SolicitudComponent extends Component
 
     public function save()
     {
+        $this->dispatch('confirm-save');
+    }
+
+    public function handleSave()
+    {
         $this->validate();
 
         if ($this->solicitud_id) {
             $solicitud = Solicitud::find($this->solicitud_id);
+            // dd($this->estado_id, $this->estado_id2);
 
-            $solicitud->update(['estado_id' => $this->estado_id2]);
+            // Lógica para determinar el estado final
+            $estadoFinal = ($this->estado_id === 'Avanzar' && $this->estado_id2 === '2' ) ? 2 : 3; // 2 = Aprobada, 3 = Rechazada
+
+            $solicitud->update(['estado_id' => $estadoFinal]);
 
             try {
                 $solicitud->validaciones()->create([
@@ -279,16 +290,19 @@ class SolicitudComponent extends Component
                     'notas' => $this->detalles,
                     'visible' => $this->visible,
                 ]);
-                $this->dispatch('sweet-alert-good', icon: 'success', title: 'Validación creada con éxito', text: 'La validación se ha guardado correctamente.');
+
+                $this->dispatch('sweet-alert-good', icon: 'success', title: 'Validación creada con éxito.', text: 'La validación se ha guardado correctamente.');
+                $this->dispatch('Updated');
 
             } catch (\Exception $e) {
-                $this->dispatch('sweet-alert-good', icon: 'info', title: 'Error', text: 'Error al guardar la validación.');
+                $this->dispatch('sweet-alert-good', icon: 'error', title: 'Error', text: 'Error al guardar la validación.');
+                $this->dispatch('Updated');
 
             }
         }
 
         $this->showValidar = false;
-        $this->dispatch('Updated');
+        $this->dispatch('updated');
     }
 
 

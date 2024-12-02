@@ -33,7 +33,7 @@ return new class extends Migration
             $table->date('fecha_emision')->nullable();
 
             // Observaciones
-            $table->string('observaciones', 255);
+            $table->text('observaciones')->nullable();
             $table->boolean('terminos');
             $table->timestamps();
 
