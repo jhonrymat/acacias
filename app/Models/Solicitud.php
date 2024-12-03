@@ -121,6 +121,13 @@ class Solicitud extends Model
         return !$hasActiveRequest || $isExpiring;
     }
 
+    public function getNumeroIdentificacionOcultoAttribute()
+    {
+        $numero = $this->numeroIdentificacion;
+        return str_repeat('*', strlen($numero) - 4) . substr($numero, -4);
+    }
+
+
 
 
 }

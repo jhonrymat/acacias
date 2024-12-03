@@ -29,10 +29,19 @@ class HistorialSolicitudesDatatable extends DataTableComponent
 
     public function builder(): Builder
     {
-        return Solicitud::query()
-            ->where('actualizado_por', auth()->id()) // Filtramos por el usuario actual
-            ->whereIn('estado_id', [2, 3]) // Filtramos por estados específicos
-            ->with(['user', 'barrio', 'direccion']); // Cargamos relaciones solo cuando sean necesarias
+        $query = Solicitud::query();
+
+        // Verificar el rol del usuario autenticado
+        if (auth()->user()->hasRole('validador1')) {
+            $query->where('actualizado_por', auth()->id())
+                ->whereIn('estado_id', [2, 3]);
+        } elseif (auth()->user()->hasRole('validador2')) {
+            $query->where('Validador2_id', auth()->id())
+                ->whereIn('estado_id', [5, 3]);
+        }
+
+        // Filtrar por estados específicos y cargar relaciones necesarias
+        return $query->with(['user', 'barrio', 'direccion']);
     }
 
 

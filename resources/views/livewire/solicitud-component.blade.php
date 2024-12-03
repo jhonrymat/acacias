@@ -116,7 +116,8 @@
 
     {{-- modal para validar la solicitud se va a llamar validar , por el momento solo va a tener un select que va a permitir cambien el estado de la solicitud --}}
     <div x-data="validationModal" x-cloak>
-        <div x-show="showModal" class="fixed inset-0 bg-gray-800 bg-opacity-70 flex items-center justify-center" x-inz>
+        <div x-show="showModal" class="fixed inset-0 bg-gray-800 bg-opacity-70 flex items-center justify-center"
+            x-inz>
             <div
                 class="bg-white w-11/12 sm:max-w-lg md:max-w-3xl lg:max-w-5xl p-6 rounded-lg shadow-lg max-h-screen overflow-y-auto">
                 <div class="flex justify-between items-center mb-2">
@@ -129,9 +130,9 @@
                         <div class="mb-3">
                             <label for="estado" class="block text-xs font-medium">Primer filtro</label>
                             <select wire:model="estado_id" id="estado"
-                                class="mt-1 block w-full border-gray-300 rounded text-sm px-2 py-1">
+                                class="mt-1 block w-full border-gray-300 rounded text-sm px-2 py-1" required>
                                 <option value="">Seleccione una opción</option>
-                                <option value="Finalizar">Finalizar</option>
+                                <option value="Finalizar">FINALIZAR - Rechazar</option>
                                 <option value="Avanzar">AVANZAR - Validar</option>
                             </select>
                             {{-- error --}}
@@ -156,7 +157,7 @@
                         <div class="mb-3">
                             <label for="estado" class="block text-xs font-medium">Segundo filtro</label>
                             <select wire:model="estado_id2" id="estado2"
-                                class="mt-1 block w-full border-gray-300 rounded text-sm px-2 py-1">
+                                class="mt-1 block w-full border-gray-300 rounded text-sm px-2 py-1" required>
                                 <option value="">Seleccione una opción de estado</option>
                                 @foreach ($estados as $estado)
                                     <option value="{{ $estado->id }}">{{ $estado->nombreEstado }} -
@@ -196,8 +197,8 @@
                             Observaciones
                         </label>
                         <textarea wire:model="detalles"
-                            class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
-                            aria-describedby="detalles_help" id="detalles" rows="3"></textarea>
+                            class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+                            aria-describedby="detalles_help" id="detalles" rows="3" required></textarea>
                         <p class="mt-1 text-xs text-gray-500 dark:text-gray-300" id="detalles_help">Detalles
                             adicionales sobre la solicitud.</p>
                         {{-- error --}}
@@ -241,7 +242,8 @@
     </div>
 
     <div x-data="{ showAdditionalModal: @entangle('showAdditional') }" x-cloak>
-        <div x-show="showAdditionalModal" class="fixed inset-0 bg-gray-800 bg-opacity-70 flex items-center justify-center" x-inz>
+        <div x-show="showAdditionalModal"
+            class="fixed inset-0 bg-gray-800 bg-opacity-70 flex items-center justify-center" x-inz>
             <div
                 class="bg-white w-11/12 sm:max-w-lg md:max-w-3xl lg:max-w-5xl p-6 rounded-lg shadow-lg max-h-screen overflow-y-auto">
                 <!-- Encabezado del modal -->
@@ -281,7 +283,8 @@
                         </div>
                         <div class="mb-3">
                             <label for="notas" class="block text-xs font-medium">Notas</label>
-                            <div id="notas" class="mt-1 p-3 border border-gray-300 rounded bg-gray-50 text-sm text-gray-700">
+                            <div id="notas"
+                                class="mt-1 p-3 border border-gray-300 rounded bg-gray-50 text-sm text-gray-700">
                                 {{ $notas ?? 'No hay notas disponibles.' }}
                             </div>
                         </div>
@@ -311,11 +314,45 @@
 
                 <!-- Botones -->
                 <div class="flex justify-end space-x-2 mt-6">
-                    <button @click="showAdditionalModal = false" class="px-4 py-2 bg-gray-500 text-white rounded">Cerrar</button>
+                    <button @click="showAdditionalModal = false"
+                        class="px-4 py-2 bg-gray-500 text-white rounded">Cerrar</button>
                 </div>
             </div>
         </div>
     </div>
+    <div x-data="{ showModal: false }" x-on:confirm-save.window="showModal = true" x-cloak>
+        <!-- Modal de Confirmación -->
+        <div x-show="showModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+            <div class="bg-white rounded-lg shadow-lg p-6 w-96">
+                <h2 class="text-lg font-bold text-gray-700">¿Estás seguro?</h2>
+                <p class="text-sm text-gray-600 mt-2">Esta acción no se puede deshacer.</p>
+                <p class="text-sm text-gray-600 mt-2">
+                    <strong>Filtro 1:</strong> <span x-text="$wire.estado_id"></span>
+                </p>
+                <p class="text-sm text-gray-600 mt-2">
+                <div x-data="{ selectedEstado2: '' }" x-init="$watch('$wire.estado_id2', value => {
+                    const estado = @js($AllStatus).find(status => status.id == value);
+                    selectedEstado2 = estado ? estado.nombreEstado : 'Sin seleccionar';
+                });">
+                    <strong>Filtro 2:</strong>
+                    <span x-text="selectedEstado2"></span>
+                </div>
+
+                </p>
+                <div class="mt-4 flex justify-end space-x-2">
+                    <button @click="showModal = false" class="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400">
+                        Cancelar
+                    </button>
+                    <button @click="$wire.handleSave(); showModal = false"
+                        class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">
+                        Confirmar
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
 
 
     <style>
@@ -323,7 +360,7 @@
             display: none !important;
         }
 
-        [x-inz]{
+        [x-inz] {
             z-index: 11;
         }
     </style>
@@ -345,6 +382,8 @@
             }));
         });
     </script>
+
+
     <x-sweet-alert-good></x-sweet-alert-good>
     <x-confirm></x-confirm>
     <x-alert></x-alert>

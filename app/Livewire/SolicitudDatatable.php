@@ -15,11 +15,16 @@ class SolicitudDatatable extends DataTableComponent
 
     public function configure(): void
     {
-        $this->setPrimaryKey('id')
-            ->setBulkActions([
+        $this->setPrimaryKey('id');
+
+        // Configurar acciones masivas solo para el rol validador2
+        if (Auth::user()->hasRole('validador2')) {
+            $this->setBulkActions([
                 'validarStatus' => 'Validar solicitudes',
                 'rechazarStatus' => 'Rechazar solicitudes',
             ]);
+        }
+
         $this->setDefaultSort('id', 'desc');
         $this->setSingleSortingStatus(false);
         // Configurar el mensaje personalizado según el rol
@@ -210,6 +215,8 @@ class SolicitudDatatable extends DataTableComponent
                             return '<span style="background-color: #DC3545; color: white; padding: 4px 8px; text-align: center; border-radius: 5px;">Rechazada</span>';
                         case 'En proceso':
                             return '<span style="background-color: #17A2B8; color: white; padding: 4px 8px; text-align: center; border-radius: 5px;">En proceso</span>';
+                        case 'En revision':
+                            return '<span style="background-color: #17A2B8; color: white; padding: 4px 8px; text-align: center; border-radius: 5px;">En revisión</span>';
                         default:
                             return '<span style="background-color: #6c757d; color: white; padding: 4px 8px; text-align: center; border-radius: 5px;">' . $value . '</span>';
                     }

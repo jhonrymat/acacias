@@ -50,23 +50,18 @@
 
                     <x-label for="numeroIdentificacion" class="block text-sm font-medium">Número de
                         identificación*</x-label>
-                    <!-- Ícono de pregunta -->
-                    <div class="ml-1 tooltip">
-                        <a href="#" class="hover:text-gray-400">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                stroke-width="1.5" stroke="currentColor" class="w-4 h-4 inline-block">
-                                <path stroke-linecap="round" stroke-linejoin="round"
-                                    d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 5.25h.008v.008H12v-.008Z" />
-                            </svg>
-                        </a>
-                        <div
-                            class="absolute left-5 top-0 z-10 w-48 p-2 mt-2 text-sm text-gray-700 bg-white border border-gray-300 rounded shadow-lg invisible tooltip-item">
-                            El documento de identidad no se puede modificar.
-                        </div>
+                </div>
+                <div class="relative group">
+                    <x-input id="numeroIdentificacion" type="text" wire:model="numeroIdentificacion"
+                        class="mt-1 block w-full focus:ring focus:ring-indigo-300"
+                        placeholder="Ingrese el número de identificación" readonly />
+                    <!-- Tooltip -->
+                    <div class="absolute hidden group-hover:block group-focus:block bg-gray-800 text-white text-sm rounded-lg px-4 py-2 w-64 shadow-lg left-0 z-10"
+                        style="top:-6rem">
+                        Este campo muestra el número de identificación. No se puede editar porque es un valor de solo
+                        lectura.
                     </div>
                 </div>
-                <x-input id="numeroIdentificacion" type="text" wire:model="numeroIdentificacion"
-                    class="mt-1 block w-full" placeholder="Ingrese el número de identificación" readonly />
                 @error('numeroIdentificacion')
                     <span class="text-red-500">{{ $message }}</span>
                 @enderror
@@ -77,25 +72,19 @@
             <div class="mt-4 mb-4 relative">
                 <div class="flex items-center">
                     <x-label class="block text-sm font-medium">Dirección*</x-label>
-                    <!-- Ícono de pregunta -->
-                    <div class="ml-1 tooltip">
-                        <a href="#" class="hover:text-gray-400">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                stroke-width="1.5" stroke="currentColor" class="w-4 h-4 inline-block">
-                                <path stroke-linecap="round" stroke-linejoin="round"
-                                    d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 5.25h.008v.008H12v-.008Z" />
-                            </svg>
-                        </a>
-                        <div
-                            class="absolute left-5 top-0 z-10 w-48 p-2 mt-2 text-sm text-gray-700 bg-white border border-gray-300 rounded shadow-lg invisible tooltip-item">
-                            De clic en el boton azul con el simbolo más, para agregar se dirección.
-                        </div>
-                    </div>
                 </div>
                 <div class="w-full mb-4 flex items-center">
-                    <x-input type="text" wire:model="direccion" id="direccionInput"
-                        class="w-full rounded-lg border border-gray-400 p-2" placeholder="Seleccione su dirección"
-                        readonly />
+                    <div class="relative group w-full">
+                        <x-input type="text" wire:model="direccion" id="direccionInput"
+                            class="w-full rounded-lg border border-gray-400 p-2 focus:ring focus:ring-indigo-300"
+                            placeholder="Seleccione su dirección" readonly />
+                        <!-- Tooltip -->
+                        <div class="absolute hidden group-hover:block group-focus:block bg-gray-800 text-white text-sm rounded-lg px-4 py-2 w-64 shadow-lg left-0 z-10"
+                            style="top:-6rem">
+                            Este campo es obligatorio. Haz clic en el ícono de más (+) para seleccionar tu dirección.
+                        </div>
+                    </div>
+
                     <div x-data="{
                         modelOpen: false,
                         tipoViaPrimaria: '',
@@ -366,30 +355,27 @@
             {{-- barrio --}}
             <div class="mb-4 relative">
                 <div class="flex items-center">
-                    <x-label for="id_barrio" class="block text-sm font-medium">Barrio o Vereda</x-label>
-                    <!-- Ícono de pregunta -->
-                    <div class="ml-1 tooltip">
-                        <a href="#" class="hover:text-gray-400">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                stroke-width="1.5" stroke="currentColor" class="w-4 h-4 inline-block">
-                                <path stroke-linecap="round" stroke-linejoin="round"
-                                    d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 5.25h.008v.008H12v-.008Z" />
-                            </svg>
-                        </a>
-                        <div
-                            class="absolute left-5 top-0 z-10 w-48 p-2 mt-2 text-sm text-gray-700 bg-white border border-gray-300 rounded shadow-lg invisible tooltip-item">
-                            Seleccione el barrio o vereda de donde vive.
-                        </div>
+                    <x-label for="id_barrio" class="block text-sm font-medium">Barrio o Vereda*</x-label>
+                </div>
+                <div class="relative group">
+                    <select name="id_barrio" id="id_barrio" wire:model="id_barrio"
+                        class="block mt-1 w-full border border-gray-300 rounded-lg focus:ring focus:ring-indigo-300"
+                        required>
+                        <option value="" selected>Selecciona un barrio o vereda</option>
+                        @foreach ($barrios as $barrio)
+                            <option value="{{ $barrio->id }}">
+                                {{ $barrio->nombreBarrio }} - {{ $barrio->zona }} - {{ $barrio->tipoUnidad }}
+                                {{ $barrio->codigoNumero }}
+                            </option>
+                        @endforeach
+                    </select>
+                    <!-- Tooltip -->
+                    <div class="absolute hidden group-hover:block group-focus:block bg-gray-800 text-white text-sm rounded-lg px-4 py-2 w-64 shadow-lg left-0 z-10"
+                        style="top:-6rem">
+                        Selecciona el barrio o vereda correspondiente a tu ubicación. Este campo es obligatorio.
                     </div>
                 </div>
-                <select name="id_barrio" id="id_barrio" wire:model="id_barrio"
-                    class="block mt-1 w-full border border-gray-300 rounded-lg">
-                    <option value="" selected>Selecciona un barrio o vereda</option>
-                    @foreach ($barrios as $barrio)
-                        <option value="{{ $barrio->id }}"> {{ $barrio->nombreBarrio }} - {{ $barrio->zona }} -
-                            {{ $barrio->tipoUnidad }} {{ $barrio->codigoNumero }}</option>
-                    @endforeach
-                </select>
+
                 @error('id_barrio')
                     <span class="text-red-500">{{ $message }}</span>
                 @enderror
@@ -399,30 +385,24 @@
             {{-- observaciones --}}
             <div class="mb-4 relative">
                 <div class="flex flex-wrap items-center">
-                    <x-label for="observaciones" class="block text-sm font-medium">Observaciones</x-label>
-                    <!-- Ícono de pregunta -->
-                    <div class="ml-1 tooltip">
-                        <a href="#" class="hover:text-gray-400">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                stroke-width="1.5" stroke="currentColor" class="w-4 h-4 inline-block">
-                                <path stroke-linecap="round" stroke-linejoin="round"
-                                    d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 5.25h.008v.008H12v-.008Z" />
-                            </svg>
-                        </a>
-                        <div
-                            class="absolute left-5 top-0 z-10 w-48 p-2 mt-2 text-sm text-gray-700 bg-white border border-gray-300 rounded shadow-lg invisible tooltip-item">
-                            Algo que quieras agregar de mas.
+                    <div class="flex items-center">
+                        <x-label for="observaciones" class="block text-sm font-medium">Observaciones</x-label>
+                    </div>
+                    <div class="relative group w-full">
+                        <textarea id="observaciones" wire:model="observaciones"
+                            class="mt-1 block w-full border border-gray-300 rounded-lg focus:ring focus:ring-indigo-300"></textarea>
+                        <!-- Tooltip -->
+                        <div class="absolute hidden group-hover:block group-focus:block bg-gray-800 text-white text-sm rounded-lg px-4 py-2 w-64 shadow-lg left-0 z-10"
+                            style="top:-7rem">
+                            Ingresa cualquier observación o comentario adicional que consideres importante. Este campo
+                            es opcional.
                         </div>
                     </div>
-                    <textarea id="observaciones" wire:model="observaciones" class="mt-1 block w-full border border-gray-300 rounded-lg"></textarea>
                     @error('observaciones')
                         <span class="text-red-500">{{ $message }}</span>
                     @enderror
                 </div>
             </div>
-
-
-
             <!-- Contenedor para los Archivos Adjuntos Opcionales -->
             <div class="p-6 mb-8 border border-blue-300 rounded-lg bg-blue-50">
                 <h3 class="text-lg font-semibold text-blue-800 mb-4">Archivos Adjuntos (Opcional)</h3>
@@ -493,11 +473,20 @@
             <!-- Sección de Términos y Condiciones con Checkbox -->
             <div class="mb-8">
                 <div class="flex items-start space-x-2 p-4 border border-green-500 rounded-lg bg-green-50">
-                    <input type="checkbox" wire:model="terminos"
-                        class="w-6 h-6 text-green-600 border-green-500 rounded focus:ring-green-400">
+                    <div class="relative group flex items-center">
+                        <input type="checkbox" wire:model="terminos"
+                               class="w-6 h-6 text-green-600 border-green-500 rounded focus:ring focus:ring-green-400" required>
+                        <!-- Tooltip -->
+                        <div class="absolute hidden group-hover:block group-focus:block bg-gray-800 text-white text-sm rounded-lg px-4 py-2 w-64 shadow-lg left-8 z-10"
+                             style="top:-2.5rem">
+                            Acepta los términos y condiciones para continuar. Este campo es obligatorio.
+                        </div>
+                    </div>
+
                     <span class="text-green-700 leading-snug font-semibold">
                         Acepto las condiciones establecidas en la política de tratamiento de información de la Alcaldía
-                        de Acacias: <a href="/proteccion" target="_blank" class="text-green-700 underline hover:text-green-800">Políticas
+                        de Acacias: <a href="/proteccion" target="_blank"
+                            class="text-green-700 underline hover:text-green-800">Políticas
                             de Protección de Datos Personales</a>.
                     </span>
                 </div>

@@ -59,7 +59,7 @@ class FormularioComponent extends Component
         'sisben' => 'file|mimes:pdf,jpeg,png,jpg|max:10240', // Valida cada archivo individualmente
         'cedula' => 'file|mimes:pdf,jpeg,png,jpg|max:10240', // Valida cada archivo individualmente
         'terminos' => 'required',
-        'observaciones' => 'required|string',
+        'observaciones' => 'nullable|string',
     ];
     protected $messages = [
         'numeroIdentificacion.required' => 'El campo número de identificación es obligatorio.',
@@ -76,7 +76,6 @@ class FormularioComponent extends Component
         'cedula.mimes' => 'El campo evidencia debe ser un archivo de tipo: pdf, jpeg, png, jpg',
         'cedula.max' => 'El campo evidencia no debe ser mayor a 10MB.',
         'terminos.required' => 'El campo términos es obligatorio.',
-        'observaciones.required' => 'El campo observaciones es obligatorio.',
         'observaciones.string' => 'El campo observaciones debe ser una cadena de texto.',
     ];
 
@@ -132,7 +131,7 @@ class FormularioComponent extends Component
             'electoral' => $filePaths['electoral'],
             'sisben' => $filePaths['sisben'],
             'cedula' => $filePaths['cedula'],
-            'observaciones' => $this->observaciones,
+            'observaciones' =>  $this->observaciones ?? null,
             'terminos' => $this->terminos,
             'estado_id' => 1, // Estado inicial de 'Pendiente'
         ]);
