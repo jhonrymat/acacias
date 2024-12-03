@@ -1,5 +1,20 @@
 <x-guest-layout>
+     <!-- Contenedor de los botones -->
+     <div class="flex justify-end space-x-4 p-4 bg-gray-100">
+        <!-- Botón para consultar trámite -->
+        <a href="{{ route('consulta.tramite') }}"
+            class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition font-bold shadow-md w-full sm:w-auto text-center">
+            Consultar Trámite
+        </a>
+        <!-- Botón para registrarse -->
+        <a href="{{ route('login') }}"
+            class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 transition font-bold shadow-md w-full sm:w-auto text-center">
+            Iniciar Sesión
+        </a>
+    </div>
+
     <x-authentication-card>
+        <!-- Botón superior derecho -->
         <x-slot name="logo">
             <a href="{{ route('login') }}">
                 <x-authentication-card-logo />
@@ -9,6 +24,11 @@
         {{-- <x-validation-errors class="mb-4" /> --}}
         <form method="POST" action="{{ route('register') }}">
             @csrf
+            {{-- titulo --}}
+            <h2 class="text-center text-2xl font-bold text-gray-800 mb-4">Registro de Usuario</h2>
+            {{-- descripcion --}}
+            <p class="text-center text-gray-600">Ingresa tus datos para registrarte en el sistema</p>
+            {{-- name --}}
 
             <div class="relative mt-4">
                 <div class="flex items-center">

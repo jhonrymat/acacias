@@ -1,6 +1,20 @@
 <x-guest-layout>
+    <!-- Contenedor de los botones -->
+     <div class="flex justify-end space-x-4 p-4 bg-gray-100">
+         <!-- Botón para consultar trámite -->
+         <a href="{{ route('consulta.tramite') }}"
+             class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition font-bold shadow-md w-full sm:w-auto text-center">
+             Consultar Trámite
+         </a>
+         <!-- Botón para registrarse -->
+         <a href="{{ route('register') }}"
+             class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 transition font-bold shadow-md w-full sm:w-auto text-center">
+             Registrarse
+         </a>
+     </div>
     <div class="min-h-screen flex items-center justify-center bg-gray-100">
-        <div class="max-w-md w-full space-y-8">
+
+        <div class="max-w-md w-full space-y-6">
 
             @auth
             {{-- Logo --}}

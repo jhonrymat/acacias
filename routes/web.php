@@ -18,11 +18,15 @@ use App\Livewire\SolicitudesComponent;
 use App\Livewire\ValidadoresComponent;
 use App\Livewire\TipoSolicitanteComponent;
 use App\Livewire\CertificadoComponent;
+use App\Livewire\ConsultaTramite;
 
 
 Route::get('/', function () {
     return view('auth.login');
 });
+
+Route::get('/consulta-tramite', ConsultaTramite::class)->name('consulta.tramite');
+
 
 
 Route::middleware([
@@ -59,4 +63,5 @@ Route::middleware([
         return view('certificados.certificado');
     })->name('certificado');
 });
+
 

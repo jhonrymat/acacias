@@ -13,17 +13,17 @@ class EstadoSeeder extends Seeder
         $estados = [
             [
                 'nombreEstado' => 'Pendiente',
-                'descripcion' => 'Este estado puede representar que la solicitud está esperando ser procesada.',
+                'descripcion' => 'La solicitud está en proceso y será validada lo más pronto posible. Te notificaremos una vez se complete la revisión.',
                 'color' => '#FFC107'
             ],
             [
                 'nombreEstado' => 'Aprobada',
-                'descripcion' => ' Indica que la solicitud ha sido aprobada.',
-                'color' => '#28A745'
+                'descripcion' => 'La solicitud fue revisada y validada exitosamente. Solo falta la emisión del certificado correspondiente.',
+                'color' => '#85D17A'
             ],
             [
                 'nombreEstado' => 'Rechazada',
-                'descripcion' => 'La solicitud fue revisada y no fue aceptada.',
+                'descripcion' => 'La solicitud fue revisada, pero no cumplió con los requisitos necesarios y no pudo ser aprobada.',
                 'color' => '#DC3545'
             ],
             [
@@ -33,18 +33,18 @@ class EstadoSeeder extends Seeder
             ],
             [
                 'nombreEstado' => 'Emitido',
-                'descripcion' => 'El cerificado fue emitido',
-                'color' => '#28A745'
+                'descripcion' => 'El certificado ha sido emitido y está disponible para su descarga desde el portal.',
+                'color' => '#5BC0EB'
             ],
             [
                 'nombreEstado' => 'Por vencer',
-                'descripcion' => 'El certificado está por vencer',
-                'color' => '#FFC107'
+                'descripcion' => 'El certificado actual está próximo a vencer. Esta notificación se activa durante los últimos 15 días de validez.',
+                'color' => '#F29423'
             ],
             [
                 'nombreEstado' => 'Vencido',
-                'descripcion' => 'El certificado ha vencido',
-                'color' => '#DC3545'
+                'descripcion' => 'El certificado ha expirado y deberá realizarse un nuevo proceso para obtener uno actualizado.',
+                'color' => '#6C757D'
             ],
         ];
 
