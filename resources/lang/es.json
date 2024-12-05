@@ -1,4 +1,8 @@
 {
+    "pagination": {
+        "next": "Siguiente",
+        "previous": "Anterior"
+    },
     "The :attribute must be at least :length characters and contain at least one number.": "La :attribute debe tener al menos :length caracteres y contener por lo menos un número.",
     "The :attribute must be at least :length characters and contain at least one special character and one number.": "La :attribute debe tener al menos :length caracteres y contener por lo menos un caracter especial y un número.",
     "The :attribute must be at least :length characters and contain at least one special character.": "La :attribute debe tener al menos :length caracteres y contener por lo menos un carácter especial.",
@@ -71,5 +75,4 @@
     "auth.failed": "Las credenciales no coinciden con nuestros registros.",
     "auth.password" : "La contraseña proporcionada es incorrecta.",
     "auth.throttle" : "Demasiados intentos de inicio de sesión. Por favor intenta de nuevo en :seconds segundos."
-
 }
