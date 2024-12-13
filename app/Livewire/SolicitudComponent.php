@@ -5,12 +5,13 @@ use App\Models\User;
 use App\Models\Barrio;
 use App\Models\Estado;
 use Livewire\Component;
+use Milon\Barcode\DNS2D;
 use App\Models\Direccion;
 use App\Models\Solicitud;
 use App\Models\Validacion;
 use Livewire\WithFileUploads;
 use Illuminate\Support\Facades\Auth;
-use Milon\Barcode\DNS2D;
+use Illuminate\Support\Facades\Mail;
 
 class SolicitudComponent extends Component
 {
@@ -152,6 +153,14 @@ class SolicitudComponent extends Component
             'Validador2_id' => Auth::id(),
         ]);
 
+
+        $userName = $solicitud->user->name; // Nombre del usuario
+        $userEmail = $solicitud->user->email; // Email del usuario
+
+        // Enviar correo de rechazo
+        Mail::to($userEmail)->send(new \App\Mail\SolicitudEmitidaNotification($solicitud->id, $userName));
+
+
         // Generar URL para el código QR
         $baseUrl = config('app.url'); // Obtenemos la URL base desde .env
         $qrUrl = $baseUrl . '/qr/' . $solicitud->id . '/' . $solicitud->numeroIdentificacion;
@@ -212,11 +221,27 @@ class SolicitudComponent extends Component
 
     public function rechazarsweet()
     {
-        Solicitud::find($this->Id)->update([
+
+        $solicitud = Solicitud::find($this->Id);
+
+        if (!$solicitud) {
+            $this->dispatch('sweet-alert-good', icon: 'error', title: 'Error', text: 'Solicitud no encontrada.');
+            return;
+        }
+
+        $solicitud->update([
             'estado_id' => 3,
             'fecha_emision' => now(),
             'Validador2_id' => Auth::id()
         ]);
+
+
+        $userName = $solicitud->user->name; // Nombre del usuario
+        $userEmail = $solicitud->user->email; // Email del usuario
+
+        // Enviar correo de rechazo
+        Mail::to($userEmail)->send(new \App\Mail\SolicitudRechazadaNotification($solicitud->id, $userName));
+
 
         $this->dispatch('Updated');
 
@@ -314,12 +339,19 @@ class SolicitudComponent extends Component
 
         if ($this->solicitud_id) {
             $solicitud = Solicitud::find($this->solicitud_id);
-            // dd($this->estado_id, $this->estado_id2);
 
             // Lógica para determinar el estado final
             $estadoFinal = ($this->estado_id === 'Avanzar' && $this->estado_id2 === '2') ? 2 : 3; // 2 = Procesando, 3 = Rechazada
 
             $solicitud->update(['estado_id' => $estadoFinal]);
+
+            $userName = $solicitud->user->name; // Nombre del usuario
+            $userEmail = $solicitud->user->email; // Email del usuario
+
+            if ($estadoFinal === 3) {
+                // Enviar correo de rechazo
+                Mail::to($userEmail)->send(new \App\Mail\SolicitudRechazadaNotification($solicitud->id, $userName));
+            }
 
             // Subir múltiples archivos
             $rutasArchivos = [];

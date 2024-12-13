@@ -530,13 +530,15 @@
             <!-- Botón de Enviar -->
             <div class="flex justify-end mt-8 mb-12">
                 <button type="submit"
-                    class="flex items-center justify-center px-6 py-3 space-x-3 text-lg font-semibold text-white uppercase transition duration-300 transform bg-blue-600 rounded-lg shadow-lg hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-300">
+                    class="flex items-center justify-center px-6 py-3 space-x-3 text-lg font-semibold text-white uppercase transition duration-300 transform bg-blue-600 rounded-lg shadow-lg hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-300"
+                    wire:loading.attr="disabled" wire:loading.class="bg-gray-400 hover:bg-gray-400 cursor-not-allowed">
                     <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" viewBox="0 0 20 20" fill="currentColor">
                         <path fill-rule="evenodd"
                             d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z"
                             clip-rule="evenodd" />
                     </svg>
-                    <span>Crear trámite</span>
+                    <span wire:loading.remove>Crear trámite</span>
+                    <span wire:loading>Procesando...</span>
                 </button>
             </div>
 
