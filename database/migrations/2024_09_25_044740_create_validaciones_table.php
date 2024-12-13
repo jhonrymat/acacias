@@ -19,11 +19,12 @@ return new class extends Migration
             // columna estado2
             $table->string('validacion2', 255)->nullable();
             // adjunto JAComunal
-            $table->text('JAComunal')->nullable();
+            $table->json('JAComunal')->nullable();
 
             $table->text('notas')->nullable();
             // permitir visualizacion de ciudadano, booleano
             $table->boolean('visible')->default(false);
+            $table->string('qr_url')->nullable(); // Enlace del QR generado
 
             $table->timestamps();
 

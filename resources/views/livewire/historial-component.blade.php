@@ -34,12 +34,14 @@
                                 class="mt-1 block w-full border-gray-300 rounded text-sm px-2 py-1" disabled>
                         </div>
                         <div class="mb-3">
-                            <label for="JAComunal" class="block text-xs font-medium">Archivo J.A.C</label>
-                            @if ($JAComunal)
-                                <a href="{{ asset('storage/' . $JAComunal) }}" target="_blank"
-                                    class="block mt-1 text-sm text-blue-500 underline">
-                                    Ver archivo
-                                </a>
+                            <label for="JAComunal" class="block text-xs font-medium">Anexos</label>
+                            @if ($JAComunal && count($JAComunal) > 0)
+                                @foreach ($JAComunal as $archivo)
+                                    <a href="{{ asset('storage/' . $archivo) }}" target="_blank"
+                                        class="block mt-1 text-sm text-blue-500 underline">
+                                        Ver archivo
+                                    </a>
+                                @endforeach
                             @else
                                 <p class="mt-1 text-sm text-gray-500">No hay archivo disponible.</p>
                             @endif

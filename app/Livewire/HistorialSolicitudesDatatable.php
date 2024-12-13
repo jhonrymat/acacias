@@ -75,8 +75,8 @@ class HistorialSolicitudesDatatable extends DataTableComponent
                     switch ($value) {
                         case 'Pendiente':
                             return '<span style="background-color: #FFC107; color: white; padding: 4px 8px; text-align: center; border-radius: 5px;">Pendiente</span>';
-                        case 'Aprobada':
-                            return '<span style="background-color: #28A745; color: white; padding: 4px 8px; text-align: center; border-radius: 5px;">Aprobada</span>';
+                        case 'Procesando':
+                            return '<span style="background-color: #28A745; color: white; padding: 4px 8px; text-align: center; border-radius: 5px;">Procesando</span>';
                         case 'Rechazada':
                             return '<span style="background-color: #DC3545; color: white; padding: 4px 8px; text-align: center; border-radius: 5px;">Rechazada</span>';
                         case 'En proceso':

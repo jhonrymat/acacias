@@ -71,12 +71,12 @@ class Solicitud extends Model
     public static function hasActiveRequest($userId)
     {
         return self::where('user_id', $userId)
-            ->whereIn('estado_id', [1, 2, 5]) // Estados restringidos: Pendiente, Aprobada, Emitida
+            ->whereIn('estado_id', [1, 2, 5]) // Estados restringidos: Pendiente, Procesando, Emitida
             ->exists();
     }
 
 
-    // Método para verificar si la solicitud aprobada está a punto de expirar (15 días antes de 6 meses)
+    // Método para verificar si la solicitud emitida está a punto de expirar (15 días antes de 6 meses)
     public static function checkIfExpiring($userId)
     {
         $approvedRequest = self::where('user_id', $userId)

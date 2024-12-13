@@ -266,7 +266,7 @@
 
     <!-- Título -->
     <div class="title">
-        LA SECRETARIA DE GOBIERNO MUNICIPAL DE ACACÍAS – META
+        LA SECRETARIA PRIVADA MUNICIPAL DE ACACÍAS – META
     </div>
 
     <!-- Contenido -->
@@ -286,7 +286,7 @@
             siempre y cuando el ciudadano lleve más de un año inscrito en los mismos.
             Que conforme a lo expuesto
             anteriormente procede el Alcalde Municipal bajo el
-            Decreto No. 154 de 05 de septiembre de 2022, delegar en el titular de la secretaría de Gobierno su
+            DECRETO 100 DEL 17 DE SEPTIEMBRE DE 2024, delegar en el titular de la secretaría de Gobierno su
             encargado, o quien haga sus veces la facultad de expedir los
             certificados de residencia del Municipio de Acacías, concordante con el artículo 209 de la Constitución
             Política de Colombia y el artículo 92 de la Ley 136 de 1994
@@ -316,11 +316,11 @@
     <div>
         @if ($estado == 'Emitido')
             <div class="validacion" style="color: green;">
-                <p>Certificado Válido</p>
+                <p>Certificado Válido</p> <span>N° {{ $id }}</span>
             </div>
         @else
             <div class="validacion" style="color: red;">
-                <p>Certificado Rechazado</p>
+                <p>Certificado Rechazado</p> <span>N° {{ $id }}</span>
             </div>
         @endif
     </div>
@@ -331,9 +331,6 @@
         <p><strong>Dada en Acacías, Meta, a los {{ $fecha_emision }}</strong></p>
         <p>Vigencia: Desde el {{ $vigencia_inicio }} hasta el {{ $vigencia_fin }}.</p>
     </div>
-
-    <br>
-    <br>
 
     <br>
     <br>
@@ -375,18 +372,14 @@
         </div>
     </div>
 
-
-
-
-
-
     <!-- Verificación -->
     <div class="verification">
         <p>Para verificar la integridad e inalterabilidad del presente documento consulte en el sitio:</p>
-        <p><a href="{{ $verificacion_url }}">{{ $verificacion_url }}</a>, digita el siguiente numero de certificado:
+        <p><a href="{{ $verificacion_url }}" target="_blank">{{ $verificacion_url }}</a>, digita el siguiente numero de certificado:
             <strong>{{ $id }}</strong>
         </p>
         <p>o escaneado el código QR impreso en este certificado</p>
+        <img src="{{ $qr }}" alt="Código QR" width="100" height="100">
     </div>
 
     <!-- Pie de página -->
@@ -402,6 +395,7 @@
                 href="https://twitter.com/Alcaldiaacacias">@Alcaldiaacacias</a> Facebook: <a
                 href="https://www.facebook.com/alcaldiadeacacias">Alcaldía de Acacías</a> Instagram: <a
                 href="https://www.instagram.com/alcaldiadeacacias">@alcaldiadeacacias</a></p>
+        <p>Validado por: {{ $codigo_validador1 }}</p>
     </div>
 
 </body>

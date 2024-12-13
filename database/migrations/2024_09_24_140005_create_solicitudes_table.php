@@ -25,7 +25,7 @@ return new class extends Migration
             $table->text('cedula')->nullable();
 
             // Estados
-            $table->unsignedBigInteger('estado_id')->default(1); // 1 nuevo - 2 aprobada - 3 rechazada
+            $table->unsignedBigInteger('estado_id')->default(1); // 1 nuevo - 2 Procesando - 3 rechazada
             $table->unsignedBigInteger('actualizado_por')->nullable(); // Usuario que actualizó
             $table->unsignedBigInteger('Validador2_id')->nullable();
 

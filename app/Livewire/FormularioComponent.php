@@ -86,7 +86,7 @@ class FormularioComponent extends Component
 
         // Verificar si el usuario puede crear una nueva solicitud
         if (!Solicitud::canCreateRequest($userId)) {
-            $this->dispatch('sweet-alert-good', icon: 'info', title: 'Solicitud activa.', text: 'No puedes crear una nueva solicitud mientras tengas una activa, aprobada o pendiente.', footer: '<a href="versolicitudes">Ver mis solicitudes</a>');
+            $this->dispatch('sweet-alert-good', icon: 'info', title: 'Solicitud activa.', text: 'No puedes crear una nueva solicitud mientras tengas una activa, procesando o pendiente.', footer: '<a href="versolicitudes">Ver mis solicitudes</a>');
             return;
         }
 
