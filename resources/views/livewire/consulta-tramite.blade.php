@@ -1,18 +1,15 @@
 <div class="max-w-6xl mx-auto bg-white shadow-md rounded-lg p-6">
-    <div class="w-full p-4 bg-gray-50">
-        <!-- Botones en bloque completo -->
-        <div class="flex flex-col space-y-4">
-            <!-- Botón para consultar trámite -->
-            <a href="{{ route('register') }}"
-                class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition font-bold shadow-md text-center">
-                Registrarse
-            </a>
-            <!-- Botón para registrarse -->
-            <a href="{{ route('login') }}"
-                class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 transition font-bold shadow-md text-center">
-                Iniciar Sesión
-            </a>
-        </div>
+    <div class="flex justify-end space-x-4 p-4 bg-white">
+        <!-- Botón para consultar trámite -->
+        <a href="{{ route('register') }}"
+            class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition font-bold shadow-md w-full sm:w-auto text-center">
+            Registrarse
+        </a>
+        <!-- Botón para registrarse -->
+        <a href="{{ route('login') }}"
+            class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 transition font-bold shadow-md w-full sm:w-auto text-center">
+            Iniciar Sesión
+        </a>
     </div>
 
     <div>

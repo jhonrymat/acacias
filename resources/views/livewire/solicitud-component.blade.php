@@ -175,21 +175,24 @@
 
                     <!-- Copia registro JAC -->
                     <div class="mb-4">
-                        <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" for="jac_input">
-                            Copia registro J.A.C
+                        <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" for="JAComunal_input">
+                            Anexos
                         </label>
-                        <input wire:model="JAComunal"
+                        <input wire:model="JAComunal" multiple
                             class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
                             aria-describedby="JAComunal_input_help" id="JAComunal_input" type="file">
-                        <p class="mt-1 text-xs text-gray-500 dark:text-gray-300" id="JAComunal_input_help">Adjunte
-                            copia de
-                            registro de los libros de afiliados a la JAC (Si aplica). PDF, PNG,
-                            JPG (MAX. 10MB).</p>
+                        <p class="mt-1 text-xs text-gray-500 dark:text-gray-300" id="JAComunal_input_help">
+                            Adjunte anexos que requiera. PDF, PNG, JPG (MAX. 10MB).
+                        </p>
                         {{-- error --}}
                         @error('JAComunal')
                             <span class="text-red-500">{{ $message }}</span>
                         @enderror
+                        @error('JAComunal.*')
+                            <span class="text-red-500">{{ $message }}</span>
+                        @enderror
                     </div>
+
 
                     {{-- input text area, detalles --}}
                     <div class="mb-4">
@@ -270,17 +273,22 @@
                             <input type="text" wire:model="validacion2" id="validacion2"
                                 class="mt-1 block w-full border-gray-300 rounded text-sm px-2 py-1" disabled>
                         </div>
+                        {{-- solo para rol validador2 --}}
+                        @if (auth()->user()->hasRole('validador2'))
                         <div class="mb-3">
-                            <label for="JAComunal" class="block text-xs font-medium">Archivo J.A.C</label>
-                            @if ($JAComunal)
-                                <a href="{{ asset('storage/' . $JAComunal) }}" target="_blank"
-                                    class="block mt-1 text-sm text-blue-500 underline">
-                                    Ver archivo
-                                </a>
+                            <label for="JAComunal" class="block text-xs font-medium">Anexos</label>
+                            @if ($JAComunal && count($JAComunal) > 0)
+                                @foreach ($JAComunal as $archivo)
+                                    <a href="{{ asset('storage/' . $archivo) }}" target="_blank"
+                                        class="block mt-1 text-sm text-blue-500 underline">
+                                        Ver archivo
+                                    </a>
+                                @endforeach
                             @else
                                 <p class="mt-1 text-sm text-gray-500">No hay archivo disponible.</p>
                             @endif
                         </div>
+                        @endif
                         <div class="mb-3">
                             <label for="notas" class="block text-xs font-medium">Notas</label>
                             <div id="notas"

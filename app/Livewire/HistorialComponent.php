@@ -34,7 +34,7 @@ class HistorialComponent extends Component
         // Asignar valores de la validación a las propiedades
         $this->validacion1 = $validacion->validacion1;
         $this->validacion2 = $estado->nombreEstado;
-        $this->JAComunal = $validacion->JAComunal;
+        $this->JAComunal = json_decode($validacion->JAComunal); // Decodifica el JSON en un array
         $this->notas = $validacion->notas;
         $this->visible = $validacion->visible;
         $this->cedula = $solicitud->numeroIdentificacion;

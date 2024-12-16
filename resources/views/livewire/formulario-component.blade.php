@@ -190,7 +190,7 @@
                                                 <option value="AC">Avenida calle</option>
                                                 <option value="AK">Avenida carrera</option>
                                                 <option value="CL">Calle</option>
-                                                <option value="KR">Carrera</option>
+                                                <option value="CR">Carrera</option>
                                                 <option value="DG">Diagonal</option>
                                                 <option value="TV">Transversal</option>
                                             </select>
@@ -415,50 +415,82 @@
                 <div class="mb-4">
                     <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                         for="accion_comunal_input">
-                        Subir Certificación de la junta de acción Comunal
+                        Subir Certificación de la Junta de Acción Comunal
                     </label>
-                    <input wire:model="accion_comunal"
-                        class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
-                        aria-describedby="accion_comunal_input_help" id="accion_comunal_input" type="file">
-                    <p class="mt-1 text-xs text-gray-500 dark:text-gray-300" id="accion_comunal_input_help">PDF, PNG,
-                        JPG (MAX. 10MB).</p>
+                    <div class="relative group">
+                        <input wire:model="accion_comunal"
+                            class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+                            aria-describedby="accion_comunal_input_help" id="accion_comunal_input" type="file">
+                        <!-- Tooltip -->
+                        <div class="absolute left-0 hidden p-2 mt-1 text-xs text-white bg-gray-900 rounded-lg shadow-md group-hover:block dark:bg-gray-800">
+                            Asegúrese de que el archivo sea legible y no borroso. Los documentos PDF deben ser originales, emitidos por
+                            la respectiva entidad, y no deben contener modificaciones. Solo se aceptarán archivos PDF, PNG o JPG que
+                            cumplan con estas condiciones.
+                        </div>
+                    </div>
+                    <p class="mt-1 text-xs text-gray-500 dark:text-gray-300" id="accion_comunal_input_help">PDF, PNG, JPG (MAX. 10MB).</p>
                 </div>
+
 
                 <!-- Subir Certificado Electoral -->
                 <div class="mb-4">
                     <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" for="electoral_input">
-                        Subir Certificado Electoral (Antiguedad minima de 12 meses)
+                        Subir Certificado Electoral (Antigüedad mínima de 12 meses)
                     </label>
-                    <input wire:model="electoral"
-                        class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
-                        aria-describedby="electoral_input_help" id="electoral_input" type="file">
-                    <p class="mt-1 text-xs text-gray-500 dark:text-gray-300" id="electoral_input_help">PDF, PNG, JPG
-                        (MAX. 10MB).</p>
+                    <div class="relative group">
+                        <input wire:model="electoral"
+                            class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+                            aria-describedby="electoral_input_help" id="electoral_input" type="file">
+                        <!-- Tooltip -->
+                        <div class="absolute left-0 hidden p-2 mt-1 text-xs text-white bg-gray-900 rounded-lg shadow-md group-hover:block dark:bg-gray-800">
+                            Asegúrese de que el certificado electoral sea emitido por la entidad oficial correspondiente, con una
+                            antigüedad mínima de 12 meses. No se aceptarán documentos con enmiendas o modificaciones, y el archivo debe
+                            ser perfectamente legible. Solo se admiten formatos PDF, PNG o JPG.
+                        </div>
+                    </div>
+                    <p class="mt-1 text-xs text-gray-500 dark:text-gray-300" id="electoral_input_help">PDF, PNG, JPG (MAX. 10MB).</p>
                 </div>
+
 
                 <!-- Subir Certificado Sisben -->
                 <div class="mb-4">
                     <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" for="sisben_input">
                         Subir Constancia de Sisben
                     </label>
-                    <input wire:model="sisben"
-                        class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
-                        aria-describedby="sisben_input_help" id="sisben_input" type="file">
-                    <p class="mt-1 text-xs text-gray-500 dark:text-gray-300" id="sisben_input_help">PDF, PNG, JPG
-                        (MAX. 10MB).</p>
+                    <div class="relative group">
+                        <input wire:model="sisben"
+                            class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+                            aria-describedby="sisben_input_help" id="sisben_input" type="file">
+                        <!-- Tooltip -->
+                        <div class="absolute left-0 hidden p-2 mt-1 text-xs text-white bg-gray-900 rounded-lg shadow-md group-hover:block dark:bg-gray-800">
+                            Asegúrese de que la constancia de Sisben esté emitida por la entidad oficial correspondiente y que sea
+                            completamente legible. No se aceptarán documentos con tachaduras, enmiendas o que sean copias
+                            modificadas. Solo se admitirán formatos PDF, PNG o JPG que cumplan con estas condiciones.
+                        </div>
+                    </div>
+                    <p class="mt-1 text-xs text-gray-500 dark:text-gray-300" id="sisben_input_help">PDF, PNG, JPG (MAX. 10MB).</p>
                 </div>
+
 
                 <!-- Subir Cédula -->
                 <div class="mb-4">
                     <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" for="cedula_input">
-                        Subir Cédula
+                        Subir Fotocopia de Cédula
                     </label>
-                    <input wire:model="cedula"
-                        class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
-                        aria-describedby="cedula_input_help" id="cedula_input" type="file">
-                    <p class="mt-1 text-xs text-gray-500 dark:text-gray-300" id="cedula_input_help">PDF, PNG, JPG
-                        (MAX. 10MB).</p>
+                    <div class="relative group">
+                        <input wire:model="cedula"
+                            class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+                            aria-describedby="cedula_input_help" id="cedula_input" type="file">
+                        <!-- Tooltip -->
+                        <div class="absolute left-0 hidden p-2 mt-1 text-xs text-white bg-gray-900 rounded-lg shadow-md group-hover:block dark:bg-gray-800">
+                            Asegúrese de que la fotocopia sea completamente legible, sin tachaduras ni áreas borrosas. El archivo debe
+                            ser escaneado en alta calidad y contener ambos lados de la cédula si es necesario. Solo se aceptan
+                            formatos PDF, PNG o JPG.
+                        </div>
+                    </div>
+                    <p class="mt-1 text-xs text-gray-500 dark:text-gray-300" id="cedula_input_help">PDF, PNG, JPG (MAX. 10MB).</p>
                 </div>
+
             </div>
 
 
@@ -498,13 +530,15 @@
             <!-- Botón de Enviar -->
             <div class="flex justify-end mt-8 mb-12">
                 <button type="submit"
-                    class="flex items-center justify-center px-6 py-3 space-x-3 text-lg font-semibold text-white uppercase transition duration-300 transform bg-blue-600 rounded-lg shadow-lg hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-300">
+                    class="flex items-center justify-center px-6 py-3 space-x-3 text-lg font-semibold text-white uppercase transition duration-300 transform bg-blue-600 rounded-lg shadow-lg hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-300"
+                    wire:loading.attr="disabled" wire:loading.class="bg-gray-400 hover:bg-gray-400 cursor-not-allowed">
                     <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" viewBox="0 0 20 20" fill="currentColor">
                         <path fill-rule="evenodd"
                             d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z"
                             clip-rule="evenodd" />
                     </svg>
-                    <span>Crear trámite</span>
+                    <span wire:loading.remove>Crear trámite</span>
+                    <span wire:loading>Procesando...</span>
                 </button>
             </div>
 

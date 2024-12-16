@@ -119,6 +119,19 @@
         </div>
     </div>
 
+    {{-- visualizar nota --}}
+    <div x-data="{ mostrarNotasModal: @entangle('abrirmodal') }"
+        x-cloak>
+        <div x-show="mostrarNotasModal" class="fixed inset-0 bg-gray-800 bg-opacity-70 flex items-center justify-center" x-inz>
+            <div class="bg-white p-6 rounded shadow-md">
+                <h2 class="text-lg font-semibold mb-4">Detalles del Validador</h2>
+                <p class="text-gray-700">{{ $notasDelValidador }}</p>
+                <button @click="mostrarNotasModal = false" class="mt-4 px-4 py-2 bg-red-500 text-white rounded">
+                    Cerrar
+                </button>
+            </div>
+        </div>
+    </div>
 
 
 

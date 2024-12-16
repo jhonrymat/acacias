@@ -15,6 +15,7 @@ class Validacion extends Model
         'JAComunal',
         'notas',
         'visible',
+        'qr_url'
     ];
 
     public function solicitud()

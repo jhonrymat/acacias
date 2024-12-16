@@ -5,6 +5,7 @@ namespace App\Livewire;
 use App\Models\User;
 use Livewire\Component;
 use App\Models\Solicitud;
+use App\Models\Validacion;
 use Barryvdh\DomPDF\Facade\Pdf;
 
 class SolicitudesComponent extends Component
@@ -21,15 +22,19 @@ class SolicitudesComponent extends Component
     public $id_genero;
     public $id_ocupacion;
     public $id_poblacion;
+    public $notasDelValidador;
 
 
     public $showForm = false; // Control para mostrar/ocultar el modal
     // variabble para mostrar los datos de user en modal
+    public $abrirmodal = false;
 
     public $name;
 
 
-    protected $listeners = ['view', 'generarPDF', 'viewPDF'];
+
+
+    protected $listeners = ['view', 'generarPDF', 'viewPDF', 'mostrarNotas'];
 
     public function mount()
     {
@@ -67,7 +72,7 @@ class SolicitudesComponent extends Component
 
         // Validar el estado de la solicitud
         if ($solicitud->estado_id !== 5) {
-            session()->flash('error', 'La solicitud no está aprobada.');
+            session()->flash('error', 'La solicitud no está emitida.');
             return;
         }
 
@@ -95,6 +100,7 @@ class SolicitudesComponent extends Component
                 . ' '
                 . ($solicitud->validador2->apellido_2 ?? '')
             ),
+            'codigo_validador1' => $solicitud->actualizador->codigo,
             'firma' => $solicitud->validador2->firma,
             'ciudad_expedicion' => $solicitud->user->ciudadExpedicion,
             'barrio_vereda' => $solicitud->barrio->nombreBarrio,
@@ -106,7 +112,8 @@ class SolicitudesComponent extends Component
             'fecha_emision' => $solicitud->fecha_emision->translatedFormat('d \\de m \\de Y'),
             'vigencia_inicio' => now()->translatedFormat('d \\de m \\de Y'),
             'vigencia_fin' => now()->addYear()->translatedFormat('d \\de m \\de Y'),
-            'verificacion_url' => 'https://acacias.gov.co/gfiles/consultaTramite/',
+            'verificacion_url' => env('APP_URL') . '/consulta-tramite',
+            'qr' => public_path('storage/' . $solicitud->validaciones->first()->qr_url),
         ];
 
         // Generar el PDF
@@ -116,6 +123,19 @@ class SolicitudesComponent extends Component
         return response()->streamDownload(function () use ($pdf) {
             echo $pdf->output();
         }, 'certificado_residencia.pdf');
+    }
+
+    public function mostrarNotas($Id)
+    {
+        $validacion = Validacion::find($Id);
+
+        if ($validacion) {
+            $this->notasDelValidador = $validacion->notas;
+            $this->abrirmodal = true;
+        } else {
+            $this->dispatch('sweet-alert-good', icon: 'error', title: 'Error', text: 'No se encontraron las notas.');
+        }
+
     }
 
     public function render()

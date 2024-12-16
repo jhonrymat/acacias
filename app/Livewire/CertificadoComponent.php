@@ -16,7 +16,7 @@ class CertificadoComponent extends Component
 
         // Validar el estado de la solicitud
         if ($solicitud->estado_id !== 5) {
-            session()->flash('error', 'La solicitud no está aprobada.');
+            session()->flash('error', 'La solicitud no está emitida.');
             return;
         }
 

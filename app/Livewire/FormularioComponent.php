@@ -14,6 +14,8 @@ use App\Models\Tsolicitante;
 use Livewire\WithFileUploads;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Http;
+use App\Mail\SolicitudCreadaNotification;
+use Illuminate\Support\Facades\Mail;
 
 class FormularioComponent extends Component
 {
@@ -86,7 +88,7 @@ class FormularioComponent extends Component
 
         // Verificar si el usuario puede crear una nueva solicitud
         if (!Solicitud::canCreateRequest($userId)) {
-            $this->dispatch('sweet-alert-good', icon: 'info', title: 'Solicitud activa.', text: 'No puedes crear una nueva solicitud mientras tengas una activa, aprobada o pendiente.', footer: '<a href="versolicitudes">Ver mis solicitudes</a>');
+            $this->dispatch('sweet-alert-good', icon: 'info', title: 'Solicitud activa.', text: 'No puedes crear una nueva solicitud mientras tengas una activa, procesando o pendiente.', footer: '<a href="versolicitudes">Ver mis solicitudes</a>');
             return;
         }
 
@@ -122,7 +124,8 @@ class FormularioComponent extends Component
         }
 
         // Crear una nueva solicitud y guardar las rutas de los archivos en la base de datos
-        Solicitud::create([
+
+        $solicitud = Solicitud::create([
             'user_id' => $userId,
             'numeroIdentificacion' => $this->numeroIdentificacion,
             'id_barrio' => $this->id_barrio,
@@ -131,10 +134,15 @@ class FormularioComponent extends Component
             'electoral' => $filePaths['electoral'],
             'sisben' => $filePaths['sisben'],
             'cedula' => $filePaths['cedula'],
-            'observaciones' =>  $this->observaciones ?? null,
+            'observaciones' => $this->observaciones ?? null,
             'terminos' => $this->terminos,
             'estado_id' => 1, // Estado inicial de 'Pendiente'
         ]);
+
+        // Enviar el correo
+        $userName = auth()->user()->name;
+        Mail::to(auth()->user()->email)->send(new SolicitudCreadaNotification($solicitud->id, $userName));
+
 
         // Mostrar mensaje de éxito
         // session()->flash('message', 'Solicitud creada exitosamente.');

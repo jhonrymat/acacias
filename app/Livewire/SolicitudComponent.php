@@ -5,11 +5,13 @@ use App\Models\User;
 use App\Models\Barrio;
 use App\Models\Estado;
 use Livewire\Component;
+use Milon\Barcode\DNS2D;
 use App\Models\Direccion;
 use App\Models\Solicitud;
 use App\Models\Validacion;
 use Livewire\WithFileUploads;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 
 class SolicitudComponent extends Component
 {
@@ -36,7 +38,8 @@ class SolicitudComponent extends Component
     protected $rules = [
         'estado_id' => 'required|string',
         'estado_id2' => 'required|exists:estados,id', // Validación para el estado
-        'JAComunal' => 'nullable|file|mimes:pdf,png,jpg|max:10240', // Máximo 10 MB
+        'JAComunal' => 'nullable|array', // Aceptar múltiples archivos
+        'JAComunal.*' => 'file|mimes:pdf,jpg,png', // Validar cada archivo
         'detalles' => 'required|string',
         'visible' => 'nullable|boolean',
     ];
@@ -46,15 +49,14 @@ class SolicitudComponent extends Component
         'estado_id.required' => 'El campo "Primer filtro" es obligatorio.',
         'estado_id2.required' => 'El campo "Segundo filtro" es obligatorio.',
         'estado_id2.exists' => 'El estado seleccionado no es válido.',
-        'JAComunal.mimes' => 'El archivo debe ser de tipo: PDF, PNG o JPG.',
-        'JAComunal.max' => 'El archivo no debe superar los 10 MB.',
+        'JAComunal.*.mimes' => 'El archivo debe ser de tipo: PDF, PNG o JPG.',
         'detalles.required' => 'El campo "Observaciones" es obligatorio.',
         'visible.boolean' => 'El campo "Habilitar visualización" debe ser verdadero o falso.',
     ];
 
 
 
-    protected $listeners = ['edit', 'delete', 'view', 'procesar', 'see', 'validar', 'rechazar','confirmSave' => 'handleSave'];
+    protected $listeners = ['edit', 'delete', 'view', 'procesar', 'see', 'validar', 'rechazar', 'confirmSave' => 'handleSave'];
 
     public function view($Id)
     {
@@ -95,10 +97,11 @@ class SolicitudComponent extends Component
             $this->dispatch('sweet-alert-good', icon: 'info', title: 'Sin validaciones.', text: 'No se encontraron validaciones para esta solicitud.');
         }
 
+
         // Asignar valores de la validación a las propiedades
         $this->validacion1 = $validacion->validacion1;
         $this->validacion2 = $estado->nombreEstado;
-        $this->JAComunal = $validacion->JAComunal;
+        $this->JAComunal = json_decode($validacion->JAComunal); // Decodifica el JSON en un array
         $this->notas = $validacion->notas;
         $this->visible = $validacion->visible;
         $this->cedula = $solicitud->numeroIdentificacion;
@@ -135,17 +138,62 @@ class SolicitudComponent extends Component
 
     public function validarsweet()
     {
-        Solicitud::find($this->Id)->update([
+        // Buscar la solicitud
+        $solicitud = Solicitud::find($this->Id);
+
+        if (!$solicitud) {
+            $this->dispatch('sweet-alert-good', icon: 'error', title: 'Error', text: 'Solicitud no encontrada.');
+            return;
+        }
+
+        // Actualizar estado de la solicitud
+        $solicitud->update([
             'estado_id' => 5,
             'fecha_emision' => now(),
-            'Validador2_id' => Auth::id()
+            'Validador2_id' => Auth::id(),
         ]);
 
+
+        $userName = $solicitud->user->name; // Nombre del usuario
+        $userEmail = $solicitud->user->email; // Email del usuario
+
+        // Enviar correo de rechazo
+        Mail::to($userEmail)->send(new \App\Mail\SolicitudEmitidaNotification($solicitud->id, $userName));
+
+
+        // Generar URL para el código QR
+        $baseUrl = config('app.url'); // Obtenemos la URL base desde .env
+        $qrUrl = $baseUrl . '/qr/' . $solicitud->id . '/' . $solicitud->numeroIdentificacion;
+
+        // Crear directorio si no existe
+        if (!file_exists(storage_path('app/public/qrs'))) {
+            mkdir(storage_path('app/public/qrs'), 0755, true);
+        }
+
+        // Generar el código QR y guardarlo en almacenamiento
+        $qrPath = 'qrs/' . $solicitud->id . '.png';
+        $barcode = new DNS2D();
+        $qrImageContent = $barcode->getBarcodePNG($qrUrl, 'QRCODE', 10, 10);
+
+        // Decodifica el contenido base64 y guarda el archivo como PNG
+        file_put_contents(storage_path('app/public/' . $qrPath), base64_decode($qrImageContent));
+
+        // Buscar y actualizar la validación con el id de la solicitud
+        $validacion = Validacion::where('id_solicitud', $solicitud->id)->first();
+
+        if ($validacion) {
+            $validacion->update([
+                'qr_url' => $qrPath,
+            ]);
+        } else {
+            $this->dispatch('sweet-alert-good', icon: 'error', title: 'Algo salió mal..!', text: 'No se encontró la validación.');
+        }
+
+        // Notificar éxito
         $this->dispatch('Updated');
-
-        $this->dispatch('sweet-alert-good', icon: 'success', title: 'Muy bien..!', text: 'Solicitud aprobada con exito.');
-
+        $this->dispatch('sweet-alert-good', icon: 'success', title: 'Muy bien..!', text: 'Solicitud emitida con éxito.');
     }
+
 
 
     public function rechazar($Id)
@@ -173,11 +221,27 @@ class SolicitudComponent extends Component
 
     public function rechazarsweet()
     {
-        Solicitud::find($this->Id)->update([
+
+        $solicitud = Solicitud::find($this->Id);
+
+        if (!$solicitud) {
+            $this->dispatch('sweet-alert-good', icon: 'error', title: 'Error', text: 'Solicitud no encontrada.');
+            return;
+        }
+
+        $solicitud->update([
             'estado_id' => 3,
             'fecha_emision' => now(),
             'Validador2_id' => Auth::id()
         ]);
+
+
+        $userName = $solicitud->user->name; // Nombre del usuario
+        $userEmail = $solicitud->user->email; // Email del usuario
+
+        // Enviar correo de rechazo
+        Mail::to($userEmail)->send(new \App\Mail\SolicitudRechazadaNotification($solicitud->id, $userName));
+
 
         $this->dispatch('Updated');
 
@@ -198,7 +262,7 @@ class SolicitudComponent extends Component
 
         // Verificar si la solicitud ya ha cambiado de estado a algo diferente a "Pendiente" o "En revisión"
         if ($solicitud->estado_id != $pendienteId && $solicitud->estado_id != $enRevisionId) {
-            $this->dispatch('sweet-alert-good', icon: 'info', title: 'Solicitud ya procesada.', text: 'Esta solicitud ya fue aprobada, rechazada o procesada por otro validador.');
+            $this->dispatch('sweet-alert-good', icon: 'info', title: 'Solicitud ya procesada.', text: 'Esta solicitud ya fue emitida, rechazada o procesada por otro validador.');
             $this->dispatch('Updated');
             return;
         }
@@ -275,18 +339,33 @@ class SolicitudComponent extends Component
 
         if ($this->solicitud_id) {
             $solicitud = Solicitud::find($this->solicitud_id);
-            // dd($this->estado_id, $this->estado_id2);
 
             // Lógica para determinar el estado final
-            $estadoFinal = ($this->estado_id === 'Avanzar' && $this->estado_id2 === '2' ) ? 2 : 3; // 2 = Aprobada, 3 = Rechazada
+            $estadoFinal = ($this->estado_id === 'Avanzar' && $this->estado_id2 === '2') ? 2 : 3; // 2 = Procesando, 3 = Rechazada
 
             $solicitud->update(['estado_id' => $estadoFinal]);
+
+            $userName = $solicitud->user->name; // Nombre del usuario
+            $userEmail = $solicitud->user->email; // Email del usuario
+
+            if ($estadoFinal === 3) {
+                // Enviar correo de rechazo
+                Mail::to($userEmail)->send(new \App\Mail\SolicitudRechazadaNotification($solicitud->id, $userName));
+            }
+
+            // Subir múltiples archivos
+            $rutasArchivos = [];
+            if ($this->JAComunal && is_array($this->JAComunal)) {
+                foreach ($this->JAComunal as $archivo) {
+                    $rutasArchivos[] = $archivo->store('uploads', 'public');
+                }
+            }
 
             try {
                 $solicitud->validaciones()->create([
                     'validacion1' => $this->estado_id,
                     'validacion2' => $this->estado_id2,
-                    'JAComunal' => $this->JAComunal ? $this->JAComunal->store('uploads', 'public') : null,
+                    'JAComunal' => json_encode($rutasArchivos), // Guardar como JSON
                     'notas' => $this->detalles,
                     'visible' => $this->visible,
                 ]);

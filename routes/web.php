@@ -1,7 +1,9 @@
 <?php
 
+use App\Livewire\ValidarQr;
 use App\Livewire\RolesComponent;
 use App\Livewire\BarrioComponent;
+use App\Livewire\ConsultaTramite;
 use App\Livewire\GeneroComponent;
 use App\Livewire\NestudioComponent;
 use App\Livewire\PermisosComponent;
@@ -14,11 +16,10 @@ use App\Livewire\CiudadanosComponent;
 use App\Livewire\FormularioComponent;
 use App\Livewire\TdocumentoComponent;
 use Illuminate\Support\Facades\Route;
+use App\Livewire\CertificadoComponent;
 use App\Livewire\SolicitudesComponent;
 use App\Livewire\ValidadoresComponent;
 use App\Livewire\TipoSolicitanteComponent;
-use App\Livewire\CertificadoComponent;
-use App\Livewire\ConsultaTramite;
 
 
 Route::get('/', function () {
@@ -26,6 +27,7 @@ Route::get('/', function () {
 });
 
 Route::get('/consulta-tramite', ConsultaTramite::class)->name('consulta.tramite');
+Route::get('/qr/{id}/{numeroIdentificacion}', ValidarQr::class)->name('validar.qr');
 
 
 

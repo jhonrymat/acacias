@@ -17,13 +17,13 @@ class EstadoSeeder extends Seeder
                 'color' => '#FFC107'
             ],
             [
-                'nombreEstado' => 'Aprobada',
+                'nombreEstado' => 'Procesando',
                 'descripcion' => 'La solicitud fue revisada y validada exitosamente. Solo falta la emisión del certificado correspondiente.',
                 'color' => '#85D17A'
             ],
             [
                 'nombreEstado' => 'Rechazada',
-                'descripcion' => 'La solicitud fue revisada, pero no cumplió con los requisitos necesarios y no pudo ser aprobada.',
+                'descripcion' => 'La solicitud fue revisada, pero no cumplió con los requisitos necesarios y no pudo ser emitida.',
                 'color' => '#DC3545'
             ],
             [
@@ -33,7 +33,7 @@ class EstadoSeeder extends Seeder
             ],
             [
                 'nombreEstado' => 'Emitido',
-                'descripcion' => 'El certificado ha sido emitido y está disponible para su descarga desde el portal.',
+                'descripcion' => 'El certificado ha sido emitido (Vigente) y está disponible para su descarga desde el portal.',
                 'color' => '#5BC0EB'
             ],
             [
