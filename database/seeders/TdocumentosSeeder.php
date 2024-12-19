@@ -10,13 +10,13 @@ class TdocumentosSeeder extends Seeder
     public function run()
     {
         $documentos = [
-            ['tipoDocumento' => 'Registro Civil'],
+            ['tipoDocumento' => 'Registro civil'],
             ['tipoDocumento' => 'Tarjeta de identidad'],
             ['tipoDocumento' => 'Cédula de ciudadanía'],
             ['tipoDocumento' => 'Cédula extranjera'],
             ['tipoDocumento' => 'NIT'],
-            ['tipoDocumento' => 'Permiso Por Protección Temporal'],
-            ['tipoDocumento' => 'Permiso Especial de Permanencia'],
+            ['tipoDocumento' => 'Permiso por protección temporal'],
+            ['tipoDocumento' => 'Permiso especial de permanencia'],
             ['tipoDocumento' => 'Salvoconducto para refugiados'],
         ];
 
