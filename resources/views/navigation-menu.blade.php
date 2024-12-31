@@ -90,19 +90,22 @@
                             </x-slot>
                         </x-dropdown>
                     </div>
-                    <x-nav-link class="hidden sm:flex" href="{{ route('ciudadanos') }}" :active="request()->routeIs('ciudadanos')">
+                    <x-nav-link class="hidden sm:flex mr-6" href="{{ route('ciudadanos') }}" :active="request()->routeIs('ciudadanos')">
                         {{ __('Ciudadanos') }}
                     </x-nav-link>
-                    <x-nav-link class="hidden sm:flex" href="{{ route('validadores') }}" :active="request()->routeIs('validadores')">
+                    <x-nav-link class="hidden sm:flex mr-6" href="{{ route('validadores') }}" :active="request()->routeIs('validadores')">
                         {{ __('Validadores') }}
 
+                    </x-nav-link>
+                    <x-nav-link class="hidden sm:flex mr-6" href="{{ route('estadisticas1') }}" :active="request()->routeIs('estadisticas1')">
+                        {{ __('Estadisticas') }}
                     </x-nav-link>
                 @endrole
                 @role('user')
                     <x-nav-link class="mx-6 hidden sm:flex" href="{{ route('formulario') }}" :active="request()->routeIs('formulario')">
                         {{ __('Solicitud') }}
                     </x-nav-link>
-                    <x-nav-link class="hidden sm:flex" href="{{ route('versolicitudes') }}" :active="request()->routeIs('versolicitudes')">
+                    <x-nav-link class="hidden sm:flex mr-6" href="{{ route('versolicitudes') }}" :active="request()->routeIs('versolicitudes')">
                         {{ __('Solicitudes') }}
                     </x-nav-link>
                 @endrole
@@ -110,8 +113,11 @@
                     <x-nav-link class="mx-6 hidden sm:flex" href="{{ route('solicitudes') }}" :active="request()->routeIs('solicitudes')">
                         {{ __('Solicitudes') }}
                     </x-nav-link>
-                    <x-nav-link class="hidden sm:flex" href="{{ route('historial') }}" :active="request()->routeIs('historial')">
+                    <x-nav-link class="hidden sm:flex mr-6" href="{{ route('historial') }}" :active="request()->routeIs('historial')">
                         {{ __('Historial') }}
+                    </x-nav-link>
+                    <x-nav-link class="hidden sm:flex mr-6" href="{{ route('estadisticas1') }}" :active="request()->routeIs('estadisticas1')">
+                        {{ __('Estadisticas') }}
                     </x-nav-link>
                 @endrole
             </div>
