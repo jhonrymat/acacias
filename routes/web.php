@@ -1,5 +1,6 @@
 <?php
 
+use App\Livewire\EstadisticasValidador;
 use App\Livewire\ValidarQr;
 use App\Livewire\RolesComponent;
 use App\Livewire\BarrioComponent;
@@ -28,6 +29,10 @@ Route::get('/', function () {
 
 Route::get('/consulta-tramite', ConsultaTramite::class)->name('consulta.tramite');
 Route::get('/qr/{id}/{numeroIdentificacion}', ValidarQr::class)->name('validar.qr');
+
+Route::get('estadisticas', function () {
+    return view('pages/estadisticas');
+})->name('estadisticas');
 
 
 
@@ -64,6 +69,10 @@ Route::middleware([
     Route::get('certificado', function () {
         return view('certificados.certificado');
     })->name('certificado');
+    // ruta para las estadisticas
+    Route::get('estadisticas1', EstadisticasValidador::class)->name('estadisticas1');
 });
 
 
+// comado para crea cpmponete de livewire
+// php artisan make:livewire EstadisticasValidador
