@@ -43,6 +43,14 @@ class BarrioDatatable extends DataTableComponent
                 ->sortable()
                 ->searchable()
                 ->collapseOnMobile(),
+            Column::make("Latitud", "lat")
+                ->sortable()
+                ->searchable()
+                ->collapseAlways(),
+            Column::make("Longitud", "lng")
+                ->sortable()
+                ->searchable()
+                ->collapseAlways(),
             Column::make("Acciones")
                 ->label(
                     fn($row) => view('livewire.acciones', ['row' => $row])

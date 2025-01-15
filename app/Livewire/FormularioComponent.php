@@ -40,10 +40,13 @@ class FormularioComponent extends Component
     public $numeroIdentificacion = '';
     public $id_barrio = '';
     public $direccion = '';
+    public $lat; // Latitud seleccionada
+    public $lng; // Longitud seleccionada
     public $accion_comunal = '';
     public $electoral = '';
     public $sisben = '';
     public $cedula = '';
+    public $recibo = '';
 
     public $terminos = '';
     public $observaciones = '';
@@ -51,15 +54,18 @@ class FormularioComponent extends Component
 
 
 
-
+    protected $listeners = ['updateLocation'];
     protected $rules = [
         'numeroIdentificacion' => 'required|string|min:3',
         'id_barrio' => 'required',
         'direccion' => 'required|string|min:3',
+        'lat' => 'required|numeric',
+        'lng' => 'required|numeric',
         'accion_comunal' => 'file|mimes:pdf,jpeg,png,jpg|max:10240', // Valida cada archivo individualmente
         'electoral' => 'file|mimes:pdf,jpeg,png,jpg|max:10240', // Valida cada archivo individualmente
         'sisben' => 'file|mimes:pdf,jpeg,png,jpg|max:10240', // Valida cada archivo individualmente
         'cedula' => 'file|mimes:pdf,jpeg,png,jpg|max:10240', // Valida cada archivo individualmente
+        'recibo' => 'file|mimes:pdf,jpeg,png,jpg|max:10240', // Valida cada archivo individualmente
         'terminos' => 'required',
         'observaciones' => 'nullable|string',
     ];
@@ -69,6 +75,10 @@ class FormularioComponent extends Component
         'id_barrio.required' => 'El campo barrio es obligatorio.',
         'direccion.required' => 'El campo dirección es obligatorio.',
         'direccion.min' => 'El campo dirección debe tener al menos 3 caracteres.',
+        'lat.required' => 'El campo latitud es obligatorio.',
+        'lat.numeric' => 'El campo latitud debe ser un número.',
+        'lng.required' => 'El campo longitud es obligatorio.',
+        'lng.numeric' => 'El campo longitud debe ser un número.',
         'accion_comunal.mimes' => 'El campo evidencia debe ser un archivo de tipo: pdf, jpeg, png, jpg',
         'accion_comunal.max' => 'El campo evidencia no debe ser mayor a 10MB.',
         'electoral.mimes' => 'El campo evidencia debe ser un archivo de tipo: pdf, jpeg, png, jpg',
@@ -77,6 +87,8 @@ class FormularioComponent extends Component
         'sisben.max' => 'El campo evidencia no debe ser mayor a 10MB.',
         'cedula.mimes' => 'El campo evidencia debe ser un archivo de tipo: pdf, jpeg, png, jpg',
         'cedula.max' => 'El campo evidencia no debe ser mayor a 10MB.',
+        'recibo.mimes' => 'El campo evidencia debe ser un archivo de tipo: pdf, jpeg, png, jpg',
+        'recibo.max' => 'El campo evidencia no debe ser mayor a 10MB.',
         'terminos.required' => 'El campo términos es obligatorio.',
         'observaciones.string' => 'El campo observaciones debe ser una cadena de texto.',
     ];
@@ -101,6 +113,7 @@ class FormularioComponent extends Component
             'electoral' => $this->electoral,
             'sisben' => $this->sisben,
             'cedula' => $this->cedula,
+            'recibo' => $this->recibo,
         ];
 
         // Crear un array para almacenar las rutas de los archivos procesados
@@ -130,10 +143,13 @@ class FormularioComponent extends Component
             'numeroIdentificacion' => $this->numeroIdentificacion,
             'id_barrio' => $this->id_barrio,
             'direccion' => $this->direccion,
+            'lat' => $this->lat,
+            'lng' => $this->lng,
             'accion_comunal' => $filePaths['accion_comunal'],
             'electoral' => $filePaths['electoral'],
             'sisben' => $filePaths['sisben'],
             'cedula' => $filePaths['cedula'],
+            'recibo' => $filePaths['recibo'],
             'observaciones' => $this->observaciones ?? null,
             'terminos' => $this->terminos,
             'estado_id' => 1, // Estado inicial de 'Pendiente'
@@ -154,6 +170,11 @@ class FormularioComponent extends Component
     }
 
 
+    public function updateLocation($lat, $lng)
+    {
+        $this->lat = $lat;
+        $this->lng = $lng;
+    }
 
 
 

@@ -10,7 +10,12 @@ class Barrio extends Model
     use HasFactory;
     protected $table = 'barrios';
 
-    protected $fillable = ['nombreBarrio', 'tipoUnidad', 'codigoNumero', 'zona'];
+    protected $casts = [
+        'lat' => 'float',
+        'lng' => 'float',
+    ];
+
+    protected $fillable = ['nombreBarrio', 'tipoUnidad', 'codigoNumero', 'zona', 'lat', 'lng'];
 
 
     public function solicitudes()

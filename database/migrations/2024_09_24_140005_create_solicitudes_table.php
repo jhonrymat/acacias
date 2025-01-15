@@ -18,11 +18,15 @@ return new class extends Migration
             $table->unsignedBigInteger('id_barrio');
             $table->string('direccion', 100);
 
+            $table->decimal('lat', 18, 14);
+            $table->decimal('lng', 18, 14);
+
             // Evidencias archivos
             $table->text('accion_comunal')->nullable();
             $table->text('electoral')->nullable();
             $table->text('sisben')->nullable();
             $table->text('cedula')->nullable();
+            $table->text('recibo')->nullable();
 
             // Estados
             $table->unsignedBigInteger('estado_id')->default(1); // 1 nuevo - 2 Procesando - 3 rechazada
