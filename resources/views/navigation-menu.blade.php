@@ -284,6 +284,18 @@
                             <x-responsive-nav-link href="{{ route('historial') }}" :active="request()->routeIs('historial')">
                                 {{ __('Historial') }}
                             </x-responsive-nav-link>
+                            <x-responsive-nav-link href="{{ route('ciudadanos') }}" :active="request()->routeIs('ciudadanos')">
+                                {{ __('Ciudadanos') }}
+                            </x-responsive-nav-link>
+
+                            <x-responsive-nav-link href="{{ route('validadores') }}" :active="request()->routeIs('validadores')">
+                                {{ __('Validadores') }}
+                            </x-responsive-nav-link>
+
+                            <x-responsive-nav-link href="{{ route('estadisticas1') }}" :active="request()->routeIs('estadisticas1')">
+                                {{ __('Estadisticas') }}
+                            </x-responsive-nav-link>
+
 
                             <!-- Botón desplegable para "Config. Formulario" -->
                             <div x-data="{ openConfigForm: false }">
@@ -367,13 +379,14 @@
                                 {{ __('Solicitudes') }}
                             </x-responsive-nav-link>
                         </div>
-
-                        <div :class="{ 'block': open, 'hidden': !open }" class="hidden sm:hidden">
-                            <div class="pt-2 pb-3 space-y-1">
-                                <x-responsive-nav-link href="{{ route('historial') }}" :active="request()->routeIs('historial')">
-                                    {{ __('Historial') }}
-                                </x-responsive-nav-link>
-                            </div>
+                        <div class="pt-2 pb-3 space-y-1">
+                            <x-responsive-nav-link href="{{ route('historial') }}" :active="request()->routeIs('historial')">
+                                {{ __('Historial') }}
+                            </x-responsive-nav-link>
+                        </div>
+                        <x-responsive-nav-link href="{{ route('estadisticas1') }}" :active="request()->routeIs('estadisticas1')">
+                            {{ __('Estadisticas') }}
+                        </x-responsive-nav-link>
                         @endrole
 
                         <!-- Responsive Settings Options -->

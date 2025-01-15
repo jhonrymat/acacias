@@ -270,7 +270,7 @@
     </div>
 
     <!-- Contenido -->
-    <div class="content">
+    <div class="content" style="text-align: justify;">
         <p>
             En virtud de lo previsto en el artículo 315 de la Constitución Política, el articulo 29 literal f numeral 6
             de la Ley 1551 de 2012, los artículos 2.3.2.3.2 del Decreto
@@ -286,7 +286,7 @@
             siempre y cuando el ciudadano lleve más de un año inscrito en los mismos.
             Que conforme a lo expuesto
             anteriormente procede el Alcalde Municipal bajo el
-            DECRETO 100 DEL 17 DE SEPTIEMBRE DE 2024, delegar en el titular de la secretaría de Gobierno su
+            DECRETO 100 DEL 17 DE SEPTIEMBRE DE 2024, delegar en el titular de la <strong> Secretaría Privada</strong> o su
             encargado, o quien haga sus veces la facultad de expedir los
             certificados de residencia del Municipio de Acacías, concordante con el artículo 209 de la Constitución
             Política de Colombia y el artículo 92 de la Ley 136 de 1994
