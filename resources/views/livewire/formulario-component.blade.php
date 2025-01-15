@@ -574,7 +574,7 @@
 
                     <span class="text-green-700 leading-snug font-semibold">
                         Acepto las condiciones establecidas en la política de tratamiento de información de la Alcaldía
-                        de Acacias: <a href="/proteccion" target="_blank"
+                        de Acacias: <a href="https://www.acacias.gov.co/publicaciones/5414/politica-de-tratamiento-de-datos-personales/" target="_blank"
                             class="text-green-700 underline hover:text-green-800">Políticas
                             de Protección de Datos Personales</a>.
                     </span>
