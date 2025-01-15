@@ -1,4 +1,19 @@
 @role('user')
+    <script>
+        // Mostrar el mensaje automáticamente al cargar la página
+        document.addEventListener("DOMContentLoaded", () => {
+            Swal.fire({
+                toast: true, // Activa el modo "toast"
+                position: 'top-end', // Ubicación en la parte superior derecha
+                icon: 'success', // Icono de éxito
+                title: '¡Éxito!',
+                text: 'Su correo esta verificado correctamente.',
+                timer: 4000, // Duración en milisegundos
+                timerProgressBar: true, // Barra de progreso para el tiempo
+                showConfirmButton: false, // Oculta el botón de confirmación
+            });
+        });
+    </script>
     <div class="p-6 lg:p-8 bg-white border-b border-gray-200">
         <x-application-logo class="" /> {{-- las clases aca no me quieren funcionar --}}
 
@@ -17,8 +32,7 @@
         class="bg-gray-200 bg-opacity-25 border-t-2 border-green-custom grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8 p-6 lg:p-8">
         <div class="md:border-r-2 max-md:border-b-2 border-green-custom">
             <div class="flex items-center">
-                <svg xmlns="/" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                    stroke="currentColor" class="size-6">
+                <svg xmlns="/" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
                     <path stroke-linecap="round" stroke-linejoin="round"
                         d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" />
                 </svg>
@@ -39,8 +53,8 @@
 
         <div class="max-md:border-b-2 max-md:border-green-custom">
             <div class="flex items-center">
-                <svg xmlns="/" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                    stroke="currentColor" class="size-6">
+                <svg xmlns="/" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+                    class="size-6">
                     <path stroke-linecap="round" stroke-linejoin="round"
                         d="M3.75 12h16.5m-16.5 3.75h16.5M3.75 19.5h16.5M5.625 4.5h12.75a1.875 1.875 0 0 1 0 3.75H5.625a1.875 1.875 0 0 1 0-3.75Z" />
                 </svg>

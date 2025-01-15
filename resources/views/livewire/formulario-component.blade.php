@@ -381,7 +381,21 @@
                 @enderror
             </div>
 
+            <!-- Mapa -->
+            <div id="map" wire:ignore style="height: 400px; z-index: 40"></div>
+            @error('lat')
+                <span class="text-red-500">{{ $message }}</span>
+            @enderror
+            @error('lng')
+                <span class="text-red-500">{{ $message }}</span>
+            @enderror
+            <input type="hidden" id="lat" wire:model="lat" readonly>
+            <input type="hidden" id="lng" wire:model="lng" readonly>
 
+            <div class="mb-4 relative">
+                <p>Latitud seleccionada: {{ $lat }}</p>
+                <p>Longitud seleccionada: {{ $lng }}</p>
+            </div>
             {{-- observaciones --}}
             <div class="mb-4 relative">
                 <div class="flex flex-wrap items-center">
@@ -393,7 +407,7 @@
                             class="mt-1 block w-full border border-gray-300 rounded-lg focus:ring focus:ring-indigo-300"></textarea>
                         <!-- Tooltip -->
                         <div class="absolute hidden group-hover:block group-focus:block bg-gray-800 text-white text-sm rounded-lg px-4 py-2 w-64 shadow-lg left-0 z-10"
-                            style="top:-7rem">
+                            style="top:-7rem; z-index: 100">
                             Ingresa cualquier observación o comentario adicional que consideres importante. Este campo
                             es opcional.
                         </div>
@@ -402,6 +416,32 @@
                         <span class="text-red-500">{{ $message }}</span>
                     @enderror
                 </div>
+            </div>
+            <!-- Subir Recibo -->
+            <div class="mb-4">
+                <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" for="recibo_input">
+                    Subir algun recibo de servicio público que soporte su dirección
+                </label>
+                <div class="relative group">
+                    <input wire:model="recibo"
+                        class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+                        aria-describedby="recibo_input_help" id="recibo_input" type="file" required
+                        accept="application/pdf, image/png, image/jpg">
+                    <!-- Tooltip -->
+                    <div
+                        class="absolute left-0 hidden p-2 mt-1 text-xs text-white bg-gray-900 rounded-lg shadow-md group-hover:block dark:bg-gray-800">
+                        Asegúrese de que el archivo sea legible y no borroso. Los documentos PDF deben ser originales,
+                        emitidos por
+                        la respectiva entidad, y no deben contener modificaciones. Solo se aceptarán archivos PDF, PNG o
+                        JPG que
+                        cumplan con estas condiciones.
+                    </div>
+                </div>
+                <p class="mt-1 text-xs text-gray-500 dark:text-gray-300" id="recibo_input_help">PDF, PNG, JPG (MAX.
+                    10MB).</p>
+                @error('recibo')
+                    <span class="text-red-500 text-sm mt-2 block">{{ $message }}</span>
+                @enderror
             </div>
             <!-- Contenedor para los Archivos Adjuntos Opcionales -->
             <div class="p-6 mb-8 border border-blue-300 rounded-lg bg-blue-50">
@@ -422,13 +462,17 @@
                             class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
                             aria-describedby="accion_comunal_input_help" id="accion_comunal_input" type="file">
                         <!-- Tooltip -->
-                        <div class="absolute left-0 hidden p-2 mt-1 text-xs text-white bg-gray-900 rounded-lg shadow-md group-hover:block dark:bg-gray-800">
-                            Asegúrese de que el archivo sea legible y no borroso. Los documentos PDF deben ser originales, emitidos por
-                            la respectiva entidad, y no deben contener modificaciones. Solo se aceptarán archivos PDF, PNG o JPG que
+                        <div
+                            class="absolute left-0 hidden p-2 mt-1 text-xs text-white bg-gray-900 rounded-lg shadow-md group-hover:block dark:bg-gray-800">
+                            Asegúrese de que el archivo sea legible y no borroso. Los documentos PDF deben ser
+                            originales, emitidos por
+                            la respectiva entidad, y no deben contener modificaciones. Solo se aceptarán archivos PDF,
+                            PNG o JPG que
                             cumplan con estas condiciones.
                         </div>
                     </div>
-                    <p class="mt-1 text-xs text-gray-500 dark:text-gray-300" id="accion_comunal_input_help">PDF, PNG, JPG (MAX. 10MB).</p>
+                    <p class="mt-1 text-xs text-gray-500 dark:text-gray-300" id="accion_comunal_input_help">PDF, PNG,
+                        JPG (MAX. 10MB).</p>
                 </div>
 
 
@@ -442,13 +486,17 @@
                             class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
                             aria-describedby="electoral_input_help" id="electoral_input" type="file">
                         <!-- Tooltip -->
-                        <div class="absolute left-0 hidden p-2 mt-1 text-xs text-white bg-gray-900 rounded-lg shadow-md group-hover:block dark:bg-gray-800">
-                            Asegúrese de que el certificado electoral sea emitido por la entidad oficial correspondiente, con una
-                            antigüedad mínima de 12 meses. No se aceptarán documentos con enmiendas o modificaciones, y el archivo debe
+                        <div
+                            class="absolute left-0 hidden p-2 mt-1 text-xs text-white bg-gray-900 rounded-lg shadow-md group-hover:block dark:bg-gray-800">
+                            Asegúrese de que el certificado electoral sea emitido por la entidad oficial
+                            correspondiente, con una
+                            antigüedad mínima de 12 meses. No se aceptarán documentos con enmiendas o modificaciones, y
+                            el archivo debe
                             ser perfectamente legible. Solo se admiten formatos PDF, PNG o JPG.
                         </div>
                     </div>
-                    <p class="mt-1 text-xs text-gray-500 dark:text-gray-300" id="electoral_input_help">PDF, PNG, JPG (MAX. 10MB).</p>
+                    <p class="mt-1 text-xs text-gray-500 dark:text-gray-300" id="electoral_input_help">PDF, PNG, JPG
+                        (MAX. 10MB).</p>
                 </div>
 
 
@@ -462,13 +510,17 @@
                             class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
                             aria-describedby="sisben_input_help" id="sisben_input" type="file">
                         <!-- Tooltip -->
-                        <div class="absolute left-0 hidden p-2 mt-1 text-xs text-white bg-gray-900 rounded-lg shadow-md group-hover:block dark:bg-gray-800">
-                            Asegúrese de que la constancia de Sisben esté emitida por la entidad oficial correspondiente y que sea
-                            completamente legible. No se aceptarán documentos con tachaduras, enmiendas o que sean copias
+                        <div
+                            class="absolute left-0 hidden p-2 mt-1 text-xs text-white bg-gray-900 rounded-lg shadow-md group-hover:block dark:bg-gray-800">
+                            Asegúrese de que la constancia de Sisben esté emitida por la entidad oficial correspondiente
+                            y que sea
+                            completamente legible. No se aceptarán documentos con tachaduras, enmiendas o que sean
+                            copias
                             modificadas. Solo se admitirán formatos PDF, PNG o JPG que cumplan con estas condiciones.
                         </div>
                     </div>
-                    <p class="mt-1 text-xs text-gray-500 dark:text-gray-300" id="sisben_input_help">PDF, PNG, JPG (MAX. 10MB).</p>
+                    <p class="mt-1 text-xs text-gray-500 dark:text-gray-300" id="sisben_input_help">PDF, PNG, JPG
+                        (MAX. 10MB).</p>
                 </div>
 
 
@@ -482,13 +534,17 @@
                             class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
                             aria-describedby="cedula_input_help" id="cedula_input" type="file">
                         <!-- Tooltip -->
-                        <div class="absolute left-0 hidden p-2 mt-1 text-xs text-white bg-gray-900 rounded-lg shadow-md group-hover:block dark:bg-gray-800">
-                            Asegúrese de que la fotocopia sea completamente legible, sin tachaduras ni áreas borrosas. El archivo debe
-                            ser escaneado en alta calidad y contener ambos lados de la cédula si es necesario. Solo se aceptan
+                        <div
+                            class="absolute left-0 hidden p-2 mt-1 text-xs text-white bg-gray-900 rounded-lg shadow-md group-hover:block dark:bg-gray-800">
+                            Asegúrese de que la fotocopia sea completamente legible, sin tachaduras ni áreas borrosas.
+                            El archivo debe
+                            ser escaneado en alta calidad y contener ambos lados de la cédula si es necesario. Solo se
+                            aceptan
                             formatos PDF, PNG o JPG.
                         </div>
                     </div>
-                    <p class="mt-1 text-xs text-gray-500 dark:text-gray-300" id="cedula_input_help">PDF, PNG, JPG (MAX. 10MB).</p>
+                    <p class="mt-1 text-xs text-gray-500 dark:text-gray-300" id="cedula_input_help">PDF, PNG, JPG
+                        (MAX. 10MB).</p>
                 </div>
 
             </div>
@@ -507,10 +563,11 @@
                 <div class="flex items-start space-x-2 p-4 border border-green-500 rounded-lg bg-green-50">
                     <div class="relative group flex items-center">
                         <input type="checkbox" wire:model="terminos"
-                               class="w-6 h-6 text-green-600 border-green-500 rounded focus:ring focus:ring-green-400" required>
+                            class="w-6 h-6 text-green-600 border-green-500 rounded focus:ring focus:ring-green-400"
+                            required>
                         <!-- Tooltip -->
                         <div class="absolute hidden group-hover:block group-focus:block bg-gray-800 text-white text-sm rounded-lg px-4 py-2 w-64 shadow-lg left-8 z-10"
-                             style="top:-2.5rem">
+                            style="top:-2.5rem">
                             Acepta los términos y condiciones para continuar. Este campo es obligatorio.
                         </div>
                     </div>
@@ -531,7 +588,8 @@
             <div class="flex justify-end mt-8 mb-12">
                 <button type="submit"
                     class="flex items-center justify-center px-6 py-3 space-x-3 text-lg font-semibold text-white uppercase transition duration-300 transform bg-blue-600 rounded-lg shadow-lg hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-300"
-                    wire:loading.attr="disabled" wire:loading.class="bg-gray-400 hover:bg-gray-400 cursor-not-allowed">
+                    wire:loading.attr="disabled"
+                    wire:loading.class="bg-gray-400 hover:bg-gray-400 cursor-not-allowed">
                     <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" viewBox="0 0 20 20" fill="currentColor">
                         <path fill-rule="evenodd"
                             d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z"
@@ -546,4 +604,35 @@
     </div>
     <x-sweet-alert-good></x-sweet-alert-good>
 
+    <script>
+        var map = L.map('map').setView([3.99077, -73.76714], 15);
+
+        L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.nomaddi.com">Nomaddi</a> 2025'
+        }).addTo(map);
+
+        var marker;
+
+        map.on('click', function(e) {
+            const lat = e.latlng.lat;
+            const lng = e.latlng.lng;
+
+            // Mueve o crea el marcador
+            if (marker) {
+                marker.setLatLng(e.latlng);
+            } else {
+                marker = L.marker(e.latlng).addTo(map).bindPopup('Ubicación seleccionada').openPopup();
+            }
+
+            // Actualiza los campos ocultos del formulario
+            document.getElementById('lat').value = lat;
+            document.getElementById('lng').value = lng;
+
+            // Enviar las coordenadas al componente Livewire usando dispatch
+            Livewire.dispatch('updateLocation', {
+                lat,
+                lng
+            });
+        });
+    </script>
 </div>

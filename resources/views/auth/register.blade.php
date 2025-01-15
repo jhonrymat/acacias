@@ -32,7 +32,7 @@
 
             <div class="relative mt-4">
                 <div class="flex items-center">
-                    <x-label for="name" value="Primer Nombre" />
+                    <x-label for="name" value="Primer Nombre*" />
                 </div>
                 <div class="relative group">
                     <x-input id="name" class="block mt-1 w-full focus:ring focus:ring-indigo-300" type="text"
@@ -70,7 +70,7 @@
             {{-- apellido_1 --}}
             <div class="relative mt-4">
                 <div class="flex items-center">
-                    <x-label for="apellido_1" value="Primer Apellido" />
+                    <x-label for="apellido_1" value="Primer Apellido*" />
                 </div>
                 <div class="relative group">
                     <x-input id="apellido_1" class="block mt-1 w-full focus:ring focus:ring-indigo-300" type="text"
@@ -107,7 +107,7 @@
 
             <div class="mt-4 relative">
                 <div class="flex items-center">
-                    <x-label for="email" value="Correo Electrónico" />
+                    <x-label for="email" value="Correo Electrónico*" />
                 </div>
                 <div class="relative group">
                     <x-input id="email" class="block mt-1 w-full focus:ring focus:ring-indigo-300" type="email"
@@ -126,7 +126,7 @@
 
 
             <div class="col-span-12 mt-4" x-data="{ show: true }">
-                <label class="block" for="password">Contraseña
+                <label class="block" for="password">Contraseña*
                     <p class="block text-gray-500 text-xs">Escribe una contraseña segura</p>
                 </label>
                 <div class="relative">
@@ -167,7 +167,7 @@
 
             {{-- Confirmar contraseña --}}
             <div class="col-span-12 mt-4" x-data="{ show: true }">
-                <label class="block" for="password_confirmation">Confirmar contraseña
+                <label class="block" for="password_confirmation">Confirmar contraseña*
                     <p class="block text-gray-500 text-xs">Asegurate que sea la misma contraseña</p>
                 </label>
 
@@ -211,7 +211,7 @@
             {{-- telefonoContacto --}}
             <div class="relative mt-4">
                 <div class="flex items-center">
-                    <x-label for="telefonoContacto" value="{{ __('Telefono de Contacto') }}" />
+                    <x-label for="telefonoContacto" value="{{ __('Telefono de Contacto*') }}" />
                 </div>
                 <div class="relative group">
                     <x-input id="telefonoContacto" class="block mt-1 w-full focus:ring focus:ring-indigo-300"
@@ -231,7 +231,7 @@
             {{-- fechaNacimiento --}}
             <div class="relative mt-4">
                 <div class="flex items-center">
-                    <x-label for="fechaNacimiento" value="{{ __('Fecha de Nacimiento') }}" />
+                    <x-label for="fechaNacimiento" value="{{ __('Fecha de Nacimiento*') }}" />
                 </div>
                 <div class="relative group">
                     <x-input id="fechaNacimiento" class="block mt-1 w-full focus:ring focus:ring-indigo-300"
@@ -253,7 +253,7 @@
             {{-- id_tipoSolicitante select de la tabla tsolicitantes --}}
             <div class="relative mt-4">
                 <div class="flex items-center">
-                    <x-label for="id_tipoSolicitante" value="{{ __('Tipo de Solicitante') }}" />
+                    <x-label for="id_tipoSolicitante" value="{{ __('Tipo de Solicitante*') }}" />
                 </div>
                 <div class="relative group">
                     <select name="id_tipoSolicitante" id="id_tipoSolicitante"
@@ -282,7 +282,7 @@
             {{-- id_tipoDocumento select de la tabla tdocumentos --}}
             <div class="relative mt-4">
                 <div class="flex items-center">
-                    <x-label for="id_tipoDocumento" value="{{ __('Tipo de Documento') }}" />
+                    <x-label for="id_tipoDocumento" value="{{ __('Tipo de Documento*') }}" />
                 </div>
                 <div class="relative group">
                     <select name="id_tipoDocumento" id="id_tipoDocumento"
@@ -311,7 +311,7 @@
             {{-- numeroIdentificacion --}}
             <div class="relative mt-4">
                 <div class="flex items-center">
-                    <x-label for="numeroIdentificacion" value="{{ __('Numero de Identificacion') }}" />
+                    <x-label for="numeroIdentificacion" value="{{ __('Numero de Identificacion*') }}" />
                 </div>
                 <div class="relative group">
                     <x-input id="numeroIdentificacion" class="block mt-1 w-full focus:ring focus:ring-indigo-300"
@@ -332,7 +332,7 @@
                     value="{{ __('Lugar de expedición del documento') }}" class="block text-center" />
                 <!-- Select País -->
                 <div class="mb-4 relative"> <label for="country"
-                        class="block text-sm font-medium text-gray-700">País</label>
+                        class="block text-sm font-medium text-gray-700">País*</label>
                     <div class="relative group">
                         <select name="country" id="country"
                             class="block mt-1 w-full focus:ring focus:ring-indigo-300" x-model="selectedCountry"
@@ -360,7 +360,7 @@
                 </div>
                 <!-- Select Departamento -->
                 <div class="mb-4 relative" x-show="selectedCountry === '1' && departments.length > 0">
-                    <label for="department" class="block text-sm font-medium text-gray-700">Departamento</label>
+                    <label for="department" class="block text-sm font-medium text-gray-700">Departamento*</label>
                     <div class="relative group">
                         <select name="department" id="department"
                             class="block mt-1 w-full focus:ring focus:ring-indigo-300" x-model="selectedDepartment"
@@ -381,7 +381,7 @@
 
                 <!-- Select Ciudad -->
                 <div class="mb-4 relative" x-show="selectedCountry === '1' && cities.length > 0">
-                    <label for="city" class="block text-sm font-medium text-gray-700">Ciudad</label>
+                    <label for="city" class="block text-sm font-medium text-gray-700">Ciudad*</label>
                     <div class="relative group">
                         <select name="city" id="city"
                             class="block mt-1 w-full focus:ring focus:ring-indigo-300" x-model="selectedCity">
@@ -434,7 +434,7 @@
             {{-- id_nivelEstudio de la tabla nestudios --}}
             <div class="relative mt-4">
                 <div class="flex items-center">
-                    <x-label for="id_nivelEstudio" value="{{ __('Nivel de Estudio') }}" />
+                    <x-label for="id_nivelEstudio" value="{{ __('Nivel de Estudio*') }}" />
                 </div>
                 <div class="relative group">
                     <select name="id_nivelEstudio" id="id_nivelEstudio"
@@ -463,7 +463,7 @@
             {{-- id_genero de la tabla generos --}}
             <div class="relative mt-4">
                 <div class="flex items-center">
-                    <x-label for="id_genero" value="{{ __('Género') }}" />
+                    <x-label for="id_genero" value="{{ __('Género*') }}" />
                 </div>
                 <div class="relative group">
                     <select name="id_genero" id="id_genero"
@@ -491,7 +491,7 @@
             {{-- id_ocupacion de la tabla ocupacion --}}
             <div class="relative mt-4">
                 <div class="flex items-center">
-                    <x-label for="id_ocupacion" value="{{ __('Ocupación') }}" />
+                    <x-label for="id_ocupacion" value="{{ __('Ocupación*') }}" />
                 </div>
                 <div class="relative group">
                     <select name="id_ocupacion" id="id_ocupacion"
@@ -520,7 +520,7 @@
 
             <div class="relative mt-4">
                 <div class="flex items-center">
-                    <x-label for="id_poblacion" value="{{ __('Población') }}" />
+                    <x-label for="id_poblacion" value="{{ __('Población*') }}" />
                 </div>
                 <div class="relative group">
                     <select name="id_poblacion" id="id_poblacion"

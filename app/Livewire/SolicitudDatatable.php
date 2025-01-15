@@ -200,6 +200,12 @@ class SolicitudDatatable extends DataTableComponent
                 ->sortable()
                 ->searchable()
                 ->collapseAlways(),
+            Column::make("_Recibo_", "recibo")
+                ->format(fn($value, $row) => $this->formatFileLink($row->recibo))
+                ->html() // Permite la interpretación del HTML en la columna
+                ->sortable()
+                ->searchable()
+                ->collapseAlways(),
 
             Column::make("Estado", "estado.nombreEstado")
                 ->sortable()

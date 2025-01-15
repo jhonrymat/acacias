@@ -4,8 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      */
@@ -17,6 +16,10 @@ return new class extends Migration
             $table->string('tipoUnidad'); // Por ejemplo: Unidad de Planeación Zonal, etc.
             $table->string('codigoNumero')->nullable(); // Código o número asociado al barrio (si aplica)
             $table->string('zona'); // Puede ser 'barrio' o 'vereda'
+            $table->double('lat')->nullable();
+            $table->double('lng')->nullable();
+
+
             $table->timestamps();
         });
 
