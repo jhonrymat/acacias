@@ -13,6 +13,8 @@ class Solicitud extends Model
     protected $table = 'solicitudes';
     protected $casts = [
         'fecha_emision' => 'date',
+        'lat' => 'float',
+        'lng' => 'float',
     ];
     protected $fillable = [
         'user_id',

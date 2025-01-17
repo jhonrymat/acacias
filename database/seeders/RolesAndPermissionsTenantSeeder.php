@@ -53,7 +53,8 @@ class RolesAndPermissionsTenantSeeder extends Seeder
             'permisos',
             'user-roles',
             'ciudadanos',
-            'validadores'
+            'validadores',
+            'iframe'
         ];
         $permissionsUser = [
             'formulario',

@@ -1,7 +1,8 @@
 <?php
 
-use App\Livewire\EstadisticasValidador;
+use App\Models\RoleIframe;
 use App\Livewire\ValidarQr;
+use App\Livewire\ManageIframes;
 use App\Livewire\RolesComponent;
 use App\Livewire\BarrioComponent;
 use App\Livewire\ConsultaTramite;
@@ -20,6 +21,7 @@ use Illuminate\Support\Facades\Route;
 use App\Livewire\CertificadoComponent;
 use App\Livewire\SolicitudesComponent;
 use App\Livewire\ValidadoresComponent;
+use App\Livewire\EstadisticasValidador;
 use App\Livewire\TipoSolicitanteComponent;
 
 
@@ -29,10 +31,6 @@ Route::get('/', function () {
 
 Route::get('/consulta-tramite', ConsultaTramite::class)->name('consulta.tramite');
 Route::get('/qr/{id}/{numeroIdentificacion}', ValidarQr::class)->name('validar.qr');
-
-Route::get('estadisticas', function () {
-    return view('pages/estadisticas');
-})->name('estadisticas');
 
 
 
@@ -71,6 +69,9 @@ Route::middleware([
     })->name('certificado');
     // ruta para las estadisticas
     Route::get('estadisticas1', EstadisticasValidador::class)->name('estadisticas1');
+
+
+    Route::middleware(['can:iframe'])->get('iframes', ManageIframes::class)->name('iframes');
 });
 
 

@@ -382,6 +382,14 @@
             </div>
 
             <!-- Mapa -->
+            <div class="mb-4">
+                <label for="map" class="block text-sm font-medium text-gray-700 mb-2">
+                    📍 Selecciona la ubicación de tu casa (opcional)
+                </label>
+                <p class="text-sm text-gray-500 mb-4">
+                    No es obligatorio, pero esto nos ayudará a encontrar tu dirección de manera más rápida y precisa.
+                </p>
+            </div>
             <div id="map" wire:ignore style="height: 400px; z-index: 40"></div>
             @error('lat')
                 <span class="text-red-500">{{ $message }}</span>
