@@ -59,8 +59,8 @@ class FormularioComponent extends Component
         'numeroIdentificacion' => 'required|string|min:3',
         'id_barrio' => 'required',
         'direccion' => 'required|string|min:3',
-        'lat' => 'required|numeric',
-        'lng' => 'required|numeric',
+        'lat' => 'nullable|numeric',
+        'lng' => 'nullable|numeric',
         'accion_comunal' => 'file|mimes:pdf,jpeg,png,jpg|max:10240', // Valida cada archivo individualmente
         'electoral' => 'file|mimes:pdf,jpeg,png,jpg|max:10240', // Valida cada archivo individualmente
         'sisben' => 'file|mimes:pdf,jpeg,png,jpg|max:10240', // Valida cada archivo individualmente
@@ -75,9 +75,7 @@ class FormularioComponent extends Component
         'id_barrio.required' => 'El campo barrio es obligatorio.',
         'direccion.required' => 'El campo dirección es obligatorio.',
         'direccion.min' => 'El campo dirección debe tener al menos 3 caracteres.',
-        'lat.required' => 'El campo latitud es obligatorio.',
         'lat.numeric' => 'El campo latitud debe ser un número.',
-        'lng.required' => 'El campo longitud es obligatorio.',
         'lng.numeric' => 'El campo longitud debe ser un número.',
         'accion_comunal.mimes' => 'El campo evidencia debe ser un archivo de tipo: pdf, jpeg, png, jpg',
         'accion_comunal.max' => 'El campo evidencia no debe ser mayor a 10MB.',
@@ -143,8 +141,8 @@ class FormularioComponent extends Component
             'numeroIdentificacion' => $this->numeroIdentificacion,
             'id_barrio' => $this->id_barrio,
             'direccion' => $this->direccion,
-            'lat' => $this->lat,
-            'lng' => $this->lng,
+            'lat' => $this->lat ? rtrim(rtrim($this->lat, '0'), '.') : null,
+            'lng' => $this->lng ? rtrim(rtrim($this->lng, '0'), '.') : null,
             'accion_comunal' => $filePaths['accion_comunal'],
             'electoral' => $filePaths['electoral'],
             'sisben' => $filePaths['sisben'],
