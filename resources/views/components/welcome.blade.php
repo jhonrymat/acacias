@@ -18,7 +18,7 @@
         <x-application-logo class="" /> {{-- las clases aca no me quieren funcionar --}}
 
         <h1 class="mt-8 text-2xl font-medium text-gray-900">
-            Bienvenido a Maddicert!
+            Bienvenido!
         </h1>
 
         <p class="mt-6 text-gray-500 leading-relaxed">
@@ -80,7 +80,7 @@
         <x-application-logo class="" /> {{-- Las clases no están funcionando correctamente aquí --}}
 
         <h1 class="mt-8 text-2xl font-medium text-gray-900">
-            Bienvenido, Administrador de Maddicert!
+            Bienvenido, Administrador!
         </h1>
 
         <p class="mt-6 text-gray-500 leading-relaxed">
@@ -101,7 +101,7 @@
         <x-application-logo class="" /> {{-- Las clases no están funcionando correctamente aquí --}}
 
         <h1 class="mt-8 text-2xl font-medium text-gray-900">
-            Bienvenido, Validador 1 de Maddicert!
+            Bienvenido, Validador 1!
         </h1>
 
         <p class="mt-6 text-gray-500 leading-relaxed">
@@ -122,7 +122,7 @@
         <x-application-logo class="" /> {{-- Las clases no están funcionando correctamente aquí --}}
 
         <h1 class="mt-8 text-2xl font-medium text-gray-900">
-            Bienvenido, Validador 2 de Maddicert!
+            Bienvenido, Validador 2!
         </h1>
 
         <p class="mt-6 text-gray-500 leading-relaxed">

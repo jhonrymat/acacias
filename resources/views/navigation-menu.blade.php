@@ -87,6 +87,14 @@
                                 <x-dropdown-link href="{{ route('user-roles') }}">
                                     {{ __('Roles') }}
                                 </x-dropdown-link>
+                                {{-- ruta iframes --}}
+                                <x-dropdown-link href="{{ route('iframes') }}">
+                                    {{ __('PowerBI') }}
+                                </x-dropdown-link>
+                                {{-- Configuracion --}}
+                                <x-dropdown-link href="{{ route('administracion') }}">
+                                    {{ __('administración') }}
+                                </x-dropdown-link>
                             </x-slot>
                         </x-dropdown>
                     </div>
@@ -363,7 +371,9 @@
                                     <x-responsive-nav-link href="{{ route('user-roles') }}" :active="request()->routeIs('user-roles')">
                                         Roles
                                     </x-responsive-nav-link>
-
+                                    <x-responsive-nav-link href="{{ route('iframes') }}" :active="request()->routeIs('iframes')">
+                                        PowerBI
+                                    </x-responsive-nav-link>
                                 </div>
                             </div>
 

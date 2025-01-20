@@ -23,6 +23,7 @@ class DatabaseSeeder extends Seeder
         $this->call(EstadoSeeder::class);
         $this->call(RolesAndPermissionsTenantSeeder::class);
         $this->call(PaisesDepartamentosCiudadesSeeder::class);
+        $this->call(SiteSettingSeeder::class);
 
 
     }
