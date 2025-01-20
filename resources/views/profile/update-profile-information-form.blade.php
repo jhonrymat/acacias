@@ -7,6 +7,8 @@
         {{ __('Actualice la información del perfil de su cuenta y su dirección de correo electrónico.') }}
     </x-slot>
 
+
+
     <x-slot name="form">
         <!-- Profile Photo -->
         @if (Laravel\Jetstream\Jetstream::managesProfilePhotos())
@@ -325,4 +327,7 @@
             {{ __('Guardar') }}
         </x-button>
     </x-slot>
+
+    
+
 </x-form-section>

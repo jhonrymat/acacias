@@ -145,12 +145,12 @@ class RolesAndPermissionsTenantSeeder extends Seeder
         );
             // Crear el usuario user
         $validador1n1 = User::firstOrCreate(
-            ['email' => 'validador1n1@gmail.com'],
+            ['email' => 'claris132010@hotmail.com'],
             [
-                'name' => 'Validador1n1',
-                'nombre_2' => 'Fabian',
-                'apellido_1' => 'cruz',
-                'apellido_2' => 'Rincon',
+                'name' => 'CLARA',
+                'nombre_2' => '',
+                'apellido_1' => 'URREGO',
+                'apellido_2' => '',
                 'telefonoContacto' => '3145687888',
                 'id_tipoSolicitante' => 1,
                 'id_tipoDocumento' => 1,
@@ -163,17 +163,17 @@ class RolesAndPermissionsTenantSeeder extends Seeder
                 'id_poblacion' => 1,
                 'password' => Hash::make('1q2w3e4r'),
                 'email_verified_at' => now(),
-                'codigo' => '001',
+                'codigo' => 'C-CU-173-24',
             ]
         );
 
         $validador1n2 = User::firstOrCreate(
-            ['email' => 'validador1n2@gmail.com'],
+            ['email' => 'lauralilianaramirezmarrero@gmail.com'],
             [
-                'name' => 'Validador1n2',
-                'nombre_2' => 'santiago',
-                'apellido_1' => 'rivera',
-                'apellido_2' => 'zapata',
+                'name' => 'LAURA',
+                'nombre_2' => 'LILIANA',
+                'apellido_1' => 'RAMIRES',
+                'apellido_2' => 'MARRERO',
                 'telefonoContacto' => '3145687899',
                 'id_tipoSolicitante' => 1,
                 'id_tipoDocumento' => 1,
@@ -186,17 +186,63 @@ class RolesAndPermissionsTenantSeeder extends Seeder
                 'id_poblacion' => 1,
                 'password' => Hash::make('1q2w3e4r'),
                 'email_verified_at' => now(),
-                'codigo' => '002',
+                'codigo' => 'C-LR-171-24',
+            ]
+        );
+
+        $validador1n3 = User::firstOrCreate(
+            ['email' => 'fray_1512@hotmail.com'],
+            [
+                'name' => 'FRANCY',
+                'nombre_2' => '',
+                'apellido_1' => 'HERNANDEZ',
+                'apellido_2' => '',
+                'telefonoContacto' => '3149687899',
+                'id_tipoSolicitante' => 1,
+                'id_tipoDocumento' => 1,
+                'numeroIdentificacion' => '1191111199',
+                'ciudadExpedicion' => 'acacias',
+                'fechaNacimiento' => '1980-01-12 00:00:00',
+                'id_nivelEstudio' => 1,
+                'id_genero' => 1,
+                'id_ocupacion' => 1,
+                'id_poblacion' => 1,
+                'password' => Hash::make('1q2w3e4r'),
+                'email_verified_at' => now(),
+                'codigo' => 'C-FH-172-24',
+            ]
+        );
+
+        $validador1n4 = User::firstOrCreate(
+            ['email' => 'crismora2015@hotmail.com'],
+            [
+                'name' => 'CRIS',
+                'nombre_2' => '',
+                'apellido_1' => 'MORA',
+                'apellido_2' => '',
+                'telefonoContacto' => '3199687899',
+                'id_tipoSolicitante' => 1,
+                'id_tipoDocumento' => 1,
+                'numeroIdentificacion' => '1991111199',
+                'ciudadExpedicion' => 'acacias',
+                'fechaNacimiento' => '1980-01-12 00:00:00',
+                'id_nivelEstudio' => 1,
+                'id_genero' => 1,
+                'id_ocupacion' => 1,
+                'id_poblacion' => 1,
+                'password' => Hash::make('1q2w3e4r'),
+                'email_verified_at' => now(),
+                'codigo' => 'C-CM-174-24',
             ]
         );
 
         $validador2 = User::firstOrCreate(
             ['email' => 'validador2@gmail.com'],
             [
-                'name' => 'Validador2',
-                'nombre_2' => 'Fabian',
-                'apellido_1' => 'cruz',
-                'apellido_2' => 'Rincon',
+                'name' => 'Mario',
+                'nombre_2' => 'Aurelio',
+                'apellido_1' => 'Pedroza',
+                'apellido_2' => 'Sandoval',
                 'telefonoContacto' => '3145687892',
                 'id_tipoSolicitante' => 1,
                 'id_tipoDocumento' => 1,
@@ -219,6 +265,8 @@ class RolesAndPermissionsTenantSeeder extends Seeder
         $user->assignRole('user');
         $validador1n1->assignRole('validador1');
         $validador1n2->assignRole('validador1');
+        $validador1n3->assignRole('validador1');
+        $validador1n4->assignRole('validador1');
         $validador2->assignRole('validador2');
 
 

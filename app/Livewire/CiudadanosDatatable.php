@@ -12,6 +12,9 @@ class CiudadanosDatatable extends DataTableComponent
 {
     protected $model = User::class;
 
+    protected $listeners = ['refresh-data-table' => '$refresh'];
+
+
     public function configure(): void
     {
         $this->setPrimaryKey('id');
@@ -60,6 +63,7 @@ class CiudadanosDatatable extends DataTableComponent
                 ->collapseAlways(),
             Column::make("TelefonoContacto", "telefonoContacto")
                 ->searchable()
+                ->collapseAlways()
                 ->sortable(),
             Column::make("NumeroIdentificacion", "numeroIdentificacion")
                 ->searchable()
@@ -73,11 +77,16 @@ class CiudadanosDatatable extends DataTableComponent
                 ->searchable()
                 ->collapseAlways(),
             Column::make("Created at", "created_at")
+                ->collapseAlways()
                 ->sortable(),
             Column::make("Updated at", "updated_at")
                 ->sortable()
                 ->searchable()
                 ->collapseAlways(),
+            Column::make("Acciones")
+                ->label(
+                    fn($row) => view('livewire.editValidador', ['row' => $row])
+                ),
         ];
     }
 }

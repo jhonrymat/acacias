@@ -104,7 +104,7 @@
         <table class="content" width="100%">
             <tr>
                 <td class="header">
-                    <img src="{{ asset('images/logo-web.png') }}" alt="Alcaldía de Acacías">
+                    <img src="{{ asset('storage/' . (App\Models\SiteSetting::first()->logo_path ?? 'images/logo-web.png')) }}" alt="Logo">
                 </td>
             </tr>
             <tr>

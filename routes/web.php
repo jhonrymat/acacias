@@ -1,5 +1,6 @@
 <?php
 
+use App\Livewire\SiteSettings;
 use App\Models\RoleIframe;
 use App\Livewire\ValidarQr;
 use App\Livewire\ManageIframes;
@@ -72,6 +73,10 @@ Route::middleware([
 
 
     Route::middleware(['can:iframe'])->get('iframes', ManageIframes::class)->name('iframes');
+
+    //<livewire:site-settings />
+    Route::middleware(['can:roles'])->get('administracion', SiteSettings::Class)->name('administracion');
+
 });
 
 

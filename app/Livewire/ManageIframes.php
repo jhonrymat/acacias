@@ -18,6 +18,8 @@ class ManageIframes extends Component
         'iframe_src' => 'required|url',
     ];
 
+    protected $listeners = ['edit', 'delete'];
+
     public function mount()
     {
         $this->loadIframes();
@@ -35,30 +37,33 @@ class ManageIframes extends Component
         RoleIframe::updateOrCreate(
             ['id' => $this->iframe_id],
             ['role' => $this->role, 'iframe_title' => $this->iframe_title, 'iframe_src' => $this->iframe_src]
+            
         );
 
         $this->resetForm();
         $this->loadIframes();
+        $this->dispatch('Updated');
         session()->flash('message', 'Iframe guardado exitosamente.');
     }
 
-    public function edit($id)
+    public function edit($Id)
     {
-        $iframe = RoleIframe::findOrFail($id);
+        $iframe = RoleIframe::findOrFail($Id);
         $this->iframe_id = $iframe->id;
         $this->role = $iframe->role;
         $this->iframe_title = $iframe->iframe_title;
         $this->iframe_src = $iframe->iframe_src;
     }
 
-    public function delete($id)
+    public function delete($Id)
     {
-        RoleIframe::findOrFail($id)->delete();
+        RoleIframe::findOrFail($Id)->delete();
         $this->loadIframes();
+        $this->dispatch('Updated');
         session()->flash('message', 'Iframe eliminado exitosamente.');
     }
 
-    
+
 
     public function resetForm()
     {

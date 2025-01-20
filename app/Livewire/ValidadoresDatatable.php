@@ -54,6 +54,7 @@ class ValidadoresDatatable extends DataTableComponent
                 ->sortable()
                 ->collapseAlways(),
             Column::make("TelefonoContacto", "telefonoContacto")
+                ->collapseAlways()
                 ->sortable(),
             Column::make("NumeroIdentificacion", "numeroIdentificacion")
                 ->sortable()
