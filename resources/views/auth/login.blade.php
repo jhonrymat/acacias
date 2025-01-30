@@ -19,7 +19,7 @@
             @auth
             {{-- Logo --}}
             <div class="flex justify-center">
-                <img class="rounded-full max-md:mx-auto block mx-auto w-32 h-32" src="{{ asset('images/logo-web-192x192.png') }}" alt="Logo">
+                <img class="max-md:mx-auto block mx-auto" src="{{ asset('images/logo-web.png') }}" alt="Logo">
             </div>
                 {{-- Si el usuario está autenticado, mostrar un mensaje --}}
                 <div class="bg-white shadow-md rounded-lg p-6">

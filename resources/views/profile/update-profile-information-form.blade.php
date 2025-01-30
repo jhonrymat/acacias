@@ -55,7 +55,7 @@
 
         <!-- Name -->
         <div class="col-span-6 sm:col-span-4">
-            <x-label for="name" value="{{ __('Name') }}" />
+            <x-label for="name" value="{{ __('Name') }}*" />
             <x-input id="name" type="text" class="mt-1 block w-full" wire:model.defer="state.name"
                 autocomplete="name" />
             <x-input-error for="name" class="mt-2" />
@@ -69,7 +69,7 @@
         </div>
         {{-- apellido_1 --}}
         <div class="col-span-6 sm:col-span-4">
-            <x-label for="apellido_1" value="{{ __('Apellido 1') }}" />
+            <x-label for="apellido_1" value="{{ __('Apellido 1') }}*" />
             <x-input id="apellido_1" type="text" class="mt-1 block w-full" wire:model.defer="state.apellido_1"
                 autocomplete="apellido_1" />
             <x-input-error for="apellido_1" class="mt-2" />
@@ -83,7 +83,7 @@
         </div>
         <!-- Email -->
         <div class="col-span-6 sm:col-span-4">
-            <x-label for="email" value="{{ __('Email') }}" />
+            <x-label for="email" value="{{ __('Email') }}*" />
             {{-- evitar que editen el correo --}}
             <x-input id="email" type="email" class="mt-1 block w-full" wire:model.defer="state.email"
                 autocomplete="username" disabled />
@@ -111,14 +111,14 @@
         {{-- {{ dd($this->user) }} --}}
         {{-- telefonoContacto --}}
         <div class="col-span-6 sm:col-span-4">
-            <x-label for="telefonoContacto" value="{{ __('Telefono de Contacto') }}" />
+            <x-label for="telefonoContacto" value="{{ __('Telefono de Contacto') }}*" />
             <x-input id="telefonoContacto" type="text" class="mt-1 block w-full"
                 wire:model.defer="state.telefonoContacto" autocomplete="telefonoContacto" />
             <x-input-error for="telefonoContacto" class="mt-2" />
         </div>
         {{-- fechaNacimiento --}}
         <div class="col-span-6 sm:col-span-4">
-            <x-label for="fechaNacimiento" value="{{ __('Fecha de Nacimiento') }}" />
+            <x-label for="fechaNacimiento" value="{{ __('Fecha de Nacimiento') }}*" />
             <x-input id="fechaNacimiento" type="date" class="mt-1 block w-full"
                 wire:model.defer="state.fechaNacimiento" autocomplete="fechaNacimiento" />
             <x-input-error for="fechaNacimiento" class="mt-2" />
@@ -127,7 +127,7 @@
         {{-- mostrar solo si el rol es validador2 --}}
         @if (auth()->user()->hasRole('validador2'))
             <div class="col-span-6 sm:col-span-4">
-                <x-label for="cargo" value="{{ __('Cargo') }}" />
+                <x-label for="cargo" value="{{ __('Cargo') }}*" />
                 <x-input id="cargo" type="text" class="mt-1 block w-full" wire:model.defer="state.cargo"
                     autocomplete="cargo" />
                 <x-input-error for="cargo" class="mt-2" />
@@ -137,7 +137,7 @@
         {{-- id_tipoSolicitante --}}
         <div class="col-span-6 sm:col-span-4">
             <label for="id_tipoSolicitante" class="block text-sm font-medium text-gray-700">Tipo de
-                Solicitante</label>
+                Solicitante*</label>
             <select id="id_tipoSolicitante" name="id_tipoSolicitante" class="mt-1 block w-full"
                 wire:model.defer="state.id_tipoSolicitante">
                 <option value="">-- Selecciona un solicitante --</option>
@@ -154,7 +154,7 @@
         </div>
         {{-- id_tipoDocumento --}}
         <div class="col-span-6 sm:col-span-4">
-            <x-label for="id_tipoDocumento" value="{{ __('Tipo de Documento') }}" />
+            <x-label for="id_tipoDocumento" value="{{ __('Tipo de Documento') }}*" />
             <select wire:model="state.id_tipoDocumento" id="id_tipoDocumento" class="mt-1 block w-full">
                 <option value="">Selecciona un tipo de documento</option>
                 @foreach (\App\Models\Tdocumento::all() as $tipoDocumento)
@@ -170,21 +170,21 @@
         </div>
         {{-- numeroIdentificacion --}}
         <div class="col-span-6 sm:col-span-4">
-            <x-label for="numeroIdentificacion" value="{{ __('Numero de Identificación') }}" />
+            <x-label for="numeroIdentificacion" value="{{ __('Numero de Identificación') }}*" />
             <x-input id="numeroIdentificacion" type="text" class="mt-1 block w-full"
                 wire:model.defer="state.numeroIdentificacion" autocomplete="numeroIdentificacion" disabled />
             <x-input-error for="numeroIdentificacion" class="mt-2" />
         </div>
         {{-- ciudadExpedicion --}}
         <div class="col-span-6 sm:col-span-4">
-            <x-label for="ciudadExpedicion" value="{{ __('Ciudad de Expedición') }}" />
+            <x-label for="ciudadExpedicion" value="{{ __('Ciudad de Expedición') }}*" />
             <x-input id="ciudadExpedicion" type="text" class="mt-1 block w-full"
                 wire:model.defer="state.ciudadExpedicion" autocomplete="ciudadExpedicion" />
             <x-input-error for="ciudadExpedicion" class="mt-2" />
         </div>
         {{-- id_nivelEstudio --}}
         <div class="col-span-6 sm:col-span-4">
-            <x-label for="id_nivelEstudio" value="{{ __('Nivel de Estudio') }}" />
+            <x-label for="id_nivelEstudio" value="{{ __('Nivel de Estudio') }}*" />
             <select wire:model="state.id_nivelEstudio" id="id_nivelEstudio" class="mt-1 block w-full">
                 <option value="">Selecciona un nivel de estudio</option>
                 @foreach (\App\Models\Nestudio::all() as $nivelEstudio)
@@ -200,7 +200,7 @@
         </div>
         {{-- id_genero --}}
         <div class="col-span-6 sm:col-span-4">
-            <x-label for="id_genero" value="{{ __('Género') }}" />
+            <x-label for="id_genero" value="{{ __('Género') }}*" />
             <select wire:model="state.id_genero" id="id_genero" class="mt-1 block w-full">
                 <option value="">Selecciona un género</option>
                 @foreach (\App\Models\Genero::all() as $genero)
@@ -216,7 +216,7 @@
         </div>
         {{-- id_ocupacion --}}
         <div class="col-span-6 sm:col-span-4">
-            <x-label for="id_ocupacion" value="{{ __('Ocupación') }}" />
+            <x-label for="id_ocupacion" value="{{ __('Ocupación') }}*" />
             <select wire:model="state.id_ocupacion" id="id_ocupacion" class="mt-1 block w-full">
                 <option value="">Selecciona una ocupación</option>
                 @foreach (\App\Models\Ocupacion::all() as $ocupacion)
@@ -232,7 +232,7 @@
         </div>
         {{-- id_poblacion --}}
         <div class="col-span-6 sm:col-span-4">
-            <x-label for="id_poblacion" value="{{ __('Población') }}" />
+            <x-label for="id_poblacion" value="{{ __('Población') }}*" />
             <select wire:model="state.id_poblacion" id="id_poblacion" class="mt-1 block w-full">
                 <option value="">Selecciona una población</option>
                 @foreach (\App\Models\Poblacion::all() as $poblacion)
@@ -249,7 +249,7 @@
         {{-- mostrar el codigo del usuario si es validador1 o 2 y no permitirlo editar ni enviar al componentes solo es para visualizacion --}}
         @if (auth()->user()->hasRole('validador1') || auth()->user()->hasRole('validador2'))
             <div class="col-span-6 sm:col-span-4">
-                <x-label for="codigo" value="{{ __('Código') }}" />
+                <x-label for="codigo" value="{{ __('Código') }}*" />
                 <x-input id="codigo" type="text" class="mt-1 block w-full" wire:model.defer="state.codigo"
                     autocomplete="codigo" readonly />
                 <x-input-error for="codigo" class="mt-2" />
@@ -263,7 +263,7 @@
         @if (auth()->user()->hasRole('validador2'))
             <div class="col-span-6 sm:col-span-4">
                 <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" for="firma_input">
-                    Subir firma para firmar los certificados
+                    Subir firma para firmar los certificados*
                 </label>
                 <input wire:model.defer="state.firma"
                     class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
@@ -328,6 +328,6 @@
         </x-button>
     </x-slot>
 
-    
+
 
 </x-form-section>
