@@ -428,7 +428,7 @@
             <!-- Subir Recibo -->
             <div class="mb-4">
                 <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" for="recibo_input">
-                    Subir algun recibo de servicio público que soporte su dirección
+                    Subir algun recibo de servicio público que soporte su dirección*
                 </label>
                 <div class="relative group">
                     <input wire:model="recibo"

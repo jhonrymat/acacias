@@ -142,6 +142,8 @@ class SolicitudesDatatable extends DataTableComponent
                 ->sortable()
                 ->searchable()
                 ->collapseAlways(),
+            Column::make("Observaciones", "observaciones")
+                ->collapseAlways(),
             Column::make("Estado", "estado.nombreEstado")
                 ->sortable()
                 ->searchable()
