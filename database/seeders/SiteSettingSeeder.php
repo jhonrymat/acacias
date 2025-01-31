@@ -15,8 +15,8 @@ class SiteSettingSeeder extends Seeder
     {
         SiteSetting::create([
             'site_name' => 'Certificado de Residencia',
-            'logo_path' => '/images/logo-web.png', // Ruta por defecto
-            'favicon_path' => '/images/favicon.ico', // Ruta por defecto
+            'logo_path' => 'images/logo-web.png', // Ruta por defecto
+            'favicon_path' => 'images/favicon.ico', // Ruta por defecto
         ]);
     }
 }
