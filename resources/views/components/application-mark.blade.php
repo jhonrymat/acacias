@@ -1,2 +1,6 @@
-<img class="block w-40" src="{{ asset('storage/' . (App\Models\SiteSetting::first()->logo_path ?? 'images/logo-web.png')) }}" alt="Logo">
+@php
+    $siteSetting = App\Models\SiteSetting::first();
+    $logoPath = $siteSetting ? 'storage/' . $siteSetting->logo_path : 'images/logo-web.png';
+@endphp
 
+<img class="block w-40" src="{{ asset($logoPath) }}" alt="Logo">

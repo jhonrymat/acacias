@@ -353,13 +353,13 @@
             <!-- Modal con Alpine.js y Livewire -->
 
             {{-- barrio --}}
-            <div class="mb-4 relative">
+            <div class="mb-4 relative" wire:ignore>
                 <div class="flex items-center">
                     <x-label for="id_barrio" class="block text-sm font-medium">Barrio o Vereda*</x-label>
                 </div>
                 <div class="relative group">
                     <select name="id_barrio" id="id_barrio" wire:model="id_barrio"
-                        class="block mt-1 w-full border border-gray-300 rounded-lg focus:ring focus:ring-indigo-300"
+                        class="block mt-1 w-full border border-gray-300 rounded-lg focus:ring focus:ring-indigo-300 select2"
                         required>
                         <option value="" selected>Selecciona un barrio o vereda</option>
                         @foreach ($barrios as $barrio)
@@ -582,8 +582,9 @@
 
                     <span class="text-green-700 leading-snug font-semibold">
                         Acepto las condiciones establecidas en la política de tratamiento de información de la Alcaldía
-                        de Acacias: <a href="https://www.acacias.gov.co/publicaciones/5414/politica-de-tratamiento-de-datos-personales/" target="_blank"
-                            class="text-green-700 underline hover:text-green-800">Políticas
+                        de Acacias: <a
+                            href="https://www.acacias.gov.co/publicaciones/5414/politica-de-tratamiento-de-datos-personales/"
+                            target="_blank" class="text-green-700 underline hover:text-green-800">Políticas
                             de Protección de Datos Personales</a>.
                     </span>
                 </div>
@@ -611,7 +612,6 @@
         </form>
     </div>
     <x-sweet-alert-good></x-sweet-alert-good>
-
     <script>
         var map = L.map('map').setView([3.99077, -73.76714], 15);
 
@@ -643,4 +643,29 @@
             });
         });
     </script>
+        <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" crossorigin="anonymous"></script>
+
+    <script>
+        $(document).ready(function() {
+            $('.select2').select2();
+        });
+    </script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            $('#id_barrio').select2();
+
+            $('#id_barrio').on('change', function (e) {
+                @this.set('id_barrio', e.target.value);
+            });
+        });
+
+        document.addEventListener("livewire:load", function () {
+            Livewire.hook('message.processed', (message, component) => {
+                $('#id_barrio').select2();
+            });
+        });
+    </script>
+
+
+
 </div>

@@ -1,32 +1,39 @@
 <x-guest-layout>
     <!-- Contenedor de los botones -->
-     <div class="flex justify-end space-x-4 p-4 bg-gray-100">
-         <!-- Botón para consultar trámite -->
-         <a href="{{ route('consulta.tramite') }}"
-             class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition font-bold shadow-md w-full sm:w-auto text-center">
-             Consultar Trámite
-         </a>
-         <!-- Botón para registrarse -->
-         <a href="{{ route('register') }}"
-             class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 transition font-bold shadow-md w-full sm:w-auto text-center">
-             Registrarse
-         </a>
-     </div>
+    <div class="flex justify-end space-x-4 p-4 bg-gray-100">
+        <!-- Botón para consultar trámite -->
+        <a href="{{ route('consulta.tramite') }}"
+            class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition font-bold shadow-md w-full sm:w-auto text-center">
+            Consultar Trámite
+        </a>
+        <!-- Botón para registrarse -->
+        <a href="{{ route('register') }}"
+            class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 transition font-bold shadow-md w-full sm:w-auto text-center">
+            Registrarse
+        </a>
+    </div>
     <div class="min-h-screen flex items-center justify-center bg-gray-100">
 
         <div class="max-w-md w-full space-y-6">
 
             @auth
-            {{-- Logo --}}
-            <div class="flex justify-center">
-                <img class="max-md:mx-auto block mx-auto" src="{{ asset('images/logo-web.png') }}" alt="Logo">
-            </div>
+                {{-- Logo --}}
+                <div class="flex justify-center">
+                    @php
+                        $siteSetting = App\Models\SiteSetting::first();
+                        $logoPath = $siteSetting ? 'storage/' . $siteSetting->logo_path : 'images/logo-web.png';
+                    @endphp
+
+                    <img class="max-md:mx-auto block mx-auto w-56 mt-2" src="{{ asset($logoPath) }}" alt="Logo">
+                </div>
                 {{-- Si el usuario está autenticado, mostrar un mensaje --}}
                 <div class="bg-white shadow-md rounded-lg p-6">
                     <h2 class="text-center text-2xl font-bold text-gray-800 mb-4">Ya estás autenticado</h2>
-                    <p class="text-center text-gray-600">Estás actualmente conectado. Haz clic abajo para acceder al Dashboard.</p>
+                    <p class="text-center text-gray-600">Estás actualmente conectado. Haz clic abajo para acceder al
+                        Dashboard.</p>
                     <div class="flex justify-center mt-6">
-                        <a href="{{ url('/dashboard') }}" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full">
+                        <a href="{{ url('/dashboard') }}"
+                            class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full">
                             Ir al Dashboard
                         </a>
                     </div>
@@ -54,7 +61,8 @@
 
                         <div>
                             <x-label for="email" value="{{ __('Correo') }}" />
-                            <x-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required autofocus />
+                            <x-input id="email" class="block mt-1 w-full" type="email" name="email"
+                                :value="old('email')" required autofocus />
                         </div>
 
                         <div class="mt-4">

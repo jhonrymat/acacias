@@ -158,13 +158,14 @@ class FormularioComponent extends Component
         Mail::to(auth()->user()->email)->send(new SolicitudCreadaNotification($solicitud->id, $userName));
 
 
+        $this->reset();
         // Mostrar mensaje de éxito
         // session()->flash('message', 'Solicitud creada exitosamente.');
         $this->dispatch('sweet-alert-good', icon: 'success', title: 'Solicitud creada exitosamente.', text: 'Tu solicitud ha sido enviada correctamente.', footer: '<a href="versolicitudes">Ver mis solicitudes</a>');
 
 
         // Resetear el formulario
-        $this->reset();
+        $this->redirect(route('versolicitudes'));
     }
 
 

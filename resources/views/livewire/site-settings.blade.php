@@ -12,7 +12,9 @@
         <div>
             <label class="block text-gray-700 font-medium mb-2">Nombre del sitio:</label>
             <input type="text" wire:model="site_name" class="w-full px-4 py-2 border rounded-lg">
-            @error('site_name') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
+            @error('site_name')
+                <span class="text-red-500 text-sm">{{ $message }}</span>
+            @enderror
         </div>
 
         <!-- Logo -->
@@ -20,19 +22,36 @@
             <label class="block text-gray-700 font-medium mb-2">Logo:</label>
             <input type="file" wire:model="logo" class="block w-full">
             @if ($existing_logo)
-                <img src="{{ asset( 'storage/' . $existing_logo) }}" alt="Logo" class="mt-2 h-16">
+                <img src="{{ asset('storage/' . $existing_logo) }}" alt="Logo" class="mt-2 h-16">
             @endif
-            @error('logo') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
+            {{-- @php
+                $siteSetting = App\Models\SiteSetting::first();
+                $logoPath =
+                    $siteSetting && \Illuminate\Support\Facades\Storage::exists('public/' . $siteSetting->logo_path)
+                        ? 'storage/' . $siteSetting->logo_path
+                        : 'images/logo-web.png';
+            @endphp
+            <img src="{{ asset($logoPath) }}" alt="Logo" class="mt-2 h-16"> --}}
+            @error('logo')
+                <span class="text-red-500 text-sm">{{ $message }}</span>
+            @enderror
         </div>
 
         <!-- Favicon -->
         <div>
             <label class="block text-gray-700 font-medium mb-2">Favicon:</label>
             <input type="file" wire:model="favicon" class="block w-full">
-            @if ($existing_favicon)
-                <img src="{{ asset( 'storage/' . $existing_favicon) }}" alt="Favicon" class="mt-2 h-8">
-            @endif
-            @error('favicon') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
+            @php
+                $siteSetting = App\Models\SiteSetting::first();
+                $favicoPath =
+                    $siteSetting && \Illuminate\Support\Facades\Storage::exists('public/' . $siteSetting->favico_path)
+                        ? 'storage/' . $siteSetting->favico_path
+                        : 'images/favicon.ico';
+            @endphp
+            <img src="{{ asset($favicoPath) }}" alt="Favicon" class="mt-2 h-8">
+            @error('favicon')
+                <span class="text-red-500 text-sm">{{ $message }}</span>
+            @enderror
         </div>
 
         <!-- Botón Guardar -->

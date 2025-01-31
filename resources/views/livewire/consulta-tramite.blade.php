@@ -14,7 +14,11 @@
 
     <div>
         <a href="{{ route('login') }}">
-            <img class="max-md:mx-auto block mx-auto w-56 mt-2" src="{{ asset('storage/' . (App\Models\SiteSetting::first()->logo_path ?? 'images/logo-web.png')) }}" alt="Logo">
+            @php
+                $siteSetting = App\Models\SiteSetting::first();
+                $logoPath = $siteSetting ? 'storage/' . $siteSetting->logo_path : 'images/logo-web.png';
+            @endphp
+            <img class="max-md:mx-auto block mx-auto w-56 mt-2" src="{{ asset($logoPath) }}" alt="Logo">
         </a>
     </div>
     <br>

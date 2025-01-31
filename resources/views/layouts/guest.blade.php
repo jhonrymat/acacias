@@ -10,7 +10,11 @@
         <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.bunny.net">
         <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
-        <link rel="icon" href="{{ asset('storage/' . (App\Models\SiteSetting::first()->favicon_path ?? 'favicon.ico')) }}" type="image/x-icon">
+        @php
+            $siteSetting = App\Models\SiteSetting::first();
+            $favicoPath = $siteSetting ? 'storage/' . $siteSetting->favicon_path : 'images/favicon.ico';
+        @endphp
+        <link rel="icon" href="{{ asset($favicoPath) }}" type="image/x-icon">
 
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
