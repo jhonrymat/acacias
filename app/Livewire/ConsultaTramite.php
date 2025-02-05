@@ -40,7 +40,7 @@ class ConsultaTramite extends Component
             $query->where('id', $this->datoConsulta);
         }
 
-        $this->resultados = $query->with('estado')->first();
+        $this->resultados = $query->with('estado')->latest()->first();
 
         // Mostrar mensaje de error si no se encuentra
         if (!$this->resultados) {

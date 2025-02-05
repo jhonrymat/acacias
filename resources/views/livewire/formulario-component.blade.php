@@ -205,11 +205,15 @@
                                                 <option value="">Letra</option>
                                                 <option value="A">A</option>
                                                 <option value="B">B</option>
+                                                <option value="C">C</option>
+                                                <option value="D">D</option>
+                                                <option value="E">E</option>
+                                                <option value="F">F</option>
                                             </select>
 
                                             <select class="border border-gray-300 rounded p-1 text-sm col-span-1"
                                                 x-model="bis" @change="actualizarDireccion()">
-                                                <option value="">Bis</option>
+                                                <option value="">Selecciona</option>
                                                 <option value="BIS">BIS</option>
                                             </select>
 
@@ -240,6 +244,10 @@
                                                         <option value="">Letra</option>
                                                         <option value="A">A</option>
                                                         <option value="B">B</option>
+                                                        <option value="C">C</option>
+                                                        <option value="D">D</option>
+                                                        <option value="E">E</option>
+                                                        <option value="F">F</option>
                                                     </select>
 
                                                     <input type="text"
@@ -355,28 +363,51 @@
             <!-- Subir Recibo -->
             <div class="mb-4">
                 <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" for="recibo_input">
-                    Suba un recibo de servicio público domiciliario con fecha de expedición no mayor a 30 días (gas, agua o energía). Asegúrese de que la dirección registrada en su solicitud coincida exactamente con la del recibo.*
+                    Suba un recibo de servicio público domiciliario con fecha de expedición no mayor a 30 días
+                    (gas, agua o energía). Asegúrese de que la dirección registrada en su solicitud coincida exactamente
+                    con la del recibo.*
                 </label>
                 <div class="relative group">
                     <input wire:model="recibo"
-                        class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+                        class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50
+                        dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
                         aria-describedby="recibo_input_help" id="recibo_input" type="file" required
-                        accept="application/pdf, image/jpg">
+                        accept="application/pdf,image/jpeg,image/jpg">
+
                     <!-- Tooltip -->
                     <div
                         class="absolute left-0 hidden p-2 mt-1 text-xs text-white bg-gray-900 rounded-lg shadow-md group-hover:block dark:bg-gray-800">
                         Asegúrese de que el archivo sea legible y no borroso. Los documentos PDF deben ser originales,
-                        emitidos por
-                        la respectiva entidad, y no deben contener modificaciones. Solo se aceptarán archivos PDF o
-                        JPG que
-                        cumplan con estas condiciones.
+                        emitidos por la respectiva entidad, y no deben contener modificaciones.
+                        Solo se aceptarán archivos PDF o JPG que cumplan con estas condiciones.
                     </div>
                 </div>
-                <p class="mt-1 text-xs text-gray-500 dark:text-gray-300" id="recibo_input_help">PDF, JPG (MAX.
-                    10MB).</p>
+
+                <!-- Indicador de carga -->
+                <div wire:loading wire:target="recibo" class="mt-2 text-sm text-blue-600 dark:text-blue-400">
+                    Subiendo archivo, por favor espere...
+                </div>
+
+                <!-- Botón para limpiar archivo -->
+                @if ($recibo)
+                    <div class="flex items-center mt-2">
+                        <span class="text-green-600 text-sm">Archivo seleccionado:
+                            {{ $recibo->getClientOriginalName() }}</span>
+                        <button type="button" wire:click="$set('recibo', null)"
+                            class="ml-2 px-2 py-1 text-xs text-white bg-red-500 rounded hover:bg-red-600">
+                            Quitar
+                        </button>
+                    </div>
+                @endif
+
+                <!-- Mensaje de error -->
                 @error('recibo')
                     <span class="text-red-500 text-sm mt-2 block">{{ $message }}</span>
                 @enderror
+
+                <p class="mt-1 text-xs text-gray-500 dark:text-gray-300" id="recibo_input_help">
+                    PDF, JPG (MAX. 10MB).
+                </p>
             </div>
 
             {{-- barrio --}}
@@ -469,20 +500,44 @@
                     </label>
                     <div class="relative group">
                         <input wire:model="accion_comunal"
-                            class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
-                            aria-describedby="accion_comunal_input_help" id="accion_comunal_input" type="file">
+                            class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50
+            dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+                            id="accion_comunal_input" type="file" accept="application/pdf,image/jpeg,image/jpg">
+
                         <!-- Tooltip -->
                         <div
                             class="absolute left-0 hidden p-2 mt-1 text-xs text-white bg-gray-900 rounded-lg shadow-md group-hover:block dark:bg-gray-800">
                             Asegúrese de que el archivo sea legible y no borroso. Los documentos PDF deben ser
-                            originales, emitidos por
-                            la respectiva entidad, y no deben contener modificaciones. Solo se aceptarán archivos PDF o JPG que
-                            cumplan con estas condiciones.
+                            originales,
+                            emitidos por la respectiva entidad, y no deben contener modificaciones.
+                            Solo se aceptarán archivos PDF o JPG.
                         </div>
+                        <p class="mt-1 text-xs text-gray-500 dark:text-gray-300" id="sisben_input_help">PDF, JPG
+                            (MAX. 10MB).</p>
                     </div>
-                    <p class="mt-1 text-xs text-gray-500 dark:text-gray-300" id="accion_comunal_input_help">PDF, JPG (MAX. 10MB).</p>
-                </div>
 
+                    <!-- Indicador de carga -->
+                    <div wire:loading wire:target="accion_comunal"
+                        class="mt-2 text-sm text-blue-600 dark:text-blue-400">
+                        Subiendo archivo, por favor espere...
+                    </div>
+
+                    <!-- Botón para limpiar archivo -->
+                    @if ($accion_comunal)
+                        <div class="flex items-center mt-2">
+                            <span class="text-green-600 text-sm">Archivo seleccionado:
+                                {{ $accion_comunal->getClientOriginalName() }}</span>
+                            <button type="button" wire:click="$set('accion_comunal', null)"
+                                class="ml-2 px-2 py-1 text-xs text-white bg-red-500 rounded hover:bg-red-600">
+                                Quitar
+                            </button>
+                        </div>
+                    @endif
+
+                    @error('accion_comunal')
+                        <span class="text-red-500 text-sm mt-2 block">{{ $message }}</span>
+                    @enderror
+                </div>
 
                 <!-- Subir Certificado Electoral -->
                 <div class="mb-4">
@@ -491,70 +546,124 @@
                     </label>
                     <div class="relative group">
                         <input wire:model="electoral"
-                            class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
-                            aria-describedby="electoral_input_help" id="electoral_input" type="file">
-                        <!-- Tooltip -->
+                            class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50
+            dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+                            id="electoral_input" type="file" accept="application/pdf,image/jpeg,image/jpg">
+
                         <div
                             class="absolute left-0 hidden p-2 mt-1 text-xs text-white bg-gray-900 rounded-lg shadow-md group-hover:block dark:bg-gray-800">
                             Asegúrese de que el certificado electoral sea emitido por la entidad oficial
-                            correspondiente, con una
-                            antigüedad mínima de 12 meses. No se aceptarán documentos con enmiendas o modificaciones, y
-                            el archivo debe
-                            ser perfectamente legible. Solo se admiten formatos PDF o JPG.
+                            correspondiente, con una antigüedad mínima de 12 meses. No se aceptarán documentos
+                            con enmiendas o modificaciones. Solo se admiten formatos PDF o JPG.
                         </div>
+                        <p class="mt-1 text-xs text-gray-500 dark:text-gray-300" id="sisben_input_help">PDF, JPG
+                            (MAX. 10MB).</p>
                     </div>
-                    <p class="mt-1 text-xs text-gray-500 dark:text-gray-300" id="electoral_input_help">PDF, JPG
-                        (MAX. 10MB).</p>
+
+                    <div wire:loading wire:target="electoral" class="mt-2 text-sm text-blue-600 dark:text-blue-400">
+                        Subiendo archivo, por favor espere...
+                    </div>
+
+                    @if ($electoral)
+                        <div class="flex items-center mt-2">
+                            <span class="text-green-600 text-sm">Archivo seleccionado:
+                                {{ $electoral->getClientOriginalName() }}</span>
+                            <button type="button" wire:click="$set('electoral', null)"
+                                class="ml-2 px-2 py-1 text-xs text-white bg-red-500 rounded hover:bg-red-600">
+                                Quitar
+                            </button>
+                        </div>
+                    @endif
+
+                    @error('electoral')
+                        <span class="text-red-500 text-sm mt-2 block">{{ $message }}</span>
+                    @enderror
                 </div>
 
-
-                <!-- Subir Certificado Sisben -->
+                <!-- Subir Constancia de Sisben -->
                 <div class="mb-4">
                     <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" for="sisben_input">
                         Subir Constancia de Sisben
                     </label>
                     <div class="relative group">
                         <input wire:model="sisben"
-                            class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
-                            aria-describedby="sisben_input_help" id="sisben_input" type="file">
-                        <!-- Tooltip -->
+                            class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50
+            dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+                            id="sisben_input" type="file" accept="application/pdf,image/jpeg,image/jpg">
+
                         <div
                             class="absolute left-0 hidden p-2 mt-1 text-xs text-white bg-gray-900 rounded-lg shadow-md group-hover:block dark:bg-gray-800">
                             Asegúrese de que la constancia de Sisben esté emitida por la entidad oficial correspondiente
-                            y que sea
-                            completamente legible. No se aceptarán documentos con tachaduras, enmiendas o que sean
-                            copias
-                            modificadas. Solo se admitirán formatos PDF o JPG que cumplan con estas condiciones.
+                            y
+                            sea completamente legible. No se aceptarán documentos con tachaduras, enmiendas o copias
+                            modificadas.
+                            Solo se admitirán formatos PDF o JPG.
                         </div>
+                        <p class="mt-1 text-xs text-gray-500 dark:text-gray-300" id="sisben_input_help">PDF, JPG
+                            (MAX. 10MB).</p>
                     </div>
-                    <p class="mt-1 text-xs text-gray-500 dark:text-gray-300" id="sisben_input_help">PDF, JPG
-                        (MAX. 10MB).</p>
+
+                    <div wire:loading wire:target="sisben" class="mt-2 text-sm text-blue-600 dark:text-blue-400">
+                        Subiendo archivo, por favor espere...
+                    </div>
+
+                    @if ($sisben)
+                        <div class="flex items-center mt-2">
+                            <span class="text-green-600 text-sm">Archivo seleccionado:
+                                {{ $sisben->getClientOriginalName() }}</span>
+                            <button type="button" wire:click="$set('sisben', null)"
+                                class="ml-2 px-2 py-1 text-xs text-white bg-red-500 rounded hover:bg-red-600">
+                                Quitar
+                            </button>
+                        </div>
+                    @endif
+
+                    @error('sisben')
+                        <span class="text-red-500 text-sm mt-2 block">{{ $message }}</span>
+                    @enderror
                 </div>
 
-
-                <!-- Subir Cédula -->
+                <!-- Subir Fotocopia de Cédula -->
                 <div class="mb-4">
                     <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" for="cedula_input">
                         Subir Fotocopia de Cédula
                     </label>
                     <div class="relative group">
                         <input wire:model="cedula"
-                            class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
-                            aria-describedby="cedula_input_help" id="cedula_input" type="file">
-                        <!-- Tooltip -->
+                            class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50
+            dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+                            id="cedula_input" type="file" accept="application/pdf,image/jpeg,image/jpg">
+
                         <div
                             class="absolute left-0 hidden p-2 mt-1 text-xs text-white bg-gray-900 rounded-lg shadow-md group-hover:block dark:bg-gray-800">
                             Asegúrese de que la fotocopia sea completamente legible, sin tachaduras ni áreas borrosas.
-                            El archivo debe
-                            ser escaneado en alta calidad y contener ambos lados de la cédula si es necesario. Solo se
-                            aceptan
-                            formatos PDF o JPG.
+                            El archivo debe ser escaneado en alta calidad y contener ambos lados de la cédula si es
+                            necesario.
+                            Solo se aceptan formatos PDF o JPG.
                         </div>
+                        <p class="mt-1 text-xs text-gray-500 dark:text-gray-300" id="sisben_input_help">PDF, JPG
+                            (MAX. 10MB).</p>
                     </div>
-                    <p class="mt-1 text-xs text-gray-500 dark:text-gray-300" id="cedula_input_help">PDF, JPG
-                        (MAX. 10MB).</p>
-                </div>
 
+                    <div wire:loading wire:target="cedula" class="mt-2 text-sm text-blue-600 dark:text-blue-400">
+                        Subiendo archivo, por favor espere...
+                    </div>
+
+                    @if ($cedula)
+                        <div class="flex items-center mt-2">
+                            <span class="text-green-600 text-sm">Archivo seleccionado:
+                                {{ $cedula->getClientOriginalName() }}</span>
+                            <button type="button" wire:click="$set('cedula', null)"
+                                class="ml-2 px-2 py-1 text-xs text-white bg-red-500 rounded hover:bg-red-600">
+                                Quitar
+                            </button>
+                        </div>
+                    @endif
+
+                    @error('cedula')
+                        <span class="text-red-500 text-sm mt-2 block">{{ $message }}</span>
+                    @enderror
+                </div>
             </div>
 
 
@@ -643,8 +752,8 @@
             });
         });
     </script>
-        <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" crossorigin="anonymous"></script>
-        <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <script>
         $(document).ready(function() {
             $('.select2').select2();
@@ -654,12 +763,12 @@
         document.addEventListener("DOMContentLoaded", function() {
             $('#id_barrio').select2();
 
-            $('#id_barrio').on('change', function (e) {
+            $('#id_barrio').on('change', function(e) {
                 @this.set('id_barrio', e.target.value);
             });
         });
 
-        document.addEventListener("livewire:load", function () {
+        document.addEventListener("livewire:load", function() {
             Livewire.hook('message.processed', (message, component) => {
                 $('#id_barrio').select2();
             });

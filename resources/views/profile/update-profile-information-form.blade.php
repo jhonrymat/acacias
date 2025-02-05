@@ -86,7 +86,7 @@
             <x-label for="email" value="{{ __('Email') }}*" />
             {{-- evitar que editen el correo --}}
             <x-input id="email" type="email" class="mt-1 block w-full" wire:model.defer="state.email"
-                autocomplete="username" disabled />
+                autocomplete="username"/>
             <x-input-error for="email" class="mt-2" />
 
             @if (Laravel\Fortify\Features::enabled(Laravel\Fortify\Features::emailVerification()) &&

@@ -38,6 +38,46 @@ class HistorialSolicitudesDatatable extends DataTableComponent
         return $query->with(['user', 'barrio', 'direccion']);
     }
 
+    public function getIconByExtension($file)
+    {
+        $extension = pathinfo($file, PATHINFO_EXTENSION);
+
+        switch ($extension) {
+            case 'pdf':
+                return 'fa-file-pdf';
+            case 'jpg':
+            case 'jpeg':
+            case 'png':
+            case 'gif':
+                return 'fa-file-image'; // Ícono para imágenes
+            default:
+                return 'fa-file';
+        }
+    }
+
+    public function formatFileLink($file)
+    {
+        if ($file) {
+            $icon = $this->getIconByExtension($file);
+            $fileName = basename($file); // Obtener el nombre del archivo
+
+            // Definir color basado en la extensión del archivo
+            $color = 'blue'; // Valor por defecto
+            $extension = pathinfo($file, PATHINFO_EXTENSION);
+
+            if ($extension === 'pdf') {
+                $color = 'red'; // Cambiar a rojo para PDF
+            } elseif (in_array($extension, ['jpg', 'jpeg', 'png', 'gif'])) {
+                $color = 'blue'; // Cambiar a azul para imágenes
+            }
+
+            return "<a href='/storage/$file' target='_blank' title='$fileName'>
+                      <i class='fas $icon fa-2x' style='color: $color;'></i>$fileName
+                  </a>";
+        }
+        return 'Sin archivo';
+    }
+
 
     public function columns(): array
     {
@@ -81,6 +121,39 @@ class HistorialSolicitudesDatatable extends DataTableComponent
                     }
                 })
                 ->html(), // Activa la renderización del HTML
+            Column::make("Comunal", "accion_comunal")
+                ->format(fn($value, $row) => $this->formatFileLink($row->accion_comunal))
+                ->html() // Importante: Permite la interpretación del HTML en la columna
+                ->sortable()
+                ->searchable()
+                ->collapseAlways(),
+
+            Column::make("Electoral", "electoral")
+                ->format(fn($value, $row) => $this->formatFileLink($row->electoral))
+                ->html() // Permite la interpretación del HTML en la columna
+                ->sortable()
+                ->searchable()
+                ->collapseAlways(),
+
+            Column::make("_Sisben_", "sisben")
+                ->format(fn($value, $row) => $this->formatFileLink($row->sisben))
+                ->html() // Permite la interpretación del HTML en la columna
+                ->sortable()
+                ->searchable()
+                ->collapseAlways(),
+
+            Column::make("_Cédula_", "cedula")
+                ->format(fn($value, $row) => $this->formatFileLink($row->cedula))
+                ->html() // Permite la interpretación del HTML en la columna
+                ->sortable()
+                ->searchable()
+                ->collapseAlways(),
+            Column::make("_Recibo_", "recibo")
+                ->format(fn($value, $row) => $this->formatFileLink($row->recibo))
+                ->html() // Permite la interpretación del HTML en la columna
+                ->sortable()
+                ->searchable()
+                ->collapseAlways(),
             Column::make("Fecha de Actualización", "updated_at")
                 ->sortable()
                 ->searchable()
