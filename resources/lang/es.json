@@ -76,5 +76,9 @@
     "auth.password" : "La contraseña proporcionada es incorrecta.",
     "auth.throttle" : "Demasiados intentos de inicio de sesión. Por favor intenta de nuevo en :seconds segundos.",
     "pagination.previous": "Anterior",
-    "pagination.next": "Siguiente"
+    "pagination.next": "Siguiente",
+    "Your email address is unverified.": "Tu dirección de correo electrónico no está verificada.",
+    "Click here to re-send the verification email.": "Haz clic aquí para reenviar el correo de verificación.",
+    "A new verification link has been sent to your email address.": "Se ha enviado un nuevo enlace de verificación a tu dirección de correo electrónico."
+
 }
