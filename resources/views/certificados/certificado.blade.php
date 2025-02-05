@@ -329,7 +329,7 @@
     <div class="fechas">
         <p>La presente certificación se expide a solicitud escrita del interesado(a).</p>
         <p><strong>Dada en Acacías, Meta, a los {{ $fecha_emision }}</strong></p>
-        <p>Vigencia: Desde el {{ $vigencia_inicio }} hasta el {{ $vigencia_fin }}.</p>
+        <p>Vigencia: Desde el {{ $vigencia_inicio }} {{ $vigencia_fin }}.</p>
     </div>
 
     <br>

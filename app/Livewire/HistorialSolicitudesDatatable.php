@@ -32,13 +32,7 @@ class HistorialSolicitudesDatatable extends DataTableComponent
         $query = Solicitud::query();
 
         // Verificar el rol del usuario autenticado
-        if (auth()->user()->hasRole('validador1')) {
-            $query->where('actualizado_por', auth()->id())
-                ->whereIn('estado_id', [2, 3]);
-        } elseif (auth()->user()->hasRole('validador2')) {
-            $query->where('Validador2_id', auth()->id())
-                ->whereIn('estado_id', [5, 3]);
-        }
+        $query->whereIn('estado_id', [2, 3, 5]);
 
         // Filtrar por estados específicos y cargar relaciones necesarias
         return $query->with(['user', 'barrio', 'direccion']);
@@ -52,7 +46,8 @@ class HistorialSolicitudesDatatable extends DataTableComponent
                 ->sortable()
                 ->searchable()
                 ->collapseAlways(),
-            Column::make("Usuario", "user.name")
+            Column::make("Usuario", "user_id")
+                ->format(fn($value, $row) => $row->user ? $row->user->name_completo : 'Usuario no asignado')
                 ->sortable()
                 ->searchable(),
             Column::make("Número de Identificación", "numeroIdentificacion")

@@ -83,6 +83,17 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->belongsTo(User::class);
     }
 
+    public function getNameCompletoAttribute()
+    {
+        // Construir el nombre completo asegurando que los nombres y apellidos opcionales no generen espacios extra
+        return trim(
+            $this->name . ' ' .
+            ($this->nombre_2 ?? '') . ' ' .
+            $this->apellido_1 . ' ' .
+            ($this->apellido_2 ?? '')
+        );
+    }
+
     public function tipoSolicitante()
     {
         return $this->belongsTo(Tsolicitante::class, 'id_tipoSolicitante');

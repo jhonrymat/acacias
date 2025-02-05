@@ -61,11 +61,11 @@ class FormularioComponent extends Component
         'direccion' => 'required|string|min:3',
         'lat' => 'nullable|numeric',
         'lng' => 'nullable|numeric',
-        'accion_comunal' => 'file|mimes:pdf,jpeg,png,jpg|max:10240', // Valida cada archivo individualmente
-        'electoral' => 'file|mimes:pdf,jpeg,png,jpg|max:10240', // Valida cada archivo individualmente
-        'sisben' => 'file|mimes:pdf,jpeg,png,jpg|max:10240', // Valida cada archivo individualmente
-        'cedula' => 'file|mimes:pdf,jpeg,png,jpg|max:10240', // Valida cada archivo individualmente
-        'recibo' => 'file|mimes:pdf,jpeg,png,jpg|max:10240', // Valida cada archivo individualmente
+        'accion_comunal' => 'file|mimes:pdf,jpeg,jpg|max:10240', // Valida cada archivo individualmente
+        'electoral' => 'file|mimes:pdf,jpeg,jpg|max:10240', // Valida cada archivo individualmente
+        'sisben' => 'file|mimes:pdf,jpeg,jpg|max:10240', // Valida cada archivo individualmente
+        'cedula' => 'file|mimes:pdf,jpeg,jpg|max:10240', // Valida cada archivo individualmente
+        'recibo' => 'file|mimes:pdf,jpeg,jpg|max:10240', // Valida cada archivo individualmente
         'terminos' => 'required',
         'observaciones' => 'nullable|string',
     ];
@@ -77,15 +77,15 @@ class FormularioComponent extends Component
         'direccion.min' => 'El campo dirección debe tener al menos 3 caracteres.',
         'lat.numeric' => 'El campo latitud debe ser un número.',
         'lng.numeric' => 'El campo longitud debe ser un número.',
-        'accion_comunal.mimes' => 'El campo evidencia debe ser un archivo de tipo: pdf, jpeg, png, jpg',
+        'accion_comunal.mimes' => 'El campo evidencia debe ser un archivo de tipo: pdf, jpeg, jpg',
         'accion_comunal.max' => 'El campo evidencia no debe ser mayor a 10MB.',
-        'electoral.mimes' => 'El campo evidencia debe ser un archivo de tipo: pdf, jpeg, png, jpg',
+        'electoral.mimes' => 'El campo evidencia debe ser un archivo de tipo: pdf, jpeg, jpg',
         'electoral.max' => 'El campo evidencia no debe ser mayor a 10MB.',
-        'sisben.mimes' => 'El campo evidencia debe ser un archivo de tipo: pdf, jpeg, png, jpg',
+        'sisben.mimes' => 'El campo evidencia debe ser un archivo de tipo: pdf, jpeg, jpg',
         'sisben.max' => 'El campo evidencia no debe ser mayor a 10MB.',
-        'cedula.mimes' => 'El campo evidencia debe ser un archivo de tipo: pdf, jpeg, png, jpg',
+        'cedula.mimes' => 'El campo evidencia debe ser un archivo de tipo: pdf, jpeg, jpg',
         'cedula.max' => 'El campo evidencia no debe ser mayor a 10MB.',
-        'recibo.mimes' => 'El campo evidencia debe ser un archivo de tipo: pdf, jpeg, png, jpg',
+        'recibo.mimes' => 'El campo evidencia debe ser un archivo de tipo: pdf, jpeg, jpg',
         'recibo.max' => 'El campo evidencia no debe ser mayor a 10MB.',
         'terminos.required' => 'El campo términos es obligatorio.',
         'observaciones.string' => 'El campo observaciones debe ser una cadena de texto.',

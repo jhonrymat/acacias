@@ -2,8 +2,11 @@
 
 namespace App\Livewire;
 
+use Carbon\Carbon;
 use App\Models\User;
 use Livewire\Component;
+use App\Models\Solicitud;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\Hash;
 
 class CiudadanosComponent extends Component
@@ -13,7 +16,15 @@ class CiudadanosComponent extends Component
     public $id_tipoDocumento = 1; // Tipo documento predeterminado
     public $ciudadExpedicion = 'Sin especificar'; // Ciudad por defecto
     public $showModal = false;
-    protected $listeners = ['edit'];
+    public $showModalHistory = false;
+    public $historial;
+    protected $listeners = ['edit', 'history', 'generarPDF'];
+
+    public function mount()
+    {
+        $this->historial = collect(); // 🔹 Inicializar como una colección vacía de Eloquent
+    }
+
 
     protected $rules = [
         'password' => ['nullable', 'min:8', 'same:password_confirmation'],
@@ -67,6 +78,19 @@ class CiudadanosComponent extends Component
         $this->numeroIdentificacion = $ciudadano->numeroIdentificacion;
         $this->fechaNacimiento = $ciudadano->fechaNacimiento;
         $this->showModal = true;
+    }
+
+    // history
+    public function history($Id)
+    {
+        $ciudadano = User::with('solicitudes')->find($Id);
+        if (!$ciudadano) {
+            abort(404, "Usuario no encontrado");
+        }
+
+        $this->historial = $ciudadano->solicitudes;
+        $this->showModalHistory = true;
+
     }
 
     // save
@@ -150,6 +174,11 @@ class CiudadanosComponent extends Component
         $this->showModal = true;
     }
 
+    public function closeModal()
+    {
+        $this->showModalHistory = false;
+    }
+
     // resetForm
     public function resetForm()
     {
@@ -164,6 +193,71 @@ class CiudadanosComponent extends Component
         $this->telefonoContacto = '';
         $this->numeroIdentificacion = '';
         $this->fechaNacimiento = '';
+    }
+
+    public function generarPDF($Id)
+    {
+        $solicitud = Solicitud::findOrFail($Id);
+
+        // Validar el estado de la solicitud
+        if ($solicitud->estado_id !== 5) {
+            session()->flash('error', 'La solicitud no está emitida.');
+            return;
+        }
+
+        // Datos dinámicos para la plantilla
+        $data = [
+            'id' => $solicitud->id,
+            'solicitante' => trim(
+                $solicitud->user->name
+                . ' '
+                . ($solicitud->user->nombre_2 ?? '')
+                . ' '
+                . $solicitud->user->apellido_1
+                . ' '
+                . ($solicitud->user->apellido_2 ?? '')
+            ),
+            'cedula' => $solicitud->numeroIdentificacion,
+            'direccion' => $solicitud->direccion,
+            'cargo' => $solicitud->validador2->cargo,
+            'validador' => trim(
+                $solicitud->validador2->name
+                . ' '
+                . ($solicitud->validador2->nombre_2 ?? '')
+                . ' '
+                . $solicitud->validador2->apellido_1
+                . ' '
+                . ($solicitud->validador2->apellido_2 ?? '')
+            ),
+            'codigo_validador1' => $solicitud->actualizador->codigo,
+            'firma' => $solicitud->validador2->firma,
+            'ciudad_expedicion' => $solicitud->user->ciudadExpedicion,
+            'barrio_vereda' => $solicitud->barrio->nombreBarrio,
+            'tipo_unidad' => $solicitud->barrio->tipoUnidad,
+            'codigo_numero' => $solicitud->barrio->codigoNumero,
+            'zona' => $solicitud->barrio->zona,
+            'estado' => $solicitud->estado->nombreEstado,
+            'numero_certificado' => $solicitud->numeroIdentificacion,
+            'fecha_emision' => $solicitud->fecha_emision
+                ? Carbon::parse($solicitud->fecha_emision)->translatedFormat('d \\de F \\de Y')
+                : 'N/A',
+            'vigencia_inicio' => $solicitud->fecha_emision
+                ? Carbon::parse($solicitud->fecha_emision)->translatedFormat('d \\de F \\de Y')
+                : 'N/A',
+
+            'vigencia_fin' => $solicitud->VigenciaFormateada,
+
+            'verificacion_url' => env('APP_URL') . '/consulta-tramite',
+            'qr' => public_path('storage/' . $solicitud->validaciones->first()->qr_url),
+        ];
+
+        // Generar el PDF
+        $pdf = Pdf::loadView('certificados.certificado', $data);
+
+        // Descargar el archivo
+        return response()->streamDownload(function () use ($pdf) {
+            echo $pdf->output();
+        }, 'certificado_residencia.pdf');
     }
     public function render()
     {

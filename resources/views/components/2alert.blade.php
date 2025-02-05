@@ -11,7 +11,20 @@
             cancelButtonText: event.detail.cancelButtonText || 'Cancelar',
         }).then((result) => {
             if (result.isConfirmed) {
-                @this.call('rechazarsweet');
+                Swal.fire({
+                    title: '¿Seguro que deseas continuar con rechazar la solicitud?',
+                    text: 'Una vez confirmada, no podrás modificar esta acción.',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#28a745',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Sí, confirmar',
+                    cancelButtonText: 'Cancelar',
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        @this.call('rechazarsweet'); // Ejecuta la acción final
+                    }
+                });
             }
         });
     ">

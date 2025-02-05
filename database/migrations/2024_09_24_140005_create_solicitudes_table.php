@@ -29,8 +29,8 @@ return new class extends Migration
             $table->text('recibo')->nullable();
 
             // Estados
-            $table->unsignedBigInteger('estado_id')->default(1); // 1 nuevo - 2 Procesando - 3 rechazada
-            $table->unsignedBigInteger('actualizado_por')->nullable(); // Usuario que actualizó
+            $table->unsignedBigInteger('estado_id')->default(1);
+            $table->unsignedBigInteger('actualizado_por')->nullable();
             $table->unsignedBigInteger('Validador2_id')->nullable();
 
             // Fecha de emisión
@@ -51,6 +51,9 @@ return new class extends Migration
             // Crear índice en la columna estado_id
             $table->index('estado_id', 'idx_estado_id');
         });
+
+        // 🚀 Establecer el valor inicial del AUTO_INCREMENT a 499000
+        DB::statement('ALTER TABLE solicitudes AUTO_INCREMENT = 499000;');
     }
 
     /**

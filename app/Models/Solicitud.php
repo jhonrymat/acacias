@@ -41,6 +41,22 @@ class Solicitud extends Model
         return $this->belongsTo(User::class, 'user_id');
     }
 
+    // nombre completo de usuario
+    public function getNombreCompletoAttribute()
+    {
+        if (!$this->user) {
+            return 'Usuario no asignado'; // Manejo en caso de que no haya usuario
+        }
+
+        // Construir el nombre completo asegurando que los nombres y apellidos opcionales no generen espacios extra
+        return trim(
+            $this->user->name . ' ' .
+            ($this->user->nombre_2 ?? '') . ' ' .
+            $this->user->apellido_1 . ' ' .
+            ($this->user->apellido_2 ?? '')
+        );
+    }
+
     public function validador2()
     {
         return $this->belongsTo(User::class, 'Validador2_id');
@@ -132,6 +148,35 @@ class Solicitud extends Model
         return str_repeat('*', strlen($numero) - 4) . substr($numero, -4);
     }
 
+    public function getVigenciaAttribute()
+    {
+        if (!$this->fecha_emision) {
+            return 'Fecha de emisión no disponible';
+        }
+
+        $fechaEmision = Carbon::parse($this->fecha_emision);
+        $fechaVencimiento = $fechaEmision->addMonths(6);
+
+        return 'hasta el ' . $fechaVencimiento->format('d/m/Y');
+    }
+
+    public function getVigenciaFormateadaAttribute()
+    {
+        if (!$this->fecha_emision) {
+            return 'Fecha de emisión no disponible';
+        }
+
+        $fechaEmision = Carbon::parse($this->fecha_emision);
+        $fechaVencimiento = $fechaEmision->addMonths(6);
+
+        return 'hasta el ' . $fechaVencimiento->translatedFormat('d \\de F \\de Y');
+    }
+
+
+    public function getFechaEmisionFormateadaAttribute()
+    {
+        return $this->fecha_emision ? Carbon::parse($this->fecha_emision)->format('d/m/Y') : 'N/A';
+    }
 
 
 

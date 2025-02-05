@@ -11,8 +11,22 @@
             cancelButtonText: event.detail.cancelButtonText || 'Cancelar',
         }).then((result) => {
             if (result.isConfirmed) {
-                @this.call('validarsweet');
+                Swal.fire({
+                    title: '¿Seguro que deseas continuar?',
+                    text: 'Una vez confirmada, no podrás modificar esta acción.',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#28a745',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Sí, confirmar',
+                    cancelButtonText: 'Cancelar',
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        @this.call('validarsweet'); // Ejecuta la acción final
+                    }
+                });
             }
         });
     ">
+
 </div>

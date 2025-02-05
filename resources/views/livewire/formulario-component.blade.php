@@ -352,6 +352,33 @@
             </div>
             <!-- Modal con Alpine.js y Livewire -->
 
+            <!-- Subir Recibo -->
+            <div class="mb-4">
+                <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" for="recibo_input">
+                    Suba un recibo de servicio público domiciliario con fecha de expedición no mayor a 30 días (gas, agua o energía). Asegúrese de que la dirección registrada en su solicitud coincida exactamente con la del recibo.*
+                </label>
+                <div class="relative group">
+                    <input wire:model="recibo"
+                        class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+                        aria-describedby="recibo_input_help" id="recibo_input" type="file" required
+                        accept="application/pdf, image/jpg">
+                    <!-- Tooltip -->
+                    <div
+                        class="absolute left-0 hidden p-2 mt-1 text-xs text-white bg-gray-900 rounded-lg shadow-md group-hover:block dark:bg-gray-800">
+                        Asegúrese de que el archivo sea legible y no borroso. Los documentos PDF deben ser originales,
+                        emitidos por
+                        la respectiva entidad, y no deben contener modificaciones. Solo se aceptarán archivos PDF o
+                        JPG que
+                        cumplan con estas condiciones.
+                    </div>
+                </div>
+                <p class="mt-1 text-xs text-gray-500 dark:text-gray-300" id="recibo_input_help">PDF, JPG (MAX.
+                    10MB).</p>
+                @error('recibo')
+                    <span class="text-red-500 text-sm mt-2 block">{{ $message }}</span>
+                @enderror
+            </div>
+
             {{-- barrio --}}
             <div class="mb-4 relative" wire:ignore>
                 <div class="flex items-center">
@@ -425,32 +452,7 @@
                     @enderror
                 </div>
             </div>
-            <!-- Subir Recibo -->
-            <div class="mb-4">
-                <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" for="recibo_input">
-                    Subir algun recibo de servicio público que soporte su dirección*
-                </label>
-                <div class="relative group">
-                    <input wire:model="recibo"
-                        class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
-                        aria-describedby="recibo_input_help" id="recibo_input" type="file" required
-                        accept="application/pdf, image/png, image/jpg">
-                    <!-- Tooltip -->
-                    <div
-                        class="absolute left-0 hidden p-2 mt-1 text-xs text-white bg-gray-900 rounded-lg shadow-md group-hover:block dark:bg-gray-800">
-                        Asegúrese de que el archivo sea legible y no borroso. Los documentos PDF deben ser originales,
-                        emitidos por
-                        la respectiva entidad, y no deben contener modificaciones. Solo se aceptarán archivos PDF, PNG o
-                        JPG que
-                        cumplan con estas condiciones.
-                    </div>
-                </div>
-                <p class="mt-1 text-xs text-gray-500 dark:text-gray-300" id="recibo_input_help">PDF, PNG, JPG (MAX.
-                    10MB).</p>
-                @error('recibo')
-                    <span class="text-red-500 text-sm mt-2 block">{{ $message }}</span>
-                @enderror
-            </div>
+
             <!-- Contenedor para los Archivos Adjuntos Opcionales -->
             <div class="p-6 mb-8 border border-blue-300 rounded-lg bg-blue-50">
                 <h3 class="text-lg font-semibold text-blue-800 mb-4">Archivos Adjuntos (Opcional)</h3>
@@ -474,13 +476,11 @@
                             class="absolute left-0 hidden p-2 mt-1 text-xs text-white bg-gray-900 rounded-lg shadow-md group-hover:block dark:bg-gray-800">
                             Asegúrese de que el archivo sea legible y no borroso. Los documentos PDF deben ser
                             originales, emitidos por
-                            la respectiva entidad, y no deben contener modificaciones. Solo se aceptarán archivos PDF,
-                            PNG o JPG que
+                            la respectiva entidad, y no deben contener modificaciones. Solo se aceptarán archivos PDF o JPG que
                             cumplan con estas condiciones.
                         </div>
                     </div>
-                    <p class="mt-1 text-xs text-gray-500 dark:text-gray-300" id="accion_comunal_input_help">PDF, PNG,
-                        JPG (MAX. 10MB).</p>
+                    <p class="mt-1 text-xs text-gray-500 dark:text-gray-300" id="accion_comunal_input_help">PDF, JPG (MAX. 10MB).</p>
                 </div>
 
 
@@ -500,10 +500,10 @@
                             correspondiente, con una
                             antigüedad mínima de 12 meses. No se aceptarán documentos con enmiendas o modificaciones, y
                             el archivo debe
-                            ser perfectamente legible. Solo se admiten formatos PDF, PNG o JPG.
+                            ser perfectamente legible. Solo se admiten formatos PDF o JPG.
                         </div>
                     </div>
-                    <p class="mt-1 text-xs text-gray-500 dark:text-gray-300" id="electoral_input_help">PDF, PNG, JPG
+                    <p class="mt-1 text-xs text-gray-500 dark:text-gray-300" id="electoral_input_help">PDF, JPG
                         (MAX. 10MB).</p>
                 </div>
 
@@ -524,10 +524,10 @@
                             y que sea
                             completamente legible. No se aceptarán documentos con tachaduras, enmiendas o que sean
                             copias
-                            modificadas. Solo se admitirán formatos PDF, PNG o JPG que cumplan con estas condiciones.
+                            modificadas. Solo se admitirán formatos PDF o JPG que cumplan con estas condiciones.
                         </div>
                     </div>
-                    <p class="mt-1 text-xs text-gray-500 dark:text-gray-300" id="sisben_input_help">PDF, PNG, JPG
+                    <p class="mt-1 text-xs text-gray-500 dark:text-gray-300" id="sisben_input_help">PDF, JPG
                         (MAX. 10MB).</p>
                 </div>
 
@@ -548,10 +548,10 @@
                             El archivo debe
                             ser escaneado en alta calidad y contener ambos lados de la cédula si es necesario. Solo se
                             aceptan
-                            formatos PDF, PNG o JPG.
+                            formatos PDF o JPG.
                         </div>
                     </div>
-                    <p class="mt-1 text-xs text-gray-500 dark:text-gray-300" id="cedula_input_help">PDF, PNG, JPG
+                    <p class="mt-1 text-xs text-gray-500 dark:text-gray-300" id="cedula_input_help">PDF, JPG
                         (MAX. 10MB).</p>
                 </div>
 
@@ -644,7 +644,7 @@
         });
     </script>
         <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" crossorigin="anonymous"></script>
-
+        <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <script>
         $(document).ready(function() {
             $('.select2').select2();

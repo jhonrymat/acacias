@@ -25,8 +25,8 @@ class CertificadoComponent extends Component
             'solicitante' => $solicitud->nombre,
             'cedula' => $solicitud->cedula,
             'direccion' => $solicitud->direccion,
-            'vigencia_inicio' => now()->format('d/m/Y'),
-            'vigencia_fin' => now()->addYear()->format('d/m/Y'),
+            'vigencia_inicio' => $solicitud->FechaEmisionFormateada,
+            'vigencia_fin' => $solicitud->Vigencia,
             'verificacion_url' => 'https://acacias.gov.co/gfiles/consultaTramite/',
         ];
 

@@ -23,6 +23,18 @@
                 <div class="grid grid-cols-1 md:grid-cols-1 gap-4">
                     <div class="border p-3 rounded-lg">
                         <h3 class="text-lg font-semibold mb-3">Validación</h3>
+                        {{-- usuario --}}
+                        <div class="mb-3">
+                            <label for="nameAll" class="block text-xs font-medium">Usuario</label>
+                            <input type="text" wire:model="nameAll" id="nameAll"
+                                class="mt-1 block w-full border-gray-300 rounded text-sm px-2 py-1" disabled>
+                        </div>
+                        {{-- Cedula --}}
+                        <div class="mb-3">
+                            <label for="cedula" class="block text-xs font-medium">Cédula</label>
+                            <input type="text" wire:model="cedula" id="cedula"
+                                class="mt-1 block w-full border-gray-300 rounded text-sm px-2 py-1" disabled>
+                        </div>
                         <div class="mb-3">
                             <label for="validacion1" class="block text-xs font-medium">Primer filtro</label>
                             <input type="text" wire:model="validacion1" id="validacion1"

@@ -48,6 +48,11 @@
                             <span class="font-semibold">Número de Identificación:</span>
                             {{ $solicitud->numeroIdentificacion }}
                         </p>
+                        {{-- nombre completo --}}
+                        <p class="text-gray-700">
+                            <span class="font-semibold">Nombre Completo:</span>
+                            {{ $solicitud->nombre_completo }}
+                        </p>
                     </div>
                     <div>
                         <p class="text-gray-600 flex items-center">
@@ -58,7 +63,12 @@
                             </span>
                         </p>
                         <p class="text-gray-700">
-                            <span class="font-semibold">Fecha de Emisión:</span> {{ $solicitud->fecha_emision }}
+                            <span class="font-semibold">Fecha de Emisión:</span>
+                            {{ $solicitud->fecha_emision_formateada }}
+                        </p>
+                        <p class="text-gray-700">
+                            <span class="font-semibold">Fecha de vencimiento:</span>
+                            {{ $solicitud->vigencia }}
                         </p>
                     </div>
                 </div>

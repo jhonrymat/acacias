@@ -2,6 +2,7 @@
 
 namespace App\Livewire;
 
+use Carbon\Carbon;
 use App\Models\User;
 use Livewire\Component;
 use App\Models\Solicitud;
@@ -109,9 +110,15 @@ class SolicitudesComponent extends Component
             'zona' => $solicitud->barrio->zona,
             'estado' => $solicitud->estado->nombreEstado,
             'numero_certificado' => $solicitud->numeroIdentificacion,
-            'fecha_emision' => $solicitud->fecha_emision->translatedFormat('d \\de m \\de Y'),
-            'vigencia_inicio' => now()->translatedFormat('d \\de m \\de Y'),
-            'vigencia_fin' => now()->addYear()->translatedFormat('d \\de m \\de Y'),
+            'fecha_emision' => $solicitud->fecha_emision
+                ? Carbon::parse($solicitud->fecha_emision)->translatedFormat('d \\de F \\de Y')
+                : 'N/A',
+            'vigencia_inicio' => $solicitud->fecha_emision
+                ? Carbon::parse($solicitud->fecha_emision)->translatedFormat('d \\de F \\de Y')
+                : 'N/A',
+
+            'vigencia_fin' => $solicitud->VigenciaFormateada,
+
             'verificacion_url' => env('APP_URL') . '/consulta-tramite',
             'qr' => public_path('storage/' . $solicitud->validaciones->first()->qr_url),
         ];
