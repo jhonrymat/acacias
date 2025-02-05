@@ -1,5 +1,5 @@
 <div>
-   <x-slot name="header">
+    <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
             {{ __('Ciudadanos registrados') }}
         </h2>
@@ -105,13 +105,94 @@
                     <div class="flex justify-end mt-4">
                         <button type="button" @click="showModal = false"
                             class="px-4 py-2 bg-gray-500 text-white rounded-md">Cancelar</button>
-                        <button type="submit"
-                            class="px-4 py-2 bg-blue-500 text-white rounded-md ml-2">Guardar</button>
+                        <button type="submit" class="px-4 py-2 bg-blue-500 text-white rounded-md ml-2">Guardar</button>
                     </div>
 
 
                 </form>
 
+            </div>
+        </div>
+    </div>
+
+    {{-- modal para visualizar el historial --}}
+    <div x-data="{ showModalHistory: @entangle('showModalHistory') }" x-cloak>
+        <div x-show="showModalHistory" class="fixed inset-0 bg-gray-800 bg-opacity-70 flex items-center justify-center">
+            <div
+                class="bg-white w-11/12 sm:max-w-lg md:max-w-3xl lg:max-w-5xl p-6 rounded-lg shadow-lg max-h-screen overflow-y-auto">
+                <div class="flex justify-between items-center mb-2">
+                    <h2 class="text-xl font-bold">
+                        <span>Historial de solicitudes</span>
+                    </h2>
+                    <button @click="showModalHistory = false" wire:click="closeModal"
+                        class="text-red-500 hover:text-red-700 text-lg">
+                        &times;
+                    </button>
+                </div>
+
+                @if (session()->has('error'))
+                    <div class="bg-red-200 text-red-800 p-2 rounded mb-4">
+                        {{ session('error') }}
+                    </div>
+                @endif
+
+                <!-- Tabla con el historial de solicitudes -->
+                @if ($historial->isNotEmpty())
+                    <div class="overflow-x-auto">
+                        <table class="w-full border-collapse border border-gray-300">
+                            <thead class="bg-gray-100">
+                                <tr>
+                                    <th class="border p-2">ID</th>
+                                    <th class="border p-2">Número Identificación</th>
+                                    <th class="border p-2">Certificado</th>
+                                    <th class="border p-2">Estado</th>
+                                    <th class="border p-2">Fecha Emisión</th>
+                                    <th class="border p-2">Notas</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach ($historial as $solicitud)
+                                    <tr class="border-b">
+                                        <td class="border p-2">{{ $solicitud->id }}</td>
+                                        <td class="border p-2">{{ $solicitud->numeroIdentificacion }}</td>
+                                        @foreach ($solicitud->validaciones as $validacion)
+                                            <td class="border p-2">
+                                                <div class="flex space-x-2">
+                                                    {{-- Verifica si el estado es "Emitido" --}}
+                                                    @if ($solicitud->estado->nombreEstado === 'Emitido')
+                                                        <button
+                                                            wire:click="$dispatch('generarPDF', { Id: {{ $solicitud->id }} })"
+                                                            class="px-4 py-2 bg-green-500 text-white rounded">
+                                                            <i class="fa-solid fa-file-arrow-down"></i> Descargar
+                                                        </button>
+                                                    @elseif($solicitud->estado->nombreEstado === 'Rechazada' && $validacion->visible === 1)
+                                                        <p>{{ $solicitud->observaciones }}</p>
+                                                    @else
+                                                        <span class="text-gray-500">
+                                                            El certificado no está disponible actualmente
+                                                        </span>
+                                                    @endif
+                                                </div>
+                                            </td>
+                                            <td class="border p-2">
+                                                {{ $solicitud->estado->nombreEstado . ' - ' . ($solicitud->updated_at ? $solicitud->updated_at->format('d/m/Y') : 'Sin estado') }}
+                                            </td>
+                                            <td class="border p-2">
+                                                {{ $solicitud->fecha_emision ? $solicitud->fecha_emision->format('d/m/Y') : 'N/A' }}
+                                            </td>
+                                            <td class="border p-2">
+                                                <p>{{ $validacion->notas }}</p>
+                                            </td>
+                                        @endforeach
+
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                @else
+                    <p class="text-gray-600 text-center mt-4">No hay historial disponible.</p>
+                @endif
             </div>
         </div>
     </div>

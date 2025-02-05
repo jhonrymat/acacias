@@ -30,7 +30,7 @@ class SolicitudComponent extends Component
     $fechaSolicitud, $id_nivelEstudio, $id_genero, $id_ocupacion, $id_poblacion,
     $numeroIdentificacion_id, $fechaActual, $barrio_id, $direccion_id, $ubicacion,
     $accion_comunal, $electoral, $sisben, $cedula, $estado_id, $estado_id2, $JAComunal, $detalles, $visible = false, $showForm = false, $showAdditional = false, $showValidar = false,
-    $validacion1, $validacion2, $notas, $nombre, $validador, $Id, $AllStatus;
+    $validacion1, $validacion2, $notas, $nombre, $validador, $Id, $AllStatus, $nameAll;
 
 
 
@@ -65,7 +65,7 @@ class SolicitudComponent extends Component
 
         $user = User::find($solicitud->user_id);
         // Concatenando los nombres
-        $this->nombreCompleto = $user->name . ' ' . $user->nombre_2 . ' ' . $user->apellido_1 . ' ' . $user->apellido_2;
+        $this->nombreCompleto = $solicitud->NombreCompleto;;
         $this->email = $user->email;
         $this->telefonoContacto = $user->telefonoContacto;
         $this->id_tipoSolicitante = $user->tipoSolicitante->tipoSolicitante;
@@ -106,7 +106,8 @@ class SolicitudComponent extends Component
         $this->visible = $validacion->visible;
         $this->cedula = $solicitud->numeroIdentificacion;
         $this->nombre = $solicitud->user->name;
-        $this->validador = $validador->name;
+        $this->nameAll = $solicitud->NombreCompleto;
+        $this->validador = $validador->name . ' | ' . $validador->codigo;
 
 
         $this->showAdditional = true;
@@ -279,6 +280,7 @@ class SolicitudComponent extends Component
             $this->solicitud_id = $solicitud->id;
             // Pasar el numero de identificacion del usuario
             $this->numeroIdentificacion_id = $user->numeroIdentificacion;
+            $this->nameAll = $solicitud->NombreCompleto;
             $this->showValidar = true;
             $this->dispatch('Updated');
             return;
@@ -293,6 +295,7 @@ class SolicitudComponent extends Component
         $this->solicitud_id = $solicitud->id;
         // Pasar el numero de identificacion del usuario
         $this->numeroIdentificacion_id = $user->numeroIdentificacion;
+        $this->nameAll = $solicitud->NombreCompleto;
         $this->showValidar = true;
     }
 

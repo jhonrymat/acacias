@@ -152,7 +152,8 @@ class SolicitudDatatable extends DataTableComponent
             Column::make("Id", "id")
                 ->sortable()
                 ->searchable(),
-            Column::make("Usuario", "user.name")
+            Column::make("Usuario", "user_id")
+                ->format(fn($value, $row) => $row->user ? $row->user->name_completo : 'Usuario no asignado')
                 ->sortable()
                 ->searchable(),
             // mostrar el nombre de actualizado_por

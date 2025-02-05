@@ -46,6 +46,11 @@ class EstadoSeeder extends Seeder
                 'descripcion' => 'El certificado ha expirado y deberá realizarse un nuevo proceso para obtener uno actualizado.',
                 'color' => '#6C757D'
             ],
+            [
+                'nombreEstado' => 'Anulado',
+                'descripcion' => 'El certificado ha sido anulado y no es válido para su uso.',
+                'color' => '#6C757D'
+            ]
         ];
 
         DB::table('estados')->insert($estados);

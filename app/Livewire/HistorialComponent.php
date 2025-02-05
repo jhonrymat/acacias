@@ -11,7 +11,7 @@ use App\Models\Validacion;
 class HistorialComponent extends Component
 {
 
-    public $validacion1, $validacion2, $JAComunal, $notas, $visible = false, $showForm = false, $cedula, $nombre, $validador;
+    public $validacion1, $validacion2, $JAComunal, $notas, $visible = false, $showForm = false, $cedula, $nombre, $validador, $nameAll;
 
     protected $listeners = ['view'];
     public function view($Id)
@@ -37,9 +37,13 @@ class HistorialComponent extends Component
         $this->JAComunal = json_decode($validacion->JAComunal); // Decodifica el JSON en un array
         $this->notas = $validacion->notas;
         $this->visible = $validacion->visible;
-        $this->cedula = $solicitud->numeroIdentificacion;
         $this->nombre = $solicitud->user->name;
-        $this->validador = $validador->name;
+        $this->cedula = $solicitud->numeroIdentificacion;
+        $this->validador = $validador->name . ' | ' . $validador->codigo;
+        $this->nameAll = $solicitud->NombreCompleto;
+
+
+
 
         $this->showForm = true;
     }

@@ -19,13 +19,18 @@ class UpdateUserProfileInformation implements UpdatesUserProfileInformation
      */
     public function update(User $user, array $input): void
     {
-        try{
+        try {
             Validator::make($input, [
                 'name' => ['required', 'string', 'max:255'],
                 'nombre_2' => ['nullable', 'string', 'max:255'],
                 'apellido_1' => ['required', 'string', 'max:255'],
                 'apellido_2' => ['nullable', 'string', 'max:255'],
-                'telefonoContacto' => ['required', 'string', 'max:255'],
+                'telefonoContacto' => [
+                    'required',
+                    'string',
+                    'max:255',
+                    Rule::unique('users', 'telefonoContacto')->ignore($user->id),
+                ],
                 'fechaNacimiento' => ['required', 'string', 'max:255'],
                 'cargo' => ['nullable', 'string', 'max:100'],
                 'id_tipoSolicitante' => ['required', 'exists:tsolicitantes,id'],

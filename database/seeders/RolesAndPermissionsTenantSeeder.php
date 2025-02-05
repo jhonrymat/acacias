@@ -65,6 +65,7 @@ class RolesAndPermissionsTenantSeeder extends Seeder
             'solicitudes',
             'versolicitudes',
             'historial',
+            'ciudadanos',
         ];
 
         // Crear los permisos
@@ -101,17 +102,17 @@ class RolesAndPermissionsTenantSeeder extends Seeder
 
         // Crear el usuario administrador
         $admin = User::firstOrCreate(
-            ['email' => 'admin@gmail.com'],
+            ['email' => 'jhon@nomaddi.com'],
             [
                 'name' => 'Administrador',
                 'nombre_2' => 'admin',
                 'apellido_1' => 'admin',
                 'apellido_2' => 'admin',
-                'telefonoContacto' => '3105320659',
+                'telefonoContacto' => '3105320651',
                 'id_tipoSolicitante' => 1,
                 'id_tipoDocumento' => 1,
                 'numeroIdentificacion' => '1121892936',
-                'ciudadExpedicion' => 'acacias',
+                'ciudadExpedicion' => 'Acacias',
                 'fechaNacimiento' => '1980-01-12 00:00:00',
                 'id_nivelEstudio' => 1,
                 'id_genero' => 1,
@@ -123,17 +124,17 @@ class RolesAndPermissionsTenantSeeder extends Seeder
         );
         // Crear el usuario user
         $user = User::firstOrCreate(
-            ['email' => 'usuario@gmail.com'],
+            ['email' => 'jhonrymat@gmail.com'],
             [
-                'name' => 'Edwin',
-                'nombre_2' => 'Fabian',
-                'apellido_1' => 'Zambrano',
-                'apellido_2' => 'Rincon',
-                'telefonoContacto' => '3105320658',
+                'name' => 'Jhon',
+                'nombre_2' => 'Henry',
+                'apellido_1' => 'Matoma',
+                'apellido_2' => 'Trujillo',
+                'telefonoContacto' => '3105320659',
                 'id_tipoSolicitante' => 1,
                 'id_tipoDocumento' => 1,
                 'numeroIdentificacion' => '1121892935',
-                'ciudadExpedicion' => 'acacias',
+                'ciudadExpedicion' => 'Acacias',
                 'fechaNacimiento' => '1980-01-12 00:00:00',
                 'id_nivelEstudio' => 1,
                 'id_genero' => 1,
@@ -145,7 +146,7 @@ class RolesAndPermissionsTenantSeeder extends Seeder
         );
             // Crear el usuario user
         $validador1n1 = User::firstOrCreate(
-            ['email' => 'claris132010@hotmail.com'],
+            ['email' => 'validadoruno1.residencia@acacias.gov.co'],
             [
                 'name' => 'CLARA',
                 'nombre_2' => '',
@@ -155,7 +156,7 @@ class RolesAndPermissionsTenantSeeder extends Seeder
                 'id_tipoSolicitante' => 1,
                 'id_tipoDocumento' => 1,
                 'numeroIdentificacion' => '1111111188',
-                'ciudadExpedicion' => 'acacias',
+                'ciudadExpedicion' => 'Acacias',
                 'fechaNacimiento' => '1980-01-12 00:00:00',
                 'id_nivelEstudio' => 1,
                 'id_genero' => 1,
@@ -168,7 +169,7 @@ class RolesAndPermissionsTenantSeeder extends Seeder
         );
 
         $validador1n2 = User::firstOrCreate(
-            ['email' => 'lauralilianaramirezmarrero@gmail.com'],
+            ['email' => 'validadoruno2.residencia@acacias.gov.co'],
             [
                 'name' => 'LAURA',
                 'nombre_2' => 'LILIANA',
@@ -178,7 +179,7 @@ class RolesAndPermissionsTenantSeeder extends Seeder
                 'id_tipoSolicitante' => 1,
                 'id_tipoDocumento' => 1,
                 'numeroIdentificacion' => '1111111199',
-                'ciudadExpedicion' => 'acacias',
+                'ciudadExpedicion' => 'Acacias',
                 'fechaNacimiento' => '1980-01-12 00:00:00',
                 'id_nivelEstudio' => 1,
                 'id_genero' => 1,
@@ -191,7 +192,7 @@ class RolesAndPermissionsTenantSeeder extends Seeder
         );
 
         $validador1n3 = User::firstOrCreate(
-            ['email' => 'fray_1512@hotmail.com'],
+            ['email' => 'validadoruno3.residencia@acacias.gov.co'],
             [
                 'name' => 'FRANCY',
                 'nombre_2' => '',
@@ -201,7 +202,7 @@ class RolesAndPermissionsTenantSeeder extends Seeder
                 'id_tipoSolicitante' => 1,
                 'id_tipoDocumento' => 1,
                 'numeroIdentificacion' => '1191111199',
-                'ciudadExpedicion' => 'acacias',
+                'ciudadExpedicion' => 'Acacias',
                 'fechaNacimiento' => '1980-01-12 00:00:00',
                 'id_nivelEstudio' => 1,
                 'id_genero' => 1,
@@ -214,7 +215,7 @@ class RolesAndPermissionsTenantSeeder extends Seeder
         );
 
         $validador1n4 = User::firstOrCreate(
-            ['email' => 'crismora2015@hotmail.com'],
+            ['email' => 'validadoruno4.residencia@acacias.gov.co'],
             [
                 'name' => 'CRIS',
                 'nombre_2' => '',
@@ -224,7 +225,7 @@ class RolesAndPermissionsTenantSeeder extends Seeder
                 'id_tipoSolicitante' => 1,
                 'id_tipoDocumento' => 1,
                 'numeroIdentificacion' => '1991111199',
-                'ciudadExpedicion' => 'acacias',
+                'ciudadExpedicion' => 'Acacias',
                 'fechaNacimiento' => '1980-01-12 00:00:00',
                 'id_nivelEstudio' => 1,
                 'id_genero' => 1,
@@ -237,7 +238,7 @@ class RolesAndPermissionsTenantSeeder extends Seeder
         );
 
         $validador2 = User::firstOrCreate(
-            ['email' => 'validador2@gmail.com'],
+            ['email' => 'residencia@acacias.gov.co'],
             [
                 'name' => 'Mario',
                 'nombre_2' => 'Aurelio',
@@ -247,7 +248,7 @@ class RolesAndPermissionsTenantSeeder extends Seeder
                 'id_tipoSolicitante' => 1,
                 'id_tipoDocumento' => 1,
                 'numeroIdentificacion' => '2222222222',
-                'ciudadExpedicion' => 'acacias',
+                'ciudadExpedicion' => 'Acacias',
                 'fechaNacimiento' => '1980-01-12 00:00:00',
                 'cargo' => 'Secretario Privado',
                 'id_nivelEstudio' => 1,

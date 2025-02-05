@@ -124,6 +124,9 @@
                     <x-nav-link class="hidden sm:flex mr-6" href="{{ route('historial') }}" :active="request()->routeIs('historial')">
                         {{ __('Historial') }}
                     </x-nav-link>
+                    <x-nav-link class="hidden sm:flex mr-6" href="{{ route('ciudadanos') }}" :active="request()->routeIs('ciudadanos')">
+                        {{ __('Ciudadanos') }}
+                    </x-nav-link>
                     <x-nav-link class="hidden sm:flex mr-6" href="{{ route('estadisticas1') }}" :active="request()->routeIs('estadisticas1')">
                         {{ __('Estadisticas') }}
                     </x-nav-link>

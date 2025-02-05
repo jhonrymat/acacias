@@ -152,6 +152,17 @@
                         @enderror
                     </div>
 
+                    {{-- nombre completo --}}
+                    <div class="mb-3">
+                        <label for="nameAll" class="block text-xs font-medium">Nombre completo</label>
+                        <input type="text" wire:model="nameAll" id="nameAll"
+                            class="mt-1 block w-full border-gray-300 rounded text-sm px-2 py-1" disabled>
+                        {{-- error --}}
+                        @error('nameAll')
+                            <span class="text-red-500">{{ $message }}</span>
+                        @enderror
+                    </div>
+
                     <div class="border p-3 rounded-lg mb-3">
                         <h3 class="text-lg font-semibold mb-3">Estado de certificado</h3>
                         <div class="mb-3">
@@ -175,7 +186,8 @@
 
                     <!-- Copia registro JAC -->
                     <div class="mb-4">
-                        <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" for="JAComunal_input">
+                        <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                            for="JAComunal_input">
                             Anexos
                         </label>
                         <input wire:model="JAComunal" multiple
@@ -264,6 +276,27 @@
                     <div class="border p-3 rounded-lg">
                         <h3 class="text-lg font-semibold mb-3">Validación</h3>
                         <div class="mb-3">
+                            <label for="cedula" class="block text-xs font-medium">Numero de
+                                identificación</label>
+                            <input type="text" wire:model="cedula" id="cedula"
+                                class="mt-1 block w-full border-gray-300 rounded text-sm px-2 py-1" disabled>
+                            {{-- error --}}
+                            @error('cedula')
+                                <span class="text-red-500">{{ $message }}</span>
+                            @enderror
+                        </div>
+
+                        {{-- nombre completo --}}
+                        <div class="mb-3">
+                            <label for="nameAll" class="block text-xs font-medium">Nombre completo</label>
+                            <input type="text" wire:model="nameAll" id="nameAll"
+                                class="mt-1 block w-full border-gray-300 rounded text-sm px-2 py-1" disabled>
+                            {{-- error --}}
+                            @error('nameAll')
+                                <span class="text-red-500">{{ $message }}</span>
+                            @enderror
+                        </div>
+                        <div class="mb-3">
                             <label for="validacion1" class="block text-xs font-medium">Primer filtro</label>
                             <input type="text" wire:model="validacion1" id="validacion1"
                                 class="mt-1 block w-full border-gray-300 rounded text-sm px-2 py-1" disabled>
@@ -275,19 +308,19 @@
                         </div>
                         {{-- solo para rol validador2 --}}
                         @if (auth()->user()->hasRole('validador2'))
-                        <div class="mb-3">
-                            <label for="JAComunal" class="block text-xs font-medium">Anexos</label>
-                            @if ($JAComunal && count($JAComunal) > 0)
-                                @foreach ($JAComunal as $archivo)
-                                    <a href="{{ asset('storage/' . $archivo) }}" target="_blank"
-                                        class="block mt-1 text-sm text-blue-500 underline">
-                                        Ver archivo
-                                    </a>
-                                @endforeach
-                            @else
-                                <p class="mt-1 text-sm text-gray-500">No hay archivo disponible.</p>
-                            @endif
-                        </div>
+                            <div class="mb-3">
+                                <label for="JAComunal" class="block text-xs font-medium">Anexos</label>
+                                @if ($JAComunal && count($JAComunal) > 0)
+                                    @foreach ($JAComunal as $archivo)
+                                        <a href="{{ asset('storage/' . $archivo) }}" target="_blank"
+                                            class="block mt-1 text-sm text-blue-500 underline">
+                                            Ver archivo
+                                        </a>
+                                    @endforeach
+                                @else
+                                    <p class="mt-1 text-sm text-gray-500">No hay archivo disponible.</p>
+                                @endif
+                            </div>
                         @endif
                         <div class="mb-3">
                             <label for="notas" class="block text-xs font-medium">Notas</label>

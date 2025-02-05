@@ -22,19 +22,13 @@ class CiudadanosDatatable extends DataTableComponent
 
     public function builder(): \Illuminate\Database\Eloquent\Builder
     {
-        // Obtener la consulta base de Solicitud
-        $query = User::query();
-
-        // Filtrar según el rol del usuario autenticado
-        if (Auth::user()->hasRole('admin')) {
-            // Mostrar solos los usuarios con el rol de user
-            $query->whereHas('roles', function ($query) {
-                $query->where('name', 'user');
+        return User::query()
+            ->select(['id', 'name', 'nombre_2', 'apellido_1', 'apellido_2', 'email', 'telefonoContacto', 'numeroIdentificacion', 'ciudadExpedicion', 'fechaNacimiento', 'created_at', 'updated_at'])
+            ->whereDoesntHave('roles', function ($query) {
+                $query->whereIn('name', ['admin', 'validador1', 'validador2']);
             });
-        }
-
-        return $query;
     }
+
 
     public function columns(): array
     {
@@ -43,20 +37,15 @@ class CiudadanosDatatable extends DataTableComponent
                 ->sortable()
                 ->searchable()
                 ->collapseAlways(),
-            Column::make("primer nombre", "name")
-                ->sortable()
-                ->searchable(),
-            Column::make("segundo nombre", "nombre_2")
-                ->sortable()
-                ->searchable()
-                ->collapseAlways(),
-            Column::make("primer apellido", "apellido_1")
-                ->sortable()
-                ->searchable(),
-            Column::make("segundo apellido", "apellido_2")
-                ->sortable()
-                ->searchable()
-                ->collapseAlways(),
+            Column::make("Nombre Completo")
+                ->label(fn($row) => trim(
+                    $row->name . ' ' .
+                    ($row->nombre_2 ?? '') . ' ' .
+                    $row->apellido_1 . ' ' .
+                    ($row->apellido_2 ?? '')
+                )),
+
+
             Column::make("Email", "email")
                 ->searchable()
                 ->sortable()
