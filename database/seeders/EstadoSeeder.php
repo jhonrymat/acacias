@@ -18,7 +18,7 @@ class EstadoSeeder extends Seeder
             ],
             [
                 'nombreEstado' => 'Procesando',
-                'descripcion' => 'La solicitud fue revisada y validada em el primer filtro exitosamente.',
+                'descripcion' => 'La solicitud fue revisada y validada en el primer filtro exitosamente.',
                 'color' => '#85D17A'
             ],
             [

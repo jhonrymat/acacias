@@ -27,6 +27,7 @@ class SolicitudDatatable extends DataTableComponent
 
         $this->setDefaultSort('id', 'desc');
         $this->setSingleSortingStatus(false);
+
         // Configurar el mensaje personalizado según el rol
         if (Auth::user()->hasRole('validador1')) {
             $this->setEmptyMessage("No hay solicitudes pendientes de revisión. Como Validador 1.");
@@ -35,7 +36,11 @@ class SolicitudDatatable extends DataTableComponent
         } else {
             $this->setEmptyMessage("No hay registros para mostrar.");
         }
+
     }
+
+
+
 
     public function validarStatus()
     {
