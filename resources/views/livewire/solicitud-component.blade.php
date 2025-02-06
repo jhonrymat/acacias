@@ -191,19 +191,50 @@
                             Anexos
                         </label>
                         <input wire:model="JAComunal" multiple
-                            class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
-                            aria-describedby="JAComunal_input_help" id="JAComunal_input" type="file">
+                            class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50
+        dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+                            id="JAComunal_input" type="file"
+                            accept="application/pdf,image/jpeg,image/jpg,image/png">
+
                         <p class="mt-1 text-xs text-gray-500 dark:text-gray-300" id="JAComunal_input_help">
                             Adjunte anexos que requiera. PDF, PNG, JPG (MAX. 10MB).
                         </p>
-                        {{-- error --}}
+
+                        <!-- Indicador de carga -->
+                        <div wire:loading wire:target="JAComunal"
+                            class="mt-2 text-sm text-blue-600 dark:text-blue-400">
+                            Subiendo archivos, por favor espere...
+                        </div>
+
+                        <!-- Lista de archivos subidos -->
+                        @if ($JAComunal)
+                            <div class="mt-2">
+                                <p class="text-sm font-medium text-gray-900 dark:text-white">Archivos seleccionados:
+                                </p>
+                                <ul class="mt-1 space-y-1">
+                                    @foreach ($JAComunal as $index => $file)
+                                        <li
+                                            class="flex items-center justify-between text-sm text-gray-700 dark:text-gray-300">
+                                            <span>{{ $file->getClientOriginalName() }}</span>
+                                            <button type="button" wire:click="removeFile({{ $index }})"
+                                                class="px-2 py-1 text-xs text-white bg-red-500 rounded hover:bg-red-600">
+                                                Quitar
+                                            </button>
+                                        </li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                        @endif
+
+                        <!-- Manejo de errores -->
                         @error('JAComunal')
-                            <span class="text-red-500">{{ $message }}</span>
+                            <span class="text-red-500 text-sm mt-2 block">{{ $message }}</span>
                         @enderror
                         @error('JAComunal.*')
-                            <span class="text-red-500">{{ $message }}</span>
+                            <span class="text-red-500 text-sm mt-2 block">{{ $message }}</span>
                         @enderror
                     </div>
+
 
 
                     {{-- input text area, detalles --}}
@@ -357,6 +388,68 @@
                 <div class="flex justify-end space-x-2 mt-6">
                     <button @click="showAdditionalModal = false"
                         class="px-4 py-2 bg-gray-500 text-white rounded">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div x-data="{ modalRechazadaModal: @entangle('modalRechazada') }" x-cloak>
+        <div x-show="modalRechazadaModal"
+            class="fixed inset-0 bg-gray-800 bg-opacity-70 flex items-center justify-center" x-inz>
+            <div
+                class="bg-white w-11/12 sm:max-w-lg md:max-w-3xl lg:max-w-5xl p-6 rounded-lg shadow-lg max-h-screen overflow-y-auto">
+                <!-- Encabezado del modal -->
+                <div class="flex justify-between items-center mb-2">
+                    <h2 class="text-xl font-bold">Información de {{ $nombre }} - {{ $cedula }}</h2>
+                    <button @click="modalRechazadaModal = false" class="text-gray-500 hover:text-gray-700">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2"
+                            stroke="currentColor" class="w-6 h-6">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    </button>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-1 gap-4">
+                    <div class="border p-3 rounded-lg">
+                        {{-- nombre completo --}}
+                        <div class="mb-3">
+                            <label for="nameAll" class="block text-xs font-medium">Nombre usuario</label>
+                            <input type="text" wire:model="nameAll" id="nameAll"
+                                class="mt-1 block w-full border-gray-300 rounded text-sm px-2 py-1" disabled>
+                        </div>
+                        {{-- aqui debo mostrar por quien fue validado validador --}}
+                        <div class="mb-3">
+                            <label for="validador" class="block text-xs font-medium">Validado por</label>
+                            <input type="text" wire:model="validador" id="validador"
+                                class="mt-1 block w-full border-gray-300 rounded text-sm px-2 py-1" disabled>
+                        </div>
+                        <h3 class="text-lg font-semibold mb-3">¿Por que se va a Cancelar?</h3>
+                        <form wire:submit.prevent="rechazarsweet">
+                            <div class="mb-3">
+                                <label for="observaciones"
+                                    class="block text-xs font-medium text-gray-900 dark:text-white">
+                                    Observaciones
+                                </label>
+                                <textarea wire:model="observaciones" id="observaciones" rows="4"
+                                    class="mt-1 block w-full p-3 text-sm text-gray-700 border border-gray-300 rounded-lg bg-gray-50
+                                dark:text-gray-300 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                    placeholder="Escriba sus observaciones aquí...">{{ old('observaciones', $observaciones) }}</textarea>
+
+                                <!-- Mostrar error si lo hay -->
+                                @error('observaciones')
+                                    <span class="text-red-500 text-sm mt-2 block">{{ $message }}</span>
+                                @enderror
+                            </div>
+                            {{-- cerrar --}}
+                            <!-- Botones -->
+                            <div class="flex justify-end space-x-2">
+                                <button @click="modalRechazadaModal = false"
+                                    class="px-4 py-2 bg-red-500 text-white rounded">Cancelar</button>
+                                <button type="submit" class="px-4 py-2 bg-blue-500 text-white rounded">
+                                    Guardar
+                                </button>
+                            </div>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>

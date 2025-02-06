@@ -22,7 +22,7 @@
                     cancelButtonText: 'Cancelar',
                 }).then((result) => {
                     if (result.isConfirmed) {
-                        @this.call('rechazarsweet'); // Ejecuta la acción final
+                        @this.call('modalRechazar'); // Ejecuta la acción final
                     }
                 });
             }

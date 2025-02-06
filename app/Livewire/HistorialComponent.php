@@ -39,7 +39,7 @@ class HistorialComponent extends Component
         $this->visible = $validacion->visible;
         $this->nombre = $solicitud->user->name;
         $this->cedula = $solicitud->numeroIdentificacion;
-        $this->validador = $validador->name . ' | ' . $validador->codigo;
+        $this->validador = $validador ? ($validador->name . ' | ' . $validador->codigo) : 'No asignado';
         $this->nameAll = $solicitud->NombreCompleto;
 
 
