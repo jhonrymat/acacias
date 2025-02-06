@@ -74,7 +74,7 @@ class CiudadanosDatatable extends DataTableComponent
                 ->collapseAlways(),
             Column::make("Acciones")
                 ->label(
-                    fn($row) => view('livewire.editValidador', ['row' => $row])
+                    fn($row) => view('livewire.editCiudadano', ['row' => $row])
                 ),
         ];
     }

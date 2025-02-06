@@ -59,20 +59,27 @@
         }
 
         .header-image-container {
-            text-align: center;
-            /* Centra la imagen horizontalmente */
+            text-align: right;
+            /* Alinea la imagen hacia la derecha */
             width: 100%;
             /* Asegura que ocupe todo el ancho */
             height: 80px;
-            /* Ocupa la mitad inferior del encabezado */
-            /* Añade un pequeño margen superior */
+            /* Altura del contenedor */
             margin-bottom: 20px;
+            /* Espaciado inferior */
         }
 
         .header-image {
+            display: inline-block;
+            /* Necesario para que respete el text-align */
             max-height: 60px;
-            /* Limita la altura máxima de la imagen */
+            /* Altura máxima de la imagen */
             width: auto;
+            /* Mantiene la proporción */
+            margin-right: 20px;
+            /* Ajusta manualmente el espacio hacia la derecha */
+            margin-top: 5px;
+            /* Ajusta manualmente el espacio hacia abajo */
         }
 
         .left2 {
@@ -117,6 +124,7 @@
             line-height: 0.5;
             font-size: 12px;
         }
+
         .validador {
             text-align: center;
             font-family: Arial, sans-serif;
@@ -286,7 +294,8 @@
             siempre y cuando el ciudadano lleve más de un año inscrito en los mismos.
             Que conforme a lo expuesto
             anteriormente procede el Alcalde Municipal bajo el
-            DECRETO 100 DEL 17 DE SEPTIEMBRE DE 2024, delegar en el titular de la <strong> Secretaría Privada</strong> o su
+            DECRETO 100 DEL 17 DE SEPTIEMBRE DE 2024, delegar en el titular de la <strong> Secretaría Privada</strong> o
+            su
             encargado, o quien haga sus veces la facultad de expedir los
             certificados de residencia del Municipio de Acacías, concordante con el artículo 209 de la Constitución
             Política de Colombia y el artículo 92 de la Ley 136 de 1994
@@ -375,7 +384,8 @@
     <!-- Verificación -->
     <div class="verification">
         <p>Para verificar la integridad e inalterabilidad del presente documento consulte en el sitio:</p>
-        <p><a href="{{ $verificacion_url }}" target="_blank">{{ $verificacion_url }}</a>, digita el siguiente numero de certificado:
+        <p><a href="{{ $verificacion_url }}" target="_blank">{{ $verificacion_url }}</a>, digita el siguiente numero
+            de certificado:
             <strong>{{ $id }}</strong>
         </p>
         <p>o escaneado el código QR impreso en este certificado</p>

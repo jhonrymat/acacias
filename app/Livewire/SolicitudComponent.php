@@ -30,7 +30,7 @@ class SolicitudComponent extends Component
     $fechaSolicitud, $id_nivelEstudio, $id_genero, $id_ocupacion, $id_poblacion,
     $numeroIdentificacion_id, $fechaActual, $barrio_id, $direccion_id, $ubicacion,
     $accion_comunal, $electoral, $sisben, $cedula, $estado_id, $estado_id2, $JAComunal, $detalles, $visible = false, $showForm = false, $showAdditional = false, $showValidar = false,
-    $validacion1, $validacion2, $notas, $nombre, $validador, $Id, $AllStatus, $nameAll;
+    $modalRechazada = false, $validacion1, $validacion2, $notas, $nombre, $validador, $Id, $AllStatus, $nameAll, $observaciones;
 
 
 
@@ -65,7 +65,8 @@ class SolicitudComponent extends Component
 
         $user = User::find($solicitud->user_id);
         // Concatenando los nombres
-        $this->nombreCompleto = $solicitud->NombreCompleto;;
+        $this->nombreCompleto = $solicitud->NombreCompleto;
+        ;
         $this->email = $user->email;
         $this->telefonoContacto = $user->telefonoContacto;
         $this->id_tipoSolicitante = $user->tipoSolicitante->tipoSolicitante;
@@ -220,10 +221,30 @@ class SolicitudComponent extends Component
         );
     }
 
+    public function modalRechazar()
+    {
+        // Obtener la solicitud por su ID
+        $solicitud = Solicitud::find($this->Id);
+        // Obtener la primera validación relacionada con la solicitud (si existe)
+        $validacion = $solicitud->validaciones()->first();
+        //obtener el nombre del validador $solicitud->actualizado_por
+        $validador = User::find($solicitud->actualizado_por);
+
+        $this->cedula = $solicitud->numeroIdentificacion;
+        $this->nombre = $solicitud->user->name;
+        $this->nameAll = $solicitud->NombreCompleto;
+        $this->observaciones = $validacion->notas;
+        $this->validador = $validador->name . ' | ' . $validador->codigo;
+
+        $this->modalRechazada = true;
+    }
+
     public function rechazarsweet()
     {
 
         $solicitud = Solicitud::find($this->Id);
+
+        $validacion = $solicitud->validaciones()->first();
 
         if (!$solicitud) {
             $this->dispatch('sweet-alert-good', icon: 'error', title: 'Error', text: 'Solicitud no encontrada.');
@@ -236,13 +257,19 @@ class SolicitudComponent extends Component
             'Validador2_id' => Auth::id()
         ]);
 
+        $validacion->update([
+            'notas' => $this->observaciones,
+        ]);
+
+
 
         $userName = $solicitud->user->name; // Nombre del usuario
         $userEmail = $solicitud->user->email; // Email del usuario
 
         // Enviar correo de rechazo
         Mail::to($userEmail)->send(new \App\Mail\SolicitudRechazadaNotification($solicitud->id, $userName));
-
+        $this->modalRechazada = false;
+        $this->resetForm();
 
         $this->dispatch('Updated');
 
@@ -281,6 +308,7 @@ class SolicitudComponent extends Component
             // Pasar el numero de identificacion del usuario
             $this->numeroIdentificacion_id = $user->numeroIdentificacion;
             $this->nameAll = $solicitud->NombreCompleto;
+            $this->resetForm();
             $this->showValidar = true;
             $this->dispatch('Updated');
             return;
@@ -296,6 +324,7 @@ class SolicitudComponent extends Component
         // Pasar el numero de identificacion del usuario
         $this->numeroIdentificacion_id = $user->numeroIdentificacion;
         $this->nameAll = $solicitud->NombreCompleto;
+        $this->resetForm();
         $this->showValidar = true;
     }
 
@@ -324,6 +353,7 @@ class SolicitudComponent extends Component
 
             $this->solicitud_id = null;
             $this->showValidar = false;
+            $this->resetForm();
             $this->dispatch('Updated');
             $this->dispatch('sweet-alert-good', icon: 'info', title: 'Solicitud liberada', text: 'Has liberado la solicitud. Ahora otros validadores pueden revisarla.');
         }
@@ -384,6 +414,7 @@ class SolicitudComponent extends Component
         }
 
         $this->showValidar = false;
+        $this->resetForm();
         $this->dispatch('updated');
     }
 
@@ -413,6 +444,19 @@ class SolicitudComponent extends Component
         $solicitud = Solicitud::find($Id);
         $solicitud->delete();
         $this->dispatch('Updated');
+    }
+
+    // limpiar campos
+    public function resetForm()
+    {
+        $this->detalles = '';
+    }
+
+    public function removeFile($index)
+    {
+        $files = $this->JAComunal;
+        unset($files[$index]); // Elimina el archivo de la lista
+        $this->JAComunal = array_values($files); // Reorganiza los índices del array
     }
 
 
