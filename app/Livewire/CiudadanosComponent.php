@@ -257,7 +257,7 @@ class CiudadanosComponent extends Component
         // Descargar el archivo
         return response()->streamDownload(function () use ($pdf) {
             echo $pdf->output();
-        }, 'certificado_residencia.pdf');
+        }, $solicitud->id . '_' . $solicitud->numeroIdentificacion . '_certificado.pdf');
     }
     public function render()
     {

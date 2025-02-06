@@ -10,6 +10,7 @@ use App\Models\Direccion;
 use App\Models\Solicitud;
 use App\Models\Validacion;
 use Livewire\WithFileUploads;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 
@@ -30,7 +31,7 @@ class SolicitudComponent extends Component
     $fechaSolicitud, $id_nivelEstudio, $id_genero, $id_ocupacion, $id_poblacion,
     $numeroIdentificacion_id, $fechaActual, $barrio_id, $direccion_id, $ubicacion,
     $accion_comunal, $electoral, $sisben, $cedula, $estado_id, $estado_id2, $JAComunal, $detalles, $visible = false, $showForm = false, $showAdditional = false, $showValidar = false,
-    $modalRechazada = false, $validacion1, $validacion2, $notas, $nombre, $validador, $Id, $AllStatus, $nameAll, $observaciones;
+    $modalRechazada = false, $validacion1, $validacion2, $notas, $nombre, $validador, $Id, $AllStatus, $nameAll, $observaciones, $anexos;
 
 
 
@@ -102,7 +103,7 @@ class SolicitudComponent extends Component
         // Asignar valores de la validación a las propiedades
         $this->validacion1 = $validacion->validacion1;
         $this->validacion2 = $estado->nombreEstado;
-        $this->JAComunal = json_decode($validacion->JAComunal); // Decodifica el JSON en un array
+        $this->anexos = json_decode($validacion->JAComunal);
         $this->notas = $validacion->notas;
         $this->visible = $validacion->visible;
         $this->cedula = $solicitud->numeroIdentificacion;
@@ -140,61 +141,83 @@ class SolicitudComponent extends Component
 
     public function validarsweet()
     {
-        // Buscar la solicitud
-        $solicitud = Solicitud::find($this->Id);
+        DB::beginTransaction(); // Inicia una transacción
 
-        if (!$solicitud) {
-            $this->dispatch('sweet-alert-good', icon: 'error', title: 'Error', text: 'Solicitud no encontrada.');
-            return;
-        }
+        try {
+            // Buscar la solicitud
+            $solicitud = Solicitud::find($this->Id);
 
-        // Actualizar estado de la solicitud
-        $solicitud->update([
-            'estado_id' => 5,
-            'fecha_emision' => now(),
-            'Validador2_id' => Auth::id(),
-        ]);
+            if (!$solicitud) {
+                throw new \Exception('Solicitud no encontrada.');
+            }
 
+            // Generar URL del QR
+            $baseUrl = config('app.url');
+            $qrUrl = $baseUrl . '/qr/' . $solicitud->id . '/' . $solicitud->numeroIdentificacion;
 
-        $userName = $solicitud->user->name; // Nombre del usuario
-        $userEmail = $solicitud->user->email; // Email del usuario
+            // Asegurar que la carpeta de almacenamiento exista
+            $qrStoragePath = storage_path('app/public/qrs');
+            if (!is_dir($qrStoragePath)) {
+                if (!mkdir($qrStoragePath, 0755, true) && !is_dir($qrStoragePath)) {
+                    throw new \Exception('No se pudo crear el directorio para el QR.');
+                }
+            }
 
-        // Enviar correo de rechazo
-        Mail::to($userEmail)->send(new \App\Mail\SolicitudEmitidaNotification($solicitud->id, $userName));
+            // Generar el código QR
+            $barcode = new DNS2D();
+            $qrImageContent = $barcode->getBarcodePNG($qrUrl, 'QRCODE', 10, 10);
 
+            // Verificar si el QR se generó correctamente
+            if (!$qrImageContent) {
+                throw new \Exception('No se pudo generar el código QR.');
+            }
 
-        // Generar URL para el código QR
-        $baseUrl = config('app.url'); // Obtenemos la URL base desde .env
-        $qrUrl = $baseUrl . '/qr/' . $solicitud->id . '/' . $solicitud->numeroIdentificacion;
+            // Guardar el QR en un archivo
+            $qrPath = 'qrs/' . $solicitud->id . '.png';
+            $qrFullPath = storage_path('app/public/' . $qrPath);
+            file_put_contents($qrFullPath, base64_decode($qrImageContent));
 
-        // Crear directorio si no existe
-        if (!file_exists(storage_path('app/public/qrs'))) {
-            mkdir(storage_path('app/public/qrs'), 0755, true);
-        }
+            // Verificar si el archivo se guardó correctamente
+            if (!file_exists($qrFullPath)) {
+                throw new \Exception('No se pudo guardar el código QR.');
+            }
 
-        // Generar el código QR y guardarlo en almacenamiento
-        $qrPath = 'qrs/' . $solicitud->id . '.png';
-        $barcode = new DNS2D();
-        $qrImageContent = $barcode->getBarcodePNG($qrUrl, 'QRCODE', 10, 10);
+            // Buscar o crear la validación y actualizarla
+            $validacion = Validacion::firstOrCreate(
+                ['id_solicitud' => $solicitud->id],
+                ['qr_url' => $qrPath]
+            );
 
-        // Decodifica el contenido base64 y guarda el archivo como PNG
-        file_put_contents(storage_path('app/public/' . $qrPath), base64_decode($qrImageContent));
+            $validacion->update(['qr_url' => $qrPath]);
 
-        // Buscar y actualizar la validación con el id de la solicitud
-        $validacion = Validacion::where('id_solicitud', $solicitud->id)->first();
-
-        if ($validacion) {
-            $validacion->update([
-                'qr_url' => $qrPath,
+            // Ahora sí actualizamos la solicitud y enviamos el correo
+            $solicitud->update([
+                'estado_id' => 5,
+                'fecha_emision' => now(),
+                'Validador2_id' => Auth::id(),
             ]);
-        } else {
-            $this->dispatch('sweet-alert-good', icon: 'error', title: 'Algo salió mal..!', text: 'No se encontró la validación.');
-        }
 
-        // Notificar éxito
-        $this->dispatch('Updated');
-        $this->dispatch('sweet-alert-good', icon: 'success', title: 'Muy bien..!', text: 'Solicitud emitida con éxito.');
+            $userName = $solicitud->user->name;
+            $userEmail = $solicitud->user->email;
+
+            // Enviar correo
+            Mail::to($userEmail)->send(new \App\Mail\SolicitudEmitidaNotification($solicitud->id, $userName));
+
+            DB::commit(); // Si todo salió bien, se confirman los cambios
+
+            // Notificar éxito
+            $this->dispatch('Updated');
+            $this->dispatch('sweet-alert-good', icon: 'success', title: 'Muy bien..!', text: 'Solicitud emitida con éxito.');
+
+        } catch (\Exception $e) {
+            DB::rollBack(); // Revertir cambios si hay error
+
+            // Mostrar error
+            $this->dispatch('sweet-alert-good', icon: 'error', title: 'Error', text: $e->getMessage());
+        }
     }
+
+
 
 
 
@@ -452,12 +475,11 @@ class SolicitudComponent extends Component
         $this->detalles = '';
     }
 
-    public function removeFile($index)
-    {
-        $files = $this->JAComunal;
-        unset($files[$index]); // Elimina el archivo de la lista
-        $this->JAComunal = array_values($files); // Reorganiza los índices del array
-    }
+
+
+
+
+
 
 
 

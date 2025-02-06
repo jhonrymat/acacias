@@ -84,8 +84,7 @@ class HistorialSolicitudesDatatable extends DataTableComponent
         return [
             Column::make("Id", "id")
                 ->sortable()
-                ->searchable()
-                ->collapseAlways(),
+                ->searchable(),
             Column::make("Usuario", "user_id")
                 ->format(fn($value, $row) => $row->user ? $row->user->name_completo : 'Usuario no asignado')
                 ->sortable()

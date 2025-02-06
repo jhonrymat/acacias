@@ -1,8 +1,11 @@
 <?php
 
-use App\Livewire\SiteSettings;
+use Milon\Barcode\DNS2D;
+use App\Models\Solicitud;
 use App\Models\RoleIframe;
+use App\Models\Validacion;
 use App\Livewire\ValidarQr;
+use App\Livewire\SiteSettings;
 use App\Livewire\ManageIframes;
 use App\Livewire\RolesComponent;
 use App\Livewire\BarrioComponent;
@@ -75,7 +78,66 @@ Route::middleware([
     Route::middleware(['can:iframe'])->get('iframes', ManageIframes::class)->name('iframes');
 
     //<livewire:site-settings />
-    Route::middleware(['can:roles'])->get('administracion', SiteSettings::Class)->name('administracion');
+    Route::middleware(['can:roles'])->get('administracion', SiteSettings::class)->name('administracion');
+
+    Route::middleware(['can:user-roles'])->get('fix-qr', function () {
+        echo "Iniciando generación de QR...<br>";
+
+        try {
+            $solicitudes = Solicitud::where('estado_id', 5)
+                ->whereHas('validaciones', function ($query) {
+                    $query->whereNull('qr_url')->orWhere('qr_url', '');
+                })
+                ->get();
+
+            if ($solicitudes->isEmpty()) {
+                echo "No hay solicitudes pendientes de QR.<br>";
+                return;
+            }
+
+            foreach ($solicitudes as $solicitud) {
+                echo "Procesando solicitud ID: {$solicitud->id}...<br>";
+
+                $qrUrl = config('app.url') . '/qr/' . $solicitud->id . '/' . $solicitud->numeroIdentificacion;
+                $qrPath = 'qrs/' . $solicitud->id . '.png';
+                $qrFullPath = storage_path('app/public/' . $qrPath);
+
+                // Crear directorio si no existe
+                $qrStoragePath = storage_path('app/public/qrs');
+                if (!is_dir($qrStoragePath)) {
+                    mkdir($qrStoragePath, 0755, true);
+                }
+
+                // Generar QR
+                $barcode = new DNS2D();
+                $qrImageContent = $barcode->getBarcodePNG($qrUrl, 'QRCODE', 10, 10);
+
+                if (!$qrImageContent) {
+                    echo "Error: No se pudo generar el QR para la solicitud ID: {$solicitud->id}<br>";
+                    continue;
+                }
+
+                file_put_contents($qrFullPath, base64_decode($qrImageContent));
+
+                if (!file_exists($qrFullPath)) {
+                    echo "Error: No se pudo guardar el código QR en {$qrFullPath}<br>";
+                    continue;
+                }
+
+                // Crear o actualizar la validación
+                $validacion = Validacion::firstOrCreate(
+                    ['id_solicitud' => $solicitud->id],
+                    ['qr_url' => $qrPath]
+                );
+                $validacion->update(['qr_url' => $qrPath]);
+
+                echo "✅ QR generado correctamente para solicitud ID: {$solicitud->id}<br>";
+            }
+        } catch (\Exception $e) {
+            echo "❌ Error crítico: " . $e->getMessage() . "<br>";
+        }
+    });
+
 
 });
 

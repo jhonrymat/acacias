@@ -341,8 +341,8 @@
                         @if (auth()->user()->hasRole('validador2'))
                             <div class="mb-3">
                                 <label for="JAComunal" class="block text-xs font-medium">Anexos</label>
-                                @if ($JAComunal && count($JAComunal) > 0)
-                                    @foreach ($JAComunal as $archivo)
+                                @if ($anexos && count($anexos) > 0)
+                                    @foreach ($anexos as $archivo)
                                         <a href="{{ asset('storage/' . $archivo) }}" target="_blank"
                                             class="block mt-1 text-sm text-blue-500 underline">
                                             Ver archivo
@@ -514,6 +514,11 @@
                     });
                 }
             }));
+        });
+    </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            Livewire.on('$refresh', () => console.log('Tabla actualizada'));
         });
     </script>
 
