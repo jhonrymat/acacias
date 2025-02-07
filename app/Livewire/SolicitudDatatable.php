@@ -1,17 +1,30 @@
 <?php
 
 namespace App\Livewire;
+use Milon\Barcode\DNS2D;
 use App\Models\Solicitud;
+use App\Models\Validacion;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
-use Rappasoft\LaravelLivewireTables\DataTableComponent;
+use Illuminate\Support\Facades\Mail;
 use Rappasoft\LaravelLivewireTables\Views\Column;
+use Rappasoft\LaravelLivewireTables\DataTableComponent;
 
 class SolicitudDatatable extends DataTableComponent
 {
     protected $model = Solicitud::class;
-    protected $listeners = ['Updated' => '$refresh']; // Refrescar la tabla cuando se actualiza un tenant
+    protected $listeners = ['Updated' => '$refresh', 'aceptarTodasSolicitudes' => 'AceptarTodas']; // Refrescar la tabla cuando se actualiza un tenant
     public ?int $searchFilterDebounce = 600;
     public array $perPageAccepted = [10, 20, 50, 100];
+
+    public $selectedRowId = null;
+
+    // public $selectAll = false;
+
+    public array $selectedRows = [];
+
+
+
 
     public function configure(): void
     {
@@ -37,6 +50,19 @@ class SolicitudDatatable extends DataTableComponent
             $this->setEmptyMessage("No hay registros para mostrar.");
         }
 
+
+
+    }
+
+    public function selectRow(int $rowId): void
+    {
+        $this->selectedRowId = $rowId;
+    }
+
+
+    public function isSelected($id)
+    {
+        return in_array($id, $this->getSelected());
     }
 
 
@@ -45,26 +71,110 @@ class SolicitudDatatable extends DataTableComponent
     public function validarStatus()
     {
         // Obtén las filas seleccionadas
-        $selectedRows = $this->getSelected();
+        $this->selectedRows = $this->getSelected();
 
         // Verificar si hay filas seleccionadas
-        if (count($selectedRows) === 0) {
+        if (count($this->selectedRows) === 0) {
             $this->dispatch('sweet-alert-good', icon: 'warning', title: 'Advertencia', text: 'Debe seleccionar al menos una fila.');
             return;
         }
 
-        Solicitud::whereIn('id', $selectedRows)->update([
-            'estado_id' => 5,
-            'fecha_emision' => now(),
-            'Validador2_id' => Auth::id()
-        ]);
-
-        $this->clearSelected();
-
-        $this->dispatch('sweet-alert-good', icon: 'success', title: 'Muy bien..!', text: 'Estado actualizado para las filas seleccionadas.');
-
-
+        // $this->dispatch('validarVulk', icon: 'success');
+        $this->dispatch(
+            'vulk',
+            icon: 'info',
+            title: '¿Estás seguro?',
+            text: 'Vas a aceptar estas solicitudes'
+        );
     }
+
+    public function AceptarTodas()
+    {
+        // Asegurar que hay filas seleccionadas antes de proceder
+        if (count($this->selectedRows) === 0) {
+            $this->dispatch('sweet-alert-good', icon: 'warning', title: 'Advertencia', text: 'Debe seleccionar al menos una fila para aceptar.');
+            return;
+        }
+
+        DB::beginTransaction(); // Iniciar transacción
+
+        try {
+            foreach ($this->selectedRows as $solicitudId) {
+                // Buscar la solicitud
+                $solicitud = Solicitud::find($solicitudId);
+                if (!$solicitud) {
+                    throw new \Exception("Solicitud con ID {$solicitudId} no encontrada.");
+                }
+
+                // Generar URL del QR
+                $baseUrl = config('app.url');
+                $qrUrl = $baseUrl . '/qr/' . $solicitud->id . '/' . $solicitud->numeroIdentificacion;
+
+                // Asegurar que la carpeta de almacenamiento exista
+                $qrStoragePath = storage_path('app/public/qrs');
+                if (!is_dir($qrStoragePath)) {
+                    if (!mkdir($qrStoragePath, 0755, true) && !is_dir($qrStoragePath)) {
+                        throw new \Exception('No se pudo crear el directorio para los QR.');
+                    }
+                }
+
+                // Generar el código QR
+                $barcode = new DNS2D();
+                $qrImageContent = $barcode->getBarcodePNG($qrUrl, 'QRCODE', 10, 10);
+
+                // Verificar si el QR se generó correctamente
+                if (!$qrImageContent) {
+                    throw new \Exception("No se pudo generar el código QR para la solicitud con ID {$solicitud->id}.");
+                }
+
+                // Guardar el QR en un archivo
+                $qrPath = 'qrs/' . $solicitud->id . '.png';
+                $qrFullPath = storage_path('app/public/' . $qrPath);
+                file_put_contents($qrFullPath, base64_decode($qrImageContent));
+
+                // Verificar si el archivo se guardó correctamente
+                if (!file_exists($qrFullPath)) {
+                    throw new \Exception("No se pudo guardar el código QR para la solicitud con ID {$solicitud->id}.");
+                }
+
+                // Buscar o crear la validación y actualizarla
+                $validacion = Validacion::firstOrCreate(
+                    ['id_solicitud' => $solicitud->id],
+                    ['qr_url' => $qrPath]
+                );
+
+                $validacion->update(['qr_url' => $qrPath]);
+
+                // Actualizar la solicitud en la base de datos
+                $solicitud->update([
+                    'estado_id' => 5,
+                    'fecha_emision' => now(),
+                    'Validador2_id' => Auth::id(),
+                ]);
+
+                // Enviar correo al usuario
+                Mail::to($solicitud->user->email)->send(new \App\Mail\SolicitudEmitidaNotification($solicitud->id, $solicitud->user->name));
+            }
+
+            DB::commit(); // Si todo salió bien, confirmamos la transacción
+
+            // Limpiar selección después de la actualización
+            $this->clearSelected();
+            $this->selectedRows = []; // Limpiar manualmente para evitar problemas
+
+            // Notificar éxito
+            $this->dispatch('Updated');
+            $this->dispatch('sweet-alert-good', icon: 'success', title: 'Muy bien..!', text: 'Solicitudes aceptadas y códigos QR generados.');
+
+        } catch (\Exception $e) {
+            DB::rollBack(); // Revertir cambios si hay error
+
+            // Mostrar error
+            $this->dispatch('sweet-alert-good', icon: 'error', title: 'Error', text: $e->getMessage());
+        }
+    }
+
+
 
 
     public function rechazarStatus()
@@ -156,13 +266,27 @@ class SolicitudDatatable extends DataTableComponent
         return [
             Column::make("Id", "id")
                 ->sortable()
-                ->searchable(),
+                ->searchable()
+                ->format(
+                    fn($value, $row) =>
+                    "<span x-data=\"{}\"
+                        @click=\"let row = \$el.closest('tr');
+                                row.style.backgroundColor = (row.style.backgroundColor === 'rgb(191, 219, 254)') ? '' : '#bfdbfe';\"
+                        style='cursor: pointer; text-decoration: underline; color: blue;'>
+                        {$value}
+                    </span>"
+                )
+                ->html(),
             Column::make("Usuario", "user_id")
                 ->format(fn($value, $row) => $row->user ? $row->user->name_completo : 'Usuario no asignado')
                 ->sortable()
                 ->searchable(),
             // mostrar el nombre de actualizado_por
             Column::make("Validado", "actualizador.name")
+                ->sortable()
+                ->searchable(),
+            Column::make("Tipo", "user_id")
+                ->format(fn($value, $row) => $row->user ? $row->user->documento_user : 'Usuario no asignado')
                 ->sortable()
                 ->searchable(),
             Column::make("Documento", "numeroIdentificacion")

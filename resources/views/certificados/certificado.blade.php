@@ -313,7 +313,7 @@
     @endphp
 
     <div class="content">
-        <p>Que, <strong>{{ $solicitante }}</strong>, identificado(a) con Cédula de Ciudadanía No
+        <p>Que, <strong>{{ $solicitante }}</strong>, identificado(a) con {{ $tipoDocumento }} No
             <strong>{{ $cedula }}</strong> expedida en <strong>{{ $ciudad_expedicion }}</strong>, con dirección de
             residencia <strong>{{ $direccion }}</strong>{{ $articulo }} {{ $zona }}
             <strong>{{ $barrio_vereda }}</strong>, {{ $tipo_unidad }} <strong>{{ $codigo_numero }}</strong>.

@@ -527,4 +527,5 @@
     <x-confirm></x-confirm>
     <x-alert></x-alert>
     <x-2alert></x-2alert>
+    <x-vulk></x-vulk>
 </div>

@@ -57,6 +57,7 @@ class Solicitud extends Model
         );
     }
 
+
     public function validador2()
     {
         return $this->belongsTo(User::class, 'Validador2_id');
