@@ -94,6 +94,20 @@ class User extends Authenticatable implements MustVerifyEmail
         );
     }
 
+    public function getDocumentoUserAttribute()
+    {
+        if (!$this->user) {
+            return 'Usuario no asignado'; // Manejo en caso de que no haya usuario
+        }
+
+
+        return trim(
+            $this->tipoDocumento->tipoDocumento . ' ' .
+            $this->numeroIdentificacion
+        );
+
+    }
+
     public function tipoSolicitante()
     {
         return $this->belongsTo(Tsolicitante::class, 'id_tipoSolicitante');

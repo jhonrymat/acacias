@@ -473,15 +473,11 @@ class SolicitudComponent extends Component
     public function resetForm()
     {
         $this->detalles = '';
+        $this->JAComunal = null;
+        $this->estado_id2 = null;
+        $this->estado_id = null;
+        $this->visible = false;
     }
-
-
-
-
-
-
-
-
 
 
     //datos del model
