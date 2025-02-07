@@ -89,6 +89,7 @@ class SolicitudesComponent extends Component
                 . ' '
                 . ($solicitud->user->apellido_2 ?? '')
             ),
+            'tipoDocumento' => $solicitud->user->tipoDocumento->tipoDocumento,
             'cedula' => $solicitud->numeroIdentificacion,
             'direccion' => $solicitud->direccion,
             'cargo' => $solicitud->validador2->cargo,

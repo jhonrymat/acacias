@@ -13,7 +13,9 @@ use Rappasoft\LaravelLivewireTables\DataTableComponent;
 class SolicitudDatatable extends DataTableComponent
 {
     protected $model = Solicitud::class;
-    protected $listeners = ['Updated' => '$refresh', 'aceptarTodasSolicitudes' => 'AceptarTodas']; // Refrescar la tabla cuando se actualiza un tenant
+    protected $listeners = ['Updated' => '$refresh',
+                            'aceptarTodasSolicitudes' => 'AceptarTodas',
+                            'rechazarTodasSolicitudes' => 'RechazarTodas']; // Escuchar el evento para aceptar todas las solicitudes
     public ?int $searchFilterDebounce = 600;
     public array $perPageAccepted = [10, 20, 50, 100];
 
@@ -180,27 +182,75 @@ class SolicitudDatatable extends DataTableComponent
     public function rechazarStatus()
     {
         // Obtén las filas seleccionadas
-        $selectedRows = $this->getSelected();
+        $this->selectedRows = $this->getSelected();
 
-        if (count($selectedRows) === 0) {
+        // Verificar si hay filas seleccionadas
+        if (count($this->selectedRows) === 0) {
             $this->dispatch('sweet-alert-good', icon: 'warning', title: 'Advertencia', text: 'Debe seleccionar al menos una fila.');
             return;
         }
-        // Actualiza el estado de las filas seleccionadas
-        Solicitud::whereIn('id', $selectedRows)->update([
-            'estado_id' => 3,
-            'fecha_emision' => now(),
-            'Validador2_id' => Auth::id()
-        ]);
 
-        // Limpia la selección
-        $this->clearSelected();
-
-        // Opcional: envía un mensaje al usuario
-        $this->dispatch('sweet-alert-good', icon: 'info', title: 'solicitudes rechazadas con exito', text: 'Estado actualizado para las filas seleccionadas.');
+        // $this->dispatch('validarVulk', icon: 'success');
+        $this->dispatch(
+            'decline',
+            icon: 'info',
+            title: '¿Estás seguro?',
+            text: 'Vas a rechazar estas solicitudes'
+        );
 
 
     }
+
+    public function RechazarTodas()
+    {
+        // Asegurar que hay filas seleccionadas antes de proceder
+        if (count($this->selectedRows) === 0) {
+            $this->dispatch('sweet-alert-good', icon: 'warning', title: 'Advertencia', text: 'Debe seleccionar al menos una fila para rechazar.');
+            return;
+        }
+
+        DB::beginTransaction(); // Iniciar transacción
+
+        try {
+            foreach ($this->selectedRows as $solicitudId) {
+                // Buscar la solicitud
+                $solicitud = Solicitud::find($solicitudId);
+                if (!$solicitud) {
+                    throw new \Exception("Solicitud con ID {$solicitudId} no encontrada.");
+                }
+
+                // Actualiza el estado de las filas seleccionadas
+                $solicitud->update([
+                    'estado_id' => 3, // Estado de "Rechazado"
+                    'fecha_emision' => now(),
+                    'Validador2_id' => Auth::id()
+                ]);
+
+                $userName = $solicitud->user->name; // Nombre del usuario
+                $userEmail = $solicitud->user->email; // Email del usuario
+
+                // Enviar correo de rechazo
+                Mail::to($userEmail)->send(new \App\Mail\SolicitudRechazadaNotification($solicitud->id, $userName));
+            }
+
+            DB::commit(); // Si todo salió bien, confirmamos la transacción
+
+            // Limpiar selección después de la actualización
+            $this->clearSelected();
+            $this->selectedRows = []; // Limpiar manualmente para evitar problemas
+
+            // Notificar éxito con el mensaje correcto
+            $this->dispatch('Updated');
+            $this->dispatch('sweet-alert-good', icon: 'success', title: 'Muy bien..!', text: 'Solicitudes rechazadas con éxito.');
+
+        } catch (\Exception $e) {
+            DB::rollBack(); // Revertir cambios si hay error
+
+            // Mostrar error
+            $this->dispatch('sweet-alert-good', icon: 'error', title: 'Error', text: $e->getMessage());
+        }
+    }
+
 
 
 
@@ -286,7 +336,7 @@ class SolicitudDatatable extends DataTableComponent
                 ->sortable()
                 ->searchable(),
             Column::make("Tipo", "user_id")
-                ->format(fn($value, $row) => $row->user ? $row->user->documento_user : 'Usuario no asignado')
+                ->format(fn($value, $row) => $row->user ? $row->user->tipoDocumento->tipoDocumento : 'Usuario no asignado')
                 ->sortable()
                 ->searchable(),
             Column::make("Documento", "numeroIdentificacion")
