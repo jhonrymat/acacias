@@ -11,15 +11,15 @@ use Laravel\Fortify\Contracts\UpdatesUserProfileInformation;
 
 class UpdateUserProfileInformation implements UpdatesUserProfileInformation
 {
-
     /**
      * Validate and update the given user's profile information.
      *
      * @param  array<string, mixed>  $input
      */
-    public function update(User $user, array $input): void
+    public function update(\Illuminate\Foundation\Auth\User $user, array $input): void
     {
         try {
+            // Validación de los datos
             Validator::make($input, [
                 'name' => ['required', 'string', 'max:255'],
                 'nombre_2' => ['nullable', 'string', 'max:255'],
@@ -41,74 +41,83 @@ class UpdateUserProfileInformation implements UpdatesUserProfileInformation
                 'id_genero' => ['required'],
                 'id_ocupacion' => ['required'],
                 'id_poblacion' => ['required'],
-                'email' => ['required', 'email', 'max:255', Rule::unique('users')->ignore($user->id)],
-                // la firma no es obligatoria, debe ser un archivo de imagen
+                'email' => [
+                    'required',
+                    'email',
+                    'max:255',
+                    Rule::unique('users')->ignore($user->id)
+                ],
                 'firma' => ['nullable', 'sometimes', 'max:10240'],
-                // codigo
                 'codigo' => ['nullable', 'string', 'max:255'],
                 'photo' => ['nullable', 'mimes:jpg,jpeg,png', 'max:1024'],
             ])->validateWithBag('updateProfileInformation');
-        } catch (\Illuminate\Validation\ValidationException $e) {
-            \Log::error('Error de validación: ' . $e->getMessage());
-        }
 
-
-        if (isset($input['photo'])) {
-
-            $user->updateProfilePhoto($input['photo']);
-        }
-
-        if (
-            $input['email'] !== $user->email &&
-            $user instanceof MustVerifyEmail
-        ) {
-            $this->updateVerifiedUser($user, $input);
-
-        } else {
-            $userData = [
-                'name' => $input['name'],
-                'nombre_2' => $input['nombre_2'],
-                'apellido_1' => $input['apellido_1'],
-                'apellido_2' => $input['apellido_2'],
-                'telefonoContacto' => $input['telefonoContacto'],
-                'fechaNacimiento' => $input['fechaNacimiento'],
-                'cargo' => $input['cargo'], // Manejo del campo cargo
-                'id_tipoSolicitante' => $input['id_tipoSolicitante'],
-                'id_tipoDocumento' => $input['id_tipoDocumento'],
-                'numeroIdentificacion' => $input['numeroIdentificacion'],
-                'ciudadExpedicion' => $input['ciudadExpedicion'],
-                'id_nivelEstudio' => $input['id_nivelEstudio'],
-                'id_genero' => $input['id_genero'],
-                'id_ocupacion' => $input['id_ocupacion'],
-                'id_poblacion' => $input['id_poblacion'],
-                'email' => $input['email'],
-            ];
-            // Verificar si el usuario tiene el rol validador2 y se ha subido una firma
-            if (isset($input['firma']) && $input['firma'] instanceof \Illuminate\Http\UploadedFile) {
-
-                try {
-                    // Obtener el archivo de la firma
-                    $file = $input['firma'];
-
-                    if ($file) {
-                        // Obtener el nombre original del archivo
-                        $originalName = $file->getClientOriginalName();
-                        // Obtener la extensión del archivo
-                        $extension = $file->getClientOriginalExtension();
-                        // Crear un nombre único: nombre original + fecha y hora
-                        $fileName = pathinfo($originalName, PATHINFO_FILENAME) . '_' . now()->format('Ymd_His') . '.' . $extension;
-                        // Guardar el archivo en la carpeta "validador2"
-                        $path = $file->storeAs('validador2', $fileName, 'public');
-                        // Almacenar la ruta de la firma en el array $userData
-                        $userData['firma'] = $path;
-                    }
-                } catch (\Exception $e) {
-                    // En caso de error, mostrar un mensaje de error
-                    session()->flash('error', 'Error al subir la firma');
-                }
+            // Verificar si el email ya existe en otro usuario
+            if (User::where('email', $input['email'])->where('id', '<>', $user->id)->exists()) {
+                throw \Illuminate\Validation\ValidationException::withMessages([
+                    'email' => ['El correo electrónico ya está en uso por otro usuario.']
+                ]);
             }
 
-            $user->forceFill($userData)->save();
+            // Actualizar la foto de perfil si se envió
+            if (isset($input['photo'])) {
+                $user->updateProfilePhoto($input['photo']);
+            }
+
+            // Si cambia el email y el usuario requiere verificación
+            if ($input['email'] !== $user->email && $user instanceof MustVerifyEmail) {
+                $this->updateVerifiedUser($user, $input);
+            } else {
+                $userData = [
+                    'name' => $input['name'],
+                    'nombre_2' => $input['nombre_2'],
+                    'apellido_1' => $input['apellido_1'],
+                    'apellido_2' => $input['apellido_2'],
+                    'telefonoContacto' => $input['telefonoContacto'],
+                    'fechaNacimiento' => $input['fechaNacimiento'],
+                    'cargo' => $input['cargo'],
+                    'id_tipoSolicitante' => $input['id_tipoSolicitante'],
+                    'id_tipoDocumento' => $input['id_tipoDocumento'],
+                    'numeroIdentificacion' => $input['numeroIdentificacion'],
+                    'ciudadExpedicion' => $input['ciudadExpedicion'],
+                    'id_nivelEstudio' => $input['id_nivelEstudio'],
+                    'id_genero' => $input['id_genero'],
+                    'id_ocupacion' => $input['id_ocupacion'],
+                    'id_poblacion' => $input['id_poblacion'],
+                    'email' => $input['email'],
+                ];
+
+                // Manejo de la firma si el usuario es "validador2"
+                if (isset($input['firma']) && $input['firma'] instanceof \Illuminate\Http\UploadedFile) {
+                    try {
+                        $file = $input['firma'];
+                        if ($file) {
+                            $fileName = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME) . '_' . now()->format('Ymd_His') . '.' . $file->getClientOriginalExtension();
+                            $path = $file->storeAs('validador2', $fileName, 'public');
+                            $userData['firma'] = $path;
+                        }
+                    } catch (\Exception $e) {
+                        session()->flash('error', 'Error al subir la firma');
+                    }
+                }
+
+                // Intentar guardar los cambios en la base de datos
+                try {
+                    $user->forceFill($userData)->save();
+                } catch (\Illuminate\Database\QueryException $e) {
+                    if ($e->errorInfo[1] == 1062) {
+                        \Log::error("Intento de actualización con correo duplicado: " . $input['email']);
+                        throw \Illuminate\Validation\ValidationException::withMessages([
+                            'email' => ['El correo electrónico ya está en uso.']
+                        ]);
+                    } else {
+                        throw $e;
+                    }
+                }
+            }
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            \Log::error('Error de validación: ' . $e->getMessage());
+            throw $e; // Lanza el error para que Laravel maneje la respuesta en el frontend
         }
     }
 
@@ -119,7 +128,6 @@ class UpdateUserProfileInformation implements UpdatesUserProfileInformation
      */
     protected function updateVerifiedUser(User $user, array $input): void
     {
-
         $user->forceFill([
             'name' => $input['name'],
             'email' => $input['email'],

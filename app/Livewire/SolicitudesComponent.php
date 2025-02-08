@@ -133,6 +133,11 @@ class SolicitudesComponent extends Component
         }, $solicitud->id . '_' . $solicitud->numeroIdentificacion . '_certificado.pdf');
     }
 
+    public function viewPDF($Id)
+    {
+        return redirect()->route('solicitud.verPDF', ['id' => $Id]);
+    }
+
     public function mostrarNotas($Id)
     {
         $validacion = Validacion::find($Id);
