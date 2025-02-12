@@ -27,6 +27,7 @@ use App\Livewire\SolicitudesComponent;
 use App\Livewire\ValidadoresComponent;
 use App\Livewire\EstadisticasValidador;
 use App\Livewire\TipoSolicitanteComponent;
+use App\Http\Controllers\PDFController;
 
 
 Route::get('/', function () {
@@ -73,6 +74,11 @@ Route::middleware([
     })->name('certificado');
     // ruta para las estadisticas
     Route::get('estadisticas1', EstadisticasValidador::class)->name('estadisticas1');
+
+
+
+Route::get('/solicitud/pdf/{id}', [PDFController::class, 'verPDF'])->name('solicitud.verPDF');
+
 
 
     Route::middleware(['can:iframe'])->get('iframes', ManageIframes::class)->name('iframes');
