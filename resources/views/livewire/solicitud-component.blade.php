@@ -279,7 +279,7 @@
                         </button>
                         <!-- Botón para guardar el formulario -->
                         <button type="submit" class="px-4 py-2 bg-blue-500 text-white rounded">
-                            Validar
+                            CONTINUAR
                         </button>
                     </div>
                 </form>

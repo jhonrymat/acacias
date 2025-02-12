@@ -13,6 +13,7 @@ use Livewire\WithFileUploads;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
+use App\Helpers\ActivityLogger;
 
 class SolicitudComponent extends Component
 {

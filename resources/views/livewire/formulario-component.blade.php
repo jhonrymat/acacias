@@ -119,7 +119,7 @@
                             this.otro = '';
                             this.direccionGenerada = '';
                             direccionGenerada: '',
-                            $wire.set('direccion', ''); // Limpia el campo de dirección fuera del modal
+                                $wire.set('direccion', ''); // Limpia el campo de dirección fuera del modal
                             // Esperar a que el modal esté completamente cerrado
                             setTimeout(() => {
                                 this.modelOpen = false;
@@ -188,7 +188,8 @@
                                         <!-- Vía Principal -->
                                         <label class="block font-bold text-sm sm:text-base">Vía Principal:</label>
                                         <div class="grid grid-cols-1 sm:grid-cols-6 gap-2">
-                                            <select class="border border-gray-300 rounded p-1 text-xs sm:text-sm col-span-2"
+                                            <select
+                                                class="border border-gray-300 rounded p-1 text-xs sm:text-sm col-span-2"
                                                 x-model="tipoViaPrimaria" @change="actualizarDireccion()">
                                                 <option value="">Tipo de vía</option>
                                                 <option value="AC">Avenida calle</option>
@@ -197,12 +198,36 @@
                                                 <option value="CR">Carrera</option>
                                                 <option value="DG">Diagonal</option>
                                                 <option value="TV">Transversal</option>
+                                                <option value="CQ">Callejón</option>
+                                                <option value="CRA">Circunvalar</option>
+                                                <option value="AV">Avenida</option>
+                                                <option value="TR">Tramo</option>
+                                                <option value="MZ">Manzana</option>
+                                                <option value="BL">Bloque</option>
+                                                <option value="LT">Lote</option>
+                                                <option value="CS">Casa</option>
+                                                <option value="ED">Edificio</option>
+                                                <option value="ET">Etapa</option>
+                                                <option value="IN">Interior</option>
+                                                <option value="LO">Local</option>
+                                                <option value="OF">Oficina</option>
+                                                <option value="PA">Parcela</option>
+                                                <option value="PI">Piso</option>
+                                                <option value="SA">Salón</option>
+                                                <option value="SE">Sector</option>
+                                                <option value="SU">Suite</option>
+                                                <option value="TZ">Torre</option>
+                                                <option value="UN">Unidad</option>
+
                                             </select>
 
-                                            <input type="number" class="border border-gray-300 rounded p-1 text-xs sm:text-sm col-span-1"
-                                                x-model="numeroViaPrincipal" @input="actualizarDireccion()" placeholder="Número" min="0" step="1">
+                                            <input type="number"
+                                                class="border border-gray-300 rounded p-1 text-xs sm:text-sm col-span-1"
+                                                x-model="numeroViaPrincipal" @input="actualizarDireccion()"
+                                                placeholder="Número" min="0" step="1">
 
-                                            <select class="border border-gray-300 rounded p-1 text-xs sm:text-sm col-span-1"
+                                            <select
+                                                class="border border-gray-300 rounded p-1 text-xs sm:text-sm col-span-1"
                                                 x-model="letraViaPrincipal" @change="actualizarDireccion()">
                                                 <option value="">Letra</option>
                                                 <option value="A">A</option>
@@ -211,21 +236,48 @@
                                                 <option value="D">D</option>
                                                 <option value="E">E</option>
                                                 <option value="F">F</option>
+                                                <option value="G">G</option>
+                                                <option value="H">H</option>
+                                                <option value="I">I</option>
+                                                <option value="J">J</option>
+                                                <option value="K">K</option>
+                                                <option value="L">L</option>
+                                                <option value="M">M</option>
+                                                <option value="N">N</option>
+                                                <option value="O">O</option>
+                                                <option value="P">P</option>
+                                                <option value="Q">Q</option>
+                                                <option value="R">R</option>
+                                                <option value="S">S</option>
+                                                <option value="T">T</option>
+                                                <option value="U">U</option>
+                                                <option value="V">V</option>
+                                                <option value="W">W</option>
+                                                <option value="X">X</option>
+                                                <option value="Y">Y</option>
+                                                <option value="Z">Z</option>
                                             </select>
 
-                                            <select class="border border-gray-300 rounded p-1 text-xs sm:text-sm col-span-1"
+                                            <select
+                                                class="border border-gray-300 rounded p-1 text-xs sm:text-sm col-span-1"
                                                 x-model="bis" @change="actualizarDireccion()">
                                                 <option value="">Selecciona</option>
                                                 <option value="BIS">BIS</option>
+                                                <option value="BIS A">BIS A</option>
+                                                <option value="BIS B">BIS B</option>
                                             </select>
 
-                                            <select class="border border-gray-300 rounded p-1 text-xs sm:text-sm col-span-1"
+                                            <select
+                                                class="border border-gray-300 rounded p-1 text-xs sm:text-sm col-span-1"
                                                 x-model="cuadranteViaPrincipal" @change="actualizarDireccion()">
                                                 <option value="">Sector</option>
                                                 <option value="SUR">SUR</option>
                                                 <option value="NORTE">NORTE</option>
                                                 <option value="OESTE">OESTE</option>
                                                 <option value="ESTE">ESTE</option>
+                                                <option value="URB">URBANA</option>
+                                                <option value="RUR">RURAL</option>
+
                                             </select>
                                         </div>
 
@@ -233,12 +285,16 @@
                                         <div class="grid grid-cols-1 sm:grid-cols-6 gap-2 mt-4">
                                             <!-- Vía Secundaria -->
                                             <div class="sm:col-span-4">
-                                                <label class="block font-bold text-sm sm:text-base">Vía Secundaria:</label>
+                                                <label class="block font-bold text-sm sm:text-base">Vía
+                                                    Secundaria:</label>
                                                 <div class="grid grid-cols-3 gap-2">
-                                                    <input type="text" class="border border-gray-300 rounded p-1 text-xs sm:text-sm col-span-1"
-                                                        x-model="numeroViaGeneradora" @input="actualizarDireccion()" placeholder="No.">
+                                                    <input type="text"
+                                                        class="border border-gray-300 rounded p-1 text-xs sm:text-sm col-span-1"
+                                                        x-model="numeroViaGeneradora" @input="actualizarDireccion()"
+                                                        placeholder="No.">
 
-                                                    <select class="border border-gray-300 rounded p-1 text-xs sm:text-sm col-span-1"
+                                                    <select
+                                                        class="border border-gray-300 rounded p-1 text-xs sm:text-sm col-span-1"
                                                         x-model="letraViaGeneradora" @change="actualizarDireccion()">
                                                         <option value="">Letra</option>
                                                         <option value="A">A</option>
@@ -247,51 +303,100 @@
                                                         <option value="D">D</option>
                                                         <option value="E">E</option>
                                                         <option value="F">F</option>
+                                                        <option value="G">G</option>
+                                                        <option value="H">H</option>
+                                                        <option value="I">I</option>
+                                                        <option value="J">J</option>
+                                                        <option value="K">K</option>
+                                                        <option value="L">L</option>
+                                                        <option value="M">M</option>
+                                                        <option value="N">N</option>
+                                                        <option value="O">O</option>
+                                                        <option value="P">P</option>
+                                                        <option value="Q">Q</option>
+                                                        <option value="R">R</option>
+                                                        <option value="S">S</option>
+                                                        <option value="T">T</option>
+                                                        <option value="U">U</option>
+                                                        <option value="V">V</option>
+                                                        <option value="W">W</option>
+                                                        <option value="X">X</option>
+                                                        <option value="Y">Y</option>
+                                                        <option value="Z">Z</option>
                                                     </select>
 
-                                                    <input type="text" class="border border-gray-300 rounded p-1 text-xs sm:text-sm col-span-1"
-                                                        x-model="numeroPlaca" @input="actualizarDireccion()" placeholder="Número placa">
+                                                    <input type="text"
+                                                        class="border border-gray-300 rounded p-1 text-xs sm:text-sm col-span-1"
+                                                        x-model="numeroPlaca" @input="actualizarDireccion()"
+                                                        placeholder="Número placa">
                                                 </div>
                                             </div>
 
                                             <!-- Vía Complemento -->
                                             <div class="sm:col-span-2">
-                                                <label class="block font-bold text-sm sm:text-base">Vía Complemento:</label>
+                                                <label class="block font-bold text-sm sm:text-base">Vía
+                                                    Complemento:</label>
                                                 <div class="grid grid-cols-1 gap-2">
-                                                    <select class="border border-gray-300 rounded p-1 text-xs sm:text-sm"
-                                                        x-model="cuadranteViaGeneradora" @change="actualizarDireccion()">
+                                                    <select
+                                                        class="border border-gray-300 rounded p-1 text-xs sm:text-sm"
+                                                        x-model="cuadranteViaGeneradora"
+                                                        @change="actualizarDireccion()">
                                                         <option value="">Sector</option>
                                                         <option value="SUR">SUR</option>
                                                         <option value="NORTE">NORTE</option>
                                                         <option value="OESTE">OESTE</option>
                                                         <option value="ESTE">ESTE</option>
+                                                        <option value="URB">URBANA</option>
+                                                        <option value="RUR">RURAL</option>
+
                                                     </select>
                                                 </div>
                                             </div>
                                         </div>
 
                                         <!-- Campo adicional -->
-                                        <label class="block font-bold text-sm sm:text-base mt-4">Adicionar otro complemento:</label>
+                                        <label class="block font-bold text-sm sm:text-base mt-4">Adicionar otro
+                                            complemento:</label>
                                         <div class="grid grid-cols-1 sm:grid-cols-6 gap-2">
-                                            <select class="border border-gray-300 rounded p-1 text-xs sm:text-sm sm:col-span-2"
+                                            <select
+                                                class="border border-gray-300 rounded p-1 text-xs sm:text-sm sm:col-span-2"
                                                 x-model="complemento" @change="actualizarDireccion()">
                                                 <option value="">Selecciona</option>
                                                 <option value="AP">Apartamento</option>
                                                 <option value="AG">Agrupación</option>
                                                 <option value="BL">Bloque</option>
                                                 <option value="BG">Bodega</option>
-                                                <!-- Más opciones aquí -->
+                                                <option value="CS">Casa</option>
+                                                <option value="CO">Conjunto</option>
+                                                <option value="DE">Depósito</json>
+                                                <option value="ED">Edificio</option>
+                                                <option value="ET">Etapa</option>
+                                                <option value="IN">Interior</option>
+                                                <option value="LO">Local</option>
+                                                <option value="OF">Oficina</option>
+                                                <option value="PA">Parcela</option>
+                                                <option value="PI">Piso</option>
+                                                <option value="SA">Salón</option>
+                                                <option value="SE">Sector</option>
+                                                <option value="SU">Suite</option>
+                                                <option value="TZ">Torre</option>
+                                                <option value="UN">Unidad</option>
+
                                             </select>
 
-                                            <input type="text" class="border border-gray-300 rounded p-1 text-xs sm:text-sm sm:col-span-2"
-                                                x-model="otro" @input="actualizarDireccion()" placeholder="Escriba lo faltante">
+                                            <input type="text"
+                                                class="border border-gray-300 rounded p-1 text-xs sm:text-sm sm:col-span-2"
+                                                x-model="otro" @input="actualizarDireccion()"
+                                                placeholder="Escriba lo faltante">
                                         </div>
 
                                         <!-- Dirección Generada -->
                                         <div class="mt-4">
-                                            <label class="block font-bold text-sm sm:text-base">Dirección Generada:</label>
+                                            <label class="block font-bold text-sm sm:text-base">Dirección
+                                                Generada:</label>
                                             <input type="text" x-model="direccionGenerada"
-                                                class="w-full bg-gray-100 border border-gray-300 rounded p-1 text-xs sm:text-sm" readonly>
+                                                class="w-full bg-gray-100 border border-gray-300 rounded p-1 text-xs sm:text-sm"
+                                                readonly>
                                         </div>
                                     </div>
 
