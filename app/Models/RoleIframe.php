@@ -9,5 +9,9 @@ class RoleIframe extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['role', 'iframe_title', 'iframe_src'];
+    protected $fillable = ['role', 'iframe_title', 'iframe_src', 'attributes'];
+
+    protected $casts = [
+        'attributes' => 'array',
+    ];
 }

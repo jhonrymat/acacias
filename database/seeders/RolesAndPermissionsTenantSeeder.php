@@ -70,26 +70,24 @@ class RolesAndPermissionsTenantSeeder extends Seeder
 
         // Crear los permisos
         foreach ($permissionsAdmin as $name => $description) {
-            Permission::firstOrCreate([
-                'name' => $name,
-                'guard_name' => 'web',
-                'description' => $description, // Nuevo campo de descripción
-            ]);
+            Permission::updateOrCreate(
+                ['name' => $name, 'guard_name' => 'web'],
+                ['description' => $description] // Actualiza la descripción si ya existe el permiso
+            );
         }
 
-        foreach ($permissionsAdmin as $name => $description) {
-            Permission::firstOrCreate([
-                'name' => $name,
-                'guard_name' => 'web',
-                'description' => $description, // Nuevo campo de descripción
-            ]);
-        }
         foreach ($permissionsUser as $name => $description) {
-            Permission::firstOrCreate([
-                'name' => $name,
-                'guard_name' => 'web',
-                'description' => $description, // Nuevo campo de descripción
-            ]);
+            Permission::updateOrCreate(
+                ['name' => $name, 'guard_name' => 'web'],
+                ['description' => $description]
+            );
+        }
+
+        foreach ($permissionsValidador as $name => $description) {
+            Permission::updateOrCreate(
+                ['name' => $name, 'guard_name' => 'web'],
+                ['description' => $description]
+            );
         }
 
 

@@ -82,10 +82,10 @@
                                     {{ __('Datos') }}
                                 </div>
                                 <x-dropdown-link href="{{ route('roles') }}">
-                                    {{ __('Permisos') }}
+                                    {{ __('Roles') }}
                                 </x-dropdown-link>
                                 <x-dropdown-link href="{{ route('user-roles') }}">
-                                    {{ __('Roles') }}
+                                    {{ __('Asignar Rol') }}
                                 </x-dropdown-link>
                                 {{-- ruta iframes --}}
                                 <x-dropdown-link href="{{ route('iframes') }}">
@@ -369,13 +369,16 @@
                                         {{ __('Datos') }}
                                     </div>
                                     <x-responsive-nav-link href="{{ route('roles') }}" :active="request()->routeIs('roles')">
-                                        Permisos
+                                        Roles
                                     </x-responsive-nav-link>
                                     <x-responsive-nav-link href="{{ route('user-roles') }}" :active="request()->routeIs('user-roles')">
-                                        Roles
+                                        Asignar Rol
                                     </x-responsive-nav-link>
                                     <x-responsive-nav-link href="{{ route('iframes') }}" :active="request()->routeIs('iframes')">
                                         PowerBI
+                                    </x-responsive-nav-link>
+                                    <x-responsive-nav-link href="{{ route('administracion') }}" :active="request()->routeIs('administracion')">
+                                        Administración
                                     </x-responsive-nav-link>
                                 </div>
                             </div>

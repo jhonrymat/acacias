@@ -1,26 +1,17 @@
-<div style="height: 100vh; margin: 0; padding: 0;">
-    <style>
-        html,
-        body,
-        iframe {
-            margin: 0;
-            padding: 0;
-            height: 100%;
-            width: 100%;
-            border: none;
-        }
-
-        iframe {
-            display: block;
-            height: 100%;
-            width: 100%;
-        }
-    </style>
-
+<div class="w-auto mx-auto py-6 flex justify-center">
     @foreach ($iframes as $iframe)
-        <iframe title="{{ $iframe->iframe_title }}"
-            src="{{ $iframe->iframe_src }}"
-            allowFullScreen="true">
-        </iframe>
+        <div class="relative">
+            <iframe title="{{ $iframe->iframe_title }}" src="{{ $iframe->iframe_src }}"
+                class="border rounded-lg shadow-lg"
+                {!! implode(
+                    ' ',
+                    array_map(
+                        fn($v, $k) => "$k=\"$v\"",
+                        json_decode($iframe->attributes, true) ?? [],
+                        array_keys(json_decode($iframe->attributes, true) ?? []),
+                    ),
+                ) !!}>
+            </iframe>
+        </div>
     @endforeach
 </div>
