@@ -30,7 +30,10 @@ class RolesComponent extends Component
             $role->name = $this->name;
             $role->save();
         } else {
-            $role = Role::create(['name' => $this->name]);
+            $role = Role::create([
+                'name' => $this->name,
+                'guard_name' => 'web',
+            ]);
         }
 
         $permissions = Permission::whereIn('id', $this->permissionIds)->get();
