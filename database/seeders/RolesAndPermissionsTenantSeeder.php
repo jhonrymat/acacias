@@ -42,63 +42,62 @@ class RolesAndPermissionsTenantSeeder extends Seeder
 
         // Crear o asegurarse de que los permisos existen
         $permissionsAdmin = [
-            'documento',
-            'genero',
-            'nestudio',
-            'tsolicitante',
-            'barrio',
-            'poblacion',
-            'ocupacion',
-            'roles',
-            'permisos',
-            'user-roles',
-            'ciudadanos',
-            'validadores',
-            'iframe'
+            'documento' => 'Gestionar documentos del sistema',
+            'genero' => 'Administrar género de usuarios',
+            'nestudio' => 'Gestionar niveles de estudio',
+            'tsolicitante' => 'Administrar tipos de solicitantes',
+            'barrio' => 'Gestionar barrios registrados',
+            'poblacion' => 'Administrar información de población',
+            'ocupacion' => 'Gestionar ocupaciones disponibles',
+            'roles' => 'Administrar roles del sistema',
+            'permisos' => 'Gestionar permisos de usuarios',
+            'user-roles' => 'Asignar roles a usuarios',
+            'ciudadanos' => 'Administrar ciudadanos registrados',
+            'validadores' => 'Gestionar validadores del sistema',
+            'iframe' => 'Controlar el acceso a iframes externos'
         ];
         $permissionsUser = [
-            'formulario',
-            'versolicitudes',
+            'formulario' => 'Acceder y completar formularios',
+            'versolicitudes' => 'Visualizar solicitudes enviadas',
         ];
 
-        $permissionsValidador =[
-            'solicitudes',
-            'versolicitudes',
-            'historial',
-            'ciudadanos',
+        $permissionsValidador = [
+            'solicitudes' => 'Gestionar solicitudes de usuarios',
+            'versolicitudes' => 'Ver detalles de solicitudes',
+            'historial' => 'Revisar historial de validaciones',
+            'ciudadanos' => 'Ver información de ciudadanos',
         ];
 
         // Crear los permisos
-        foreach ($permissionsAdmin as $permission) {
-            Permission::firstOrCreate([
-                'name' => $permission,
-                'guard_name' => 'web',
-            ]);
+        foreach ($permissionsAdmin as $name => $description) {
+            Permission::updateOrCreate(
+                ['name' => $name, 'guard_name' => 'web'],
+                ['description' => $description] // Actualiza la descripción si ya existe el permiso
+            );
         }
 
-        foreach ($permissionsUser as $permission) {
-            Permission::firstOrCreate([
-                'name' => $permission,
-                'guard_name' => 'web',
-            ]);
-        }
-        foreach ($permissionsValidador as $permission) {
-            Permission::firstOrCreate([
-                'name' => $permission,
-                'guard_name' => 'web',
-            ]);
+        foreach ($permissionsUser as $name => $description) {
+            Permission::updateOrCreate(
+                ['name' => $name, 'guard_name' => 'web'],
+                ['description' => $description]
+            );
         }
 
+        foreach ($permissionsValidador as $name => $description) {
+            Permission::updateOrCreate(
+                ['name' => $name, 'guard_name' => 'web'],
+                ['description' => $description]
+            );
+        }
 
 
 
-        // Asignar todos los permisos al rol de administrador
-        $adminRole->syncPermissions($permissionsAdmin);
-        // Asignar todos los permisos al rol de administrador
-        $userRole->syncPermissions($permissionsUser);
 
-        $validador1Role->syncPermissions($permissionsValidador);
-        $validador2Role->syncPermissions($permissionsValidador);
+        $adminRole->syncPermissions(Permission::whereIn('name', array_keys($permissionsAdmin))->pluck('name')->toArray());
+        $userRole->syncPermissions(Permission::whereIn('name', array_keys($permissionsUser))->pluck('name')->toArray());
+        $validador1Role->syncPermissions(Permission::whereIn('name', array_keys($permissionsValidador))->pluck('name')->toArray());
+        $validador2Role->syncPermissions(Permission::whereIn('name', array_keys($permissionsValidador))->pluck('name')->toArray());
+
 
         // Crear el usuario administrador
         $admin = User::firstOrCreate(
@@ -144,7 +143,7 @@ class RolesAndPermissionsTenantSeeder extends Seeder
                 'email_verified_at' => now(),
             ]
         );
-            // Crear el usuario user
+        // Crear el usuario user
         $validador1n1 = User::firstOrCreate(
             ['email' => 'validadoruno1.residencia@acacias.gov.co'],
             [

@@ -18,6 +18,19 @@ class ManageIframesDatatable extends DataTableComponent
         $this->setPrimaryKey('id');
     }
 
+    public function formatAttributes($value)
+    {
+        $attributes = json_decode($value, true) ?? [];
+
+        if (empty($attributes)) {
+            return '<span class="text-gray-500">Sin atributos</span>';
+        }
+
+        return collect($attributes)
+            ->map(fn($val, $key) => "<strong>$key:</strong> $val")
+            ->implode('<br>');
+    }
+
     public function columns(): array
     {
         return [
@@ -31,6 +44,10 @@ class ManageIframesDatatable extends DataTableComponent
             Column::make("Iframe src", "iframe_src")
                 ->collapseAlways()
                 ->sortable(),
+            Column::make("Atributos", "attributes")
+                ->format(fn($value) => $this->formatAttributes($value))
+                ->html()
+                ->collapseAlways(),
             Column::make("Created at", "created_at")
                 ->collapseOnMobile()
                 ->sortable(),

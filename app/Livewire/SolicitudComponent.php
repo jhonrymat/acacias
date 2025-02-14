@@ -400,7 +400,10 @@ class SolicitudComponent extends Component
             // Lógica para determinar el estado final
             $estadoFinal = ($this->estado_id === 'Avanzar' && $this->estado_id2 === '2') ? 2 : 3; // 2 = Procesando, 3 = Rechazada
 
-            $solicitud->update(['estado_id' => $estadoFinal]);
+            $solicitud->update([
+                'estado_id' => $estadoFinal,
+                'actualizado_por' => auth()->id(), // Liberar la solicitud
+            ]);
 
             $userName = $solicitud->user->name; // Nombre del usuario
             $userEmail = $solicitud->user->email; // Email del usuario

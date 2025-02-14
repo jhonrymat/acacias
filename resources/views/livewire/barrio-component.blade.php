@@ -45,10 +45,10 @@
                             <option value="" selected>Selecciona una Numero</option>
                             <option value="1">1</option>
                             <option value="2">2</option>
-                            <option value="2">3</option>
-                            <option value="2">4</option>
-                            <option value="2">5</option>
-                            <option value="2">6</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                            <option value="6">6</option>
                         </select>
                         @error('codigoNumero')
                             <span class="text-red-500">{{ $message }}</span>

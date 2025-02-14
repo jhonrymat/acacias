@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('role'); // Nombre del rol (e.g., 'admin', 'validador1')
             $table->string('iframe_title'); // Título del iframe
             $table->text('iframe_src'); // URL del iframe
+            $table->json('attributes')->nullable(); // Atributos adicionales del iframe
             $table->timestamps();
         });
     }
