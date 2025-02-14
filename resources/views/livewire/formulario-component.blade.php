@@ -424,11 +424,36 @@
 
             <!-- Subir Recibo -->
             <div class="mb-4">
-                <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" for="recibo_input">
-                    Suba un recibo de servicio público domiciliario con fecha de expedición no mayor a 30 días
-                    (gas, agua o energía). Asegúrese de que la dirección registrada en su solicitud coincida exactamente
-                    con la del recibo.*
-                </label>
+                <div class="p-4 border-2 border-red-500 bg-red-100 text-red-900 rounded-lg">
+                    <div class="p-4 border-3 border-red-500 bg-red-100 text-red-900 rounded-lg shadow-lg">
+                        <label class="block text-sm font-medium">
+                            Por favor adjunte
+                            <span class="font-bold text-lg">NÍTIDA Y A COLOR</span> una copia de un recibo físico de servicios públicos de su domicilio.
+                            <br>
+                            <span class="font-bold text-lg">(ÚNICAMENTE AGUA, ENERGÍA, GAS O ASEO)</span>
+                            <br><br>
+
+                            <div class="flex items-start">
+                                <span class="text-red-600 text-xl">🚨</span>
+                                <p class="ml-2">
+                                    <strong class="text-red-700">Importante:</strong> El recibo debe tener una expedición no mayor a
+                                    <strong>30 días</strong>. La plataforma <span class="font-bold text-red-700">NO admite recibos digitales</span> generados por servicios web de las empresas.
+                                </p>
+                            </div>
+
+                            <br>
+
+                            <div class="flex items-start">
+                                <span class="text-green-600 text-xl">✅</span>
+                                <p class="ml-2">
+                                    La dirección ingresada en su formulario debe coincidir <strong>exactamente</strong> con la del recibo.
+                                </p>
+                            </div>
+                        </label>
+                    </div>
+
+                </div>
+
                 <div class="relative group">
                     <input wire:model="recibo"
                         class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50
