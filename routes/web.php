@@ -4,7 +4,9 @@ use Milon\Barcode\DNS2D;
 use App\Models\Solicitud;
 use App\Models\RoleIframe;
 use App\Models\Validacion;
+use App\Livewire\AccessLog;
 use App\Livewire\ValidarQr;
+use App\Livewire\ActivityLog;
 use App\Livewire\SiteSettings;
 use App\Livewire\ManageIframes;
 use App\Livewire\RolesComponent;
@@ -25,9 +27,9 @@ use Illuminate\Support\Facades\Route;
 use App\Livewire\CertificadoComponent;
 use App\Livewire\SolicitudesComponent;
 use App\Livewire\ValidadoresComponent;
+use App\Http\Controllers\PDFController;
 use App\Livewire\EstadisticasValidador;
 use App\Livewire\TipoSolicitanteComponent;
-use App\Http\Controllers\PDFController;
 
 
 Route::get('/', function () {
@@ -77,8 +79,11 @@ Route::middleware([
 
 
 
-Route::get('/solicitud/pdf/{id}', [PDFController::class, 'verPDF'])->name('solicitud.verPDF');
+    Route::get('/solicitud/pdf/{id}', [PDFController::class, 'verPDF'])->name('solicitud.verPDF');
 
+    // tablas
+    Route::middleware(['can:permisos'])->get('historial-accesos', AccessLog::class)->name('historial.accesos');
+    Route::middleware(['can:permisos'])->get('historial-actividades', ActivityLog::class)->name('historial.actividades');
 
 
     Route::middleware(['can:iframe'])->get('iframes', ManageIframes::class)->name('iframes');

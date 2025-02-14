@@ -95,6 +95,13 @@
                                 <x-dropdown-link href="{{ route('administracion') }}">
                                     {{ __('administración') }}
                                 </x-dropdown-link>
+                                {{-- historial-actividades --}}
+                                <x-dropdown-link href="{{ route('historial.actividades') }}">
+                                    {{ __('Historial de actividades') }}
+                                </x-dropdown-link>
+                                <x-dropdown-link href="{{ route('historial.accesos') }}">
+                                    {{ __('Historial de accesos') }}
+                                </x-dropdown-link>
                             </x-slot>
                         </x-dropdown>
                     </div>

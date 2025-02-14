@@ -147,6 +147,7 @@
                                     <th class="border p-2">Certificado</th>
                                     <th class="border p-2">Estado</th>
                                     <th class="border p-2">Fecha Emisión</th>
+                                    <th class="border p-2">Fecha de creación</th>
                                     <th class="border p-2">Notas</th>
                                 </tr>
                             </thead>
@@ -179,6 +180,9 @@
                                             </td>
                                             <td class="border p-2">
                                                 {{ $solicitud->fecha_emision ? $solicitud->fecha_emision->format('d/m/Y') : 'N/A' }}
+                                            </td>
+                                            <td class="border p-2">
+                                                {{ $solicitud->created_at->format('d/m/Y') }}
                                             </td>
                                             <td class="border p-2">
                                                 <p>{{ $validacion->notas }}</p>
