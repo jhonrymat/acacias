@@ -427,8 +427,8 @@
                 <div class="p-4 border-2 border-red-500 bg-red-100 text-red-900 rounded-lg">
                     <div class="p-4 border-3 border-red-500 bg-red-100 text-red-900 rounded-lg shadow-lg">
                         <label class="block text-sm font-medium">
-                            Por favor adjunte
-                            <span class="font-bold text-lg">NÍTIDA Y A COLOR</span> una copia de un recibo físico de servicios públicos de su domicilio.
+                            Por favor adjunte una
+                            <span class="font-bold text-lg"> FOTO NÍTIDA Y A COLOR</span> de un recibo de servicios públicos de su domicilio,
                             <br>
                             <span class="font-bold text-lg">(ÚNICAMENTE AGUA, ENERGÍA, GAS O ASEO)</span>
                             <br><br>
