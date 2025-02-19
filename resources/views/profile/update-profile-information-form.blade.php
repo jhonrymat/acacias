@@ -57,28 +57,28 @@
         <div class="col-span-6 sm:col-span-4">
             <x-label for="name" value="{{ __('Name') }}*" />
             <x-input id="name" type="text" class="mt-1 block w-full" wire:model.defer="state.name"
-                autocomplete="name" />
+                autocomplete="name" disabled/>
             <x-input-error for="name" class="mt-2" />
         </div>
         {{-- nombre_2 --}}
         <div class="col-span-6 sm:col-span-4">
             <x-label for="nombre_2" value="{{ __('Nombre 2') }}" />
             <x-input id="nombre_2" type="text" class="mt-1 block w-full" wire:model.defer="state.nombre_2"
-                autocomplete="nombre_2" />
+                autocomplete="nombre_2" disabled/>
             <x-input-error for="nombre_2" class="mt-2" />
         </div>
         {{-- apellido_1 --}}
         <div class="col-span-6 sm:col-span-4">
             <x-label for="apellido_1" value="{{ __('Apellido 1') }}*" />
             <x-input id="apellido_1" type="text" class="mt-1 block w-full" wire:model.defer="state.apellido_1"
-                autocomplete="apellido_1" />
+                autocomplete="apellido_1" disabled/>
             <x-input-error for="apellido_1" class="mt-2" />
         </div>
         {{-- apellido_2 --}}
         <div class="col-span-6 sm:col-span-4">
             <x-label for="apellido_2" value="{{ __('Apellido 2') }}" />
             <x-input id="apellido_2" type="text" class="mt-1 block w-full" wire:model.defer="state.apellido_2"
-                autocomplete="apellido_2" />
+                autocomplete="apellido_2" disabled/>
             <x-input-error for="apellido_2" class="mt-2" />
         </div>
         <!-- Email -->
