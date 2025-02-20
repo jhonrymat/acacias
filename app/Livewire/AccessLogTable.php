@@ -21,7 +21,7 @@ class AccessLogTable extends DataTableComponent
     public function columns(): array
     {
         return [
-            Column::make('ID', 'id')->sortable(),
+            Column::make('ID', 'id')->searchable()->sortable(),
             Column::make('Usuario', 'user.name')->searchable()->sortable(),
             Column::make('IP', 'ip_address')->searchable()->sortable(),
             Column::make('Navegador', 'user_agent')->searchable()->collapseAlways(),
