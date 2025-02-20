@@ -30,6 +30,7 @@ use App\Livewire\ValidadoresComponent;
 use App\Http\Controllers\PDFController;
 use App\Livewire\EstadisticasValidador;
 use App\Livewire\TipoSolicitanteComponent;
+use App\Livewire\AdminNotifications;
 
 
 Route::get('/', function () {
@@ -66,6 +67,7 @@ Route::middleware([
     // ruta para obtener todos los ciudadanos de la base de datos
     Route::middleware(['can:ciudadanos'])->get('ciudadanos', CiudadanosComponent::class)->name('ciudadanos');
     Route::middleware(['can:validadores'])->get('validadores', ValidadoresComponent::class)->name('validadores');
+
     Route::get('certificados', CertificadoComponent::class)->name('certificados');
     //ruta para la politica de proteccion de datos
     Route::get('proteccion', function () {
@@ -85,6 +87,8 @@ Route::middleware([
     Route::middleware(['can:permisos'])->get('historial-accesos', AccessLog::class)->name('historial.accesos');
     Route::middleware(['can:permisos'])->get('historial-actividades', ActivityLog::class)->name('historial.actividades');
 
+    //notificaciones
+    Route::middleware(['can:permisos'])->get('notifications', AdminNotifications::class)->name('admin.notifications');
 
     Route::middleware(['can:iframe'])->get('iframes', ManageIframes::class)->name('iframes');
 
@@ -153,5 +157,4 @@ Route::middleware([
 });
 
 
-// comado para crea cpmponete de livewire
-// php artisan make:livewire EstadisticasValidador
+

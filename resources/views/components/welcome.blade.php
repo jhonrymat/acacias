@@ -1,3 +1,4 @@
+<livewire:notification-banner position="welcome" />
 @role('user')
     <script>
         // Mostrar el mensaje automáticamente al cargar la página
