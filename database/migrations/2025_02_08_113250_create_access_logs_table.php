@@ -14,7 +14,7 @@ return new class extends Migration {
             $table->id();
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->string('ip_address')->nullable();
-            $table->string('user_agent')->nullable();
+            $table->text('user_agent')->nullable();
             $table->timestamp('logged_in_at')->nullable();
             $table->timestamp('logged_out_at')->nullable();
             $table->boolean('out_of_working_hours')->default(false);

@@ -21,10 +21,10 @@ class ActivityLogTable extends DataTableComponent
             Column::make('ID', 'id')->sortable(),
             Column::make('Usuario', 'user.name')->searchable()->sortable(),
             Column::make('Acción', 'action')->searchable()->sortable(),
-            Column::make('Modelo Afectado', 'model_type')->searchable(),
-            Column::make('ID del Registro', 'model_id')->sortable(),
+            Column::make('Modelo Afectado', 'model_type')->searchable()->collapseAlways(),
+            Column::make('ID del Registro', 'model_id')->searchable()->sortable(),
             Column::make('Fecha y Hora', 'created_at')->sortable(),
-            Column::make("Updated at", "updated_at")->sortable(),
+            Column::make("Updated at", "updated_at")->sortable()->collapseAlways(),
         ];
     }
 }

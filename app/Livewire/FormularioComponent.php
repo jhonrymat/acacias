@@ -124,8 +124,10 @@ class FormularioComponent extends Component
                 $originalName = $file->getClientOriginalName();
                 // Obtener la extensión del archivo
                 $extension = $file->getClientOriginalExtension();
-                // Crear un nombre único: nombre original + fecha y hora
-                $fileName = pathinfo($originalName, PATHINFO_FILENAME) . '_' . now()->format('Ymd_His') . '.' . $extension;
+                // Limpiar caracteres especiales del nombre original
+                $fileNameSanitized = preg_replace('/[^A-Za-z0-9_\-]/', '_', pathinfo($originalName, PATHINFO_FILENAME));
+                // Crear un nombre único: nombre original limpio + fecha y hora
+                $fileName = $fileNameSanitized . '_' . now()->format('Ymd_His') . '.' . $extension;
                 // Guardar el archivo en la carpeta específica según el tipo de archivo
                 $path = $file->storeAs($key, $fileName, 'public');
                 // Almacenar la ruta del archivo en el array
