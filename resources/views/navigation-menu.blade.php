@@ -102,6 +102,9 @@
                                 <x-dropdown-link href="{{ route('historial.accesos') }}">
                                     {{ __('Historial de accesos') }}
                                 </x-dropdown-link>
+                                <x-dropdown-link href="{{ route('admin.notifications') }}">
+                                    {{ __('Notificaciones') }}
+                                </x-dropdown-link>
                             </x-slot>
                         </x-dropdown>
                     </div>

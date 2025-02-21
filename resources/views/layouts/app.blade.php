@@ -34,6 +34,7 @@
 
         <div class="min-h-screen bg-gray-100">
             @livewire('navigation-menu')
+            <livewire:notification-banner position="navbar" /> 
 
             <!-- Page Heading -->
             @if (isset($header))
