@@ -304,7 +304,8 @@ class SolicitudComponent extends Component
     // enviar datos a modal procesar para que el validador 1 cambie el estado
     public function procesar($Id)
     {
-        $solicitud = Solicitud::find($Id);
+        // Bloquear la solicitud mientras se procesa para evitar concurrencia
+        $solicitud = Solicitud::where('id', $Id)->lockForUpdate()->first();
         // obtener el usuario de esta solicitud
         $user = User::find($solicitud->user_id);
 
@@ -318,6 +319,9 @@ class SolicitudComponent extends Component
             $this->dispatch('Updated');
             return;
         }
+
+        // Refrescar el modelo para obtener la información más actualizada
+        $solicitud->refresh();
 
         // Verificar si la solicitud está en revisión por otro validador
         if ($solicitud->estado_id == $enRevisionId && $solicitud->actualizado_por !== auth()->id()) {
