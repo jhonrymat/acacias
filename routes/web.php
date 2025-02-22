@@ -13,9 +13,11 @@ use App\Livewire\RolesComponent;
 use App\Livewire\BarrioComponent;
 use App\Livewire\ConsultaTramite;
 use App\Livewire\GeneroComponent;
+use App\Livewire\MaintenanceToggle;
 use App\Livewire\NestudioComponent;
 use App\Livewire\PermisosComponent;
 use App\Livewire\UserRoleComponent;
+use App\Livewire\AdminNotifications;
 use App\Livewire\HistorialComponent;
 use App\Livewire\OcupacionComponent;
 use App\Livewire\PoblacionComponent;
@@ -30,7 +32,6 @@ use App\Livewire\ValidadoresComponent;
 use App\Http\Controllers\PDFController;
 use App\Livewire\EstadisticasValidador;
 use App\Livewire\TipoSolicitanteComponent;
-use App\Livewire\AdminNotifications;
 
 
 Route::get('/', function () {
@@ -40,6 +41,9 @@ Route::get('/', function () {
 Route::get('/consulta-tramite', ConsultaTramite::class)->name('consulta.tramite');
 Route::get('/qr/{id}/{numeroIdentificacion}', ValidarQr::class)->name('validar.qr');
 
+Route::middleware(['auth', 'can:permisos'])->group(function () {
+    Route::get('admin/maintenance', MaintenanceToggle::class)->name('maintenance.toggle');
+});
 
 
 Route::middleware([
