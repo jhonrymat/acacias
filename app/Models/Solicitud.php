@@ -34,6 +34,7 @@ class Solicitud extends Model
         'fecha_emision',
         'observaciones',
         'terminos',
+        'es_favorito',
     ];
 
     public function user()
