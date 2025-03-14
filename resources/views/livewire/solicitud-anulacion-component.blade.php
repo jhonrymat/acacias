@@ -38,7 +38,10 @@
                 <label for="descripcion" class="block text-sm font-medium text-gray-700">Descripción:</label>
                 <textarea id="descripcion" wire:model="descripcion"
                     class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500"
-                    rows="4" placeholder="Describe el motivo de la anulación..."></textarea>
+                    rows="4" placeholder="Describe el motivo de la anulación..." required></textarea>
+                @error('descripcion')
+                    <span class="text-red-500 text-sm">{{ $message }}</span>
+                @enderror
             </div>
 
             <!-- Carga de Archivo -->
@@ -48,21 +51,21 @@
                     class="mt-2 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4
                 file:rounded-lg file:border-0 file:text-sm file:font-semibold
                 file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100" />
-                @error('archivo')
-                    <span class="text-red-500 text-sm">{{ $message }}</span>
-                @enderror
+                @if ($errors->has('archivo'))
+                    <span class="text-red-500 text-sm">{{ $errors->first('archivo') }}</span>
+                @endif
             </div>
 
             <!-- Checkbox para Visibilidad -->
             <div class="flex items-center mb-4">
                 <input type="checkbox" id="visible" wire:model="visible"
-                    class="h-5 w-5 text-blue-600 focus:ring-blue-500 border-gray-300 rounded">
+                    class="h-5 w-5 text-blue-600 focus:ring-blue-500 border-gray-300 rounded" required>
                 <label for="visible" class="ml-2 text-sm text-gray-700">¿Hacer visible la anulación al usuario?</label>
             </div>
 
             <!-- Botón para Anular -->
             <div class="text-right">
-                <button wire:click="anularSolicitud"
+                <button wire:click="confirmarAnulacion"
                     class="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-lg shadow">
                     🔴 Anular Solicitud
                 </button>
@@ -74,5 +77,7 @@
             <div class="text-green-600 mt-4">{{ session('success') }}</div>
         </div>
     @endif
+
+    <x-anular></x-anular>
 
 </div>

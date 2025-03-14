@@ -2,19 +2,42 @@
 
 namespace App\Livewire;
 
+use Log;
+use Exception;
 use Livewire\Component;
-use Livewire\WithFileUploads;
-use App\Models\Solicitud;
 use App\Models\Anulacion;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Storage;
+use App\Models\Solicitud;
 use Illuminate\Support\Str;
+use Livewire\WithFileUploads;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Storage;
+use App\Mail\SolicitudAnuladaNotification;
 
 class SolicitudAnulacionComponent extends Component
 {
     use WithFileUploads;
 
     public $numeroSolicitud, $solicitud, $descripcion, $archivo, $visible;
+
+    protected $rules = [
+        'numeroSolicitud' => 'required|integer|exists:solicitudes,id',
+        'descripcion' => 'required|string',
+        'archivo' => 'nullable|file|mimes:pdf,jpg,png|max:5120', // Máx 5MB
+        'visible' => 'boolean',
+    ];
+
+    protected $messages = [
+        'numeroSolicitud.exists' => 'La solicitud no existe.',
+        'numeroSolicitud.integer' => 'El número de solicitud debe ser un número entero.',
+        'numeroSolicitud.required' => 'El número de solicitud es obligatorio.',
+        'descripcion.required' => 'La descripción es obligatoria.',
+        'archivo.file' => 'El archivo debe ser un archivo.',
+        'archivo.mimes' => 'El archivo debe ser un PDF, JPG o PNG.',
+        'archivo.max' => 'El archivo no puede ser mayor a 5MB.',
+        'visible.boolean' => 'El campo visible debe ser un valor booleano.',
+
+    ];
 
     public function buscarSolicitud()
     {
@@ -27,12 +50,26 @@ class SolicitudAnulacionComponent extends Component
         }
     }
 
+    // preguntar si desea anular la solicitud
+    public function confirmarAnulacion()
+    {
+        if (!$this->solicitud) {
+            session()->flash('error', 'No se encontró la solicitud.');
+            return;
+        }
+
+        $this->dispatch(
+            'anular',
+            icon: 'info',
+            title: '¿Estás seguro?',
+            text: 'Anularas la solicitud #' . $this->solicitud->id . '.',
+        );
+        $this->dispatch('Updated');
+    }
+
     public function anularSolicitud()
     {
-        $this->validate([
-            'descripcion' => 'required|string',
-            'archivo' => 'nullable|file|mimes:pdf,jpg,png|max:5120', // Máx 5MB
-        ]);
+        $this->validate();
 
         // Verificar si la carpeta "anulados" existe en `storage/app/public/anulados`
         if (!Storage::exists('public/anulados')) {
@@ -70,6 +107,12 @@ class SolicitudAnulacionComponent extends Component
 
         // Actualizar estado de la solicitud a "Anulado" (ID = 8)
         $this->solicitud->update(['estado_id' => 8]);
+
+        // Enviar el correo
+        $userName = $this->solicitud->NombreCompleto;
+        $userEmail = $this->solicitud->user->email;
+
+        Mail::to($userEmail)->send(new SolicitudAnuladaNotification($this->solicitud->id, $userName));
 
         // Mensaje de éxito y reseteo del formulario
         session()->flash('success', 'Solicitud anulada correctamente.');
