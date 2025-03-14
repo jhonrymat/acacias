@@ -5,6 +5,7 @@ namespace App\Livewire;
 use Carbon\Carbon;
 use App\Models\User;
 use Livewire\Component;
+use App\Models\Anulacion;
 use App\Models\Solicitud;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\Hash;
@@ -19,6 +20,11 @@ class CiudadanosComponent extends Component
     public $showModalHistory = false;
     public $historial;
     protected $listeners = ['edit', 'history', 'generarPDF'];
+
+    // Ver por que se anulo la solicitud
+    public $mostrarModal = false;
+    public $descripcionAnulacion, $archivoAnulacion, $visibleAnulacion;
+
 
     public function mount()
     {
@@ -63,6 +69,25 @@ class CiudadanosComponent extends Component
         'numeroIdentificacion' => 'número de identificación',
         'fechaNacimiento' => 'fecha de nacimiento',
     ];
+
+    // metodo para ver la anulacion
+    public function verAnulacion($solicitudId)
+    {
+        // Buscar la anulación de la solicitud
+        $anulacion = Anulacion::where('solicitud_id', $solicitudId)->first();
+
+        if ($anulacion) {
+            $this->descripcionAnulacion = $anulacion->descripcion;
+            $this->archivoAnulacion = $anulacion->archivo;
+            $this->visibleAnulacion = $anulacion->visible;
+
+            // Mostrar el modal
+            $this->mostrarModal = true;
+        } else {
+            $this->dispatch('sweet-alert-good', icon: 'error', title: 'Error', text: 'No se encontró información de anulación.');
+        }
+    }
+
 
     // edit
     public function edit($Id)

@@ -1,5 +1,6 @@
 <?php
 
+use App\Livewire\SolicitudAnulacionComponent;
 use Milon\Barcode\DNS2D;
 use App\Models\Solicitud;
 use App\Models\RoleIframe;
@@ -71,6 +72,10 @@ Route::middleware([
     // ruta para obtener todos los ciudadanos de la base de datos
     Route::middleware(['can:ciudadanos'])->get('ciudadanos', CiudadanosComponent::class)->name('ciudadanos');
     Route::middleware(['can:validadores'])->get('validadores', ValidadoresComponent::class)->name('validadores');
+
+    // Anular solicitudes ya omitidas
+    // Route::middleware(['can:permisos'])->get('anular-solicitud', SolicitudAnulacionComponent::class)->name('anular-solicitud');
+    Route::middleware(['role:validador2'])->get('anular-solicitud', SolicitudAnulacionComponent::class)->name('anular-solicitud');
 
     Route::get('certificados', CertificadoComponent::class)->name('certificados');
     //ruta para la politica de proteccion de datos

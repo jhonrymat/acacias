@@ -5,6 +5,7 @@ namespace App\Livewire;
 use Carbon\Carbon;
 use App\Models\User;
 use Livewire\Component;
+use App\Models\Anulacion;
 use App\Models\Solicitud;
 use App\Models\Validacion;
 use Barryvdh\DomPDF\Facade\Pdf;
@@ -32,10 +33,14 @@ class SolicitudesComponent extends Component
 
     public $name;
 
+    // Ver por que se anulo la solicitud
+    public $mostrarModal = false;
+    public $descripcionAnulacion, $archivoAnulacion, $visibleAnulacion;
 
 
 
-    protected $listeners = ['view', 'generarPDF', 'viewPDF', 'mostrarNotas'];
+
+    protected $listeners = ['view', 'generarPDF', 'viewPDF', 'mostrarNotas', 'verAnulacion'];
 
     public function mount()
     {
@@ -149,6 +154,23 @@ class SolicitudesComponent extends Component
             $this->dispatch('sweet-alert-good', icon: 'error', title: 'Error', text: 'No se encontraron las notas.');
         }
 
+    }
+
+    public function verAnulacion($Id)
+    {
+        // Buscar la anulación de la solicitud
+        $anulacion = Anulacion::where('solicitud_id', $Id)->first();
+
+        if ($anulacion) {
+            $this->descripcionAnulacion = $anulacion->descripcion;
+            $this->archivoAnulacion = $anulacion->archivo;
+            $this->visibleAnulacion = $anulacion->visible;
+
+            // Mostrar el modal
+            $this->mostrarModal = true;
+        } else {
+            $this->dispatch('sweet-alert-good', icon: 'error', title: 'Error', text: 'No se encontró información de anulación.');
+        }
     }
 
     public function render()

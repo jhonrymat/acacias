@@ -141,6 +141,11 @@
                         {{ __('Estadisticas') }}
                     </x-nav-link>
                 @endrole
+                @role('validador2')
+                <x-nav-link class="hidden sm:flex mr-6" href="{{ route('anular-solicitud') }}" :active="request()->routeIs('anular-solicitud')">
+                    {{ __('Anular solicitud') }}
+                </x-nav-link>
+                @endrole
             </div>
 
             <div class="hidden sm:flex sm:items-center sm:ms-6">
