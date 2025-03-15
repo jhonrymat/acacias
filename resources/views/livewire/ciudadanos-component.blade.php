@@ -166,6 +166,13 @@
                                                             class="px-4 py-2 bg-green-500 text-white rounded">
                                                             <i class="fa-solid fa-file-arrow-down"></i> Descargar
                                                         </button>
+                                                        {{-- Si la solicitud fue "Anulada", mostrar botón para ver detalles --}}
+                                                    @elseif ($solicitud->estado->nombreEstado === 'Anulado'&& $validacion->visible === 1)
+                                                        <button wire:click="verAnulacion({{ $solicitud->id }})"
+                                                            class="px-4 py-2 bg-red-600 text-white rounded">
+                                                            <i class="fa-solid fa-eye"></i> Ver Anulación
+                                                        </button>
+                                                        {{-- Si está "Rechazada" y es visible, mostrar observaciones --}}
                                                     @elseif($solicitud->estado->nombreEstado === 'Rechazada' && $validacion->visible === 1)
                                                         <p>{{ $solicitud->observaciones }}</p>
                                                     @else
@@ -201,4 +208,37 @@
         </div>
     </div>
     <x-sweet-alert-good></x-sweet-alert-good>
+    <!-- Modal para ver detalles de la anulación -->
+    <div x-data="{ open: @entangle('mostrarModal') }" x-cloak>
+        <div x-show="open" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+            <div class="bg-white p-6 rounded-lg shadow-lg max-w-lg w-full">
+                <h2 class="text-lg font-semibold text-gray-800 mb-4">Detalles de la Anulación</h2>
+
+                <!-- Descripción -->
+                <p class="text-gray-700"><strong>Descripción:</strong> {{ $descripcionAnulacion }}</p>
+
+                <!-- Archivo (si existe) -->
+                @if ($archivoAnulacion)
+                    <p class="mt-2"><strong>Archivo:</strong>
+                        <a href="{{ asset('storage/' . $archivoAnulacion) }}"
+                            class="text-blue-600 underline" target="_blank">Ver Archivo</a>
+                    </p>
+                @endif
+
+                <!-- ¿Es visible? -->
+                <p class="mt-2"><strong>Visible para los usuario:</strong>
+                    @if ($visibleAnulacion)
+                        <span class="text-green-600 font-bold">Sí</span>
+                    @else
+                        <span class="text-red-600 font-bold">No</span>
+                    @endif
+                </p>
+
+                <!-- Botón de cierre -->
+                <div class="mt-4 text-right">
+                    <button x-on:click="open = false" class="px-4 py-2 bg-gray-500 text-white rounded">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>

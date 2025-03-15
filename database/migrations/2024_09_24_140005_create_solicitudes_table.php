@@ -47,6 +47,7 @@ return new class extends Migration
             $table->foreign('estado_id')->references('id')->on('estados');
             $table->foreign('actualizado_por')->references('id')->on('users');
             $table->foreign('Validador2_id')->references('id')->on('users');
+            $table->boolean('es_favorito')->default(false);
 
             // Crear índice en la columna estado_id
             $table->index('estado_id', 'idx_estado_id');

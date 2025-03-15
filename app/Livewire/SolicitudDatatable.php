@@ -13,9 +13,11 @@ use Rappasoft\LaravelLivewireTables\DataTableComponent;
 class SolicitudDatatable extends DataTableComponent
 {
     protected $model = Solicitud::class;
-    protected $listeners = ['Updated' => '$refresh',
-                            'aceptarTodasSolicitudes' => 'AceptarTodas',
-                            'rechazarTodasSolicitudes' => 'RechazarTodas']; // Escuchar el evento para aceptar todas las solicitudes
+    protected $listeners = [
+        'Updated' => '$refresh',
+        'aceptarTodasSolicitudes' => 'AceptarTodas',
+        'rechazarTodasSolicitudes' => 'RechazarTodas'
+    ]; // Escuchar el evento para aceptar todas las solicitudes
     public ?int $searchFilterDebounce = 600;
     public array $perPageAccepted = [10, 20, 50, 100];
 
@@ -268,7 +270,7 @@ class SolicitudDatatable extends DataTableComponent
             $query->where('estado_id', 2);
         }
 
-        return $query;
+        return $query->orderByDesc('es_favorito');
     }
 
 
@@ -311,6 +313,17 @@ class SolicitudDatatable extends DataTableComponent
         }
         return 'Sin archivo';
     }
+
+    public function toggleFavorito($solicitudId)
+    {
+        $solicitud = Solicitud::find($solicitudId);
+        if ($solicitud) {
+            $solicitud->es_favorito = !$solicitud->es_favorito;
+            $solicitud->save();
+        }
+
+        $this->dispatch('Updated');
+    }
     public function columns(): array
     {
         return [
@@ -327,6 +340,21 @@ class SolicitudDatatable extends DataTableComponent
                     </span>"
                 )
                 ->html(),
+            Column::make("Favorito", "es_favorito")
+                ->sortable()
+                ->searchable()
+                ->format(function ($value, $row) {
+                    if ($value) {
+                        return '<button wire:click="toggleFavorito(' . $row->id . ')" class="border-0 bg-transparent">
+                                    <i class="fas fa-star" style="color: #FFC107; font-size: 20px;"></i>
+                                </button>';
+                    } else {
+                        return '<button wire:click="toggleFavorito(' . $row->id . ')" class="border-0 bg-transparent">
+                                    <i class="far fa-star" style="color: #6c757d; font-size: 20px;"></i>
+                                </button>';
+                    }
+                })
+                ->html(), // Activa la renderización del HTML
             Column::make("Usuario", "user_id")
                 ->format(fn($value, $row) => $row->user ? $row->user->name_completo : 'Usuario no asignado')
                 ->sortable()
