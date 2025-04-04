@@ -573,9 +573,9 @@
 
             <!-- Contenedor para los Archivos Adjuntos Opcionales -->
             <div class="p-6 mb-8 border border-blue-300 rounded-lg bg-blue-50">
-                <h3 class="text-lg font-semibold text-blue-800 mb-4">Archivos Adjuntos (Opcional)</h3>
+                <h3 class="text-lg font-semibold text-blue-800 mb-4">Archivos Adjuntos </h3>
                 <p class="text-sm text-blue-700 mb-6">
-                    Los siguientes anexos son opcionales y pueden ayudar a agilizar el proceso de su solicitud. Si no
+                    Los siguientes anexos pueden ayudar a agilizar el proceso de su solicitud. Si no
                     tiene estos documentos, aún puede completar y enviar el formulario.
                 </p>
 
