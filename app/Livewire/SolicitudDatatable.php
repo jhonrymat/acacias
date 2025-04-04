@@ -42,7 +42,7 @@ class SolicitudDatatable extends DataTableComponent
             ]);
         }
 
-        $this->setDefaultSort('id', 'desc');
+        $this->setDefaultSort('id', 'asc');
         $this->setSingleSortingStatus(false);
 
         // Configurar el mensaje personalizado según el rol
@@ -270,7 +270,8 @@ class SolicitudDatatable extends DataTableComponent
             $query->where('estado_id', 2);
         }
 
-        return $query->orderByDesc('es_favorito');
+        return $query;
+
     }
 
 
