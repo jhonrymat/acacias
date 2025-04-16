@@ -240,7 +240,7 @@
                     <!-- Sección de fotos del frente de la casa -->
                     <div x-data="{ fotosCasa: [] }" class="mb-6">
                         <label class="block font-semibold mb-1">Fotos del frente de la casa</label>
-                        <input type="file" multiple accept="image/*" class="mb-2"
+                        <input type="file" multiple accept="image/*" capture="environment" class="mb-2"
                             @change="Array.from($event.target.files).forEach(file => fotosCasa.push(file))">
                         <div class="flex flex-wrap gap-2">
                             <template x-for="(foto, index) in fotosCasa" :key="index">
@@ -257,7 +257,7 @@
                     <!-- Sección de fotos de la matrícula -->
                     <div x-data="{ fotosMatricula: [] }" class="mb-6">
                         <label class="block font-semibold mb-1">Fotos de la matrícula</label>
-                        <input type="file" multiple accept="image/*" class="mb-2"
+                        <input type="file" multiple accept="image/*" capture="environment" class="mb-2"
                             @change=" Array.from($event.target.files).forEach(file => fotosMatricula.push(file)) ">
                         <div class="flex flex-wrap gap-2">
                             <template x-for="(foto, index) in fotosMatricula" :key="index">
