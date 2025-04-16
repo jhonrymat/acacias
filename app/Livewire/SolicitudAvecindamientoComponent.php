@@ -53,8 +53,11 @@ class SolicitudAvecindamientoComponent extends Component
         'JAComunal.*' => 'file|mimes:pdf,jpg,png', // Validar cada archivo
         'detalles' => 'required|string',
         'visible' => 'nullable|boolean',
+        'fotosFrente' => 'nullable|array',
         'fotosFrente.*' => 'nullable|image|mimes:jpeg,png,jpg|max:5120',
+        'fotosMatricula' => 'nullable|array',
         'fotosMatricula.*' => 'nullable|image|mimes:jpeg,png,jpg|max:5120',
+
 
     ];
 
@@ -65,13 +68,7 @@ class SolicitudAvecindamientoComponent extends Component
         'estado_id2.exists' => 'El estado seleccionado no es válido.',
         'JAComunal.*.mimes' => 'El archivo debe ser de tipo: PDF, PNG o JPG.',
         'detalles.required' => 'El campo "Observaciones" es obligatorio.',
-        'visible.boolean' => 'El campo "Habilitar visualización" debe ser verdadero o falso.',
-        'fotosFrente.*.image' => 'El archivo debe ser una imagen.',
-        'fotosFrente.*.mimes' => 'El archivo debe ser de tipo: JPEG, PNG o JPG.',
-        'fotosFrente.*.max' => 'El archivo no debe exceder los 5 MB.',
-        'fotosMatricula.*.image' => 'El archivo debe ser una imagen.',
-        'fotosMatricula.*.mimes' => 'El archivo debe ser de tipo: JPEG, PNG o JPG.',
-        'fotosMatricula.*.max' => 'El archivo no debe exceder los 5 MB.',
+        'visible.boolean' => 'El campo "Habilitar visualización" debe ser verdadero o falso.'
     ];
 
 
@@ -235,10 +232,6 @@ class SolicitudAvecindamientoComponent extends Component
             $this->dispatch('sweet-alert-good', icon: 'error', title: 'Error', text: $e->getMessage());
         }
     }
-
-
-
-
 
     public function rechazar($Id)
     {
@@ -405,8 +398,6 @@ class SolicitudAvecindamientoComponent extends Component
         }
     }
 
-
-
     public function save()
     {
         $this->dispatch('confirm-save');
@@ -414,83 +405,87 @@ class SolicitudAvecindamientoComponent extends Component
 
     public function handleSave()
     {
-        $this->validate();
+        try {
+            $this->validate();
 
-        if ($this->solicitud_id) {
-            $solicitud = SolicitudAvecindamiento::find($this->solicitud_id);
+            if ($this->solicitud_id) {
+                $solicitud = SolicitudAvecindamiento::find($this->solicitud_id);
 
-            // Lógica para determinar el estado final
-            $estadoFinal = ($this->estado_id === 'Avanzar' && $this->estado_id2 === '2') ? 2 : 3; // 2 = Procesando, 3 = Rechazada
+                // Lógica para determinar el estado final
+                $estadoFinal = ($this->estado_id === 'Avanzar' && $this->estado_id2 === '2') ? 2 : 3; // 2 = Procesando, 3 = Rechazada
 
-            $solicitud->update([
-                'estado_id' => $estadoFinal,
-                'actualizado_por' => auth()->id(), // Liberar la solicitud
-            ]);
-
-            $userName = $solicitud->user->name; // Nombre del usuario
-            $userEmail = $solicitud->user->email; // Email del usuario
-
-            if ($estadoFinal === 3) {
-                // Enviar correo de rechazo
-                Mail::to($userEmail)->send(new \App\Mail\SolicitudRechazadaNotification($solicitud->id, $userName));
-            }
-
-            // Subir múltiples archivos
-            $rutasArchivos = [];
-            if ($this->JAComunal && is_array($this->JAComunal)) {
-                foreach ($this->JAComunal as $archivo) {
-                    $rutasArchivos[] = $archivo->store('uploads', 'public');
-                }
-            }
-
-            if (!empty($this->fotosFrente)) {
-                foreach ($this->fotosFrente as $foto) {
-                    $path = $foto->store('imagenes/frente', 'public');
-                    Imagen::create([
-                        'solicitud_id' => $solicitud->id,
-                        'ruta' => $path,
-                        'tipo' => 'frente',
-                        'lat' => $this->latFrente,
-                        'lng' => $this->lngFrente,
-                    ]);
-                }
-            }
-
-            if (!empty($this->fotosMatricula)) {
-                foreach ($this->fotosMatricula as $foto) {
-                    $path = $foto->store('imagenes/matricula', 'public');
-                    Imagen::create([
-                        'solicitud_id' => $solicitud->id,
-                        'ruta' => $path,
-                        'tipo' => 'matricula',
-                        'lat' => $this->latMatricula,
-                        'lng' => $this->lngMatricula,
-                    ]);
-                }
-            }
-
-            try {
-                $solicitud->validaciones()->create([
-                    'validacion1' => $this->estado_id,
-                    'validacion2' => $this->estado_id2,
-                    'JAComunal' => json_encode($rutasArchivos), // Guardar como JSON
-                    'notas' => $this->detalles,
-                    'visible' => $this->visible,
+                $solicitud->update([
+                    'estado_id' => $estadoFinal,
+                    'actualizado_por' => auth()->id(), // Liberar la solicitud
                 ]);
 
-                $this->dispatch('sweet-alert-good', icon: 'success', title: 'Validación creada con éxito.', text: 'La validación se ha guardado correctamente.');
-                $this->dispatch('Updated');
+                $userName = $solicitud->user->name; // Nombre del usuario
+                $userEmail = $solicitud->user->email; // Email del usuario
 
-            } catch (\Exception $e) {
-                $this->dispatch('sweet-alert-good', icon: 'error', title: 'Error', text: 'Error al guardar la validación.');
-                $this->dispatch('Updated');
+                if ($estadoFinal === 3) {
+                    // Enviar correo de rechazo
+                    Mail::to($userEmail)->send(new \App\Mail\SolicitudRechazadaNotification($solicitud->id, $userName));
+                }
 
+                // Subir múltiples archivos
+                $rutasArchivos = [];
+                if ($this->JAComunal && is_array($this->JAComunal)) {
+                    foreach ($this->JAComunal as $archivo) {
+                        $rutasArchivos[] = $archivo->store('uploads', 'public');
+                    }
+                }
+
+                if (!empty($this->fotosFrente)) {
+                    foreach ($this->fotosFrente as $foto) {
+                        $path = $foto->store('imagenes/frente', 'public');
+                        Imagen::create([
+                            'solicitud_id' => $solicitud->id,
+                            'ruta' => $path,
+                            'tipo' => 'frente',
+                            'lat' => $this->latFrente,
+                            'lng' => $this->lngFrente,
+                        ]);
+                    }
+                }
+
+                if (!empty($this->fotosMatricula)) {
+                    foreach ($this->fotosMatricula as $foto) {
+                        $path = $foto->store('imagenes/matricula', 'public');
+                        Imagen::create([
+                            'solicitud_id' => $solicitud->id,
+                            'ruta' => $path,
+                            'tipo' => 'matricula',
+                            'lat' => $this->latMatricula,
+                            'lng' => $this->lngMatricula,
+                        ]);
+                    }
+                }
+
+                try {
+                    $solicitud->validaciones()->create([
+                        'validacion1' => $this->estado_id,
+                        'validacion2' => $this->estado_id2,
+                        'JAComunal' => json_encode($rutasArchivos), // Guardar como JSON
+                        'notas' => $this->detalles,
+                        'visible' => $this->visible,
+                    ]);
+
+                    $this->dispatch('sweet-alert-good', icon: 'success', title: 'Validación creada con éxito.', text: 'La validación se ha guardado correctamente.');
+                    $this->dispatch('Updated');
+
+                } catch (\Exception $e) {
+                    $this->dispatch('sweet-alert-good', icon: 'error', title: 'Error', text: 'Error al guardar la validación.');
+                    $this->dispatch('Updated');
+
+                }
             }
-        }
 
-        $this->showValidar = false;
-        $this->resetForm();
-        $this->dispatch('updated');
+            $this->showValidar = false;
+            $this->resetForm();
+            $this->dispatch('updated');
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            dd($e->validator->errors()->all());
+        }
     }
 
 
