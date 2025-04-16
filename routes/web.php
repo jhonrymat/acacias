@@ -1,6 +1,5 @@
 <?php
 
-use App\Livewire\SolicitudAnulacionComponent;
 use Milon\Barcode\DNS2D;
 use App\Models\Solicitud;
 use App\Models\RoleIframe;
@@ -10,6 +9,7 @@ use App\Livewire\ValidarQr;
 use App\Livewire\ActivityLog;
 use App\Livewire\SiteSettings;
 use App\Livewire\ManageIframes;
+use App\Livewire\TipoSolicitud;
 use App\Livewire\RolesComponent;
 use App\Livewire\BarrioComponent;
 use App\Livewire\ConsultaTramite;
@@ -26,6 +26,7 @@ use App\Livewire\SolicitudComponent;
 use App\Livewire\CiudadanosComponent;
 use App\Livewire\FormularioComponent;
 use App\Livewire\TdocumentoComponent;
+use App\Livewire\HistorialAvecindamientoComponent;
 use Illuminate\Support\Facades\Route;
 use App\Livewire\CertificadoComponent;
 use App\Livewire\SolicitudesComponent;
@@ -33,6 +34,11 @@ use App\Livewire\ValidadoresComponent;
 use App\Http\Controllers\PDFController;
 use App\Livewire\EstadisticasValidador;
 use App\Livewire\TipoSolicitanteComponent;
+use App\Livewire\SolicitudAnulacionComponent;
+use App\Livewire\SolicitudAvecindamientoComponent;
+use App\Livewire\FormularioAvecindamientoComponent;
+use App\Livewire\SolicitudesAvecindamientoComponent;
+use App\Livewire\SolicitudAnulacionAvecindamientoComponent;
 
 
 Route::get('/', function () {
@@ -60,22 +66,27 @@ Route::middleware([
     Route::middleware(['can:nestudio'])->get('nestudio', NestudioComponent::class)->name('nestudio');
     Route::middleware(['can:tsolicitante'])->get('tsolicitante', TipoSolicitanteComponent::class)->name('tsolicitante');
     Route::middleware(['can:barrio'])->get('barrio', BarrioComponent::class)->name('barrio');
-    Route::middleware(['can:solicitudes'])->get('solicitudes', SolicitudComponent::class)->name('solicitudes');
+    Route::middleware(['can:solicitudes'])->get('solicitudes-residencia', SolicitudComponent::class)->name('solicitudes-residencia');
+    Route::middleware(['can:solicitudes'])->get('solicitudes-avecindamiento', SolicitudAvecindamientoComponent::class)->name('solicitudes-avecindamiento');
     Route::middleware(['can:roles'])->get('roles', RolesComponent::class)->name('roles');
     Route::middleware(['can:permisos'])->get('permisos', PermisosComponent::class)->name('permisos');
-    Route::middleware(['can:formulario'])->get('formulario', FormularioComponent::class)->name('formulario');
+    Route::middleware(['can:formulario'])->get('formulario-residencia', FormularioComponent::class)->name('formulario-residencia');
+    Route::middleware(['can:formulario'])->get('formulario-avecindamiento', FormularioAvecindamientoComponent::class)->name('formulario-avecindamiento');
     Route::middleware(['can:ocupacion'])->get('ocupacion', OcupacionComponent::class)->name('ocupacion');
     Route::middleware(['can:poblacion'])->get('poblacion', PoblacionComponent::class)->name('poblacion');
-    Route::middleware(['can:versolicitudes'])->get('versolicitudes', SolicitudesComponent::class)->name('versolicitudes');
+    Route::middleware(['can:versolicitudes'])->get('versolicitudesresidencia', SolicitudesComponent::class)->name('versolicitudesresidencia');
+    Route::middleware(['can:versolicitudes'])->get('versolicitudesavecindamiento', SolicitudesAvecindamientoComponent::class)->name('versolicitudesavecindamiento');
     Route::middleware(['can:user-roles'])->get('user-roles', UserRoleComponent::class)->name('user-roles');
-    Route::middleware(['can:historial'])->get('historial', HistorialComponent::class)->name('historial');
+    Route::middleware(['can:historial'])->get('historial-residencia', HistorialComponent::class)->name('historial-residencia');
+    Route::middleware(['can:historial'])->get('historial-avecindamiento', HistorialAvecindamientoComponent::class)->name('historial-avecindamiento');
     // ruta para obtener todos los ciudadanos de la base de datos
     Route::middleware(['can:ciudadanos'])->get('ciudadanos', CiudadanosComponent::class)->name('ciudadanos');
     Route::middleware(['can:validadores'])->get('validadores', ValidadoresComponent::class)->name('validadores');
 
     // Anular solicitudes ya omitidas
     // Route::middleware(['can:permisos'])->get('anular-solicitud', SolicitudAnulacionComponent::class)->name('anular-solicitud');
-    Route::middleware(['role:validador2'])->get('anular-solicitud', SolicitudAnulacionComponent::class)->name('anular-solicitud');
+    Route::middleware(['role:validador2'])->get('anular-solicitud-residencia', SolicitudAnulacionComponent::class)->name('anular-solicitud-residencia');
+    Route::middleware(['role:validador2'])->get('anular-solicitud-avecindamiento', SolicitudAnulacionAvecindamientoComponent::class)->name('anular-solicitud-avecindamiento');
 
     Route::get('certificados', CertificadoComponent::class)->name('certificados');
     //ruta para la politica de proteccion de datos

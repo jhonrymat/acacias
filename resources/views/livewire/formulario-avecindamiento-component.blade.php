@@ -1,5 +1,5 @@
-<div class="max-w-7xl mx-auto sm:px-6 lg:px-8 pt-7 bg-green-200">
-    <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6 border-2 border-green-500">
+<div class="max-w-7xl mx-auto sm:px-6 lg:px-8 pt-7 bg-blue-200">
+    <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6 border-2 border-blue-500">
         <!-- Mensaje de éxito -->
         @if (session()->has('message'))
             <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative" role="alert">
@@ -14,25 +14,25 @@
         <div class="bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 p-4 rounded-md shadow-md mb-4">
             <h2 class="font-bold text-lg">⚠️ Importante: Veracidad de la Información</h2>
             <p class="mt-2">
-                Al completar esta solicitud para obtener un <strong>certificado de residencia</strong>, usted declara
-                que la información proporcionada es <strong>fiel y verdadera</strong>. La presentación de datos falsos,
-                como una dirección incorrecta o un documento adulterado, no solo invalida su solicitud, sino que también
-                constituye una <strong>falta grave de acuerdo con la normativa legal vigente</strong>.
+                Al diligenciar esta solicitud para obtener su <strong>certificado de avecindamiento</strong>, usted
+                manifiesta que la información suministrada es <strong>completa, veraz y verificable</strong>. Recuerde
+                que proporcionar datos falsos, como direcciones incorrectas o documentos alterados, invalida el trámite
+                e implica consecuencias legales.
             </p>
             <p class="mt-2">
-                <strong>Advertencia:</strong> Según el <em>Artículo 289 del Código Penal Colombiano</em>, la falsedad en
-                documento público es un delito que puede conllevar sanciones penales, incluyendo penas de prisión.
-                Asegúrese de que todos los datos ingresados sean correctos y verificables para evitar sanciones y
-                garantizar un proceso ágil.
+                <strong>Atención:</strong> De acuerdo con el <em>Artículo 289 del Código Penal Colombiano</em>,
+                falsificar o alterar un documento público constituye un <strong>delito penal</strong> sancionado con
+                prisión. Por eso, es fundamental que toda la información registrada sea precisa y auténtica.
             </p>
-            <p class="mt-4 font-semibold text-center">¡Su honestidad es esencial para mantener la integridad de este
-                proceso!</p>
+            <p class="mt-4 font-semibold text-center">¡La transparencia en su solicitud garantiza un proceso más rápido
+                y seguro para todos!</p>
         </div>
+
         <form wire:submit.prevent="save" enctype="multipart/form-data">
             @csrf
             <div class="mt-8 mb-6 text-center">
                 <h2 class="text-2xl font-extrabold text-gray-800 uppercase tracking-wide">
-                    Solicitud de Certificado de Residencia
+                    Solicitud de Certificado de Avecindamiento
                 </h2>
                 <p class="text-sm text-gray-600 mt-1">Complete este formulario para iniciar su solicitud</p>
             </div>
@@ -66,7 +66,70 @@
                     <span class="text-red-500">{{ $message }}</span>
                 @enderror
             </div>
-            
+
+            @if ($esMenorDeEdad)
+                <div x-data="{ tipo: @entangle('tipoPersonaCargo') }" class="bg-white border border-green-400 rounded-lg p-6 mt-6 shadow-md">
+                    <h3 class="text-lg font-semibold text-gray-800 mb-4">Persona(s) a cargo:</h3>
+
+                    <div class="mb-4">
+                        <label for="tipoPersonaCargo" class="block font-medium text-gray-700">
+                            Tipo de persona a cargo <span class="text-red-500">*</span>
+                        </label>
+                        <select id="tipoPersonaCargo" x-model="tipo" wire:model="tipoPersonaCargo"
+                            class="form-select mt-1 block w-full">
+                            <option value="">Seleccione</option>
+                            <option value="padre">padre</option>
+                            <option value="madre">madre</option>
+                            <option value="padre y madre">padre y madre</option>
+                            <option value="apoderado">apoderado</option>
+                        </select>
+                        <p class="text-sm text-gray-500 mt-1">Selecciona quién es responsable del menor de edad.</p>
+                    </div>
+
+                    <!-- Mostrar campos solo si hay una opción seleccionada -->
+                    <template x-if="tipo !== ''">
+                        <div>
+                            <!-- Si es padre y madre -->
+                            <div x-show="tipo === 'padre y madre'" class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                                <div>
+                                    <label class="block font-medium text-gray-700">Nombre del padre</label>
+                                    <input type="text" wire:model="nombrePadre" class="form-input mt-1 block w-full">
+                                </div>
+                                <div>
+                                    <label class="block font-medium text-gray-700">Documento del padre</label>
+                                    <input type="text" wire:model="documentoPadre"
+                                        class="form-input mt-1 block w-full">
+                                </div>
+                                <div>
+                                    <label class="block font-medium text-gray-700">Nombre de la madre</label>
+                                    <input type="text" wire:model="nombreMadre" class="form-input mt-1 block w-full">
+                                </div>
+                                <div>
+                                    <label class="block font-medium text-gray-700">Documento de la madre</label>
+                                    <input type="text" wire:model="documentoMadre"
+                                        class="form-input mt-1 block w-full">
+                                </div>
+                            </div>
+
+                            <!-- Si es otro tipo -->
+                            <div x-show="tipo !== 'padre y madre'" class="mb-4">
+                                <label class="block font-medium text-gray-700">Nombre persona a cargo</label>
+                                <input type="text" wire:model="nombrePersonaCargo"
+                                    class="form-input mt-1 block w-full">
+                            </div>
+                            <div x-show="tipo !== 'padre y madre'" class="mb-4">
+                                <label class="block font-medium text-gray-700">Documento de identidad</label>
+                                <input type="text" wire:model="documentoPersonaCargo"
+                                    class="form-input mt-1 block w-full">
+                            </div>
+                        </div>
+                    </template>
+                </div>
+            @endif
+
+
+
+
 
             <!-- Modal -->
             <!-- Campo de dirección fuera del modal, parte del formulario -->
@@ -136,8 +199,8 @@
                                     clip-rule="evenodd" />
                             </svg>
                         </button>
-                        <div x-show="modelOpen" class="fixed inset-0 z-50 overflow-y-auto" aria-labelledby="modal-title"
-                            role="dialog" aria-modal="true">
+                        <div x-show="modelOpen" class="fixed inset-0 z-50 overflow-y-auto"
+                            aria-labelledby="modal-title" role="dialog" aria-modal="true">
                             <div
                                 class="flex items-end justify-center min-h-screen px-4 text-center md:items-center sm:block sm:p-0">
                                 <!-- Background overlay -->
@@ -429,7 +492,8 @@
                     <div class="p-4 border-3 border-red-500 bg-red-100 text-red-900 rounded-lg shadow-lg">
                         <label class="block text-sm font-medium">
                             Por favor adjunte una
-                            <span class="font-bold text-lg"> FOTO NÍTIDA Y A COLOR</span> de un recibo de servicios públicos de su domicilio,
+                            <span class="font-bold text-lg"> FOTO NÍTIDA Y A COLOR</span> de un recibo de servicios
+                            públicos de su domicilio,
                             <br>
                             <span class="font-bold text-lg">(ÚNICAMENTE AGUA, ENERGÍA, GAS O ASEO)</span>
                             <br><br>
@@ -437,8 +501,10 @@
                             <div class="flex items-start">
                                 <span class="text-red-600 text-xl">🚨</span>
                                 <p class="ml-2">
-                                    <strong class="text-red-700">Importante:</strong> El recibo debe tener una expedición no mayor a
-                                    <strong>30 días</strong>. La plataforma <span class="font-bold text-red-700">NO admite recibos digitales</span> generados por servicios web de las empresas.
+                                    <strong class="text-red-700">Importante:</strong> El recibo debe tener una
+                                    expedición no mayor a
+                                    <strong>30 días</strong>. La plataforma <span class="font-bold text-red-700">NO
+                                        admite recibos digitales</span> generados por servicios web de las empresas.
                                 </p>
                             </div>
 
@@ -447,7 +513,8 @@
                             <div class="flex items-start">
                                 <span class="text-green-600 text-xl">✅</span>
                                 <p class="ml-2">
-                                    La dirección ingresada en su formulario debe coincidir <strong>exactamente</strong> con la del recibo.
+                                    La dirección ingresada en su formulario debe coincidir <strong>exactamente</strong>
+                                    con la del recibo.
                                 </p>
                             </div>
                         </label>

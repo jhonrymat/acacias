@@ -1,9 +1,9 @@
-<div class="w-4/5 mx-auto py-6 bg-green-50">
+<div class="w-4/5 mx-auto py-6">
     <div class="flex justify-between items-center mb-4">
-        <h1 class="text-2xl font-bold">Solicitudes de residencia</h1>
+        <h1 class="text-2xl font-bold">Solicitudes de Avecindamiento</h1>
     </div>
     <!-- Componente de tabla -->
-    @livewire('solicitud-datatable')
+    @livewire('solicitud-avecindamiento-datatable')
 
     <!-- Modal con Alpine.js -->
     <div x-data="{ showModal: @entangle('showForm') }" x-cloak>
@@ -237,7 +237,39 @@
                         @enderror
                     </div>
 
+                    <!-- Sección de fotos del frente de la casa -->
+                    <div x-data="{ fotosCasa: [] }" class="mb-6">
+                        <label class="block font-semibold mb-1">Fotos del frente de la casa</label>
+                        <input type="file" multiple accept="image/*" class="mb-2"
+                            @change="Array.from($event.target.files).forEach(file => fotosCasa.push(file))">
+                        <div class="flex flex-wrap gap-2">
+                            <template x-for="(foto, index) in fotosCasa" :key="index">
+                                <div class="relative w-24 h-24">
+                                    <img :src="URL.createObjectURL(foto)"
+                                        class="w-full h-full object-cover rounded shadow">
+                                    <button type="button" @click="fotosCasa.splice(index, 1)"
+                                        class="absolute top-1 right-1 bg-white text-red-600 rounded-full w-5 h-5 text-xs flex items-center justify-center">×</button>
+                                </div>
+                            </template>
+                        </div>
+                    </div>
 
+                    <!-- Sección de fotos de la matrícula -->
+                    <div x-data="{ fotosMatricula: [] }" class="mb-6">
+                        <label class="block font-semibold mb-1">Fotos de la matrícula</label>
+                        <input type="file" multiple accept="image/*" class="mb-2"
+                            @change=" Array.from($event.target.files).forEach(file => fotosMatricula.push(file)) ">
+                        <div class="flex flex-wrap gap-2">
+                            <template x-for="(foto, index) in fotosMatricula" :key="index">
+                                <div class="relative w-24 h-24">
+                                    <img :src="URL.createObjectURL(foto)"
+                                        class="w-full h-full object-cover rounded shadow">
+                                    <button type="button" @click="fotosMatricula.splice(index, 1)"
+                                        class="absolute top-1 right-1 bg-white text-red-600 rounded-full w-5 h-5 text-xs flex items-center justify-center">×</button>
+                                </div>
+                            </template>
+                        </div>
+                    </div>
 
                     {{-- input text area, detalles --}}
                     <div class="mb-4">
@@ -487,9 +519,6 @@
             </div>
         </div>
     </div>
-
-
-
 
     <style>
         [x-cloak] {

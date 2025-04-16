@@ -2,23 +2,25 @@
 
 namespace App\Livewire;
 
+use Carbon\Carbon;
 use App\Models\User;
 use App\Models\Barrio;
 use App\Models\Genero;
-use Livewire\Attributes\Title;
 use Livewire\Component;
 use App\Models\Nestudio;
-use App\Models\Solicitud;
 use App\Models\Tdocumento;
 use App\Models\Tsolicitante;
 use Livewire\WithFileUploads;
-use Illuminate\Support\Facades\Storage;
+use Livewire\Attributes\Title;
 use Illuminate\Support\Facades\Http;
-use App\Mail\SolicitudCreadaNotification;
 use Illuminate\Support\Facades\Mail;
+use App\Models\SolicitudAvecindamiento;
+use Illuminate\Support\Facades\Storage;
+use App\Mail\SolicitudCreadaNotification;
 
-class FormularioComponent extends Component
+class FormularioAvecindamientoComponent extends Component
 {
+
     use WithFileUploads;
 
     public $openModal = false; // Inicializar $openModal como false
@@ -38,6 +40,7 @@ class FormularioComponent extends Component
 
 
     public $numeroIdentificacion = '';
+    public $fechaNacimiento = '';
     public $id_barrio = '';
     public $direccion = '';
     public $lat; // Latitud seleccionada
@@ -50,6 +53,15 @@ class FormularioComponent extends Component
 
     public $terminos = '';
     public $observaciones = '';
+
+    public $tipoPersonaCargo = '';
+    public $nombrePersonaCargo = '';
+    public $documentoPersonaCargo = '';
+    public $nombrePadre = '';
+    public $documentoPadre = '';
+    public $nombreMadre = '';
+    public $documentoMadre = '';
+
 
 
 
@@ -94,19 +106,47 @@ class FormularioComponent extends Component
 
     public function save()
     {
-
         $userId = auth()->id();
 
         // Verificar si el usuario puede crear una nueva solicitud
-        if (!Solicitud::canCreateRequest($userId)) {
-            $this->dispatch('sweet-alert-good', icon: 'info', title: 'Solicitud activa.', text: 'No puedes crear una nueva solicitud mientras tengas una activa, procesando o pendiente.', footer: '<a href="versolicitudesresidencia">Ver mis solicitudes</a>');
+        if (!SolicitudAvecindamiento::canCreateRequest($userId)) {
+            $this->dispatch('sweet-alert-good', icon: 'info', title: 'Solicitud activa.', text: 'No puedes crear una nueva solicitud mientras tengas una activa, procesando o pendiente.', footer: '<a href="versolicitudesavecindamiento">Ver mis solicitudes</a>');
             return;
         }
 
-        // Validate form data
-        $validatedData = $this->validate();
+        // Validar campos generales del formulario
+        $this->validate();
 
-        // Procesar cada archivo individualmente
+        $esMenorDeEdad = Carbon::parse($this->fechaNacimiento)->age < 18;
+
+        $nombreCargo = null;
+        $documentoCargo = null;
+
+        if ($esMenorDeEdad) {
+            $this->validate([
+                'tipoPersonaCargo' => 'required|string',
+            ]);
+
+            if ($this->tipoPersonaCargo === 'padre y madre') {
+                $this->validate([
+                    'nombrePadre' => 'required|string',
+                    'documentoPadre' => 'required|string',
+                    'nombreMadre' => 'required|string',
+                    'documentoMadre' => 'required|string',
+                ]);
+                $nombreCargo = "Padre: {$this->nombrePadre} / Madre: {$this->nombreMadre}";
+                $documentoCargo = "{$this->documentoPadre} / {$this->documentoMadre}";
+            } else {
+                $this->validate([
+                    'nombrePersonaCargo' => 'required|string',
+                    'documentoPersonaCargo' => 'required|string',
+                ]);
+                $nombreCargo = $this->nombrePersonaCargo;
+                $documentoCargo = $this->documentoPersonaCargo;
+            }
+        }
+
+        // Procesar los archivos
         $files = [
             'accion_comunal' => $this->accion_comunal,
             'electoral' => $this->electoral,
@@ -115,31 +155,23 @@ class FormularioComponent extends Component
             'recibo' => $this->recibo,
         ];
 
-        // Crear un array para almacenar las rutas de los archivos procesados
         $filePaths = [];
 
         foreach ($files as $key => $file) {
             if ($file) {
-                // Obtener el nombre original del archivo
                 $originalName = $file->getClientOriginalName();
-                // Obtener la extensión del archivo
                 $extension = $file->getClientOriginalExtension();
-                // Limpiar caracteres especiales del nombre original
                 $fileNameSanitized = preg_replace('/[^A-Za-z0-9_\-]/', '_', pathinfo($originalName, PATHINFO_FILENAME));
-                // Crear un nombre único: nombre original limpio + fecha y hora
                 $fileName = $fileNameSanitized . '_' . now()->format('Ymd_His') . '.' . $extension;
-                // Guardar el archivo en la carpeta específica según el tipo de archivo
                 $path = $file->storeAs($key, $fileName, 'public');
-                // Almacenar la ruta del archivo en el array
                 $filePaths[$key] = $path;
             } else {
-                $filePaths[$key] = null; // No se subió archivo
+                $filePaths[$key] = null;
             }
         }
 
-        // Crear una nueva solicitud y guardar las rutas de los archivos en la base de datos
-
-        $solicitud = Solicitud::create([
+        // Crear la solicitud
+        $solicitud = SolicitudAvecindamiento::create([
             'user_id' => $userId,
             'numeroIdentificacion' => $this->numeroIdentificacion,
             'id_barrio' => $this->id_barrio,
@@ -153,23 +185,23 @@ class FormularioComponent extends Component
             'recibo' => $filePaths['recibo'],
             'observaciones' => $this->observaciones ?? null,
             'terminos' => $this->terminos,
-            'estado_id' => 1, // Estado inicial de 'Pendiente'
+            'estado_id' => 1,
+            'tipo_persona_cargo' => $esMenorDeEdad ? $this->tipoPersonaCargo : null,
+            'nombre_persona_cargo' => $esMenorDeEdad ? $nombreCargo : null,
+            'documento_persona_cargo' => $esMenorDeEdad ? $documentoCargo : null,
         ]);
 
-        // Enviar el correo
+        // Enviar notificación
         $userName = auth()->user()->name;
         Mail::to(auth()->user()->email)->send(new SolicitudCreadaNotification($solicitud->id, $userName));
 
-
         $this->reset();
-        // Mostrar mensaje de éxito
-        // session()->flash('message', 'Solicitud creada exitosamente.');
-        $this->dispatch('sweet-alert-good', icon: 'success', title: 'Solicitud creada exitosamente.', text: 'Tu solicitud ha sido enviada correctamente.', footer: '<a href="versolicitudesresidencia">Ver mis solicitudes</a>');
 
+        $this->dispatch('sweet-alert-good', icon: 'success', title: 'Solicitud creada exitosamente.', text: 'Tu solicitud ha sido enviada correctamente.', footer: '<a href="versolicitudesavecindamiento">Ver mis solicitudes</a>');
 
-        // Resetear el formulario
-        $this->redirect(route('versolicitudesresidencia'));
+        $this->redirect(route('versolicitudesavecindamiento'));
     }
+
 
 
     public function updateLocation($lat, $lng)
@@ -186,15 +218,26 @@ class FormularioComponent extends Component
         $user = User::find(auth()->id());
         $barrios = Barrio::orderBy('nombreBarrio', 'asc')->get();
 
-        // Asignar el valor de numeroIdentificacion a la propiedad pública del componente
         if (!$this->numeroIdentificacion) {
             $this->numeroIdentificacion = $user->numeroIdentificacion;
         }
 
-        return view('livewire.formulario-component', [
+        if (!$this->fechaNacimiento) {
+            $this->fechaNacimiento = $user->fechaNacimiento;
+        }
+
+        // Verificar si es menor de edad
+        $esMenorDeEdad = false;
+
+        if ($this->fechaNacimiento) {
+            $edad = Carbon::parse($this->fechaNacimiento)->age;
+            $esMenorDeEdad = $edad < 18;
+        }
+
+        return view('livewire.formulario-avecindamiento-component', [
             'user' => $user,
             'barrios' => $barrios,
+            'esMenorDeEdad' => $esMenorDeEdad,
         ]);
-
     }
 }

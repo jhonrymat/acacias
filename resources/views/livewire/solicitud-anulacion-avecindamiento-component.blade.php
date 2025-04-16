@@ -1,6 +1,6 @@
 <div>
     <div class="max-w-3xl mx-auto bg-white shadow-lg rounded-lg p-6 mt-6 border">
-        <h2 class="text-xl font-semibold text-gray-800 mb-4">Anulación de Solicitud de residencia #{{ $numeroSolicitud }}</h2>
+        <h2 class="text-xl font-semibold text-gray-800 mb-4">Anulación de Solicitud de avecindamiento #{{ $numeroSolicitud }}</h2>
 
         <!-- Input para Número de Solicitud -->
         <div class="mb-4" x-data>

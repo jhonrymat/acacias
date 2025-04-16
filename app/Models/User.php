@@ -130,6 +130,11 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->hasMany(Solicitud::class);
     }
 
+    public function solicitudesAvecindamiento()
+    {
+        return $this->hasMany(SolicitudAvecindamiento::class);
+    }
+
     // Verificar si el usuario tiene un perfil completo
     public function hasCompleteProfile()
     {

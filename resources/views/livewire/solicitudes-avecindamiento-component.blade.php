@@ -1,6 +1,6 @@
 <div class="w-3/4 mx-auto py-6">
     <div class="flex justify-between items-center mb-4">
-        <h1 class="text-2xl font-bold">Solicitudes de Residencia</h1>
+        <h1 class="text-2xl font-bold">Solicitudes de Avecindamiento</h1>
     </div>
     <div class="flex justify-end my-4"> <!-- Alinea a la derecha y agrega espaciado vertical -->
         <button wire:click="$dispatch('view')" class="px-4 py-2 bg-blue-500 text-white rounded">
@@ -8,7 +8,7 @@
         </button>
     </div>
     <!-- Componente de tabla -->
-    @livewire('solicitudes-datatable')
+    @livewire('solicitudes-avecindamiento-datatable')
 
 
     <!-- Modal con Alpine.js -->

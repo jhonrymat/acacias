@@ -18,8 +18,10 @@ class CiudadanosComponent extends Component
     public $ciudadExpedicion = 'Sin especificar'; // Ciudad por defecto
     public $showModal = false;
     public $showModalHistory = false;
+    public $showModalHistoryAvecindamiento = false;
     public $historial;
-    protected $listeners = ['edit', 'history', 'generarPDF'];
+    public $historial_avecindamiento;
+    protected $listeners = ['edit', 'history','historyAvecindamiento', 'generarPDF'];
 
     // Ver por que se anulo la solicitud
     public $mostrarModal = false;
@@ -29,6 +31,7 @@ class CiudadanosComponent extends Component
     public function mount()
     {
         $this->historial = collect(); // 🔹 Inicializar como una colección vacía de Eloquent
+        $this->historial_avecindamiento = collect(); // 🔹 Inicializar como una colección vacía de Eloquent
     }
 
 
@@ -115,6 +118,18 @@ class CiudadanosComponent extends Component
 
         $this->historial = $ciudadano->solicitudes;
         $this->showModalHistory = true;
+
+    }
+    public function historyAvecindamiento($Id)
+    {
+
+        $ciudadano_Avecindamiento = User::with('SolicitudesAvecindamiento')->find($Id);
+        if (!$ciudadano_Avecindamiento) {
+            abort(404, "Usuario no encontrado");
+        }
+
+        $this->historial_avecindamiento = $ciudadano_Avecindamiento->solicitudesAvecindamiento;
+        $this->showModalHistoryAvecindamiento = true;
 
     }
 

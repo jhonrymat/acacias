@@ -1,10 +1,10 @@
 <div>
     <div class="w-3/4 mx-auto py-6">
         <div class="flex justify-between items-center mb-4">
-            <h1 class="text-2xl font-bold">Historial de solicitudes de residencia</h1>
+            <h1 class="text-2xl font-bold">Historial de solicitudes de avecindamiento</h1>
         </div>
         <!-- Componente de tabla -->
-        @livewire('historial-solicitudes-datatable')
+        @livewire('historial-avecindamiento-datatable')
     </div>
     <div x-data="{ showModal: @entangle('showForm') }" x-cloak>
         <!-- Overlay para el modal -->

@@ -19,7 +19,7 @@
         </a>
         {{-- Si la solicitud fue "Anulada", mostrar botón para ver detalles --}}
     @elseif ($row['estado.nombreEstado'] === 'Anulado')
-        @if ($ifAnulacion->visible === 1)
+        @if ($ifAnulacion?->visible === 1)
             <button wire:click="$dispatch('verAnulacion', { Id: {{ $row->id }} })"
                 class="px-4 py-2 bg-red-600 text-white rounded">
                 <i class="fa-solid fa-eye"></i> Ver Anulación
@@ -31,7 +31,7 @@
             </p>
         @endif
         {{-- Si la solicitud fue "Rechazada", mostrar botón para ver detalles --}}
-    @elseif($row['estado.nombreEstado'] === 'Rechazada' && optional($validacion)->visible === 1)
+    @elseif($row['estado.nombreEstado'] === 'Rechazada' && optional($validacion)->visible == 1)
         <button wire:click="$dispatch('mostrarNotas', { Id: {{ optional($validacion)->id }}})"
             class="px-4 py-2 bg-blue-500 text-white rounded">
             Ver detalles

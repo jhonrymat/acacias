@@ -5,6 +5,11 @@
     {{-- historial --}}
     <button wire:click="$dispatch('history' , { Id: {{ $row->id }} })"
         class="px-4 py-2 bg-green-500 text-white rounded">
-        <i class="fa-solid fa-book-open fa-lg"></i>
+        <i class="fa-solid fa-book-open fa-lg"> R</i>
+    </button>
+    {{-- historial Avecindamiento--}}
+    <button wire:click="$dispatch('historyAvecindamiento' , { Id: {{ $row->id }} })"
+        class="px-4 py-2 bg-purple-500 text-white rounded">
+        <i class="fa-solid fa-book-open fa-lg"> A</i>
     </button>
 </div>
