@@ -4,6 +4,7 @@ namespace App\Livewire;
 use App\Models\User;
 use App\Models\Barrio;
 use App\Models\Estado;
+use App\Models\Imagen;
 use Livewire\Component;
 use Milon\Barcode\DNS2D;
 use App\Models\Direccion;
@@ -14,6 +15,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use App\Helpers\ActivityLogger;
+
 
 class SolicitudAvecindamientoComponent extends Component
 {
@@ -34,8 +36,12 @@ class SolicitudAvecindamientoComponent extends Component
     $numeroIdentificacion_id, $fechaActual, $barrio_id, $direccion_id, $ubicacion,
     $accion_comunal, $electoral, $sisben, $cedula, $estado_id, $estado_id2, $JAComunal, $detalles, $visible = false, $showForm = false, $showAdditional = false, $showValidar = false,
     $modalRechazada = false, $validacion1, $validacion2, $notas, $nombre, $validador, $Id, $AllStatus, $nameAll, $observaciones, $anexos;
-    public $fotosCasa = [];
+    public $fotosFrente = [];
     public $fotosMatricula = [];
+    public $latFrente, $lngFrente;
+    public $latMatricula, $lngMatricula;
+
+
 
 
 
@@ -47,6 +53,9 @@ class SolicitudAvecindamientoComponent extends Component
         'JAComunal.*' => 'file|mimes:pdf,jpg,png', // Validar cada archivo
         'detalles' => 'required|string',
         'visible' => 'nullable|boolean',
+        'fotosFrente.*' => 'nullable|image|mimes:jpeg,png,jpg|max:5120',
+        'fotosMatricula.*' => 'nullable|image|mimes:jpeg,png,jpg|max:5120',
+
     ];
 
     //mostar validaciones en español
@@ -57,6 +66,12 @@ class SolicitudAvecindamientoComponent extends Component
         'JAComunal.*.mimes' => 'El archivo debe ser de tipo: PDF, PNG o JPG.',
         'detalles.required' => 'El campo "Observaciones" es obligatorio.',
         'visible.boolean' => 'El campo "Habilitar visualización" debe ser verdadero o falso.',
+        'fotosFrente.*.image' => 'El archivo debe ser una imagen.',
+        'fotosFrente.*.mimes' => 'El archivo debe ser de tipo: JPEG, PNG o JPG.',
+        'fotosFrente.*.max' => 'El archivo no debe exceder los 5 MB.',
+        'fotosMatricula.*.image' => 'El archivo debe ser una imagen.',
+        'fotosMatricula.*.mimes' => 'El archivo debe ser de tipo: JPEG, PNG o JPG.',
+        'fotosMatricula.*.max' => 'El archivo no debe exceder los 5 MB.',
     ];
 
 
@@ -428,6 +443,32 @@ class SolicitudAvecindamientoComponent extends Component
                 }
             }
 
+            if (!empty($this->fotosFrente)) {
+                foreach ($this->fotosFrente as $foto) {
+                    $path = $foto->store('imagenes/frente', 'public');
+                    Imagen::create([
+                        'solicitud_id' => $solicitud->id,
+                        'ruta' => $path,
+                        'tipo' => 'frente',
+                        'lat' => $this->latFrente,
+                        'lng' => $this->lngFrente,
+                    ]);
+                }
+            }
+
+            if (!empty($this->fotosMatricula)) {
+                foreach ($this->fotosMatricula as $foto) {
+                    $path = $foto->store('imagenes/matricula', 'public');
+                    Imagen::create([
+                        'solicitud_id' => $solicitud->id,
+                        'ruta' => $path,
+                        'tipo' => 'matricula',
+                        'lat' => $this->latMatricula,
+                        'lng' => $this->lngMatricula,
+                    ]);
+                }
+            }
+
             try {
                 $solicitud->validaciones()->create([
                     'validacion1' => $this->estado_id,
@@ -488,6 +529,14 @@ class SolicitudAvecindamientoComponent extends Component
         $this->estado_id2 = null;
         $this->estado_id = null;
         $this->visible = false;
+
+        // Nuevas propiedades para imágenes y coordenadas
+        $this->fotosFrente = [];
+        $this->fotosMatricula = [];
+        $this->latFrente = null;
+        $this->lngFrente = null;
+        $this->latMatricula = null;
+        $this->lngMatricula = null;
     }
 
 

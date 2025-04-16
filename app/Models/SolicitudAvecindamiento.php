@@ -186,4 +186,10 @@ class SolicitudAvecindamiento extends Model
     {
         return $this->fecha_emision ? Carbon::parse($this->fecha_emision)->format('d/m/Y') : 'N/A';
     }
+
+    public function imagenes()
+    {
+        return $this->hasMany(Imagen::class, 'solicitud_id');
+    }
+
 }

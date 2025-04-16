@@ -238,38 +238,147 @@
                     </div>
 
                     <!-- Sección de fotos del frente de la casa -->
-                    <div x-data="{ fotosCasa: [] }" class="mb-6">
-                        <label class="block font-semibold mb-1">Fotos del frente de la casa</label>
-                        <input type="file" multiple accept="image/*" capture="environment" class="mb-2"
-                            @change="Array.from($event.target.files).forEach(file => fotosCasa.push(file))">
+                    <!-- Sección Fotos del frente -->
+                    <div x-data="{
+                        fotos: [],
+                        lat: null,
+                        lng: null,
+                        async capturarUbicacion() {
+                            if (!navigator.geolocation) {
+                                alert('Este dispositivo no soporta GPS.');
+                                return;
+                            }
+
+                            navigator.geolocation.getCurrentPosition(
+                                (pos) => {
+                                    this.lat = pos.coords.latitude.toFixed(7);
+                                    this.lng = pos.coords.longitude.toFixed(7);
+                                    $wire.set('latFrente', this.lat);
+                                    $wire.set('lngFrente', this.lng);
+                                },
+                                (err) => {
+                                    alert('No se pudo obtener tu ubicación. Puedes continuar sin ella.');
+                                    console.warn(err);
+                                }, { enableHighAccuracy: true }
+                            );
+                        },
+                        procesarArchivos(e) {
+                            const nuevos = Array.from(e.target.files);
+                            if (this.fotos.length === 0 && nuevos.length > 0) {
+                                this.capturarUbicacion(); // Solo en la primera carga
+                            }
+                            this.fotos.push(...nuevos);
+                            $wire.set('fotosFrente', e.target.files); // Envía a Livewire
+                        },
+                        eliminar(index) {
+                            this.fotos.splice(index, 1);
+                            // También actualizar Livewire si lo deseas
+                        }
+                    }" class="mb-6 bg-gray-100 p-4 rounded border">
+                        <label class="block font-semibold mb-1 text-gray-700">Fotos del frente de la casa</label>
+
+                        <!-- Input -->
+                        <input type="file" multiple accept="image/*" capture="environment"
+                            @change="procesarArchivos"
+                            class="mb-2 block w-full text-sm border border-gray-300 rounded px-2 py-1 bg-white shadow-sm">
+
+                        <!-- Coordenadas -->
+                        <template x-if="lat && lng">
+                            <p class="text-xs text-gray-600 mb-2">
+                                Ubicación capturada: Latitud <strong x-text="lat"></strong>, Longitud <strong
+                                    x-text="lng"></strong>
+                            </p>
+                        </template>
+
+                        <!-- Botón volver a intentar ubicación -->
+                        <button type="button" @click="capturarUbicacion"
+                            class="text-xs text-blue-600 hover:underline mb-3">Volver a intentar obtener
+                            ubicación</button>
+
+                        <!-- Miniaturas -->
                         <div class="flex flex-wrap gap-2">
-                            <template x-for="(foto, index) in fotosCasa" :key="index">
+                            <template x-for="(foto, index) in fotos" :key="index">
                                 <div class="relative w-24 h-24">
                                     <img :src="URL.createObjectURL(foto)"
                                         class="w-full h-full object-cover rounded shadow">
-                                    <button type="button" @click="fotosCasa.splice(index, 1)"
+                                    <button type="button" @click="eliminar(index)"
                                         class="absolute top-1 right-1 bg-white text-red-600 rounded-full w-5 h-5 text-xs flex items-center justify-center">×</button>
                                 </div>
                             </template>
                         </div>
                     </div>
 
-                    <!-- Sección de fotos de la matrícula -->
-                    <div x-data="{ fotosMatricula: [] }" class="mb-6">
-                        <label class="block font-semibold mb-1">Fotos de la matrícula</label>
-                        <input type="file" multiple accept="image/*" capture="environment" class="mb-2"
-                            @change=" Array.from($event.target.files).forEach(file => fotosMatricula.push(file)) ">
+
+                    <!-- Sección Fotos de la matrícula -->
+                    <div x-data="{
+                        fotos: [],
+                        lat: null,
+                        lng: null,
+                        async capturarUbicacion() {
+                            if (!navigator.geolocation) {
+                                alert('Este dispositivo no soporta GPS.');
+                                return;
+                            }
+
+                            navigator.geolocation.getCurrentPosition(
+                                (pos) => {
+                                    this.lat = pos.coords.latitude.toFixed(7);
+                                    this.lng = pos.coords.longitude.toFixed(7);
+                                    $wire.set('latMatricula', this.lat);
+                                    $wire.set('lngMatricula', this.lng);
+                                },
+                                (err) => {
+                                    alert('No se pudo obtener tu ubicación. Puedes continuar sin ella.');
+                                    console.warn(err);
+                                }, { enableHighAccuracy: true }
+                            );
+                        },
+                        procesarArchivos(e) {
+                            const nuevos = Array.from(e.target.files);
+                            if (this.fotos.length === 0 && nuevos.length > 0) {
+                                this.capturarUbicacion(); // Solo en la primera carga
+                            }
+                            this.fotos.push(...nuevos);
+                            $wire.set('fotosMatricula', e.target.files); // Envía a Livewire
+                        },
+                        eliminar(index) {
+                            this.fotos.splice(index, 1);
+                            // También puedes actualizar Livewire si lo deseas
+                        }
+                    }" class="mb-6 bg-gray-100 p-4 rounded border">
+                        <label class="block font-semibold mb-1 text-gray-700">Fotos de la matrícula</label>
+
+                        <!-- Input -->
+                        <input type="file" multiple accept="image/*" capture="environment"
+                            @change="procesarArchivos"
+                            class="mb-2 block w-full text-sm border border-gray-300 rounded px-2 py-1 bg-white shadow-sm">
+
+                        <!-- Coordenadas -->
+                        <template x-if="lat && lng">
+                            <p class="text-xs text-gray-600 mb-2">
+                                Ubicación capturada: Latitud <strong x-text="lat"></strong>, Longitud <strong
+                                    x-text="lng"></strong>
+                            </p>
+                        </template>
+
+                        <!-- Botón volver a intentar ubicación -->
+                        <button type="button" @click="capturarUbicacion"
+                            class="text-xs text-blue-600 hover:underline mb-3">Volver a intentar obtener
+                            ubicación</button>
+
+                        <!-- Miniaturas -->
                         <div class="flex flex-wrap gap-2">
-                            <template x-for="(foto, index) in fotosMatricula" :key="index">
+                            <template x-for="(foto, index) in fotos" :key="index">
                                 <div class="relative w-24 h-24">
                                     <img :src="URL.createObjectURL(foto)"
                                         class="w-full h-full object-cover rounded shadow">
-                                    <button type="button" @click="fotosMatricula.splice(index, 1)"
+                                    <button type="button" @click="eliminar(index)"
                                         class="absolute top-1 right-1 bg-white text-red-600 rounded-full w-5 h-5 text-xs flex items-center justify-center">×</button>
                                 </div>
                             </template>
                         </div>
                     </div>
+
 
                     {{-- input text area, detalles --}}
                     <div class="mb-4">
@@ -286,6 +395,7 @@
                             <span class="text-red-500">{{ $message }}</span>
                         @enderror
                     </div>
+                    
                     {{-- un check en don de diga, permitir visualización de la observación al ciudadano --}}
                     <div class="mb-4 p-4 bg-gray-100 border border-gray-300 rounded-md">
                         <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" for="visible">
