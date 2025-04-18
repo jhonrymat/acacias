@@ -401,7 +401,14 @@
         </div>
     </div>
 
-    <div x-data="{ showAdditionalModal: @entangle('showAdditional') }" x-cloak>
+    <div x-data="{ showAdditionalModal: @entangle('showAdditional'), coordenadas: @entangle('coordenadasFrente'), }" x-init="$watch('showAdditionalModal', value => {
+        if (value) {
+            setTimeout(() => {
+                window.initLeafletMapaFrente(coordenadas),
+                    window.mapaFrenteInstancia.invalidateSize();
+            }, 300);
+        }
+    })" x-cloak>
         <div x-show="showAdditionalModal"
             class="fixed inset-0 bg-gray-800 bg-opacity-70 flex items-center justify-center" x-inz>
             <div
@@ -452,21 +459,65 @@
                                 class="mt-1 block w-full border-gray-300 rounded text-sm px-2 py-1" disabled>
                         </div>
                         {{-- solo para rol validador2 --}}
-                        @if (auth()->user()->hasRole('validador2'))
-                            <div class="mb-3">
-                                <label for="JAComunal" class="block text-xs font-medium">Anexos</label>
-                                @if ($anexos && count($anexos) > 0)
-                                    @foreach ($anexos as $archivo)
-                                        <a href="{{ asset('storage/' . $archivo) }}" target="_blank"
-                                            class="block mt-1 text-sm text-blue-500 underline">
-                                            Ver archivo
-                                        </a>
+                        <div class="mb-3">
+                            <label for="JAComunal" class="block text-xs font-medium">Anexos</label>
+                            @if ($anexos && count($anexos) > 0)
+                                @foreach ($anexos as $archivo)
+                                    <a href="{{ asset('storage/' . $archivo) }}" target="_blank"
+                                        class="block mt-1 text-sm text-blue-500 underline">
+                                        Ver archivo
+                                    </a>
+                                @endforeach
+                            @else
+                                <p class="mt-1 text-sm text-gray-500">No hay archivo disponible.</p>
+                            @endif
+                        </div>
+                        {{-- SECCIÓN DE FOTOS DEL FRENTE --}}
+                        @if (isset($solicitud_avecindamiento) && $solicitud_avecindamiento->imagenes->where('tipo', 'frente')->count())
+                            <div class="mb-6">
+                                <h3 class="text-lg font-semibold mb-2">Fotos del frente de la casa</h3>
+                                <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+                                    @foreach ($solicitud_avecindamiento->imagenes->where('tipo', 'frente') as $img)
+                                        <div class="flex flex-col items-center bg-white p-2 rounded border shadow-sm">
+                                            <a href="{{ Storage::url($img->ruta) }}" target="_blank" class="mb-2">
+                                                <img src="{{ Storage::url($img->ruta) }}"
+                                                    class="w-28 h-28 object-cover rounded">
+                                            </a>
+                                            <p class="text-[11px] text-center text-gray-600 leading-tight">
+                                                Lat: {{ $img->lat ?? 'N/A' }}<br>
+                                                Lng: {{ $img->lng ?? 'N/A' }}
+                                            </p>
+                                        </div>
                                     @endforeach
-                                @else
-                                    <p class="mt-1 text-sm text-gray-500">No hay archivo disponible.</p>
-                                @endif
+                                </div>
+                                {{-- Mapa --}}
+                                <div id="mapaFrente" class="h-64 rounded border"></div>
                             </div>
                         @endif
+
+
+                        {{-- SECCIÓN DE FOTOS DE LA MATRÍCULA --}}
+                        @if (isset($solicitud_avecindamiento) && $solicitud_avecindamiento->imagenes->where('tipo', 'matricula')->count())
+                            <div class="mb-6">
+                                <h3 class="text-lg font-semibold mb-2">Fotos de la matrícula</h3>
+                                <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+                                    @foreach ($solicitud_avecindamiento->imagenes->where('tipo', 'matricula') as $img)
+                                        <div class="flex flex-col items-center bg-white p-2 rounded border shadow-sm">
+                                            <a href="{{ Storage::url($img->ruta) }}" target="_blank" class="mb-2">
+                                                <img src="{{ Storage::url($img->ruta) }}"
+                                                    class="w-28 h-28 object-cover rounded">
+                                            </a>
+                                            <p class="text-[11px] text-center text-gray-600 leading-tight">
+                                                Lat: {{ $img->lat ?? 'N/A' }}<br>
+                                                Lng: {{ $img->lng ?? 'N/A' }}
+                                            </p>
+                                        </div>
+                                    @endforeach
+                                </div>
+                            </div>
+                        @endif
+
+
                         <div class="mb-3">
                             <label for="notas" class="block text-xs font-medium">Notas</label>
                             <div id="notas"
@@ -474,6 +525,7 @@
                                 {{ $notas ?? 'No hay notas disponibles.' }}
                             </div>
                         </div>
+
                         {{-- mostrar al validador si esta opcion se marco, como visible o no, visible es 1 --}}
                         @if ($visible == 1)
                             <div class="mb-3 bg-green-100 border border-green-300 text-green-800 p-3 rounded">
@@ -632,6 +684,48 @@
             Livewire.on('$refresh', () => console.log('Tabla actualizada'));
         });
     </script>
+    <script>
+        window.initLeafletMapaFrente = function(coordenadas) {
+            if (window.mapaFrenteInstancia) {
+                window.mapaFrenteInstancia.remove(); // eliminar mapa previo si lo hay
+            }
+
+            const contenedor = document.getElementById('mapaFrente');
+            if (!contenedor) return;
+
+            window.mapaFrenteInstancia = L.map(contenedor).setView([4.15, -73.63], 15);
+            if (coordenadas.length > 0) {
+                const lat = parseFloat(coordenadas[0].lat);
+                const lng = parseFloat(coordenadas[0].lng);
+                window.mapaFrenteInstancia.setView([lat, lng], 18);
+            }
+
+
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; OpenStreetMap contributors'
+            }).addTo(window.mapaFrenteInstancia);
+
+            console.log('Puntos cargados:', coordenadas);
+
+            coordenadas.forEach((coordenada, i) => {
+                console.log('Marcador', i, coordenada.lat, coordenada.lng);
+                if (coordenada.lat && coordenada.lng) {
+                    L.marker([parseFloat(coordenada.lat), parseFloat(coordenada.lng)])
+                        .addTo(window.mapaFrenteInstancia)
+                        .bindPopup(
+                            `<img src='${coordenada.url}' width='100'><br>Lat: ${coordenada.lat}<br>Lng: ${coordenada.lng}`
+                        )
+                        .openPopup();
+                }
+            });
+
+        };
+    </script>
+
+
+
+
+
 
 
     <x-sweet-alert-good></x-sweet-alert-good>

@@ -8,13 +8,15 @@ use App\Models\Imagen;
 use Livewire\Component;
 use Milon\Barcode\DNS2D;
 use App\Models\Direccion;
-use App\Models\SolicitudAvecindamiento;
-use App\Models\ValidacionAvecindamiento;
 use Livewire\WithFileUploads;
+use App\Helpers\ActivityLogger;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
-use App\Helpers\ActivityLogger;
+use App\Models\SolicitudAvecindamiento;
+use Illuminate\Support\Facades\Storage;
+use App\Models\ValidacionAvecindamiento;
 
 
 class SolicitudAvecindamientoComponent extends Component
@@ -40,6 +42,11 @@ class SolicitudAvecindamientoComponent extends Component
     public $fotosMatricula = [];
     public $latFrente, $lngFrente;
     public $latMatricula, $lngMatricula;
+    public $solicitud;
+
+    public $solicitud_avecindamiento;
+    public $coordenadasFrente = [];
+
 
 
 
@@ -100,36 +107,52 @@ class SolicitudAvecindamientoComponent extends Component
 
     public function see($Id)
     {
-        // Obtener la solicitud por su ID
-        $solicitud = SolicitudAvecindamiento::find($Id);
+        // Obtener la solicitud con imágenes
+        $solicitud = SolicitudAvecindamiento::with('imagenes', 'user', 'validaciones')->find($Id);
+
+        if (!$solicitud) {
+            $this->dispatch('sweet-alert-good', icon: 'error', title: 'Error', text: 'La solicitud no existe.');
+            return;
+        }
 
         // Obtener la primera validación relacionada con la solicitud (si existe)
-        $validacion = $solicitud->validaciones()->first();
-        // obtener el nombre del estado de $validacion->validacion2;
-        $estado = Estado::find($validacion->validacion2);
-        //obtener el nombre del validador $solicitud->actualizado_por
-        $validador = User::find($solicitud->actualizado_por);
-
+        $validacion = $solicitud->validaciones->first();
 
         if (!$validacion) {
             $this->dispatch('sweet-alert-good', icon: 'info', title: 'Sin validaciones.', text: 'No se encontraron validaciones para esta solicitud.');
+            return;
         }
 
+        // Obtener el estado y validador relacionados
+        $estado = Estado::find($validacion->validacion2);
+        $validador = User::find($solicitud->actualizado_por);
 
-        // Asignar valores de la validación a las propiedades
+        $this->coordenadasFrente = $solicitud->imagenes->where('tipo', 'frente')->map(function ($img) {
+            return [
+                'lat' => $img->lat,
+                'lng' => $img->lng,
+                'url' => Storage::url($img->ruta),
+            ];
+        })->values()->toArray();
+        logger()->info('coordenadasFrente', $this->coordenadasFrente);
+
+
+        // Asignar solicitud completa como propiedad para el modal
+        $this->solicitud_avecindamiento = $solicitud;
+
+        // Asignar valores a las propiedades del modal
         $this->validacion1 = $validacion->validacion1;
-        $this->validacion2 = $estado->nombreEstado;
-        $this->anexos = json_decode($validacion->JAComunal);
+        $this->validacion2 = $estado->nombreEstado ?? '—';
         $this->notas = $validacion->notas;
         $this->visible = $validacion->visible;
         $this->cedula = $solicitud->numeroIdentificacion;
-        $this->nombre = $solicitud->user->name;
-        $this->nameAll = $solicitud->NombreCompleto;
-        $this->validador = $validador->name . ' | ' . $validador->codigo;
-
+        $this->nombre = $solicitud->user->name ?? '—';
+        $this->nameAll = $solicitud->NombreCompleto ?? '—';
+        $this->validador = $validador ? ($validador->name . ' | ' . $validador->codigo) : '—';
 
         $this->showAdditional = true;
     }
+
 
     public function validar($Id)
     {
@@ -484,7 +507,7 @@ class SolicitudAvecindamientoComponent extends Component
             $this->resetForm();
             $this->dispatch('updated');
         } catch (\Illuminate\Validation\ValidationException $e) {
-            dd($e->validator->errors()->all());
+            Log::error('Validation error: ' . $e->getMessage());
         }
     }
 
@@ -543,7 +566,7 @@ class SolicitudAvecindamientoComponent extends Component
 
         return view('livewire.solicitud-avecindamiento-component', [
             'solicitudes' => SolicitudAvecindamiento::with('barrio', 'direccion'), // Paginación de 10 elementos
-            'estados' => $estados,
+            'estados' => $estados
         ]);
     }
 }
