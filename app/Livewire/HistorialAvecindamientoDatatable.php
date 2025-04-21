@@ -153,6 +153,18 @@ class HistorialAvecindamientoDatatable extends DataTableComponent
                 ->sortable()
                 ->searchable()
                 ->collapseAlways(),
+            Column::make("Tipo persona a cargo", "tipo_persona_cargo")
+                ->sortable()
+                ->searchable()
+                ->collapseAlways(),
+            Column::make("persona a cargo", "nombre_persona_cargo")
+                ->sortable()
+                ->searchable()
+                ->collapseAlways(),
+            Column::make("Doumento de persona a cargo", "documento_persona_cargo")
+                ->sortable()
+                ->searchable()
+                ->collapseAlways(),
             Column::make("Fecha de Actualización", "updated_at")
                 ->sortable()
                 ->searchable()

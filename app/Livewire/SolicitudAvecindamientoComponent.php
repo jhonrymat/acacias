@@ -46,6 +46,8 @@ class SolicitudAvecindamientoComponent extends Component
 
     public $solicitud_avecindamiento;
     public $coordenadasFrente = [];
+    public $coordenadasMatricula = [];
+
 
 
 
@@ -109,7 +111,6 @@ class SolicitudAvecindamientoComponent extends Component
     {
         // Obtener la solicitud con imágenes
         $solicitud = SolicitudAvecindamiento::with('imagenes', 'user', 'validaciones')->find($Id);
-
         if (!$solicitud) {
             $this->dispatch('sweet-alert-good', icon: 'error', title: 'Error', text: 'La solicitud no existe.');
             return;
@@ -117,7 +118,6 @@ class SolicitudAvecindamientoComponent extends Component
 
         // Obtener la primera validación relacionada con la solicitud (si existe)
         $validacion = $solicitud->validaciones->first();
-
         if (!$validacion) {
             $this->dispatch('sweet-alert-good', icon: 'info', title: 'Sin validaciones.', text: 'No se encontraron validaciones para esta solicitud.');
             return;
@@ -134,7 +134,17 @@ class SolicitudAvecindamientoComponent extends Component
                 'url' => Storage::url($img->ruta),
             ];
         })->values()->toArray();
-        logger()->info('coordenadasFrente', $this->coordenadasFrente);
+
+        $this->coordenadasMatricula = $solicitud->imagenes->where('tipo', 'matricula')->map(function ($img) {
+            return [
+                'lat' => $img->lat,
+                'lng' => $img->lng,
+                'url' => Storage::url($img->ruta),
+            ];
+        })->values()->toArray();
+
+
+        // logger()->info('coordenadasFrente', $this->coordenadasFrente);
 
 
         // Asignar solicitud completa como propiedad para el modal

@@ -6,7 +6,23 @@
         <!-- Componente de tabla -->
         @livewire('historial-avecindamiento-datatable')
     </div>
-    <div x-data="{ showModal: @entangle('showForm') }" x-cloak>
+    <div x-data="{
+        showModal: @entangle('showForm'),
+        coordenadas: @entangle('coordenadasFrente'),
+        coordenadasMatricula: @entangle('coordenadasMatricula')
+    }" x-init="$watch('showModal', value => {
+        if (value) {
+            setTimeout(() => {
+                if (document.getElementById('mapaFrente')?.offsetParent !== null) {
+                    window.initLeafletMapaFrente(coordenadas);
+                }
+                if (document.getElementById('mapaMatricula')?.offsetParent !== null) {
+                    window.initLeafletMapaMatricula(coordenadasMatricula);
+                }
+            }, 300);
+        }
+    })"
+     x-cloak>
         <!-- Overlay para el modal -->
         <div x-show="showModal" class="fixed inset-0 bg-gray-800 bg-opacity-70 flex items-center justify-center">
             <div
@@ -47,22 +63,104 @@
                             <input type="text" wire:model="validacion2" id="validacion2"
                                 class="mt-1 block w-full border-gray-300 rounded text-sm px-2 py-1" disabled>
                         </div>
-                        <div class="mb-3">
-                            <label for="JAComunal" class="block text-xs font-medium">Anexos</label>
-                            @if ($JAComunal && count($JAComunal) > 0)
-                                @foreach ($JAComunal as $archivo)
-                                    <a href="{{ asset('storage/' . $archivo) }}" target="_blank"
-                                        class="block mt-1 text-sm text-blue-500 underline">
-                                        Ver archivo
-                                    </a>
-                                @endforeach
-                            @else
-                                <p class="mt-1 text-sm text-gray-500">No hay archivo disponible.</p>
-                            @endif
+                        <div class="mb-6" x-data="{
+                            tab: 'frente',
+                            frenteIniciado: false,
+                            matriculaIniciada: false,
+                            initMapaFrente() {
+                                if (!this.frenteIniciado && typeof window.initLeafletMapaFrente === 'function') {
+                                    this.frenteIniciado = true;
+                                    setTimeout(() => window.initLeafletMapaFrente(coordenadas), 200);
+                                } else {
+                                    setTimeout(() => window.mapaFrenteInstancia.invalidateSize(), 200);
+                                }
+                            },
+                            initMapaMatricula() {
+                                if (!this.matriculaIniciada && typeof window.initLeafletMapaMatricula === 'function') {
+                                    this.matriculaIniciada = true;
+                                    setTimeout(() => window.initLeafletMapaMatricula(coordenadasMatricula), 200);
+                                } else {
+                                    setTimeout(() => window.mapaMatriculaInstancia.invalidateSize(), 200);
+                                }
+                            }
+                        }">
+                            <h3 class="text-lg font-semibold mb-2">Captura de imágenes</h3>
+
+                            <div class="flex mb-4">
+                                <button class="px-4 py-2 rounded-l border border-gray-300 text-sm"
+                                    :class="tab === 'frente' ? 'bg-blue-500 text-white' : 'bg-white text-gray-700'"
+                                    @click="tab = 'frente'; initMapaFrente()">
+                                    Frente
+                                </button>
+                                <button class="px-4 py-2 rounded-r border border-gray-300 text-sm"
+                                    :class="tab === 'matricula' ? 'bg-blue-500 text-white' : 'bg-white text-gray-700'"
+                                    @click="tab = 'matricula'; initMapaMatricula()">
+                                    Matrícula
+                                </button>
+                            </div>
+
+                            {{-- TAB FRENTE --}}
+                            <div x-show="tab === 'frente'" x-transition>
+                                @if (isset($solicitud_avecindamiento) && $solicitud_avecindamiento->imagenes->where('tipo', 'frente')->count())
+                                    <div class="mb-6">
+                                        <h3 class="text-lg font-semibold mb-2">Fotos del frente de la casa</h3>
+                                        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+                                            @foreach ($solicitud_avecindamiento->imagenes->where('tipo', 'frente') as $img)
+                                                <div
+                                                    class="flex flex-col items-center bg-white p-2 rounded border shadow-sm">
+                                                    <a href="{{ Storage::url($img->ruta) }}" target="_blank"
+                                                        class="mb-2">
+                                                        <img src="{{ Storage::url($img->ruta) }}"
+                                                            class="w-28 h-28 object-cover rounded">
+                                                    </a>
+                                                    <p class="text-[11px] text-center text-gray-600 leading-tight">
+                                                        Lat: {{ $img->lat ?? 'N/A' }}<br>
+                                                        Lng: {{ $img->lng ?? 'N/A' }}
+                                                    </p>
+                                                </div>
+                                            @endforeach
+                                        </div>
+                                        <div id="mapaFrente" class="h-80 rounded border"></div>
+                                    </div>
+                                @else
+                                    <div class="text-sm text-gray-500 italic">No se encontraron imágenes del frente.
+                                    </div>
+                                @endif
+                            </div>
+
+                            {{-- TAB MATRÍCULA --}}
+                            <div x-show="tab === 'matricula'" x-transition>
+                                @if (isset($solicitud_avecindamiento) && $solicitud_avecindamiento->imagenes->where('tipo', 'matricula')->count())
+                                    <div class="mb-6">
+                                        <h3 class="text-lg font-semibold mb-2">Fotos de la matrícula</h3>
+                                        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+                                            @foreach ($solicitud_avecindamiento->imagenes->where('tipo', 'matricula') as $img)
+                                                <div
+                                                    class="flex flex-col items-center bg-white p-2 rounded border shadow-sm">
+                                                    <a href="{{ Storage::url($img->ruta) }}" target="_blank"
+                                                        class="mb-2">
+                                                        <img src="{{ Storage::url($img->ruta) }}"
+                                                            class="w-28 h-28 object-cover rounded">
+                                                    </a>
+                                                    <p class="text-[11px] text-center text-gray-600 leading-tight">
+                                                        Lat: {{ $img->lat ?? 'N/A' }}<br>
+                                                        Lng: {{ $img->lng ?? 'N/A' }}
+                                                    </p>
+                                                </div>
+                                            @endforeach
+                                        </div>
+                                        <div id="mapaMatricula" class="h-80 rounded border mt-4"></div>
+                                    </div>
+                                @else
+                                    <div class="text-sm text-gray-500 italic">No se encontraron imágenes de matrícula.
+                                    </div>
+                                @endif
+                            </div>
                         </div>
                         <div class="mb-3">
                             <label for="notas" class="block text-xs font-medium">Notas</label>
-                            <div id="notas" class="mt-1 p-3 border border-gray-300 rounded bg-gray-50 text-sm text-gray-700">
+                            <div id="notas"
+                                class="mt-1 p-3 border border-gray-300 rounded bg-gray-50 text-sm text-gray-700">
                                 {{ $notas ?? 'No hay notas disponibles.' }}
                             </div>
                         </div>
@@ -92,9 +190,87 @@
 
                 <!-- Botones -->
                 <div class="flex justify-end space-x-2 mt-6">
-                    <button @click="showModal = false" class="px-4 py-2 bg-gray-500 text-white rounded">Cerrar</button>
+                    <button @click="showModal = false"
+                        class="px-4 py-2 bg-gray-500 text-white rounded">Cerrar</button>
                 </div>
             </div>
         </div>
     </div>
+    <script>
+        window.initLeafletMapaFrente = function(coordenadas) {
+            if (window.mapaFrenteInstancia) {
+                window.mapaFrenteInstancia.remove(); // eliminar mapa previo si lo hay
+            }
+
+            const contenedor = document.getElementById('mapaFrente');
+            if (!contenedor) return;
+
+            window.mapaFrenteInstancia = L.map(contenedor).setView([4.15, -73.63], 15);
+            if (coordenadas.length > 0) {
+                const lat = parseFloat(coordenadas[0].lat);
+                const lng = parseFloat(coordenadas[0].lng);
+                window.mapaFrenteInstancia.setView([lat, lng], 14);
+            }
+
+
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; <a href="https://www.nomaddi.com" target="_blank">Nomaddi</a> 2025'
+            }).addTo(window.mapaFrenteInstancia);
+
+            console.log('Puntos cargados:', coordenadas);
+
+            coordenadas.forEach((coordenada, i) => {
+                console.log('Marcador', i, coordenada.lat, coordenada.lng);
+                if (coordenada.lat && coordenada.lng) {
+                    L.marker([parseFloat(coordenada.lat), parseFloat(coordenada.lng)])
+                        .addTo(window.mapaFrenteInstancia)
+                        .bindPopup(
+                            `<img src='${coordenada.url}' width='100'><br>Lat: ${coordenada.lat}<br>Lng: ${coordenada.lng}`
+                        );
+                    // .openPopup();
+                }
+            });
+
+        };
+    </script>
+    <script>
+        window.initLeafletMapaMatricula = function(coordenadas) {
+            if (window.mapaMatriculaInstancia) {
+                window.mapaMatriculaInstancia.remove();
+            }
+
+            const contenedor = document.getElementById('mapaMatricula');
+            if (!contenedor) return;
+
+            window.mapaMatriculaInstancia = L.map(contenedor).setView([4.15, -73.63], 15);
+
+            if (coordenadas.length > 0) {
+                const lat = parseFloat(coordenadas[0].lat);
+                const lng = parseFloat(coordenadas[0].lng);
+                window.mapaMatriculaInstancia.setView([lat, lng], 14);
+            }
+
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; <a href="https://www.nomaddi.com" target="_blank">Nomaddi</a> 2025'
+            }).addTo(window.mapaMatriculaInstancia);
+
+            console.log('Puntos matrícula:', coordenadas);
+
+            coordenadas.forEach((coordenada, i) => {
+                const marker = L.marker([parseFloat(coordenada.lat), parseFloat(coordenada.lng)])
+                    .addTo(window.mapaMatriculaInstancia)
+                    .bindPopup(
+                        `<img src='${coordenada.url}' width='100'><br>Lat: ${coordenada.lat}<br>Lng: ${coordenada.lng}`
+                    );
+
+                // if (i === 0) {
+                //     marker.openPopup();
+                // }
+            });
+
+            setTimeout(() => {
+                window.mapaMatriculaInstancia.invalidateSize();
+            }, 300);
+        };
+    </script>
 </div>

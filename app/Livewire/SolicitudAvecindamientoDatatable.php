@@ -417,6 +417,10 @@ class SolicitudAvecindamientoDatatable extends DataTableComponent
                 ->collapseAlways(),
             Column::make("Observaciones", "observaciones")
                 ->collapseAlways(),
+            Column::make("Tipo persona a cargo", "tipo_persona_cargo")
+                ->sortable()
+                ->searchable()
+                ->collapseAlways(),
             Column::make("persona a cargo", "nombre_persona_cargo")
                 ->sortable()
                 ->searchable()

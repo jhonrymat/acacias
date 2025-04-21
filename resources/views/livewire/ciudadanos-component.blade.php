@@ -219,7 +219,7 @@
                 <div class="flex justify-between items-center mb-2">
                     <h2 class="text-xl font-bold">
                         <span>Historial de solicitudes de avecindamiento</span>
-                        <span class="inline-block bg-purple-100 text-purple-800 text-sm font-semibold px-3 py-1 rounded-full ml-2">
+                        <span class="inline-block bg-green-100 text-green-800 text-sm font-semibold px-3 py-1 rounded-full ml-2">
                             Avecindamiento
                         </span>
                     </h2>

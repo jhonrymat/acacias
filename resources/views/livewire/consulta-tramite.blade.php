@@ -24,11 +24,32 @@
     <br>
     <h1 class="text-2xl font-bold text-gray-800 text-center mb-4">Consulta de Trámites</h1>
     <p class="text-center text-gray-600 mb-6">
-        Ingresa tu número de identificación o número de solicitud para consultar el estado de tu trámite.
+        Selecciona el tipo de solicitud, luego el método de consulta, e ingresa tu número de identificación o número de solicitud para verificar el estado del trámite.
     </p>
 
     <!-- Formulario -->
     <div x-data="{ tipoConsulta: '' }" class="space-y-4">
+        <!-- Nuevo Select para tipo de solicitud -->
+        <div>
+            <div class="relative group">
+                <label for="tipoSolicitud" class="block text-gray-700">¿Qué tipo de solicitud deseas consultar?</label>
+                <select wire:model="tipoSolicitud" id="tipoSolicitud" required
+                    class="mt-1 block w-full border border-gray-300 rounded-lg shadow-sm px-3 py-2 focus:ring focus:ring-indigo-300">
+                    <option value="" selected disabled>Seleccione una opción</option>
+                    <option value="residencia">Residencia</option>
+                    <option value="avecindamiento">Avecindamiento</option>
+                </select>
+                <!-- Tooltip -->
+                <div class="absolute hidden group-hover:block bg-gray-800 text-white text-sm rounded-lg px-4 py-2 w-64 shadow-lg left-0 z-10"
+                    style="top: -5rem">
+                    Seleccione el tipo de solicitud que quiere consultar.
+                </div>
+            </div>
+            @error('tipoSolicitud')
+                <span class="text-red-500 text-sm">{{ $message }}</span>
+            @enderror
+        </div>
+
         <!-- Select para elegir el tipo de consulta -->
         <div>
             <div class="relative group">
@@ -44,7 +65,7 @@
 
                 <!-- Tooltip -->
                 <div class="absolute hidden group-hover:block bg-gray-800 text-white text-sm rounded-lg px-4 py-2 w-64 shadow-lg left-0 z-10"
-                    style="top: -5rem">
+                    style="top: -4rem">
                     Seleccione una opción: "Número de Identificación" o "Número de Solicitud" para realizar la consulta.
                 </div>
             </div>

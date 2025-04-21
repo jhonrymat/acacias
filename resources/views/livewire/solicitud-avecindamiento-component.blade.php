@@ -401,11 +401,15 @@
         </div>
     </div>
 
-    <div x-data="{ showAdditionalModal: @entangle('showAdditional'), coordenadas: @entangle('coordenadasFrente'), }" x-init="$watch('showAdditionalModal', value => {
+    <div x-data="{
+        showAdditionalModal: @entangle('showAdditional'),
+        coordenadas: @entangle('coordenadasFrente'),
+        coordenadasMatricula: @entangle('coordenadasMatricula')
+    }" x-init="$watch('showAdditionalModal', value => {
         if (value) {
             setTimeout(() => {
-                window.initLeafletMapaFrente(coordenadas),
-                    window.mapaFrenteInstancia.invalidateSize();
+                window.initLeafletMapaFrente(coordenadas);
+                window.initLeafletMapaMatricula(coordenadasMatricula);
             }, 300);
         }
     })" x-cloak>
@@ -472,50 +476,103 @@
                                 <p class="mt-1 text-sm text-gray-500">No hay archivo disponible.</p>
                             @endif
                         </div>
-                        {{-- SECCIÓN DE FOTOS DEL FRENTE --}}
-                        @if (isset($solicitud_avecindamiento) && $solicitud_avecindamiento->imagenes->where('tipo', 'frente')->count())
-                            <div class="mb-6">
-                                <h3 class="text-lg font-semibold mb-2">Fotos del frente de la casa</h3>
-                                <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
-                                    @foreach ($solicitud_avecindamiento->imagenes->where('tipo', 'frente') as $img)
-                                        <div class="flex flex-col items-center bg-white p-2 rounded border shadow-sm">
-                                            <a href="{{ Storage::url($img->ruta) }}" target="_blank" class="mb-2">
-                                                <img src="{{ Storage::url($img->ruta) }}"
-                                                    class="w-28 h-28 object-cover rounded">
-                                            </a>
-                                            <p class="text-[11px] text-center text-gray-600 leading-tight">
-                                                Lat: {{ $img->lat ?? 'N/A' }}<br>
-                                                Lng: {{ $img->lng ?? 'N/A' }}
-                                            </p>
-                                        </div>
-                                    @endforeach
-                                </div>
-                                {{-- Mapa --}}
-                                <div id="mapaFrente" class="h-64 rounded border"></div>
+
+                        <div class="mb-6" x-data="{
+                            tab: 'frente',
+                            frenteIniciado: false,
+                            matriculaIniciada: false,
+                            initMapaFrente() {
+                                if (!this.frenteIniciado && typeof window.initLeafletMapaFrente === 'function') {
+                                    this.frenteIniciado = true;
+                                    setTimeout(() => window.initLeafletMapaFrente(coordenadas), 200);
+                                } else {
+                                    setTimeout(() => window.mapaFrenteInstancia.invalidateSize(), 200);
+                                }
+                            },
+                            initMapaMatricula() {
+                                if (!this.matriculaIniciada && typeof window.initLeafletMapaMatricula === 'function') {
+                                    this.matriculaIniciada = true;
+                                    setTimeout(() => window.initLeafletMapaMatricula(coordenadasMatricula), 200);
+                                } else {
+                                    setTimeout(() => window.mapaMatriculaInstancia.invalidateSize(), 200);
+                                }
+                            }
+                        }">
+                            <h3 class="text-lg font-semibold mb-2">Captura de imágenes</h3>
+
+                            <div class="flex mb-4">
+                                <button class="px-4 py-2 rounded-l border border-gray-300 text-sm"
+                                    :class="tab === 'frente' ? 'bg-blue-500 text-white' : 'bg-white text-gray-700'"
+                                    @click="tab = 'frente'; initMapaFrente()">
+                                    Frente
+                                </button>
+                                <button class="px-4 py-2 rounded-r border border-gray-300 text-sm"
+                                    :class="tab === 'matricula' ? 'bg-blue-500 text-white' : 'bg-white text-gray-700'"
+                                    @click="tab = 'matricula'; initMapaMatricula()">
+                                    Matrícula
+                                </button>
                             </div>
-                        @endif
+
+                            {{-- TAB FRENTE --}}
+                            <div x-show="tab === 'frente'" x-transition>
+                                @if (isset($solicitud_avecindamiento) && $solicitud_avecindamiento->imagenes->where('tipo', 'frente')->count())
+                                    <div class="mb-6">
+                                        <h3 class="text-lg font-semibold mb-2">Fotos del frente de la casa</h3>
+                                        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+                                            @foreach ($solicitud_avecindamiento->imagenes->where('tipo', 'frente') as $img)
+                                                <div
+                                                    class="flex flex-col items-center bg-white p-2 rounded border shadow-sm">
+                                                    <a href="{{ Storage::url($img->ruta) }}" target="_blank"
+                                                        class="mb-2">
+                                                        <img src="{{ Storage::url($img->ruta) }}"
+                                                            class="w-28 h-28 object-cover rounded">
+                                                    </a>
+                                                    <p class="text-[11px] text-center text-gray-600 leading-tight">
+                                                        Lat: {{ $img->lat ?? 'N/A' }}<br>
+                                                        Lng: {{ $img->lng ?? 'N/A' }}
+                                                    </p>
+                                                </div>
+                                            @endforeach
+                                        </div>
+                                        <div id="mapaFrente" class="h-80 rounded border"></div>
+                                    </div>
+                                @else
+                                    <div class="text-sm text-gray-500 italic">No se encontraron imágenes del frente.
+                                    </div>
+                                @endif
+                            </div>
+
+                            {{-- TAB MATRÍCULA --}}
+                            <div x-show="tab === 'matricula'" x-transition>
+                                @if (isset($solicitud_avecindamiento) && $solicitud_avecindamiento->imagenes->where('tipo', 'matricula')->count())
+                                    <div class="mb-6">
+                                        <h3 class="text-lg font-semibold mb-2">Fotos de la matrícula</h3>
+                                        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+                                            @foreach ($solicitud_avecindamiento->imagenes->where('tipo', 'matricula') as $img)
+                                                <div
+                                                    class="flex flex-col items-center bg-white p-2 rounded border shadow-sm">
+                                                    <a href="{{ Storage::url($img->ruta) }}" target="_blank"
+                                                        class="mb-2">
+                                                        <img src="{{ Storage::url($img->ruta) }}"
+                                                            class="w-28 h-28 object-cover rounded">
+                                                    </a>
+                                                    <p class="text-[11px] text-center text-gray-600 leading-tight">
+                                                        Lat: {{ $img->lat ?? 'N/A' }}<br>
+                                                        Lng: {{ $img->lng ?? 'N/A' }}
+                                                    </p>
+                                                </div>
+                                            @endforeach
+                                        </div>
+                                        <div id="mapaMatricula" class="h-80 rounded border mt-4"></div>
+                                    </div>
+                                @else
+                                    <div class="text-sm text-gray-500 italic">No se encontraron imágenes de matrícula.
+                                    </div>
+                                @endif
+                            </div>
+                        </div>
 
 
-                        {{-- SECCIÓN DE FOTOS DE LA MATRÍCULA --}}
-                        @if (isset($solicitud_avecindamiento) && $solicitud_avecindamiento->imagenes->where('tipo', 'matricula')->count())
-                            <div class="mb-6">
-                                <h3 class="text-lg font-semibold mb-2">Fotos de la matrícula</h3>
-                                <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
-                                    @foreach ($solicitud_avecindamiento->imagenes->where('tipo', 'matricula') as $img)
-                                        <div class="flex flex-col items-center bg-white p-2 rounded border shadow-sm">
-                                            <a href="{{ Storage::url($img->ruta) }}" target="_blank" class="mb-2">
-                                                <img src="{{ Storage::url($img->ruta) }}"
-                                                    class="w-28 h-28 object-cover rounded">
-                                            </a>
-                                            <p class="text-[11px] text-center text-gray-600 leading-tight">
-                                                Lat: {{ $img->lat ?? 'N/A' }}<br>
-                                                Lng: {{ $img->lng ?? 'N/A' }}
-                                            </p>
-                                        </div>
-                                    @endforeach
-                                </div>
-                            </div>
-                        @endif
 
 
                         <div class="mb-3">
@@ -680,6 +737,47 @@
         });
     </script>
     <script>
+        window.initLeafletMapaMatricula = function(coordenadas) {
+            if (window.mapaMatriculaInstancia) {
+                window.mapaMatriculaInstancia.remove();
+            }
+
+            const contenedor = document.getElementById('mapaMatricula');
+            if (!contenedor) return;
+
+            window.mapaMatriculaInstancia = L.map(contenedor).setView([4.15, -73.63], 15);
+
+            if (coordenadas.length > 0) {
+                const lat = parseFloat(coordenadas[0].lat);
+                const lng = parseFloat(coordenadas[0].lng);
+                window.mapaMatriculaInstancia.setView([lat, lng], 14);
+            }
+
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; <a href="https://www.nomaddi.com" target="_blank">Nomaddi</a> 2025'
+            }).addTo(window.mapaMatriculaInstancia);
+
+            console.log('Puntos matrícula:', coordenadas);
+
+            coordenadas.forEach((coordenada, i) => {
+                const marker = L.marker([parseFloat(coordenada.lat), parseFloat(coordenada.lng)])
+                    .addTo(window.mapaMatriculaInstancia)
+                    .bindPopup(
+                        `<img src='${coordenada.url}' width='100'><br>Lat: ${coordenada.lat}<br>Lng: ${coordenada.lng}`
+                    );
+
+                // if (i === 0) {
+                //     marker.openPopup();
+                // }
+            });
+
+            setTimeout(() => {
+                window.mapaMatriculaInstancia.invalidateSize();
+            }, 300);
+        };
+    </script>
+
+    <script>
         document.addEventListener('DOMContentLoaded', () => {
             Livewire.on('$refresh', () => console.log('Tabla actualizada'));
         });
@@ -697,12 +795,12 @@
             if (coordenadas.length > 0) {
                 const lat = parseFloat(coordenadas[0].lat);
                 const lng = parseFloat(coordenadas[0].lng);
-                window.mapaFrenteInstancia.setView([lat, lng], 18);
+                window.mapaFrenteInstancia.setView([lat, lng], 14);
             }
 
 
             L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                attribution: '&copy; OpenStreetMap contributors'
+                attribution: '&copy; <a href="https://www.nomaddi.com" target="_blank">Nomaddi</a> 2025'
             }).addTo(window.mapaFrenteInstancia);
 
             console.log('Puntos cargados:', coordenadas);
@@ -714,8 +812,8 @@
                         .addTo(window.mapaFrenteInstancia)
                         .bindPopup(
                             `<img src='${coordenada.url}' width='100'><br>Lat: ${coordenada.lat}<br>Lng: ${coordenada.lng}`
-                        )
-                        .openPopup();
+                        );
+                        // .openPopup();
                 }
             });
 
