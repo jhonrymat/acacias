@@ -12,7 +12,7 @@ use Livewire\WithFileUploads;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
-use App\Mail\SolicitudAnuladaNotification;
+use App\Mail\SolicitudAvecindamientoAnuladaNotification;
 
 class SolicitudAnulacionAvecindamientoComponent extends Component
 {
@@ -113,7 +113,7 @@ class SolicitudAnulacionAvecindamientoComponent extends Component
         $userName = $this->solicitud->NombreCompleto;
         $userEmail = $this->solicitud->user->email;
 
-        Mail::to($userEmail)->send(new SolicitudAnuladaNotification($this->solicitud->id, $userName));
+        Mail::to($userEmail)->send(new SolicitudAvecindamientoAnuladaNotification($this->solicitud->id, $userName));
 
         // Mensaje de éxito y reseteo del formulario
         session()->flash('success', 'Solicitud anulada correctamente.');

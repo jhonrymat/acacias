@@ -36,8 +36,8 @@ class SolicitudAvecindamientoComponent extends Component
     $numeroIdentificacion, $ciudadExpedicion, $fechaNacimiento, $solicitud_id,
     $fechaSolicitud, $id_nivelEstudio, $id_genero, $id_ocupacion, $id_poblacion,
     $numeroIdentificacion_id, $fechaActual, $barrio_id, $direccion_id, $ubicacion,
-    $accion_comunal, $electoral, $sisben, $cedula, $estado_id, $estado_id2, $JAComunal, $detalles, $visible = false, $showForm = false, $showAdditional = false, $showValidar = false,
-    $modalRechazada = false, $validacion1, $validacion2, $notas, $nombre, $validador, $Id, $AllStatus, $nameAll, $observaciones, $anexos;
+    $accion_comunal, $electoral, $sisben, $cedula, $estado_id, $estado_id2, $detalles, $visible = false, $showForm = false, $showAdditional = false, $showValidar = false,
+    $modalRechazada = false, $validacion1, $validacion2, $notas, $nombre, $validador, $Id, $AllStatus, $nameAll, $observaciones;
     public $fotosFrente = [];
     public $fotosMatricula = [];
     public $latFrente, $lngFrente;
@@ -47,6 +47,9 @@ class SolicitudAvecindamientoComponent extends Component
     public $solicitud_avecindamiento;
     public $coordenadasFrente = [];
     public $coordenadasMatricula = [];
+    public $evidencia_residencia;
+    public $tiempo_residencia_anios;
+    public $tiempo_residencia_meses;
 
 
 
@@ -58,16 +61,15 @@ class SolicitudAvecindamientoComponent extends Component
     protected $rules = [
         'estado_id' => 'required|string',
         'estado_id2' => 'required|exists:estados,id', // Validación para el estado
-        'JAComunal' => 'nullable|array', // Aceptar múltiples archivos
-        'JAComunal.*' => 'file|mimes:pdf,jpg,png', // Validar cada archivo
         'detalles' => 'required|string',
         'visible' => 'nullable|boolean',
         'fotosFrente' => 'nullable|array',
         'fotosFrente.*' => 'nullable|image|mimes:jpeg,png,jpg|max:5120',
         'fotosMatricula' => 'nullable|array',
         'fotosMatricula.*' => 'nullable|image|mimes:jpeg,png,jpg|max:5120',
-
-
+        'evidencia_residencia' => 'required|boolean',
+        'tiempo_residencia_anios' => 'required|integer|min:0',
+        'tiempo_residencia_meses' => 'required|integer|min:0|max:11',
     ];
 
     //mostar validaciones en español
@@ -75,9 +77,15 @@ class SolicitudAvecindamientoComponent extends Component
         'estado_id.required' => 'El campo "Primer filtro" es obligatorio.',
         'estado_id2.required' => 'El campo "Segundo filtro" es obligatorio.',
         'estado_id2.exists' => 'El estado seleccionado no es válido.',
-        'JAComunal.*.mimes' => 'El archivo debe ser de tipo: PDF, PNG o JPG.',
         'detalles.required' => 'El campo "Observaciones" es obligatorio.',
-        'visible.boolean' => 'El campo "Habilitar visualización" debe ser verdadero o falso.'
+        'visible.boolean' => 'El campo "Habilitar visualización" debe ser verdadero o falso.',
+        'evidencia_residencia.required' => 'El campo "Evidencia de residencia" es obligatorio.',
+        'tiempo_residencia_anios.required' => 'El campo "Años de residencia" es obligatorio.',
+        'tiempo_residencia_anios.integer' => 'El campo "Años de residencia" debe ser un número entero.',
+        'tiempo_residencia_anios.min' => 'El campo "Años de residencia" debe ser al menos 0.',
+        'tiempo_residencia_meses.required' => 'El campo "Meses de residencia" es obligatorio.',
+        'tiempo_residencia_meses.integer' => 'El campo "Meses de residencia" debe ser un número entero.',
+        'tiempo_residencia_meses.min' => 'El campo "Meses de residencia" debe ser al menos 0.',
     ];
 
 
@@ -155,6 +163,13 @@ class SolicitudAvecindamientoComponent extends Component
         $this->validacion2 = $estado->nombreEstado ?? '—';
         $this->notas = $validacion->notas;
         $this->visible = $validacion->visible;
+
+        $this->evidencia_residencia = $validacion->evidencia_residencia;
+
+        $tiempo = json_decode($validacion->tiempo_residencia, true);
+        $this->tiempo_residencia_anios = $tiempo['anios'] ?? null;
+        $this->tiempo_residencia_meses = $tiempo['meses'] ?? null;
+        
         $this->cedula = $solicitud->numeroIdentificacion;
         $this->nombre = $solicitud->user->name ?? '—';
         $this->nameAll = $solicitud->NombreCompleto ?? '—';
@@ -202,7 +217,7 @@ class SolicitudAvecindamientoComponent extends Component
 
             // Generar URL del QR
             $baseUrl = config('app.url');
-            $qrUrl = $baseUrl . '/qr/' . $solicitud->id . '/' . $solicitud->numeroIdentificacion;
+            $qrUrl = $baseUrl . '/qr-avecindamiento/' . $solicitud->id . '/' . $solicitud->numeroIdentificacion;
 
             // Asegurar que la carpeta de almacenamiento exista
             $qrStoragePath = storage_path('app/public/qrs');
@@ -250,7 +265,7 @@ class SolicitudAvecindamientoComponent extends Component
             $userEmail = $solicitud->user->email;
 
             // Enviar correo
-            Mail::to($userEmail)->send(new \App\Mail\SolicitudEmitidaNotification($solicitud->id, $userName));
+            Mail::to($userEmail)->send(new \App\Mail\SolicitudAvecindamientoEmitidaNotification($solicitud->id, $userName));
 
             DB::commit(); // Si todo salió bien, se confirman los cambios
 
@@ -335,7 +350,7 @@ class SolicitudAvecindamientoComponent extends Component
         $userEmail = $solicitud->user->email; // Email del usuario
 
         // Enviar correo de rechazo
-        Mail::to($userEmail)->send(new \App\Mail\SolicitudRechazadaNotification($solicitud->id, $userName));
+        Mail::to($userEmail)->send(new \App\Mail\SolicitudAvecindamientoRechazadaNotification($solicitud->id, $userName));
         $this->modalRechazada = false;
         $this->resetForm();
 
@@ -457,16 +472,9 @@ class SolicitudAvecindamientoComponent extends Component
 
                 if ($estadoFinal === 3) {
                     // Enviar correo de rechazo
-                    Mail::to($userEmail)->send(new \App\Mail\SolicitudRechazadaNotification($solicitud->id, $userName));
+                    Mail::to($userEmail)->send(new \App\Mail\SolicitudAvecindamientoRechazadaNotification($solicitud->id, $userName));
                 }
 
-                // Subir múltiples archivos
-                $rutasArchivos = [];
-                if ($this->JAComunal && is_array($this->JAComunal)) {
-                    foreach ($this->JAComunal as $archivo) {
-                        $rutasArchivos[] = $archivo->store('uploads', 'public');
-                    }
-                }
 
                 if (!empty($this->fotosFrente)) {
                     foreach ($this->fotosFrente as $foto) {
@@ -498,9 +506,13 @@ class SolicitudAvecindamientoComponent extends Component
                     $solicitud->validaciones()->create([
                         'validacion1' => $this->estado_id,
                         'validacion2' => $this->estado_id2,
-                        'JAComunal' => json_encode($rutasArchivos), // Guardar como JSON
                         'notas' => $this->detalles,
                         'visible' => $this->visible,
+                        'evidencia_residencia' => $this->evidencia_residencia, // Nuevo campo boolean
+                        'tiempo_residencia' => json_encode([ // Nuevo campo JSON
+                            'anios' => $this->tiempo_residencia_anios,
+                            'meses' => $this->tiempo_residencia_meses,
+                        ]),
                     ]);
 
                     $this->dispatch('sweet-alert-good', icon: 'success', title: 'Validación creada con éxito.', text: 'La validación se ha guardado correctamente.');
@@ -553,7 +565,6 @@ class SolicitudAvecindamientoComponent extends Component
     public function resetForm()
     {
         $this->detalles = '';
-        $this->JAComunal = null;
         $this->estado_id2 = null;
         $this->estado_id = null;
         $this->visible = false;

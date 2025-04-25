@@ -75,6 +75,11 @@ class SolicitudesAvecindamientoComponent extends Component
     public function generarPDF($Id)
     {
         $solicitud = SolicitudAvecindamiento::findOrFail($Id);
+        $validacion = ValidacionAvecindamiento::where('id_solicitud', $Id)->first();
+        if (!$validacion) {
+            session()->flash('error', 'No se encontró la validación de la solicitud.');
+            return;
+        }
 
         // Validar el estado de la solicitud
         if ($solicitud->estado_id !== 5) {
@@ -124,23 +129,26 @@ class SolicitudesAvecindamientoComponent extends Component
                 : 'N/A',
 
             'vigencia_fin' => $solicitud->VigenciaFormateada,
+            'fecha_visita' => $validacion->created_at
+                ? Carbon::parse($validacion->created_at)->translatedFormat('d \\de F \\de Y')
+                : 'N/A',
 
             'verificacion_url' => env('APP_URL') . '/consulta-tramite',
             'qr' => public_path('storage/' . $solicitud->validaciones->first()->qr_url),
         ];
 
         // Generar el PDF
-        $pdf = Pdf::loadView('certificados.certificado', $data);
+        $pdf = Pdf::loadView('certificados.certificadoAvecindamientoUsuario', $data);
 
         // Descargar el archivo
         return response()->streamDownload(function () use ($pdf) {
             echo $pdf->output();
-        }, $solicitud->id . '_' . $solicitud->numeroIdentificacion . '_certificado.pdf');
+        }, $solicitud->id . '_' . $solicitud->numeroIdentificacion . '_certificadoAvecindamiento.pdf');
     }
 
     public function viewPDF($Id)
     {
-        return redirect()->route('solicitud.verPDF', ['id' => $Id]);
+        return redirect()->route('solicitud.verPDF.avecindamiento', ['id' => $Id]);
     }
 
     public function mostrarNotas($Id)

@@ -111,16 +111,16 @@
                 <td>
                     <div class="inner-body">
                         <h1>¡Hola {{ $userName }}!</h1>
-                        <p>Lamentamos informarte que tu solicitud de Certificado de Residencia, con id {{ $solicitudId }} ha sido anulada.</p>
-                        <p>Puedes consultar los detalles de la anulación, haciendo clic en el siguiente enlace:</p>
-                        <a href="{{ url('/versolicitudesresidencia') }}" class="button">Ver detalles</a>
+                        <p>Lamentamos informarte que tu solicitud de Certificado de Avecindamiento no ha sido completado.</p>
+                        <p>Puedes consultar los detalles, haciendo clic en el siguiente enlace:</p>
+                        <a href="{{ url('/versolicitudesavecindamiento') }}" class="button">Ver detalles</a>
                         <p>Si tienes alguna pregunta, no dudes en contactarnos.</p>
                     </div>
                 </td>
             </tr>
             <tr>
                 <td class="footer">
-                    Equipo de Certificados de Residencia - Acacías, Meta
+                    Equipo de Certificados de Avecindamiento - Acacías, Meta
                 </td>
             </tr>
         </table>

@@ -15,6 +15,11 @@ class HistorialAvecindamientoComponent extends Component
     public $coordenadasMatricula = [];
     public $solicitud_avecindamiento;
     protected $listeners = ['view'];
+
+    public $evidencia_residencia;
+    public $tiempo_residencia_anios;
+    public $tiempo_residencia_meses;
+
     public function view($Id)
     {
         // Obtener la solicitud por su ID
@@ -59,6 +64,13 @@ class HistorialAvecindamientoComponent extends Component
         $this->validacion2 = $estado->nombreEstado;
         $this->notas = $validacion->notas;
         $this->visible = $validacion->visible;
+
+        $this->evidencia_residencia = $validacion->evidencia_residencia;
+
+        $tiempo = json_decode($validacion->tiempo_residencia, true);
+        $this->tiempo_residencia_anios = $tiempo['anios'] ?? null;
+        $this->tiempo_residencia_meses = $tiempo['meses'] ?? null;
+
         $this->nombre = $solicitud->user->name;
         $this->cedula = $solicitud->numeroIdentificacion;
         $this->validador = $validador ? ($validador->name . ' | ' . $validador->codigo) : 'No asignado';

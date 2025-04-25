@@ -115,7 +115,7 @@ class SolicitudAvecindamiento extends Model
             ->first();
 
         if ($approvedRequest) {
-            $expiryDate = Carbon::parse($approvedRequest->fecha_emision)->addMonths(6);
+            $expiryDate = Carbon::parse($approvedRequest->fecha_emision)->addMonths(12);
             return Carbon::now()->greaterThanOrEqualTo($expiryDate->subDays(15));
         }
 
@@ -164,7 +164,7 @@ class SolicitudAvecindamiento extends Model
         }
 
         $fechaEmision = Carbon::parse($this->fecha_emision);
-        $fechaVencimiento = $fechaEmision->addMonths(6);
+        $fechaVencimiento = $fechaEmision->addMonths(12);
 
         return 'hasta el ' . $fechaVencimiento->format('d/m/Y');
     }
@@ -176,7 +176,7 @@ class SolicitudAvecindamiento extends Model
         }
 
         $fechaEmision = Carbon::parse($this->fecha_emision);
-        $fechaVencimiento = $fechaEmision->addMonths(6);
+        $fechaVencimiento = $fechaEmision->addMonths(12);
 
         return 'hasta el ' . $fechaVencimiento->translatedFormat('d \\de F \\de Y');
     }

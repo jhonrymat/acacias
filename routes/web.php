@@ -26,15 +26,16 @@ use App\Livewire\SolicitudComponent;
 use App\Livewire\CiudadanosComponent;
 use App\Livewire\FormularioComponent;
 use App\Livewire\TdocumentoComponent;
-use App\Livewire\HistorialAvecindamientoComponent;
 use Illuminate\Support\Facades\Route;
 use App\Livewire\CertificadoComponent;
 use App\Livewire\SolicitudesComponent;
 use App\Livewire\ValidadoresComponent;
 use App\Http\Controllers\PDFController;
 use App\Livewire\EstadisticasValidador;
+use App\Livewire\ValidarQrAvecindamiento;
 use App\Livewire\TipoSolicitanteComponent;
 use App\Livewire\SolicitudAnulacionComponent;
+use App\Livewire\HistorialAvecindamientoComponent;
 use App\Livewire\SolicitudAvecindamientoComponent;
 use App\Livewire\FormularioAvecindamientoComponent;
 use App\Livewire\SolicitudesAvecindamientoComponent;
@@ -47,6 +48,7 @@ Route::get('/', function () {
 
 Route::get('/consulta-tramite', ConsultaTramite::class)->name('consulta.tramite');
 Route::get('/qr/{id}/{numeroIdentificacion}', ValidarQr::class)->name('validar.qr');
+Route::get('/qr-avecindamiento/{id}/{numeroIdentificacion}', ValidarQrAvecindamiento::class)->name('validar.qr.avecindamiento');
 
 Route::middleware(['auth', 'can:permisos'])->group(function () {
     Route::get('admin/maintenance', MaintenanceToggle::class)->name('maintenance.toggle');
@@ -102,6 +104,7 @@ Route::middleware([
 
 
     Route::get('/solicitud/pdf/{id}', [PDFController::class, 'verPDF'])->name('solicitud.verPDF');
+    Route::get('/solicitudAvecindamiento/pdf/{id}', [PDFController::class, 'verPDFAvecindamiento'])->name('solicitud.verPDF.avecindamiento');
 
     // tablas
     Route::middleware(['can:permisos'])->get('historial-accesos', AccessLog::class)->name('historial.accesos');

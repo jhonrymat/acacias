@@ -16,7 +16,7 @@ use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Mail;
 use App\Models\SolicitudAvecindamiento;
 use Illuminate\Support\Facades\Storage;
-use App\Mail\SolicitudCreadaNotification;
+use App\Mail\SolicitudAvecindamientoCreadaNotification;
 
 class FormularioAvecindamientoComponent extends Component
 {
@@ -193,7 +193,7 @@ class FormularioAvecindamientoComponent extends Component
 
         // Enviar notificación
         $userName = auth()->user()->name;
-        Mail::to(auth()->user()->email)->send(new SolicitudCreadaNotification($solicitud->id, $userName));
+        Mail::to(auth()->user()->email)->send(new SolicitudAvecindamientoCreadaNotification($solicitud->id, $userName));
 
         $this->reset();
 

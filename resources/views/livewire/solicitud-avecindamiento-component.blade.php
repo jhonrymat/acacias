@@ -186,56 +186,47 @@
                             value="{{ $solicitud_id }}">
                     </div>
 
-                    <!-- Copia registro JAC -->
                     <div class="mb-4">
-                        <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                            for="JAComunal_input">
-                            Anexos
-                        </label>
-                        <input wire:model="JAComunal" multiple
-                            class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50
-        dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
-                            id="JAComunal_input" type="file"
-                            accept="application/pdf,image/jpeg,image/jpg,image/png">
-
-                        <p class="mt-1 text-xs text-gray-500 dark:text-gray-300" id="JAComunal_input_help">
-                            Adjunte anexos que requiera. PDF, PNG, JPG (MAX. 10MB).
-                        </p>
-
-                        <!-- Indicador de carga -->
-                        <div wire:loading wire:target="JAComunal"
-                            class="mt-2 text-sm text-blue-600 dark:text-blue-400">
-                            Subiendo archivos, por favor espere...
+                        <label class="block text-sm font-medium text-gray-700">¿Se evidencia que la persona vive en
+                            dirección aportada?</label>
+                        <div class="flex space-x-4 mt-2">
+                            <label class="flex items-center space-x-2">
+                                <input type="radio" wire:model="evidencia_residencia" value="1"
+                                    class="text-blue-600">
+                                <span>Sí</span>
+                            </label>
+                            <label class="flex items-center space-x-2">
+                                <input type="radio" wire:model="evidencia_residencia" value="0"
+                                    class="text-red-600">
+                                <span>No</span>
+                            </label>
                         </div>
-
-                        <!-- Lista de archivos subidos -->
-                        @if ($JAComunal)
-                            <div class="mt-2">
-                                <p class="text-sm font-medium text-gray-900 dark:text-white">Archivos seleccionados:
-                                </p>
-                                <ul class="mt-1 space-y-1">
-                                    @foreach ($JAComunal as $index => $file)
-                                        <li
-                                            class="flex items-center justify-between text-sm text-gray-700 dark:text-gray-300">
-                                            <span>{{ $file->getClientOriginalName() }}</span>
-                                            <button type="button" wire:click="removeFile({{ $index }})"
-                                                class="px-2 py-1 text-xs text-white bg-red-500 rounded hover:bg-red-600">
-                                                Quitar
-                                            </button>
-                                        </li>
-                                    @endforeach
-                                </ul>
-                            </div>
-                        @endif
-
-                        <!-- Manejo de errores -->
-                        @error('JAComunal')
-                            <span class="text-red-500 text-sm mt-2 block">{{ $message }}</span>
-                        @enderror
-                        @error('JAComunal.*')
-                            <span class="text-red-500 text-sm mt-2 block">{{ $message }}</span>
+                        @error('evidencia_residencia')
+                            <span class="text-red-500 text-sm">{{ $message }}</span>
                         @enderror
                     </div>
+
+                    <div class="mb-4">
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Tiempo en el que lleva viviendo el peticionario en el inmueble:</label>
+                        <div class="flex space-x-4">
+                            <div>
+                                <label class="block text-xs">Años</label>
+                                <input type="number" min="0" wire:model="tiempo_residencia_anios" class="border-gray-300 rounded px-2 py-1 text-sm w-24">
+                            </div>
+                            <div>
+                                <label class="block text-xs">Meses</label>
+                                <input type="number" min="0" max="11" wire:model="tiempo_residencia_meses" class="border-gray-300 rounded px-2 py-1 text-sm w-24">
+                            </div>
+                        </div>
+                        @error('tiempo_residencia_anios')
+                            <span class="text-red-500 text-sm block">{{ $message }}</span>
+                        @enderror
+                        @error('tiempo_residencia_meses')
+                            <span class="text-red-500 text-sm block">{{ $message }}</span>
+                        @enderror
+                    </div>
+
+
 
                     <!-- Sección de fotos del frente de la casa -->
                     <!-- Fotos del frente -->
@@ -462,20 +453,20 @@
                             <input type="text" wire:model="validacion2" id="validacion2"
                                 class="mt-1 block w-full border-gray-300 rounded text-sm px-2 py-1" disabled>
                         </div>
-                        {{-- solo para rol validador2 --}}
-                        <div class="mb-3">
-                            <label for="JAComunal" class="block text-xs font-medium">Anexos</label>
-                            @if ($anexos && count($anexos) > 0)
-                                @foreach ($anexos as $archivo)
-                                    <a href="{{ asset('storage/' . $archivo) }}" target="_blank"
-                                        class="block mt-1 text-sm text-blue-500 underline">
-                                        Ver archivo
-                                    </a>
-                                @endforeach
-                            @else
-                                <p class="mt-1 text-sm text-gray-500">No hay archivo disponible.</p>
-                            @endif
+
+                        <div class="mt-4">
+                            <h3 class="font-bold text-sm">¿Se evidencia que la persona vive en dirección aportada?</h3>
+                            <p class="text-gray-700">{{ $evidencia_residencia ? 'Sí' : 'No' }}</p>
                         </div>
+
+                        <div class="mt-4">
+                            <h3 class="font-bold text-sm">Tiempo en el que lleva viviendo en el inmueble:</h3>
+                            <p class="text-gray-700">Años: {{ $tiempo_residencia_anios ?? 'N/A' }}</p>
+                            <p class="text-gray-700">Meses: {{ $tiempo_residencia_meses ?? 'N/A' }}</p>
+                        </div>
+
+
+                        
 
                         <div class="mb-6" x-data="{
                             tab: 'frente',
@@ -813,7 +804,7 @@
                         .bindPopup(
                             `<img src='${coordenada.url}' width='100'><br>Lat: ${coordenada.lat}<br>Lng: ${coordenada.lng}`
                         );
-                        // .openPopup();
+                    // .openPopup();
                 }
             });
 

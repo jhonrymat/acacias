@@ -21,8 +21,7 @@
                 }
             }, 300);
         }
-    })"
-     x-cloak>
+    })" x-cloak>
         <!-- Overlay para el modal -->
         <div x-show="showModal" class="fixed inset-0 bg-gray-800 bg-opacity-70 flex items-center justify-center">
             <div
@@ -63,6 +62,19 @@
                             <input type="text" wire:model="validacion2" id="validacion2"
                                 class="mt-1 block w-full border-gray-300 rounded text-sm px-2 py-1" disabled>
                         </div>
+
+                        <div class="mb-3">
+                            <h3 class="font-bold text-sm">¿Se evidencia que la persona vive en dirección aportada?</h3>
+                            <p class="text-gray-700">{{ $evidencia_residencia ? 'Sí' : 'No' }}</p>
+                        </div>
+
+                        <div class="mb-3    ">
+                            <h3 class="font-bold text-sm">Tiempo en el que lleva viviendo en el inmueble:</h3>
+                            <p class="text-gray-700">Años: {{ $tiempo_residencia_anios ?? 'N/A' }}</p>
+                            <p class="text-gray-700">Meses: {{ $tiempo_residencia_meses ?? 'N/A' }}</p>
+                        </div>
+
+
                         <div class="mb-6" x-data="{
                             tab: 'frente',
                             frenteIniciado: false,

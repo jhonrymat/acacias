@@ -18,7 +18,10 @@ class ValidacionAvecindamiento extends Model
         'notas',
         'visible',
         'qr_url',
-        'solicitud_id'
+        'solicitud_id', 
+
+        'evidencia_residencia', // nuevo campo booleano
+        'tiempo_residencia',    // nuevo campo JSON
     ];
 
     public function solicitud()

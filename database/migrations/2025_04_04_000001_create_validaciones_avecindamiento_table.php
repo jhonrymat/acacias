@@ -21,6 +21,9 @@ return new class extends Migration {
             $table->boolean('visible')->default(false);
             $table->string('qr_url')->nullable();
 
+            $table->boolean('evidencia_residencia')->nullable();
+            $table->json('tiempo_residencia')->nullable(); // { "anios": X, "meses": Y }
+
             $table->timestamps();
 
             // Relación con solicitudes_avecindamiento

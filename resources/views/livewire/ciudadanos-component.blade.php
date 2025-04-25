@@ -115,7 +115,7 @@
         </div>
     </div>
 
-    {{-- modal para visualizar el historial residencia--}}
+    {{-- modal para visualizar el historial residencia --}}
     <div x-data="{ showModalHistory: @entangle('showModalHistory') }" x-cloak>
         <div x-show="showModalHistory" class="fixed inset-0 bg-gray-800 bg-opacity-70 flex items-center justify-center">
             <div
@@ -123,7 +123,8 @@
                 <div class="flex justify-between items-center mb-2">
                     <h2 class="text-xl font-bold">
                         <span>Historial de solicitudes de residencia</span>
-                        <span class="inline-block bg-blue-100 text-blue-800 text-sm font-semibold px-3 py-1 rounded-full ml-2">
+                        <span
+                            class="inline-block bg-blue-100 text-blue-800 text-sm font-semibold px-3 py-1 rounded-full ml-2">
                             Residencia
                         </span>
                     </h2>
@@ -170,8 +171,9 @@
                                                             <i class="fa-solid fa-file-arrow-down"></i> Descargar
                                                         </button>
                                                         {{-- Si la solicitud fue "Anulada", mostrar botón para ver detalles --}}
-                                                    @elseif ($solicituResidencia->estado->nombreEstado === 'Anulado'&& $validacion->visible === 1)
-                                                        <button wire:click="verAnulacion({{ $solicituResidencia->id }})"
+                                                    @elseif ($solicituResidencia->estado->nombreEstado === 'Anulado' && $validacion->visible === 1)
+                                                        <button
+                                                            wire:click="verAnulacion({{ $solicituResidencia->id }})"
                                                             class="px-4 py-2 bg-red-600 text-white rounded">
                                                             <i class="fa-solid fa-eye"></i> Ver Anulación
                                                         </button>
@@ -211,15 +213,17 @@
         </div>
     </div>
 
-    {{-- modal para visualizar el historial Avecindamiento--}}
+    {{-- modal para visualizar el historial Avecindamiento --}}
     <div x-data="{ showModalHistoryAvecindamiento: @entangle('showModalHistoryAvecindamiento') }" x-cloak>
-        <div x-show="showModalHistoryAvecindamiento" class="fixed inset-0 bg-gray-800 bg-opacity-70 flex items-center justify-center">
+        <div x-show="showModalHistoryAvecindamiento"
+            class="fixed inset-0 bg-gray-800 bg-opacity-70 flex items-center justify-center">
             <div
                 class="bg-white w-11/12 sm:max-w-lg md:max-w-3xl lg:max-w-5xl p-6 rounded-lg shadow-lg max-h-screen overflow-y-auto">
                 <div class="flex justify-between items-center mb-2">
                     <h2 class="text-xl font-bold">
                         <span>Historial de solicitudes de avecindamiento</span>
-                        <span class="inline-block bg-green-100 text-green-800 text-sm font-semibold px-3 py-1 rounded-full ml-2">
+                        <span
+                            class="inline-block bg-green-100 text-green-800 text-sm font-semibold px-3 py-1 rounded-full ml-2">
                             Avecindamiento
                         </span>
                     </h2>
@@ -260,13 +264,20 @@
                                                 <div class="flex space-x-2">
                                                     {{-- Verifica si el estado es "Emitido" --}}
                                                     @if ($solicitud->estado->nombreEstado === 'Emitido')
-                                                        <button
-                                                            wire:click="$dispatch('generarPDF', { Id: {{ $solicitud->id }} })"
-                                                            class="px-4 py-2 bg-green-500 text-white rounded">
-                                                            <i class="fa-solid fa-file-arrow-down"></i> Descargar
-                                                        </button>
+                                                        <div class="flex flex-col space-y-2">
+                                                            <button
+                                                                wire:click="$dispatch('generarPDFAvecindamiento', { Id: {{ $solicitud->id }} })"
+                                                                class="px-4 py-2 bg-green-500 text-white rounded">
+                                                                Certificado
+                                                            </button>
+                                                            <button
+                                                                wire:click="$dispatch('generarActaAvecindamiento', { Id: {{ $solicitud->id }} })"
+                                                                class="px-4 py-2 bg-blue-500 text-white rounded"> Acta
+                                                            </button>
+                                                        </div>
+
                                                         {{-- Si la solicitud fue "Anulada", mostrar botón para ver detalles --}}
-                                                    @elseif ($solicitud->estado->nombreEstado === 'Anulado'&& $validacion->visible === 1)
+                                                    @elseif ($solicitud->estado->nombreEstado === 'Anulado' && $validacion->visible === 1)
                                                         <button wire:click="verAnulacion({{ $solicitud->id }})"
                                                             class="px-4 py-2 bg-red-600 text-white rounded">
                                                             <i class="fa-solid fa-eye"></i> Ver Anulación
@@ -319,8 +330,8 @@
                 <!-- Archivo (si existe) -->
                 @if ($archivoAnulacion)
                     <p class="mt-2"><strong>Archivo:</strong>
-                        <a href="{{ asset('storage/' . $archivoAnulacion) }}"
-                            class="text-blue-600 underline" target="_blank">Ver Archivo</a>
+                        <a href="{{ asset('storage/' . $archivoAnulacion) }}" class="text-blue-600 underline"
+                            target="_blank">Ver Archivo</a>
                     </p>
                 @endif
 

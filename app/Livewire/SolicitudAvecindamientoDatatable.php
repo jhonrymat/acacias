@@ -112,7 +112,7 @@ class SolicitudAvecindamientoDatatable extends DataTableComponent
 
                 // Generar URL del QR
                 $baseUrl = config('app.url');
-                $qrUrl = $baseUrl . '/qr/' . $solicitud->id . '/' . $solicitud->numeroIdentificacion;
+                $qrUrl = $baseUrl . '/qr-avecindamiento/' . $solicitud->id . '/' . $solicitud->numeroIdentificacion;
 
                 // Asegurar que la carpeta de almacenamiento exista
                 $qrStoragePath = storage_path('app/public/qrs');
@@ -157,7 +157,7 @@ class SolicitudAvecindamientoDatatable extends DataTableComponent
                 ]);
 
                 // Enviar correo al usuario
-                Mail::to($solicitud->user->email)->send(new \App\Mail\SolicitudEmitidaNotification($solicitud->id, $solicitud->user->name));
+                Mail::to($solicitud->user->email)->send(new \App\Mail\SolicitudAvecindamientoEmitidaNotification($solicitud->id, $solicitud->user->name));
             }
 
             DB::commit(); // Si todo salió bien, confirmamos la transacción
@@ -232,7 +232,7 @@ class SolicitudAvecindamientoDatatable extends DataTableComponent
                 $userEmail = $solicitud->user->email; // Email del usuario
 
                 // Enviar correo de rechazo
-                Mail::to($userEmail)->send(new \App\Mail\SolicitudRechazadaNotification($solicitud->id, $userName));
+                Mail::to($userEmail)->send(new \App\Mail\SolicitudAvecindamientoRechazadaNotification($solicitud->id, $userName));
             }
 
             DB::commit(); // Si todo salió bien, confirmamos la transacción

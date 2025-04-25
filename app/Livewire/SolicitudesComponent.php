@@ -135,7 +135,7 @@ class SolicitudesComponent extends Component
         // Descargar el archivo
         return response()->streamDownload(function () use ($pdf) {
             echo $pdf->output();
-        }, $solicitud->id . '_' . $solicitud->numeroIdentificacion . '_certificado.pdf');
+        }, $solicitud->id . '_' . $solicitud->numeroIdentificacion . '_certificadoResidencia.pdf');
     }
 
     public function viewPDF($Id)
