@@ -52,6 +52,20 @@
                             <input type="text" wire:model="cedula" id="cedula"
                                 class="mt-1 block w-full border-gray-300 rounded text-sm px-2 py-1" disabled>
                         </div>
+                        {{-- fecha de creacion --}}
+                        <div class="mb-3">
+                            <label for="fecha_creacion" class="block text-xs font-medium">Fecha de
+                                creación</label>
+                            <input type="text" wire:model="fecha_creacion" id="fecha_creacion"
+                                class="mt-1 block w-full border-gray-300 rounded text-sm px-2 py-1" disabled>
+                        </div>
+                        {{-- fecha de validacion --}}
+                        <div class="mb-3">
+                            <label for="fecha_validacion" class="block text-xs font-medium">Fecha de
+                                validación</label>
+                            <input type="text" wire:model="fecha_validacion" id="fecha_validacion"
+                                class="mt-1 block w-full border-gray-300 rounded text-sm px-2 py-1" disabled>
+                        </div>
                         <div class="mb-3">
                             <label for="validacion1" class="block text-xs font-medium">Primer filtro</label>
                             <input type="text" wire:model="validacion1" id="validacion1"

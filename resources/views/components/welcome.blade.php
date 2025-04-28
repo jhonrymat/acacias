@@ -23,7 +23,7 @@
         </h1>
 
         <p class="mt-6 text-gray-500 leading-relaxed">
-            Nos alegra que estén aquí. En esta plataforma, podrán gestionar y obtener sus certificados de residencia de una
+            Nos alegra que estén aquí. En esta plataforma, podrán gestionar y obtener sus certificados de una
             manera rápida, sencilla y sin complicaciones. Nuestro objetivo es hacer el proceso lo más eficiente posible,
             para que puedan dedicar su tiempo a lo que realmente importa.
         </p>
@@ -107,7 +107,7 @@
 
         <p class="mt-6 text-gray-500 leading-relaxed">
             Como administrador, tienes el control total de la plataforma. Desde aquí, podrás realizar ajustes generales,
-            gestionar roles de usuario, supervisar solicitudes y administrar los certificados de residencia emitidos.
+            gestionar roles de usuario, supervisar solicitudes y administrar los certificados emitidos.
             Asegúrate de revisar todas las configuraciones para garantizar el correcto funcionamiento del sistema.
         </p>
     </div>

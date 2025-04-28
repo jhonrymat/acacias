@@ -19,6 +19,8 @@ class HistorialAvecindamientoComponent extends Component
     public $evidencia_residencia;
     public $tiempo_residencia_anios;
     public $tiempo_residencia_meses;
+    public $fecha_creacion;
+    public $fecha_validacion;
 
     public function view($Id)
     {
@@ -75,6 +77,8 @@ class HistorialAvecindamientoComponent extends Component
         $this->cedula = $solicitud->numeroIdentificacion;
         $this->validador = $validador ? ($validador->name . ' | ' . $validador->codigo) : 'No asignado';
         $this->nameAll = $solicitud->NombreCompleto;
+        $this->fecha_creacion = $solicitud->created_at->format('d/m/Y H:i:s');
+        $this->fecha_validacion = $validacion->created_at ? $validacion->created_at->format('d/m/Y H:i:s') : 'No validado';
 
         $this->showForm = true;
     }

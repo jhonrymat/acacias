@@ -19,7 +19,7 @@ class CustomVerifyEmail extends BaseVerifyEmail
             ->action(__('Verificar correo electrónico'), $verificationUrl)
             ->line(__('Si no has iniciado este proceso o recibiste este correo por error, puedes ignorarlo.'))
             ->salutation(__('Saludos cordiales,'))
-            ->salutation(__('Equipo de Certificados de Residencia - Acacías, Meta'));
+            ->salutation(__('Equipo de Certificados - Acacías, Meta'));
 
     }
 }

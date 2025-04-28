@@ -120,7 +120,7 @@
             </tr>
             <tr>
                 <td class="footer">
-                    Equipo de Certificados de Residencia - Acacías, Meta
+                    Equipo de Certificados - Acacías, Meta
                 </td>
             </tr>
         </table>
