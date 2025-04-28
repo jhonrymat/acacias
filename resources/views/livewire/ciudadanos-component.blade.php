@@ -177,8 +177,8 @@
                                                             class="px-4 py-2 bg-red-600 text-white rounded">
                                                             <i class="fa-solid fa-eye"></i> Ver Anulación
                                                         </button>
-                                                        {{-- Si está "Rechazada" y es visible, mostrar observaciones --}}
-                                                    @elseif($solicituResidencia->estado->nombreEstado === 'Rechazada' && $validacion->visible === 1)
+                                                        {{-- Si está "no completado" y es visible, mostrar observaciones --}}
+                                                    @elseif($solicituResidencia->estado->nombreEstado === 'no completado' && $validacion->visible === 1)
                                                         <p>{{ $solicituResidencia->observaciones }}</p>
                                                     @else
                                                         <span class="text-gray-500">
@@ -282,8 +282,8 @@
                                                             class="px-4 py-2 bg-red-600 text-white rounded">
                                                             <i class="fa-solid fa-eye"></i> Ver Anulación
                                                         </button>
-                                                        {{-- Si está "Rechazada" y es visible, mostrar observaciones --}}
-                                                    @elseif($solicitud->estado->nombreEstado === 'Rechazada' && $validacion->visible === 1)
+                                                        {{-- Si está "no completado" y es visible, mostrar observaciones --}}
+                                                    @elseif($solicitud->estado->nombreEstado === 'no completado' && $validacion->visible === 1)
                                                         <p>{{ $solicitud->observaciones }}</p>
                                                     @else
                                                         <span class="text-gray-500">

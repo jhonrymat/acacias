@@ -243,7 +243,7 @@ class SolicitudAvecindamientoDatatable extends DataTableComponent
 
             // Notificar éxito con el mensaje correcto
             $this->dispatch('Updated');
-            $this->dispatch('sweet-alert-good', icon: 'success', title: 'Muy bien..!', text: 'Solicitudes rechazadas con éxito.');
+            $this->dispatch('sweet-alert-good', icon: 'success', title: 'Muy bien..!', text: 'Solicitudes no completado con éxito.');
 
         } catch (\Exception $e) {
             DB::rollBack(); // Revertir cambios si hay error
@@ -439,8 +439,8 @@ class SolicitudAvecindamientoDatatable extends DataTableComponent
                             return '<span style="background-color: #FFC107; color: white; padding: 4px 8px; text-align: center; border-radius: 5px;">Pendiente</span>';
                         case 'Procesando':
                             return '<span style="background-color: #28A745; color: white; padding: 4px 8px; text-align: center; border-radius: 5px;">Procesando</span>';
-                        case 'Rechazada':
-                            return '<span style="background-color: #DC3545; color: white; padding: 4px 8px; text-align: center; border-radius: 5px;">Rechazada</span>';
+                        case 'no completado':
+                            return '<span style="background-color: #DC3545; color: white; padding: 4px 8px; text-align: center; border-radius: 5px;">no completado</span>';
                         case 'En proceso':
                             return '<span style="background-color: #17A2B8; color: white; padding: 4px 8px; text-align: center; border-radius: 5px;">En proceso</span>';
                         case 'En revision':

@@ -22,7 +22,7 @@ class EstadoSeeder extends Seeder
                 'color' => '#85D17A'
             ],
             [
-                'nombreEstado' => 'Rechazada',
+                'nombreEstado' => 'no completado',
                 'descripcion' => 'La solicitud fue revisada, pero no cumplió con los requisitos necesarios y no pudo ser emitida.',
                 'color' => '#DC3545'
             ],
