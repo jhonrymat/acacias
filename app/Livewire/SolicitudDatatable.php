@@ -197,7 +197,7 @@ class SolicitudDatatable extends DataTableComponent
             'decline',
             icon: 'info',
             title: '¿Estás seguro?',
-            text: 'Vas a rechazar estas solicitudes'
+            text: 'No completaras estas solicitudes estas solicitudes'
         );
 
 
@@ -207,7 +207,7 @@ class SolicitudDatatable extends DataTableComponent
     {
         // Asegurar que hay filas seleccionadas antes de proceder
         if (count($this->selectedRows) === 0) {
-            $this->dispatch('sweet-alert-good', icon: 'warning', title: 'Advertencia', text: 'Debe seleccionar al menos una fila para rechazar.');
+            $this->dispatch('sweet-alert-good', icon: 'warning', title: 'Advertencia', text: 'Debe seleccionar al menos una fila para no completarla.');
             return;
         }
 
@@ -243,7 +243,7 @@ class SolicitudDatatable extends DataTableComponent
 
             // Notificar éxito con el mensaje correcto
             $this->dispatch('Updated');
-            $this->dispatch('sweet-alert-good', icon: 'success', title: 'Muy bien..!', text: 'Solicitudes no completado con éxito.');
+            $this->dispatch('sweet-alert-good', icon: 'success', title: 'Muy bien..!', text: 'Solicitudes No completado con éxito.');
 
         } catch (\Exception $e) {
             DB::rollBack(); // Revertir cambios si hay error
@@ -427,8 +427,8 @@ class SolicitudDatatable extends DataTableComponent
                             return '<span style="background-color: #FFC107; color: white; padding: 4px 8px; text-align: center; border-radius: 5px;">Pendiente</span>';
                         case 'Procesando':
                             return '<span style="background-color: #28A745; color: white; padding: 4px 8px; text-align: center; border-radius: 5px;">Procesando</span>';
-                        case 'no completado':
-                            return '<span style="background-color: #DC3545; color: white; padding: 4px 8px; text-align: center; border-radius: 5px;">no completado</span>';
+                        case 'No completado':
+                            return '<span style="background-color: #DC3545; color: white; padding: 4px 8px; text-align: center; border-radius: 5px;">No completado</span>';
                         case 'En proceso':
                             return '<span style="background-color: #17A2B8; color: white; padding: 4px 8px; text-align: center; border-radius: 5px;">En proceso</span>';
                         case 'En revision':

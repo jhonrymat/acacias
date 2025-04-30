@@ -178,7 +178,7 @@
                                                             <i class="fa-solid fa-eye"></i> Ver Anulación
                                                         </button>
                                                         {{-- Si está "no completado" y es visible, mostrar observaciones --}}
-                                                    @elseif($solicituResidencia->estado->nombreEstado === 'no completado' && $validacion->visible === 1)
+                                                    @elseif($solicituResidencia->estado->nombreEstado === 'No completado' && $validacion->visible === 1)
                                                         <p>{{ $solicituResidencia->observaciones }}</p>
                                                     @else
                                                         <span class="text-gray-500">
@@ -283,7 +283,7 @@
                                                             <i class="fa-solid fa-eye"></i> Ver Anulación
                                                         </button>
                                                         {{-- Si está "no completado" y es visible, mostrar observaciones --}}
-                                                    @elseif($solicitud->estado->nombreEstado === 'no completado' && $validacion->visible === 1)
+                                                    @elseif($solicitud->estado->nombreEstado === 'No completado' && $validacion->visible === 1)
                                                         <p>{{ $solicitud->observaciones }}</p>
                                                     @else
                                                         <span class="text-gray-500">

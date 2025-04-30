@@ -300,7 +300,7 @@ class SolicitudAvecindamientoComponent extends Component
             '2alert',
             icon: 'info',
             title: '¿Estás seguro?',
-            text: 'Vas a rechazar esta solicitud'
+            text: 'No completaras esta solicitud'
         );
     }
 
@@ -356,7 +356,7 @@ class SolicitudAvecindamientoComponent extends Component
 
         $this->dispatch('Updated');
 
-        $this->dispatch('sweet-alert-good', icon: 'success', title: 'Muy bien..!', text: 'Solicitud no completado con exito.');
+        $this->dispatch('sweet-alert-good', icon: 'success', title: 'Muy bien..!', text: 'Solicitud No completada con exito.');
 
     }
 

@@ -320,7 +320,7 @@
             </div>
         @else
             <div class="validacion" style="color: red;">
-                <p>Certificado Rechazado</p> <span>N° {{ $id }}</span>
+                <p>Certificado No completado</p> <span>N° {{ $id }}</span>
             </div>
         @endif
     </div>

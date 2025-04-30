@@ -625,7 +625,7 @@
                     <div x-data="{ openConfigForm: false }">
                         <x-responsive-nav-link class="mb-1 flex items-center" @click="openConfigForm = !openConfigForm"
                             :active="request()->routeIs('configForm.*')">
-                            <span>Historia</span>
+                            <span>Historial</span>
                             <svg :class="{ 'rotate-180': openConfigForm }" class="w-4 h-4 ml-1 transition-transform"
                                 fill="currentColor" viewBox="0 0 20 20">
                                 <path fill-rule="evenodd"
@@ -647,9 +647,42 @@
                             </x-responsive-nav-link>
                         </div>
                     </div>
+
+                    <x-responsive-nav-link href="{{ route('ciudadanos') }}" :active="request()->routeIs('ciudadanos')">
+                        {{ __('Ciudadanos') }}
+                    </x-responsive-nav-link>
                     <x-responsive-nav-link href="{{ route('estadisticas1') }}" :active="request()->routeIs('estadisticas1')">
                         {{ __('Estadisticas') }}
                     </x-responsive-nav-link>
+                @endrole
+
+                @role('validador2')
+                    <div x-data="{ openConfigForm: false }">
+                        <x-responsive-nav-link class="mb-1 flex items-center" @click="openConfigForm = !openConfigForm"
+                            :active="request()->routeIs('configForm.*')">
+                            <span>Anular solicitud</span>
+                            <svg :class="{ 'rotate-180': openConfigForm }" class="w-4 h-4 ml-1 transition-transform"
+                                fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd"
+                                    d="M5.23 7.21a.75.75 0 011.06 0L10 10.94l3.71-3.73a.75.75 0 111.06 1.06l-4.24 4.25a.75.75 0 01-1.06 0L5.23 8.27a.75.75 0 010-1.06z"
+                                    clip-rule="evenodd" />
+                            </svg>
+                        </x-responsive-nav-link>
+
+                        <!-- Subopciones de "Configuracion" -->
+                        <div x-show="openConfigForm" class="space-y-1 pl-4">
+                            <div class="block px-4 py-2 text-xs text-gray-400">
+                                {{ __('Seleccionables') }}
+                            </div>
+                            <x-responsive-nav-link href="{{ route('anular-solicitud-residencia') }}" :active="request()->routeIs('anular-solicitud-residencia')">
+                                Certificado de residencia
+                            </x-responsive-nav-link>
+                            <x-responsive-nav-link href="{{ route('anular-solicitud-avecindamiento') }}"
+                                :active="request()->routeIs('anular-solicitud-avecindamiento')">
+                                Certificado de avecindamiento
+                            </x-responsive-nav-link>
+                        </div>
+                    </div>
                 @endrole
 
                 <!-- Responsive Settings Options -->

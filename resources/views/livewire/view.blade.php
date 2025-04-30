@@ -31,7 +31,7 @@
             </p>
         @endif
         {{-- Si la solicitud fue "no completado", mostrar botón para ver detalles --}}
-    @elseif($row['estado.nombreEstado'] === 'no completado' && optional($validacion)->visible == 1)
+    @elseif($row['estado.nombreEstado'] === 'No completado' && optional($validacion)->visible == 1)
         <button wire:click="$dispatch('mostrarNotas', { Id: {{ optional($validacion)->id }}})"
             class="px-4 py-2 bg-blue-500 text-white rounded">
             Ver detalles

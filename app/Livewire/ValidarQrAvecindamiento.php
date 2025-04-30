@@ -31,7 +31,7 @@ class ValidarQrAvecindamiento extends Component
                 case 'Vencido':
                     $this->mensaje = 'El certificado esta vencido. Por favor, actualícelo. No es válido.';
                     break;
-                case 'no completado':
+                case 'No completado':
                     $this->mensaje = 'El certificado no fue completado. Consulte con la entidad correspondiente. No es válido.';
                     break;
                 case 'En revision':

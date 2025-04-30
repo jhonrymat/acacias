@@ -134,7 +134,7 @@
                             <select wire:model="estado_id" id="estado"
                                 class="mt-1 block w-full border-gray-300 rounded text-sm px-2 py-1" required>
                                 <option value="">Seleccione una opción</option>
-                                <option value="Finalizar">FINALIZAR - Rechazar</option>
+                                <option value="Finalizar">FINALIZAR - No completar</option>
                                 <option value="Avanzar">AVANZAR - Validar</option>
                             </select>
                             {{-- error --}}
