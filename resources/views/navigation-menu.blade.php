@@ -241,9 +241,37 @@
                     <x-nav-link class="hidden sm:flex mr-6" href="{{ route('ciudadanos') }}" :active="request()->routeIs('ciudadanos')">
                         {{ __('Ciudadanos') }}
                     </x-nav-link>
-                    <x-nav-link class="hidden sm:flex mr-6" href="{{ route('estadisticas1') }}" :active="request()->routeIs('estadisticas1')">
-                        {{ __('Estadisticas') }}
-                    </x-nav-link>
+                    <div class="hidden sm:flex sm:items-center sm:ml-6 mx-auto my-auto mr-6">
+                        <x-dropdown width="48">
+                            <x-slot name="trigger">
+                                <span class="inline-flex rounded-md">
+                                    <button type="button"
+                                        class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none focus:bg-gray-50 active:bg-gray-50 transition ease-in-out duration-150">
+                                        Reportes
+                                        <svg class="ml-2 -mr-0.5 h-4 w-4 " xmlns="http://www.w3.org/2000/svg"
+                                            fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round"
+                                                d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+                                        </svg>
+                                    </button>
+                                </span>
+                            </x-slot>
+                            <x-slot name="content">
+                                <!-- Account Management -->
+                                <div class="block px-4 py-2 text-xs text-gray-400">
+                                    {{ __('Seleccionables') }}
+                                </div>
+                                <x-dropdown-link href="{{ route('estadisticas1') }}">
+                                    {{ __('Graficas') }}
+                                </x-dropdown-link>
+                                @role('validador2')
+                                    <x-dropdown-link href="{{ route('exportar-solicitudes') }}">
+                                        {{ __('Exportar') }}
+                                    </x-dropdown-link>
+                                @endrole
+                            </x-slot>
+                        </x-dropdown>
+                    </div>
                 @endrole
                 @role('validador2')
                     <div class="hidden sm:flex sm:items-center sm:ml-6 mx-auto my-auto mr-6">
@@ -651,9 +679,33 @@
                     <x-responsive-nav-link href="{{ route('ciudadanos') }}" :active="request()->routeIs('ciudadanos')">
                         {{ __('Ciudadanos') }}
                     </x-responsive-nav-link>
-                    <x-responsive-nav-link href="{{ route('estadisticas1') }}" :active="request()->routeIs('estadisticas1')">
-                        {{ __('Estadisticas') }}
-                    </x-responsive-nav-link>
+                    <div x-data="{ openConfigForm: false }">
+                        <x-responsive-nav-link class="mb-1 flex items-center" @click="openConfigForm = !openConfigForm"
+                            :active="request()->routeIs('configForm.*')">
+                            <span>Reportes</span>
+                            <svg :class="{ 'rotate-180': openConfigForm }" class="w-4 h-4 ml-1 transition-transform"
+                                fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd"
+                                    d="M5.23 7.21a.75.75 0 011.06 0L10 10.94l3.71-3.73a.75.75 0 111.06 1.06l-4.24 4.25a.75.75 0 01-1.06 0L5.23 8.27a.75.75 0 010-1.06z"
+                                    clip-rule="evenodd" />
+                            </svg>
+                        </x-responsive-nav-link>
+
+                        <!-- Subopciones de "Configuracion" -->
+                        <div x-show="openConfigForm" class="space-y-1 pl-4">
+                            <div class="block px-4 py-2 text-xs text-gray-400">
+                                {{ __('Seleccionables') }}
+                            </div>
+                            <x-responsive-nav-link href="{{ route('estadisticas1') }}" :active="request()->routeIs('estadisticas1')">
+                                {{ __('Graficos') }}
+                            </x-responsive-nav-link>
+                            @role('validador2')
+                                <x-responsive-nav-link href="{{ route('exportar-solicitudes') }}" :active="request()->routeIs('exportar-solicitudes')">
+                                    Exportar solicitudes
+                                </x-responsive-nav-link>
+                            @endrole
+                        </div>
+                    </div>
                 @endrole
 
                 @role('validador2')

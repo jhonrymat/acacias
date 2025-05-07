@@ -787,7 +787,7 @@
                         <input wire:model="cedula"
                             class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50
             dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
-                            id="cedula_input" type="file" accept="application/pdf,image/jpeg,image/jpg">
+                            id="cedula_input" type="file" accept="application/pdf,image/jpeg,image/jpg" required>
 
                         <div
                             class="absolute left-0 hidden p-2 mt-1 text-xs text-white bg-gray-900 rounded-lg shadow-md group-hover:block dark:bg-gray-800">

@@ -38,6 +38,7 @@ use App\Livewire\SolicitudAnulacionComponent;
 use App\Livewire\HistorialAvecindamientoComponent;
 use App\Livewire\SolicitudAvecindamientoComponent;
 use App\Livewire\FormularioAvecindamientoComponent;
+use App\Livewire\SolicitudesExportComponent;
 use App\Livewire\SolicitudesAvecindamientoComponent;
 use App\Livewire\SolicitudAnulacionAvecindamientoComponent;
 
@@ -89,6 +90,9 @@ Route::middleware([
     // Route::middleware(['can:permisos'])->get('anular-solicitud', SolicitudAnulacionComponent::class)->name('anular-solicitud');
     Route::middleware(['role:validador2'])->get('anular-solicitud-residencia', SolicitudAnulacionComponent::class)->name('anular-solicitud-residencia');
     Route::middleware(['role:validador2'])->get('anular-solicitud-avecindamiento', SolicitudAnulacionAvecindamientoComponent::class)->name('anular-solicitud-avecindamiento');
+
+    // modulo para exportar solicitudes
+    Route::middleware(['role:validador2'])->get('exportar-solicitudes', SolicitudesExportComponent::class)->name('exportar-solicitudes');
 
     Route::get('certificados', CertificadoComponent::class)->name('certificados');
     //ruta para la politica de proteccion de datos

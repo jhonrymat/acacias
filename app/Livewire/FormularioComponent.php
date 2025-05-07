@@ -64,7 +64,7 @@ class FormularioComponent extends Component
         'accion_comunal' => 'file|mimes:pdf,jpeg,jpg|max:10240', // Valida cada archivo individualmente
         'electoral' => 'file|mimes:pdf,jpeg,jpg|max:10240', // Valida cada archivo individualmente
         'sisben' => 'file|mimes:pdf,jpeg,jpg|max:10240', // Valida cada archivo individualmente
-        'cedula' => 'file|mimes:pdf,jpeg,jpg|max:10240', // Valida cada archivo individualmente
+        'cedula' => 'required|file|mimes:pdf,jpeg,jpg|max:10240', // Valida cada archivo individualmente
         'recibo' => 'required|file|mimes:pdf,jpeg,jpg|max:10240', // Valida cada archivo individualmente
         'terminos' => 'required',
         'observaciones' => 'nullable|string',
@@ -85,9 +85,10 @@ class FormularioComponent extends Component
         'sisben.max' => 'El campo evidencia no debe ser mayor a 10MB.',
         'cedula.mimes' => 'El campo evidencia debe ser un archivo de tipo: pdf, jpeg, jpg',
         'cedula.max' => 'El campo evidencia no debe ser mayor a 10MB.',
+        'cedula.required' => 'El campo cédula es necesario para crear la solicitud.',
         'recibo.mimes' => 'El campo evidencia debe ser un archivo de tipo: pdf, jpeg, jpg',
         'recibo.max' => 'El campo evidencia no debe ser mayor a 10MB.',
-        'recibo.required' => 'El campo recibo es obligatorio.',
+        'recibo.required' => 'El campo recibo es necesario para crear la solicitud.',
         'terminos.required' => 'El campo términos es obligatorio.',
         'observaciones.string' => 'El campo observaciones debe ser una cadena de texto.',
     ];

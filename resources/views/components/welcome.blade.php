@@ -158,4 +158,5 @@
         Revisa las opciones de la parte superior de la página para realizar la revisión final y dar tu aprobación a las
         solicitudes. ¡Gracias por asegurar la calidad y precisión en cada certificado emitido!
     </div>
+
 @endrole
