@@ -2,6 +2,8 @@
 
 namespace App\Livewire;
 
+use App\Models\SolicitudAvecindamiento;
+use App\Models\ValidacionAvecindamiento;
 use Carbon\Carbon;
 use App\Models\User;
 use Livewire\Component;
@@ -18,8 +20,10 @@ class CiudadanosComponent extends Component
     public $ciudadExpedicion = 'Sin especificar'; // Ciudad por defecto
     public $showModal = false;
     public $showModalHistory = false;
+    public $showModalHistoryAvecindamiento = false;
     public $historial;
-    protected $listeners = ['edit', 'history', 'generarPDF'];
+    public $historial_avecindamiento;
+    protected $listeners = ['edit', 'history', 'historyAvecindamiento', 'generarPDF', 'generarPDFAvecindamiento', 'generarActaAvecindamiento'];
 
     // Ver por que se anulo la solicitud
     public $mostrarModal = false;
@@ -29,6 +33,7 @@ class CiudadanosComponent extends Component
     public function mount()
     {
         $this->historial = collect(); // 🔹 Inicializar como una colección vacía de Eloquent
+        $this->historial_avecindamiento = collect(); // 🔹 Inicializar como una colección vacía de Eloquent
     }
 
 
@@ -115,6 +120,18 @@ class CiudadanosComponent extends Component
 
         $this->historial = $ciudadano->solicitudes;
         $this->showModalHistory = true;
+
+    }
+    public function historyAvecindamiento($Id)
+    {
+
+        $ciudadano_Avecindamiento = User::with('SolicitudesAvecindamiento')->find($Id);
+        if (!$ciudadano_Avecindamiento) {
+            abort(404, "Usuario no encontrado");
+        }
+
+        $this->historial_avecindamiento = $ciudadano_Avecindamiento->solicitudesAvecindamiento;
+        $this->showModalHistoryAvecindamiento = true;
 
     }
 
@@ -285,6 +302,154 @@ class CiudadanosComponent extends Component
             echo $pdf->output();
         }, $solicitud->id . '_' . $solicitud->numeroIdentificacion . '_certificado.pdf');
     }
+
+    public function generarPDFAvecindamiento($Id)
+    {
+        $solicitud = SolicitudAvecindamiento::findOrFail($Id);
+        $validacion = ValidacionAvecindamiento::where('id_solicitud', $Id)->first();
+        if (!$validacion) {
+            session()->flash('error', 'No se encontró la validación de la solicitud.');
+            return;
+        }
+
+        // Validar el estado de la solicitud
+        if ($solicitud->estado_id !== 5) {
+            session()->flash('error', 'La solicitud no está emitida.');
+            return;
+        }
+
+        // Datos dinámicos para la plantilla
+        $data = [
+            'id' => $solicitud->id,
+            'solicitante' => trim(
+                $solicitud->user->name
+                . ' '
+                . ($solicitud->user->nombre_2 ?? '')
+                . ' '
+                . $solicitud->user->apellido_1
+                . ' '
+                . ($solicitud->user->apellido_2 ?? '')
+            ),
+            'tipoDocumento' => $solicitud->user->tipoDocumento->tipoDocumento,
+            'cedula' => $solicitud->numeroIdentificacion,
+            'direccion' => $solicitud->direccion,
+            'cargo' => $solicitud->validador2->cargo,
+            'validador' => trim(
+                $solicitud->validador2->name
+                . ' '
+                . ($solicitud->validador2->nombre_2 ?? '')
+                . ' '
+                . $solicitud->validador2->apellido_1
+                . ' '
+                . ($solicitud->validador2->apellido_2 ?? '')
+            ),
+            'codigo_validador1' => $solicitud->actualizador->codigo,
+            'firma' => $solicitud->validador2->firma,
+            'ciudad_expedicion' => $solicitud->user->ciudadExpedicion,
+            'barrio_vereda' => $solicitud->barrio->nombreBarrio,
+            'tipo_unidad' => $solicitud->barrio->tipoUnidad,
+            'codigo_numero' => $solicitud->barrio->codigoNumero,
+            'zona' => $solicitud->barrio->zona,
+            'estado' => $solicitud->estado->nombreEstado,
+            'numero_certificado' => $solicitud->numeroIdentificacion,
+            'fecha_emision' => $solicitud->fecha_emision
+                ? Carbon::parse($solicitud->fecha_emision)->translatedFormat('d \\de F \\de Y')
+                : 'N/A',
+            'vigencia_inicio' => $solicitud->fecha_emision
+                ? Carbon::parse($solicitud->fecha_emision)->translatedFormat('d \\de F \\de Y')
+                : 'N/A',
+
+            'vigencia_fin' => $solicitud->VigenciaFormateada,
+            'fecha_visita' => $validacion->created_at
+                ? Carbon::parse($validacion->created_at)->translatedFormat('d \\de F \\de Y')
+                : 'N/A',
+
+            'verificacion_url' => env('APP_URL') . '/consulta-tramite',
+            'qr' => public_path('storage/' . $solicitud->validaciones->first()->qr_url),
+        ];
+
+        // Generar el PDF
+        $pdf = Pdf::loadView('certificados.certificadoAvecindamientoUsuario', $data);
+
+        // Descargar el archivo
+        return response()->streamDownload(function () use ($pdf) {
+            echo $pdf->output();
+        }, $solicitud->id . '_' . $solicitud->numeroIdentificacion . '_certificadoAvecindamiento.pdf');
+    }
+
+    public function generarActaAvecindamiento($Id)
+    {
+        $solicitud = SolicitudAvecindamiento::findOrFail($Id);
+        $validacion = ValidacionAvecindamiento::where('id_solicitud', $Id)->first();
+        if (!$validacion) {
+            session()->flash('error', 'No se encontró la validación de la solicitud.');
+            return;
+        }
+
+        // Validar el estado de la solicitud
+        if ($solicitud->estado_id !== 5) {
+            session()->flash('error', 'La solicitud no está emitida.');
+            return;
+        }
+
+        // Decodificar el campo JSON de tiempo de residencia
+        $tiempoResidencia = json_decode($validacion->tiempo_residencia, true);
+
+
+        // Datos dinámicos para la plantilla
+        $data = [
+            'id' => $solicitud->id,
+            'solicitante' => trim(
+                $solicitud->user->name
+                . ' '
+                . ($solicitud->user->nombre_2 ?? '')
+                . ' '
+                . $solicitud->user->apellido_1
+                . ' '
+                . ($solicitud->user->apellido_2 ?? '')
+            ),
+            'fecha_solicitud' => $solicitud->created_at
+                ? Carbon::parse($solicitud->created_at)->translatedFormat('d \\de F \\de Y')
+                : 'N/A',
+            'tipoDocumento' => $solicitud->user->tipoDocumento->tipoDocumento,
+            'cedula' => $solicitud->numeroIdentificacion,
+            'ciudad_expedicion' => $solicitud->user->ciudadExpedicion,
+            'telefono' => $solicitud->user->telefonoContacto,
+            'direccion' => $solicitud->direccion,
+            'barrio_vereda' => $solicitud->barrio->nombreBarrio,
+            'tipo_unidad' => $solicitud->barrio->tipoUnidad,
+            'codigo_numero' => $solicitud->barrio->codigoNumero,
+            'zona' => $solicitud->barrio->zona,
+            'fecha_visita' => $validacion->created_at
+                ? Carbon::parse($validacion->created_at)->translatedFormat('d \\de F \\de Y')
+                : 'N/A',
+            'validador1' => trim(
+                $solicitud->actualizador->name
+                . ' '
+                . ($solicitud->actualizador->nombre_2 ?? '')
+                . ' '
+                . $solicitud->actualizador->apellido_1
+                . ' '
+                . ($solicitud->actualizador->apellido_2 ?? '')
+            ),
+            'codigo_validador1' => $solicitud->actualizador->codigo,
+
+            // ➡️ NUEVAS VARIABLES PARA LA PLANTILLA
+            'evidencia_residencia' => $validacion->evidencia_residencia,
+            'tiempo_residencia_anios' => $tiempoResidencia['anios'] ?? null,
+            'tiempo_residencia_meses' => $tiempoResidencia['meses'] ?? null,
+
+        ];
+
+        // Generar el PDF
+        $pdf = Pdf::loadView('certificados.certificadoAvecindamientoInterno', $data);
+
+        // Descargar el archivo
+        return response()->streamDownload(function () use ($pdf) {
+            echo $pdf->output();
+        }, $solicitud->id . '_' . $solicitud->numeroIdentificacion . '_ActaAvecindamiento.pdf');
+    }
+
     public function render()
     {
         return view('livewire.ciudadanos-component');

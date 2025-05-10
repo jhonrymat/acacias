@@ -241,7 +241,7 @@ class SolicitudComponent extends Component
             '2alert',
             icon: 'info',
             title: '¿Estás seguro?',
-            text: 'Vas a rechazar esta solicitud'
+            text: 'No completaras esta solicitud'
         );
     }
 
@@ -297,7 +297,7 @@ class SolicitudComponent extends Component
 
         $this->dispatch('Updated');
 
-        $this->dispatch('sweet-alert-good', icon: 'success', title: 'Muy bien..!', text: 'Solicitud rechazada con exito.');
+        $this->dispatch('sweet-alert-good', icon: 'success', title: 'Muy bien..!', text: 'Solicitud No completada con exito.');
 
     }
 
@@ -315,7 +315,7 @@ class SolicitudComponent extends Component
 
         // Verificar si la solicitud ya ha cambiado de estado a algo diferente a "Pendiente" o "En revisión"
         if ($solicitud->estado_id != $pendienteId && $solicitud->estado_id != $enRevisionId) {
-            $this->dispatch('sweet-alert-good', icon: 'info', title: 'Solicitud ya procesada.', text: 'Esta solicitud ya fue emitida, rechazada o procesada por otro validador.');
+            $this->dispatch('sweet-alert-good', icon: 'info', title: 'Solicitud ya procesada.', text: 'Esta solicitud ya fue emitida, no completada o procesada por otro validador.');
             $this->dispatch('Updated');
             return;
         }
@@ -402,7 +402,7 @@ class SolicitudComponent extends Component
             $solicitud = Solicitud::find($this->solicitud_id);
 
             // Lógica para determinar el estado final
-            $estadoFinal = ($this->estado_id === 'Avanzar' && $this->estado_id2 === '2') ? 2 : 3; // 2 = Procesando, 3 = Rechazada
+            $estadoFinal = ($this->estado_id === 'Avanzar' && $this->estado_id2 === '2') ? 2 : 3; // 2 = Procesando, 3 = no completado
 
             $solicitud->update([
                 'estado_id' => $estadoFinal,

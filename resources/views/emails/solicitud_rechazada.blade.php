@@ -111,16 +111,16 @@
                 <td>
                     <div class="inner-body">
                         <h1>¡Hola {{ $userName }}!</h1>
-                        <p>Lamentamos informarte que tu solicitud de Certificado de Residencia ha sido rechazada.</p>
-                        <p>Puedes consultar los detalles del rechazo haciendo clic en el siguiente enlace:</p>
-                        <a href="{{ url('/versolicitudes') }}" class="button">Ver detalles</a>
+                        <p>Lamentamos informarte que tu solicitud de Certificado de Residencia no ha sido completada.</p>
+                        <p>Puedes consultar los detalles, haciendo clic en el siguiente enlace:</p>
+                        <a href="{{ url('/versolicitudesresidencia') }}" class="button">Ver detalles</a>
                         <p>Si tienes alguna pregunta, no dudes en contactarnos.</p>
                     </div>
                 </td>
             </tr>
             <tr>
                 <td class="footer">
-                    Equipo de Certificados de Residencia - Acacías, Meta
+                    Equipo de Certificados - Acacías, Meta
                 </td>
             </tr>
         </table>

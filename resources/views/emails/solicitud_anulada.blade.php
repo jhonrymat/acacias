@@ -113,14 +113,14 @@
                         <h1>¡Hola {{ $userName }}!</h1>
                         <p>Lamentamos informarte que tu solicitud de Certificado de Residencia, con id {{ $solicitudId }} ha sido anulada.</p>
                         <p>Puedes consultar los detalles de la anulación, haciendo clic en el siguiente enlace:</p>
-                        <a href="{{ url('/versolicitudes') }}" class="button">Ver detalles</a>
+                        <a href="{{ url('/versolicitudesresidencia') }}" class="button">Ver detalles</a>
                         <p>Si tienes alguna pregunta, no dudes en contactarnos.</p>
                     </div>
                 </td>
             </tr>
             <tr>
                 <td class="footer">
-                    Equipo de Certificados de Residencia - Acacías, Meta
+                    Equipo de Certificados - Acacías, Meta
                 </td>
             </tr>
         </table>

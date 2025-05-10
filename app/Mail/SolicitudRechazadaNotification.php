@@ -27,7 +27,7 @@ class SolicitudRechazadaNotification extends Mailable
      */
     public function build()
     {
-        return $this->subject('Tu solicitud ha sido rechazada')
+        return $this->subject('Tu solicitud No ha sido completado')
                     ->view('emails.solicitud_rechazada')
                     ->with([
                         'solicitudId' => $this->solicitudId,

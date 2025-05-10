@@ -13,13 +13,13 @@
             class="px-4 py-2 bg-green-500 text-white rounded">
             <i class="fa-solid fa-file-arrow-down"></i> Descargar
         </button>
-        <a href="{{ route('solicitud.verPDF', ['id' => $row->id]) }}" target="_blank"
+        <a href="{{ route('solicitud.verPDF.avecindamiento', ['id' => $row->id]) }}" target="_blank"
             class="px-4 py-2 bg-blue-500 text-white rounded">
             <i class="fa-solid fa-eye"></i> Ver
         </a>
         {{-- Si la solicitud fue "Anulada", mostrar botón para ver detalles --}}
     @elseif ($row['estado.nombreEstado'] === 'Anulado')
-        @if ($ifAnulacion->visible === 1)
+        @if ($ifAnulacion?->visible === 1)
             <button wire:click="$dispatch('verAnulacion', { Id: {{ $row->id }} })"
                 class="px-4 py-2 bg-red-600 text-white rounded">
                 <i class="fa-solid fa-eye"></i> Ver Anulación
@@ -30,8 +30,8 @@
                 debera acercarse a la oficina.
             </p>
         @endif
-        {{-- Si la solicitud fue "Rechazada", mostrar botón para ver detalles --}}
-    @elseif($row['estado.nombreEstado'] === 'Rechazada' && optional($validacion)->visible === 1)
+        {{-- Si la solicitud fue "no completado", mostrar botón para ver detalles --}}
+    @elseif($row['estado.nombreEstado'] === 'No completado' && optional($validacion)->visible == 1)
         <button wire:click="$dispatch('mostrarNotas', { Id: {{ optional($validacion)->id }}})"
             class="px-4 py-2 bg-blue-500 text-white rounded">
             Ver detalles

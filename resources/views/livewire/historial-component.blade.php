@@ -1,6 +1,8 @@
 <div>
     <div class="w-3/4 mx-auto py-6">
-
+        <div class="flex justify-between items-center mb-4">
+            <h1 class="text-2xl font-bold">Historial de solicitudes de residencia</h1>
+        </div>
         <!-- Componente de tabla -->
         @livewire('historial-solicitudes-datatable')
     </div>
@@ -33,6 +35,20 @@
                         <div class="mb-3">
                             <label for="cedula" class="block text-xs font-medium">Cédula</label>
                             <input type="text" wire:model="cedula" id="cedula"
+                                class="mt-1 block w-full border-gray-300 rounded text-sm px-2 py-1" disabled>
+                        </div>
+                         {{-- fecha de creacion --}}
+                         <div class="mb-3">
+                            <label for="fecha_creacion" class="block text-xs font-medium">Fecha de
+                                creación</label>
+                            <input type="text" wire:model="fecha_creacion" id="fecha_creacion"
+                                class="mt-1 block w-full border-gray-300 rounded text-sm px-2 py-1" disabled>
+                        </div>
+                        {{-- fecha de validacion --}}
+                        <div class="mb-3">
+                            <label for="fecha_validacion" class="block text-xs font-medium">Fecha de
+                                validación</label>
+                            <input type="text" wire:model="fecha_validacion" id="fecha_validacion"
                                 class="mt-1 block w-full border-gray-300 rounded text-sm px-2 py-1" disabled>
                         </div>
                         <div class="mb-3">

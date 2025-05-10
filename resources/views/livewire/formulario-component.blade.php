@@ -1,5 +1,5 @@
-<div class="max-w-7xl mx-auto sm:px-6 lg:px-8 pt-7">
-    <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6">
+<div class="max-w-7xl mx-auto sm:px-6 lg:px-8 pt-7 bg-green-200">
+    <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6 border-2 border-green-500">
         <!-- Mensaje de éxito -->
         @if (session()->has('message'))
             <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative" role="alert">
@@ -66,6 +66,7 @@
                     <span class="text-red-500">{{ $message }}</span>
                 @enderror
             </div>
+
 
             <!-- Modal -->
             <!-- Campo de dirección fuera del modal, parte del formulario -->
@@ -719,7 +720,7 @@
                         <input wire:model="cedula"
                             class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50
             dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
-                            id="cedula_input" type="file" accept="application/pdf,image/jpeg,image/jpg">
+                            id="cedula_input" type="file" accept="application/pdf,image/jpeg,image/jpg" required>
 
                         <div
                             class="absolute left-0 hidden p-2 mt-1 text-xs text-white bg-gray-900 rounded-lg shadow-md group-hover:block dark:bg-gray-800">

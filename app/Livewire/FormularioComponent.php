@@ -64,7 +64,7 @@ class FormularioComponent extends Component
         'accion_comunal' => 'file|mimes:pdf,jpeg,jpg|max:10240', // Valida cada archivo individualmente
         'electoral' => 'file|mimes:pdf,jpeg,jpg|max:10240', // Valida cada archivo individualmente
         'sisben' => 'file|mimes:pdf,jpeg,jpg|max:10240', // Valida cada archivo individualmente
-        'cedula' => 'file|mimes:pdf,jpeg,jpg|max:10240', // Valida cada archivo individualmente
+        'cedula' => 'required|file|mimes:pdf,jpeg,jpg|max:10240', // Valida cada archivo individualmente
         'recibo' => 'required|file|mimes:pdf,jpeg,jpg|max:10240', // Valida cada archivo individualmente
         'terminos' => 'required',
         'observaciones' => 'nullable|string',
@@ -85,9 +85,10 @@ class FormularioComponent extends Component
         'sisben.max' => 'El campo evidencia no debe ser mayor a 10MB.',
         'cedula.mimes' => 'El campo evidencia debe ser un archivo de tipo: pdf, jpeg, jpg',
         'cedula.max' => 'El campo evidencia no debe ser mayor a 10MB.',
+        'cedula.required' => 'El campo cédula es necesario para crear la solicitud.',
         'recibo.mimes' => 'El campo evidencia debe ser un archivo de tipo: pdf, jpeg, jpg',
         'recibo.max' => 'El campo evidencia no debe ser mayor a 10MB.',
-        'recibo.required' => 'El campo recibo es obligatorio.',
+        'recibo.required' => 'El campo recibo es necesario para crear la solicitud.',
         'terminos.required' => 'El campo términos es obligatorio.',
         'observaciones.string' => 'El campo observaciones debe ser una cadena de texto.',
     ];
@@ -99,7 +100,7 @@ class FormularioComponent extends Component
 
         // Verificar si el usuario puede crear una nueva solicitud
         if (!Solicitud::canCreateRequest($userId)) {
-            $this->dispatch('sweet-alert-good', icon: 'info', title: 'Solicitud activa.', text: 'No puedes crear una nueva solicitud mientras tengas una activa, procesando o pendiente.', footer: '<a href="versolicitudes">Ver mis solicitudes</a>');
+            $this->dispatch('sweet-alert-good', icon: 'info', title: 'Solicitud activa.', text: 'No puedes crear una nueva solicitud mientras tengas una activa, procesando o pendiente.', footer: '<a href="versolicitudesresidencia">Ver mis solicitudes</a>');
             return;
         }
 
@@ -164,11 +165,11 @@ class FormularioComponent extends Component
         $this->reset();
         // Mostrar mensaje de éxito
         // session()->flash('message', 'Solicitud creada exitosamente.');
-        $this->dispatch('sweet-alert-good', icon: 'success', title: 'Solicitud creada exitosamente.', text: 'Tu solicitud ha sido enviada correctamente.', footer: '<a href="versolicitudes">Ver mis solicitudes</a>');
+        $this->dispatch('sweet-alert-good', icon: 'success', title: 'Solicitud creada exitosamente.', text: 'Tu solicitud ha sido enviada correctamente.', footer: '<a href="versolicitudesresidencia">Ver mis solicitudes</a>');
 
 
         // Resetear el formulario
-        $this->redirect(route('versolicitudes'));
+        $this->redirect(route('versolicitudesresidencia'));
     }
 
 

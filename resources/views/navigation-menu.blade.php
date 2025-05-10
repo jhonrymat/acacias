@@ -120,31 +120,189 @@
                     </x-nav-link>
                 @endrole
                 @role('user')
-                    <x-nav-link class="mx-6 hidden sm:flex" href="{{ route('formulario') }}" :active="request()->routeIs('formulario')">
-                        {{ __('Solicitud') }}
-                    </x-nav-link>
-                    <x-nav-link class="hidden sm:flex mr-6" href="{{ route('versolicitudes') }}" :active="request()->routeIs('versolicitudes')">
-                        {{ __('Solicitudes') }}
-                    </x-nav-link>
+                    <div class="hidden sm:flex sm:items-center sm:ml-6 mx-auto my-auto mr-6">
+                        <x-dropdown width="48">
+                            <x-slot name="trigger">
+                                <span class="inline-flex rounded-md">
+                                    <button type="button"
+                                        class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none focus:bg-gray-50 active:bg-gray-50 transition ease-in-out duration-150">
+                                        Crear solicitud
+                                        <svg class="ml-2 -mr-0.5 h-4 w-4 " xmlns="http://www.w3.org/2000/svg" fill="none"
+                                            viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round"
+                                                d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+                                        </svg>
+                                    </button>
+                                </span>
+                            </x-slot>
+                            <x-slot name="content">
+                                <!-- Account Management -->
+                                <div class="block px-4 py-2 text-xs text-gray-400">
+                                    {{ __('Seleccionables') }}
+                                </div>
+                                <x-dropdown-link href="{{ route('formulario-residencia') }}">
+                                    {{ __('Certificado de residencia') }}
+                                </x-dropdown-link>
+                                <x-dropdown-link href="{{ route('formulario-avecindamiento') }}">
+                                    {{ __('Certificado de avecindamiento') }}
+                                </x-dropdown-link>
+                            </x-slot>
+                        </x-dropdown>
+                    </div>
+                    <div class="hidden sm:flex sm:items-center sm:ml-6 mx-auto my-auto mr-6">
+                        <x-dropdown width="48">
+                            <x-slot name="trigger">
+                                <span class="inline-flex rounded-md">
+                                    <button type="button"
+                                        class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none focus:bg-gray-50 active:bg-gray-50 transition ease-in-out duration-150">
+                                        Ver solicitudes
+                                        <svg class="ml-2 -mr-0.5 h-4 w-4 " xmlns="http://www.w3.org/2000/svg" fill="none"
+                                            viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round"
+                                                d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+                                        </svg>
+                                    </button>
+                                </span>
+                            </x-slot>
+                            <x-slot name="content">
+                                <!-- Account Management -->
+                                <div class="block px-4 py-2 text-xs text-gray-400">
+                                    {{ __('Seleccionables') }}
+                                </div>
+                                <x-dropdown-link href="{{ route('versolicitudesresidencia') }}">
+                                    {{ __('Certificado de residencia') }}
+                                </x-dropdown-link>
+                                <x-dropdown-link href="{{ route('versolicitudesavecindamiento') }}">
+                                    {{ __('Certificado de avecindamiento') }}
+                                </x-dropdown-link>
+                            </x-slot>
+                        </x-dropdown>
+                    </div>
                 @endrole
                 @hasanyrole('validador1|validador2')
-                    <x-nav-link class="mx-6 hidden sm:flex" href="{{ route('solicitudes') }}" :active="request()->routeIs('solicitudes')">
-                        {{ __('Solicitudes') }}
-                    </x-nav-link>
-                    <x-nav-link class="hidden sm:flex mr-6" href="{{ route('historial') }}" :active="request()->routeIs('historial')">
-                        {{ __('Historial') }}
-                    </x-nav-link>
+                    <div class="hidden sm:flex sm:items-center sm:ml-6 mx-auto my-auto mr-6">
+                        <x-dropdown width="48">
+                            <x-slot name="trigger">
+                                <span class="inline-flex rounded-md">
+                                    <button type="button"
+                                        class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none focus:bg-gray-50 active:bg-gray-50 transition ease-in-out duration-150">
+                                        Ver solicitudes
+                                        <svg class="ml-2 -mr-0.5 h-4 w-4 " xmlns="http://www.w3.org/2000/svg"
+                                            fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round"
+                                                d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+                                        </svg>
+                                    </button>
+                                </span>
+                            </x-slot>
+                            <x-slot name="content">
+                                <!-- Account Management -->
+                                <div class="block px-4 py-2 text-xs text-gray-400">
+                                    {{ __('Seleccionables') }}
+                                </div>
+                                <x-dropdown-link href="{{ route('solicitudes-residencia') }}">
+                                    {{ __('Certificado de residencia') }}
+                                </x-dropdown-link>
+                                <x-dropdown-link href="{{ route('solicitudes-avecindamiento') }}">
+                                    {{ __('Certificado de avecindamiento') }}
+                                </x-dropdown-link>
+                            </x-slot>
+                        </x-dropdown>
+                    </div>
+                    <div class="hidden sm:flex sm:items-center sm:ml-6 mx-auto my-auto mr-6">
+                        <x-dropdown width="48">
+                            <x-slot name="trigger">
+                                <span class="inline-flex rounded-md">
+                                    <button type="button"
+                                        class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none focus:bg-gray-50 active:bg-gray-50 transition ease-in-out duration-150">
+                                        Historial
+                                        <svg class="ml-2 -mr-0.5 h-4 w-4 " xmlns="http://www.w3.org/2000/svg"
+                                            fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round"
+                                                d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+                                        </svg>
+                                    </button>
+                                </span>
+                            </x-slot>
+                            <x-slot name="content">
+                                <!-- Account Management -->
+                                <div class="block px-4 py-2 text-xs text-gray-400">
+                                    {{ __('Seleccionables') }}
+                                </div>
+                                <x-dropdown-link href="{{ route('historial-residencia') }}">
+                                    {{ __('Certificado de residencia') }}
+                                </x-dropdown-link>
+                                <x-dropdown-link href="{{ route('historial-avecindamiento') }}">
+                                    {{ __('Certificado de avecindamiento') }}
+                                </x-dropdown-link>
+                            </x-slot>
+                        </x-dropdown>
+                    </div>
                     <x-nav-link class="hidden sm:flex mr-6" href="{{ route('ciudadanos') }}" :active="request()->routeIs('ciudadanos')">
                         {{ __('Ciudadanos') }}
                     </x-nav-link>
-                    <x-nav-link class="hidden sm:flex mr-6" href="{{ route('estadisticas1') }}" :active="request()->routeIs('estadisticas1')">
-                        {{ __('Estadisticas') }}
-                    </x-nav-link>
+                    <div class="hidden sm:flex sm:items-center sm:ml-6 mx-auto my-auto mr-6">
+                        <x-dropdown width="48">
+                            <x-slot name="trigger">
+                                <span class="inline-flex rounded-md">
+                                    <button type="button"
+                                        class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none focus:bg-gray-50 active:bg-gray-50 transition ease-in-out duration-150">
+                                        Reportes
+                                        <svg class="ml-2 -mr-0.5 h-4 w-4 " xmlns="http://www.w3.org/2000/svg"
+                                            fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round"
+                                                d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+                                        </svg>
+                                    </button>
+                                </span>
+                            </x-slot>
+                            <x-slot name="content">
+                                <!-- Account Management -->
+                                <div class="block px-4 py-2 text-xs text-gray-400">
+                                    {{ __('Seleccionables') }}
+                                </div>
+                                <x-dropdown-link href="{{ route('estadisticas1') }}">
+                                    {{ __('Graficas') }}
+                                </x-dropdown-link>
+                                @role('validador2')
+                                    <x-dropdown-link href="{{ route('exportar-solicitudes') }}">
+                                        {{ __('Exportar') }}
+                                    </x-dropdown-link>
+                                @endrole
+                            </x-slot>
+                        </x-dropdown>
+                    </div>
                 @endrole
                 @role('validador2')
-                <x-nav-link class="hidden sm:flex mr-6" href="{{ route('anular-solicitud') }}" :active="request()->routeIs('anular-solicitud')">
-                    {{ __('Anular solicitud') }}
-                </x-nav-link>
+                    <div class="hidden sm:flex sm:items-center sm:ml-6 mx-auto my-auto mr-6">
+                        <x-dropdown width="48">
+                            <x-slot name="trigger">
+                                <span class="inline-flex rounded-md">
+                                    <button type="button"
+                                        class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none focus:bg-gray-50 active:bg-gray-50 transition ease-in-out duration-150">
+                                        Anular solicitud
+                                        <svg class="ml-2 -mr-0.5 h-4 w-4 " xmlns="http://www.w3.org/2000/svg"
+                                            fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round"
+                                                d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+                                        </svg>
+                                    </button>
+                                </span>
+                            </x-slot>
+                            <x-slot name="content">
+                                <!-- Account Management -->
+                                <div class="block px-4 py-2 text-xs text-gray-400">
+                                    {{ __('Seleccionables') }}
+                                </div>
+                                <x-dropdown-link href="{{ route('anular-solicitud-residencia') }}">
+                                    {{ __('Certificado de residencia') }}
+                                </x-dropdown-link>
+                                <x-dropdown-link href="{{ route('anular-solicitud-avecindamiento') }}">
+                                    {{ __('Certificado de avecindamiento') }}
+                                </x-dropdown-link>
+                            </x-slot>
+                        </x-dropdown>
+                    </div>
                 @endrole
             </div>
 
@@ -160,7 +318,8 @@
                                         {{ Auth::user()->currentTeam->name }}
 
                                         <svg class="ms-2 -me-0.5 h-4 w-4" xmlns="http://www.w3.org/2000/svg"
-                                            fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                                            fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                                            stroke="currentColor">
                                             <path stroke-linecap="round" stroke-linejoin="round"
                                                 d="M8.25 15L12 18.75 15.75 15m-7.5-6L12 5.25 15.75 9" />
                                         </svg>
@@ -212,7 +371,8 @@
                                 <button
                                     class="flex text-sm border-2 border-transparent rounded-full focus:outline-none focus:border-gray-300 transition">
                                     <img class="h-8 w-8 rounded-full object-cover"
-                                        src="{{ Auth::user()->profile_photo_url }}" alt="{{ Auth::user()->name }}" />
+                                        src="{{ Auth::user()->profile_photo_url }}"
+                                        alt="{{ Auth::user()->name }}" />
                                 </button>
                             @else
                                 <span class="inline-flex rounded-md">
@@ -288,212 +448,366 @@
 
         @role('user')
             <div :class="{ 'block': open, 'hidden': !open }" class="hidden sm:hidden">
-                <div class="pt-2 pb-3 space-y-1">
-                    <x-responsive-nav-link href="{{ route('formulario') }}" :active="request()->routeIs('formulario')">
-                        {{ __('Solicitud') }}
+                <div x-data="{ openConfigForm: false }">
+                    <x-responsive-nav-link class="mb-1 flex items-center" @click="openConfigForm = !openConfigForm"
+                        :active="request()->routeIs('configForm.*')">
+                        <span>Crear solicitud</span>
+                        <svg :class="{ 'rotate-180': openConfigForm }" class="w-4 h-4 ml-1 transition-transform"
+                            fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd"
+                                d="M5.23 7.21a.75.75 0 011.06 0L10 10.94l3.71-3.73a.75.75 0 111.06 1.06l-4.24 4.25a.75.75 0 01-1.06 0L5.23 8.27a.75.75 0 010-1.06z"
+                                clip-rule="evenodd" />
+                        </svg>
                     </x-responsive-nav-link>
-                </div>
 
-                <div :class="{ 'block': open, 'hidden': !open }" class="hidden sm:hidden">
-                    <div class="pt-2 pb-3 space-y-1">
-                        <x-responsive-nav-link href="{{ route('versolicitudes') }}" :active="request()->routeIs('versolicitudes')">
-                            {{ __('Solicitudes') }}
+                    <!-- Subopciones de "Config. Formulario" -->
+                    <div x-show="openConfigForm" class="space-y-1 pl-4">
+                        <div class="block px-4 py-2 text-xs text-gray-400">
+                            {{ __('Seleccionables') }}
+                        </div>
+                        <x-responsive-nav-link href="{{ route('formulario-residencia') }}" :active="request()->routeIs('formulario-residencia')">
+                            Certificado de residencia
+                        </x-responsive-nav-link>
+                        <x-responsive-nav-link href="{{ route('formulario-avecindamiento') }}" :active="request()->routeIs('formulario-avecindamiento')">
+                            Certificado de avecindamiento
                         </x-responsive-nav-link>
                     </div>
-                @endrole
+                </div>
+                <div x-data="{ openConfigForm: false }">
+                    <x-responsive-nav-link class="mb-1 flex items-center" @click="openConfigForm = !openConfigForm"
+                        :active="request()->routeIs('configForm.*')">
+                        <span>Ver solicitudes</span>
+                        <svg :class="{ 'rotate-180': openConfigForm }" class="w-4 h-4 ml-1 transition-transform"
+                            fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd"
+                                d="M5.23 7.21a.75.75 0 011.06 0L10 10.94l3.71-3.73a.75.75 0 111.06 1.06l-4.24 4.25a.75.75 0 01-1.06 0L5.23 8.27a.75.75 0 010-1.06z"
+                                clip-rule="evenodd" />
+                        </svg>
+                    </x-responsive-nav-link>
 
-                @role('admin')
-                    <div :class="{ 'block': open, 'hidden': !open }" class="hidden sm:hidden">
-                        <div class="pt-2 pb-3 space-y-1">
-
-                            <!-- Enlace directo a "Historial" -->
-                            <x-responsive-nav-link href="{{ route('historial') }}" :active="request()->routeIs('historial')">
-                                {{ __('Historial') }}
-                            </x-responsive-nav-link>
-                            <x-responsive-nav-link href="{{ route('ciudadanos') }}" :active="request()->routeIs('ciudadanos')">
-                                {{ __('Ciudadanos') }}
-                            </x-responsive-nav-link>
-
-                            <x-responsive-nav-link href="{{ route('validadores') }}" :active="request()->routeIs('validadores')">
-                                {{ __('Validadores') }}
-                            </x-responsive-nav-link>
-
-                            <x-responsive-nav-link href="{{ route('estadisticas1') }}" :active="request()->routeIs('estadisticas1')">
-                                {{ __('Estadisticas') }}
-                            </x-responsive-nav-link>
-
-
-                            <!-- Botón desplegable para "Config. Formulario" -->
-                            <div x-data="{ openConfigForm: false }">
-                                <x-responsive-nav-link class="mb-1 flex items-center"
-                                    @click="openConfigForm = !openConfigForm" :active="request()->routeIs('configForm.*')">
-                                    <span>Config. Formulario</span>
-                                    <svg :class="{ 'rotate-180': openConfigForm }" class="w-4 h-4 ml-1 transition-transform"
-                                        fill="currentColor" viewBox="0 0 20 20">
-                                        <path fill-rule="evenodd"
-                                            d="M5.23 7.21a.75.75 0 011.06 0L10 10.94l3.71-3.73a.75.75 0 111.06 1.06l-4.24 4.25a.75.75 0 01-1.06 0L5.23 8.27a.75.75 0 010-1.06z"
-                                            clip-rule="evenodd" />
-                                    </svg>
-                                </x-responsive-nav-link>
-
-                                <!-- Subopciones de "Config. Formulario" -->
-                                <div x-show="openConfigForm" class="space-y-1 pl-4">
-                                    <div class="block px-4 py-2 text-xs text-gray-400">
-                                        {{ __('Seleccionables') }}
-                                    </div>
-                                    <x-responsive-nav-link href="{{ route('documento') }}" :active="request()->routeIs('documento')">
-                                        Documentos
-                                    </x-responsive-nav-link>
-                                    <x-responsive-nav-link href="{{ route('genero') }}" :active="request()->routeIs('genero')">
-                                        Generos
-                                    </x-responsive-nav-link>
-                                    <x-responsive-nav-link href="{{ route('nestudio') }}" :active="request()->routeIs('nestudio')">
-                                        Nivel de estudios
-                                    </x-responsive-nav-link>
-                                    <x-responsive-nav-link href="{{ route('tsolicitante') }}" :active="request()->routeIs('tsolicitante')">
-                                        Tipo de solicitante
-                                    </x-responsive-nav-link>
-                                    <x-responsive-nav-link href="{{ route('barrio') }}" :active="request()->routeIs('barrio')">
-                                        Barrios
-                                    </x-responsive-nav-link>
-                                    <x-responsive-nav-link href="{{ route('ocupacion') }}" :active="request()->routeIs('ocupacion')">
-                                        Ocupacion
-                                    </x-responsive-nav-link>
-                                    <x-responsive-nav-link href="{{ route('poblacion') }}" :active="request()->routeIs('poblacion')">
-                                        Poblacion
-                                    </x-responsive-nav-link>
-                                </div>
-                            </div>
-
-                            <!-- Botón desplegable para "Configuracion" -->
-                            <div x-data="{ openConfigForm: false }">
-                                <x-responsive-nav-link class="mb-1 flex items-center"
-                                    @click="openConfigForm = !openConfigForm" :active="request()->routeIs('configForm.*')">
-                                    <span>Configuración</span>
-                                    <svg :class="{ 'rotate-180': openConfigForm }" class="w-4 h-4 ml-1 transition-transform"
-                                        fill="currentColor" viewBox="0 0 20 20">
-                                        <path fill-rule="evenodd"
-                                            d="M5.23 7.21a.75.75 0 011.06 0L10 10.94l3.71-3.73a.75.75 0 111.06 1.06l-4.24 4.25a.75.75 0 01-1.06 0L5.23 8.27a.75.75 0 010-1.06z"
-                                            clip-rule="evenodd" />
-                                    </svg>
-                                </x-responsive-nav-link>
-
-                                <!-- Subopciones de "Configuracion" -->
-                                <div x-show="openConfigForm" class="space-y-1 pl-4">
-                                    <div class="block px-4 py-2 text-xs text-gray-400">
-                                        {{ __('Datos') }}
-                                    </div>
-                                    <x-responsive-nav-link href="{{ route('roles') }}" :active="request()->routeIs('roles')">
-                                        Roles
-                                    </x-responsive-nav-link>
-                                    <x-responsive-nav-link href="{{ route('user-roles') }}" :active="request()->routeIs('user-roles')">
-                                        Asignar Rol
-                                    </x-responsive-nav-link>
-                                    <x-responsive-nav-link href="{{ route('iframes') }}" :active="request()->routeIs('iframes')">
-                                        PowerBI
-                                    </x-responsive-nav-link>
-                                    <x-responsive-nav-link href="{{ route('administracion') }}" :active="request()->routeIs('administracion')">
-                                        Administración
-                                    </x-responsive-nav-link>
-                                </div>
-                            </div>
-
+                    <!-- Subopciones de "Config. Formulario" -->
+                    <div x-show="openConfigForm" class="space-y-1 pl-4">
+                        <div class="block px-4 py-2 text-xs text-gray-400">
+                            {{ __('Seleccionables') }}
                         </div>
+                        <x-responsive-nav-link href="{{ route('versolicitudesresidencia') }}" :active="request()->routeIs('versolicitudesresidencia')">
+                            Certificado de residencia
+                        </x-responsive-nav-link>
+                        <x-responsive-nav-link href="{{ route('versolicitudesavecindamiento') }}" :active="request()->routeIs('versolicitudesavecindamiento')">
+                            Certificado de avecindamiento
+                        </x-responsive-nav-link>
                     </div>
-                @endrole
+                </div>
+            @endrole
 
+            @role('admin')
+                <div :class="{ 'block': open, 'hidden': !open }" class="hidden sm:hidden">
+                    <div class="pt-2 pb-3 space-y-1">
 
-                @hasanyrole('validador1|validador2')
-                    <div :class="{ 'block': open, 'hidden': !open }" class="hidden sm:hidden">
-                        <div class="pt-2 pb-3 space-y-1">
-                            <x-responsive-nav-link href="{{ route('versolicitudes') }}" :active="request()->routeIs('versolicitudes')">
-                                {{ __('Solicitudes') }}
+                        <!-- Enlace directo a "Historial" -->
+                        <div x-data="{ openConfigForm: false }">
+                            <x-responsive-nav-link class="mb-1 flex items-center"
+                                @click="openConfigForm = !openConfigForm" :active="request()->routeIs('configForm.*')">
+                                <span>Historia</span>
+                                <svg :class="{ 'rotate-180': openConfigForm }" class="w-4 h-4 ml-1 transition-transform"
+                                    fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd"
+                                        d="M5.23 7.21a.75.75 0 011.06 0L10 10.94l3.71-3.73a.75.75 0 111.06 1.06l-4.24 4.25a.75.75 0 01-1.06 0L5.23 8.27a.75.75 0 010-1.06z"
+                                        clip-rule="evenodd" />
+                                </svg>
                             </x-responsive-nav-link>
+
+                            <!-- Subopciones de "Configuracion" -->
+                            <div x-show="openConfigForm" class="space-y-1 pl-4">
+                                <div class="block px-4 py-2 text-xs text-gray-400">
+                                    {{ __('Seleccionables') }}
+                                </div>
+                                <x-responsive-nav-link href="{{ route('historial-residencia') }}" :active="request()->routeIs('historial-residencia')">
+                                    Certificado de residencia
+                                </x-responsive-nav-link>
+                                <x-responsive-nav-link href="{{ route('historial-avecindamiento') }}" :active="request()->routeIs('historial-avecindamiento')">
+                                    Certificado de avecindamiento
+                                </x-responsive-nav-link>
+                            </div>
                         </div>
-                        <div class="pt-2 pb-3 space-y-1">
-                            <x-responsive-nav-link href="{{ route('historial') }}" :active="request()->routeIs('historial')">
-                                {{ __('Historial') }}
-                            </x-responsive-nav-link>
-                        </div>
+                        <x-responsive-nav-link href="{{ route('ciudadanos') }}" :active="request()->routeIs('ciudadanos')">
+                            {{ __('Ciudadanos') }}
+                        </x-responsive-nav-link>
+
+                        <x-responsive-nav-link href="{{ route('validadores') }}" :active="request()->routeIs('validadores')">
+                            {{ __('Validadores') }}
+                        </x-responsive-nav-link>
+
                         <x-responsive-nav-link href="{{ route('estadisticas1') }}" :active="request()->routeIs('estadisticas1')">
                             {{ __('Estadisticas') }}
                         </x-responsive-nav-link>
-                        @endrole
 
-                        <!-- Responsive Settings Options -->
-                        <div class="pt-4 pb-1 border-t border-gray-200">
-                            <div class="flex items-center px-4">
-                                @if (Laravel\Jetstream\Jetstream::managesProfilePhotos())
-                                    <div class="shrink-0 me-3">
-                                        <img class="h-10 w-10 rounded-full object-cover"
-                                            src="{{ Auth::user()->profile_photo_url }}"
-                                            alt="{{ Auth::user()->name }}" />
-                                    </div>
-                                @endif
 
-                                <div>
-                                    <div class="font-medium text-base text-gray-800">{{ Auth::user()->name }}</div>
-                                    <div class="font-medium text-sm text-gray-500">{{ Auth::user()->email }}</div>
+                        <!-- Botón desplegable para "Config. Formulario" -->
+                        <div x-data="{ openConfigForm: false }">
+                            <x-responsive-nav-link class="mb-1 flex items-center"
+                                @click="openConfigForm = !openConfigForm" :active="request()->routeIs('configForm.*')">
+                                <span>Config. Formulario</span>
+                                <svg :class="{ 'rotate-180': openConfigForm }" class="w-4 h-4 ml-1 transition-transform"
+                                    fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd"
+                                        d="M5.23 7.21a.75.75 0 011.06 0L10 10.94l3.71-3.73a.75.75 0 111.06 1.06l-4.24 4.25a.75.75 0 01-1.06 0L5.23 8.27a.75.75 0 010-1.06z"
+                                        clip-rule="evenodd" />
+                                </svg>
+                            </x-responsive-nav-link>
+
+                            <!-- Subopciones de "Config. Formulario" -->
+                            <div x-show="openConfigForm" class="space-y-1 pl-4">
+                                <div class="block px-4 py-2 text-xs text-gray-400">
+                                    {{ __('Seleccionables') }}
                                 </div>
-                            </div>
-
-                            <div class="mt-3 space-y-1">
-                                <!-- Account Management -->
-                                <x-responsive-nav-link href="{{ route('profile.show') }}" :active="request()->routeIs('profile.show')">
-                                    {{ __('Profile') }}
+                                <x-responsive-nav-link href="{{ route('documento') }}" :active="request()->routeIs('documento')">
+                                    Documentos
                                 </x-responsive-nav-link>
-
-                                @if (Laravel\Jetstream\Jetstream::hasApiFeatures())
-                                    <x-responsive-nav-link href="{{ route('api-tokens.index') }}" :active="request()->routeIs('api-tokens.index')">
-                                        {{ __('API Tokens') }}
-                                    </x-responsive-nav-link>
-                                @endif
-
-                                <!-- Authentication -->
-                                <form method="POST" action="{{ route('logout') }}" x-data>
-                                    @csrf
-
-                                    <x-responsive-nav-link href="{{ route('logout') }}"
-                                        @click.prevent="$root.submit();">
-                                        {{ __('Log Out') }}
-                                    </x-responsive-nav-link>
-                                </form>
-
-                                <!-- Team Management -->
-                                @if (Laravel\Jetstream\Jetstream::hasTeamFeatures())
-                                    <div class="border-t border-gray-200"></div>
-
-                                    <div class="block px-4 py-2 text-xs text-gray-400">
-                                        {{ __('Manage Team') }}
-                                    </div>
-
-                                    <!-- Team Settings -->
-                                    <x-responsive-nav-link
-                                        href="{{ route('teams.show', Auth::user()->currentTeam->id) }}"
-                                        :active="request()->routeIs('teams.show')">
-                                        {{ __('Team Settings') }}
-                                    </x-responsive-nav-link>
-
-                                    @can('create', Laravel\Jetstream\Jetstream::newTeamModel())
-                                        <x-responsive-nav-link href="{{ route('teams.create') }}" :active="request()->routeIs('teams.create')">
-                                            {{ __('Create New Team') }}
-                                        </x-responsive-nav-link>
-                                    @endcan
-
-                                    <!-- Team Switcher -->
-                                    @if (Auth::user()->allTeams()->count() > 1)
-                                        <div class="border-t border-gray-200"></div>
-
-                                        <div class="block px-4 py-2 text-xs text-gray-400">
-                                            {{ __('Switch Teams') }}
-                                        </div>
-
-                                        @foreach (Auth::user()->allTeams() as $team)
-                                            <x-switchable-team :team="$team" component="responsive-nav-link" />
-                                        @endforeach
-                                    @endif
-                                @endif
+                                <x-responsive-nav-link href="{{ route('genero') }}" :active="request()->routeIs('genero')">
+                                    Generos
+                                </x-responsive-nav-link>
+                                <x-responsive-nav-link href="{{ route('nestudio') }}" :active="request()->routeIs('nestudio')">
+                                    Nivel de estudios
+                                </x-responsive-nav-link>
+                                <x-responsive-nav-link href="{{ route('tsolicitante') }}" :active="request()->routeIs('tsolicitante')">
+                                    Tipo de solicitante
+                                </x-responsive-nav-link>
+                                <x-responsive-nav-link href="{{ route('barrio') }}" :active="request()->routeIs('barrio')">
+                                    Barrios
+                                </x-responsive-nav-link>
+                                <x-responsive-nav-link href="{{ route('ocupacion') }}" :active="request()->routeIs('ocupacion')">
+                                    Ocupacion
+                                </x-responsive-nav-link>
+                                <x-responsive-nav-link href="{{ route('poblacion') }}" :active="request()->routeIs('poblacion')">
+                                    Poblacion
+                                </x-responsive-nav-link>
                             </div>
                         </div>
+
+                        <!-- Botón desplegable para "Configuracion" -->
+                        <div x-data="{ openConfigForm: false }">
+                            <x-responsive-nav-link class="mb-1 flex items-center"
+                                @click="openConfigForm = !openConfigForm" :active="request()->routeIs('configForm.*')">
+                                <span>Configuración</span>
+                                <svg :class="{ 'rotate-180': openConfigForm }" class="w-4 h-4 ml-1 transition-transform"
+                                    fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd"
+                                        d="M5.23 7.21a.75.75 0 011.06 0L10 10.94l3.71-3.73a.75.75 0 111.06 1.06l-4.24 4.25a.75.75 0 01-1.06 0L5.23 8.27a.75.75 0 010-1.06z"
+                                        clip-rule="evenodd" />
+                                </svg>
+                            </x-responsive-nav-link>
+
+                            <!-- Subopciones de "Configuracion" -->
+                            <div x-show="openConfigForm" class="space-y-1 pl-4">
+                                <div class="block px-4 py-2 text-xs text-gray-400">
+                                    {{ __('Datos') }}
+                                </div>
+                                <x-responsive-nav-link href="{{ route('roles') }}" :active="request()->routeIs('roles')">
+                                    Roles
+                                </x-responsive-nav-link>
+                                <x-responsive-nav-link href="{{ route('user-roles') }}" :active="request()->routeIs('user-roles')">
+                                    Asignar Rol
+                                </x-responsive-nav-link>
+                                <x-responsive-nav-link href="{{ route('iframes') }}" :active="request()->routeIs('iframes')">
+                                    PowerBI
+                                </x-responsive-nav-link>
+                                <x-responsive-nav-link href="{{ route('administracion') }}" :active="request()->routeIs('administracion')">
+                                    Administración
+                                </x-responsive-nav-link>
+                            </div>
+                        </div>
+
                     </div>
+                </div>
+            @endrole
+
+
+            @hasanyrole('validador1|validador2')
+                <div :class="{ 'block': open, 'hidden': !open }" class="hidden sm:hidden">
+                    <div x-data="{ openConfigForm: false }">
+                        <x-responsive-nav-link class="mb-1 flex items-center" @click="openConfigForm = !openConfigForm"
+                            :active="request()->routeIs('configForm.*')">
+                            <span>Solicitudes</span>
+                            <svg :class="{ 'rotate-180': openConfigForm }" class="w-4 h-4 ml-1 transition-transform"
+                                fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd"
+                                    d="M5.23 7.21a.75.75 0 011.06 0L10 10.94l3.71-3.73a.75.75 0 111.06 1.06l-4.24 4.25a.75.75 0 01-1.06 0L5.23 8.27a.75.75 0 010-1.06z"
+                                    clip-rule="evenodd" />
+                            </svg>
+                        </x-responsive-nav-link>
+
+                        <!-- Subopciones de "Configuracion" -->
+                        <div x-show="openConfigForm" class="space-y-1 pl-4">
+                            <div class="block px-4 py-2 text-xs text-gray-400">
+                                {{ __('Seleccionables') }}
+                            </div>
+                            <x-responsive-nav-link href="{{ route('solicitudes-residencia') }}" :active="request()->routeIs('solicitudes-residencia')">
+                                Certificado de residencia
+                            </x-responsive-nav-link>
+                            <x-responsive-nav-link href="{{ route('solicitudes-avecindamiento') }}" :active="request()->routeIs('solicitudes-avecindamiento')">
+                                Certificado de avecindamiento
+                            </x-responsive-nav-link>
+                        </div>
+                    </div>
+                    <div x-data="{ openConfigForm: false }">
+                        <x-responsive-nav-link class="mb-1 flex items-center" @click="openConfigForm = !openConfigForm"
+                            :active="request()->routeIs('configForm.*')">
+                            <span>Historial</span>
+                            <svg :class="{ 'rotate-180': openConfigForm }" class="w-4 h-4 ml-1 transition-transform"
+                                fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd"
+                                    d="M5.23 7.21a.75.75 0 011.06 0L10 10.94l3.71-3.73a.75.75 0 111.06 1.06l-4.24 4.25a.75.75 0 01-1.06 0L5.23 8.27a.75.75 0 010-1.06z"
+                                    clip-rule="evenodd" />
+                            </svg>
+                        </x-responsive-nav-link>
+
+                        <!-- Subopciones de "Configuracion" -->
+                        <div x-show="openConfigForm" class="space-y-1 pl-4">
+                            <div class="block px-4 py-2 text-xs text-gray-400">
+                                {{ __('Seleccionables') }}
+                            </div>
+                            <x-responsive-nav-link href="{{ route('historial-residencia') }}" :active="request()->routeIs('historial-residencia')">
+                                Certificado de residencia
+                            </x-responsive-nav-link>
+                            <x-responsive-nav-link href="{{ route('historial-avecindamiento') }}" :active="request()->routeIs('historial-avecindamiento')">
+                                Certificado de avecindamiento
+                            </x-responsive-nav-link>
+                        </div>
+                    </div>
+
+                    <x-responsive-nav-link href="{{ route('ciudadanos') }}" :active="request()->routeIs('ciudadanos')">
+                        {{ __('Ciudadanos') }}
+                    </x-responsive-nav-link>
+                    <div x-data="{ openConfigForm: false }">
+                        <x-responsive-nav-link class="mb-1 flex items-center" @click="openConfigForm = !openConfigForm"
+                            :active="request()->routeIs('configForm.*')">
+                            <span>Reportes</span>
+                            <svg :class="{ 'rotate-180': openConfigForm }" class="w-4 h-4 ml-1 transition-transform"
+                                fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd"
+                                    d="M5.23 7.21a.75.75 0 011.06 0L10 10.94l3.71-3.73a.75.75 0 111.06 1.06l-4.24 4.25a.75.75 0 01-1.06 0L5.23 8.27a.75.75 0 010-1.06z"
+                                    clip-rule="evenodd" />
+                            </svg>
+                        </x-responsive-nav-link>
+
+                        <!-- Subopciones de "Configuracion" -->
+                        <div x-show="openConfigForm" class="space-y-1 pl-4">
+                            <div class="block px-4 py-2 text-xs text-gray-400">
+                                {{ __('Seleccionables') }}
+                            </div>
+                            <x-responsive-nav-link href="{{ route('estadisticas1') }}" :active="request()->routeIs('estadisticas1')">
+                                {{ __('Graficos') }}
+                            </x-responsive-nav-link>
+                            @role('validador2')
+                                <x-responsive-nav-link href="{{ route('exportar-solicitudes') }}" :active="request()->routeIs('exportar-solicitudes')">
+                                    Exportar solicitudes
+                                </x-responsive-nav-link>
+                            @endrole
+                        </div>
+                    </div>
+                @endrole
+
+                @role('validador2')
+                    <div x-data="{ openConfigForm: false }">
+                        <x-responsive-nav-link class="mb-1 flex items-center" @click="openConfigForm = !openConfigForm"
+                            :active="request()->routeIs('configForm.*')">
+                            <span>Anular solicitud</span>
+                            <svg :class="{ 'rotate-180': openConfigForm }" class="w-4 h-4 ml-1 transition-transform"
+                                fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd"
+                                    d="M5.23 7.21a.75.75 0 011.06 0L10 10.94l3.71-3.73a.75.75 0 111.06 1.06l-4.24 4.25a.75.75 0 01-1.06 0L5.23 8.27a.75.75 0 010-1.06z"
+                                    clip-rule="evenodd" />
+                            </svg>
+                        </x-responsive-nav-link>
+
+                        <!-- Subopciones de "Configuracion" -->
+                        <div x-show="openConfigForm" class="space-y-1 pl-4">
+                            <div class="block px-4 py-2 text-xs text-gray-400">
+                                {{ __('Seleccionables') }}
+                            </div>
+                            <x-responsive-nav-link href="{{ route('anular-solicitud-residencia') }}" :active="request()->routeIs('anular-solicitud-residencia')">
+                                Certificado de residencia
+                            </x-responsive-nav-link>
+                            <x-responsive-nav-link href="{{ route('anular-solicitud-avecindamiento') }}"
+                                :active="request()->routeIs('anular-solicitud-avecindamiento')">
+                                Certificado de avecindamiento
+                            </x-responsive-nav-link>
+                        </div>
+                    </div>
+                @endrole
+
+                <!-- Responsive Settings Options -->
+                <div class="pt-4 pb-1 border-t border-gray-200">
+                    <div class="flex items-center px-4">
+                        @if (Laravel\Jetstream\Jetstream::managesProfilePhotos())
+                            <div class="shrink-0 me-3">
+                                <img class="h-10 w-10 rounded-full object-cover"
+                                    src="{{ Auth::user()->profile_photo_url }}" alt="{{ Auth::user()->name }}" />
+                            </div>
+                        @endif
+
+                        <div>
+                            <div class="font-medium text-base text-gray-800">{{ Auth::user()->name }}</div>
+                            <div class="font-medium text-sm text-gray-500">{{ Auth::user()->email }}</div>
+                        </div>
+                    </div>
+
+                    <div class="mt-3 space-y-1">
+                        <!-- Account Management -->
+                        <x-responsive-nav-link href="{{ route('profile.show') }}" :active="request()->routeIs('profile.show')">
+                            {{ __('Profile') }}
+                        </x-responsive-nav-link>
+
+                        @if (Laravel\Jetstream\Jetstream::hasApiFeatures())
+                            <x-responsive-nav-link href="{{ route('api-tokens.index') }}" :active="request()->routeIs('api-tokens.index')">
+                                {{ __('API Tokens') }}
+                            </x-responsive-nav-link>
+                        @endif
+
+                        <!-- Authentication -->
+                        <form method="POST" action="{{ route('logout') }}" x-data>
+                            @csrf
+
+                            <x-responsive-nav-link href="{{ route('logout') }}" @click.prevent="$root.submit();">
+                                {{ __('Log Out') }}
+                            </x-responsive-nav-link>
+                        </form>
+
+                        <!-- Team Management -->
+                        @if (Laravel\Jetstream\Jetstream::hasTeamFeatures())
+                            <div class="border-t border-gray-200"></div>
+
+                            <div class="block px-4 py-2 text-xs text-gray-400">
+                                {{ __('Manage Team') }}
+                            </div>
+
+                            <!-- Team Settings -->
+                            <x-responsive-nav-link href="{{ route('teams.show', Auth::user()->currentTeam->id) }}"
+                                :active="request()->routeIs('teams.show')">
+                                {{ __('Team Settings') }}
+                            </x-responsive-nav-link>
+
+                            @can('create', Laravel\Jetstream\Jetstream::newTeamModel())
+                                <x-responsive-nav-link href="{{ route('teams.create') }}" :active="request()->routeIs('teams.create')">
+                                    {{ __('Create New Team') }}
+                                </x-responsive-nav-link>
+                            @endcan
+
+                            <!-- Team Switcher -->
+                            @if (Auth::user()->allTeams()->count() > 1)
+                                <div class="border-t border-gray-200"></div>
+
+                                <div class="block px-4 py-2 text-xs text-gray-400">
+                                    {{ __('Switch Teams') }}
+                                </div>
+
+                                @foreach (Auth::user()->allTeams() as $team)
+                                    <x-switchable-team :team="$team" component="responsive-nav-link" />
+                                @endforeach
+                            @endif
+                        @endif
+                    </div>
+                </div>
+            </div>
 </nav>

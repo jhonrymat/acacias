@@ -115,14 +115,18 @@
         </div>
     </div>
 
-    {{-- modal para visualizar el historial --}}
+    {{-- modal para visualizar el historial residencia --}}
     <div x-data="{ showModalHistory: @entangle('showModalHistory') }" x-cloak>
         <div x-show="showModalHistory" class="fixed inset-0 bg-gray-800 bg-opacity-70 flex items-center justify-center">
             <div
                 class="bg-white w-11/12 sm:max-w-lg md:max-w-3xl lg:max-w-5xl p-6 rounded-lg shadow-lg max-h-screen overflow-y-auto">
                 <div class="flex justify-between items-center mb-2">
                     <h2 class="text-xl font-bold">
-                        <span>Historial de solicitudes</span>
+                        <span>Historial de solicitudes de residencia</span>
+                        <span
+                            class="inline-block bg-blue-100 text-blue-800 text-sm font-semibold px-3 py-1 rounded-full ml-2">
+                            Residencia
+                        </span>
                     </h2>
                     <button @click="showModalHistory = false" wire:click="closeModal"
                         class="text-red-500 hover:text-red-700 text-lg">
@@ -152,7 +156,106 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach ($historial as $solicitud)
+                                @foreach ($historial as $solicituResidencia)
+                                    <tr class="border-b">
+                                        <td class="border p-2">{{ $solicituResidencia->id }}</td>
+                                        <td class="border p-2">{{ $solicituResidencia->numeroIdentificacion }}</td>
+                                        @foreach ($solicituResidencia->validaciones as $validacion)
+                                            <td class="border p-2">
+                                                <div class="flex space-x-2">
+                                                    {{-- Verifica si el estado es "Emitido" --}}
+                                                    @if ($solicituResidencia->estado->nombreEstado === 'Emitido')
+                                                        <button
+                                                            wire:click="$dispatch('generarPDF', { Id: {{ $solicituResidencia->id }} })"
+                                                            class="px-4 py-2 bg-green-500 text-white rounded">
+                                                            <i class="fa-solid fa-file-arrow-down"></i> Descargar
+                                                        </button>
+                                                        {{-- Si la solicitud fue "Anulada", mostrar botón para ver detalles --}}
+                                                    @elseif ($solicituResidencia->estado->nombreEstado === 'Anulado' && $validacion->visible === 1)
+                                                        <button
+                                                            wire:click="verAnulacion({{ $solicituResidencia->id }})"
+                                                            class="px-4 py-2 bg-red-600 text-white rounded">
+                                                            <i class="fa-solid fa-eye"></i> Ver Anulación
+                                                        </button>
+                                                        {{-- Si está "no completado" y es visible, mostrar observaciones --}}
+                                                    @elseif($solicituResidencia->estado->nombreEstado === 'No completado' && $validacion->visible === 1)
+                                                        <p>{{ $solicituResidencia->observaciones }}</p>
+                                                    @else
+                                                        <span class="text-gray-500">
+                                                            El certificado no está disponible actualmente
+                                                        </span>
+                                                    @endif
+                                                </div>
+                                            </td>
+                                            <td class="border p-2">
+                                                {{ $solicituResidencia->estado->nombreEstado . ' - ' . ($solicituResidencia->updated_at ? $solicituResidencia->updated_at->format('d/m/Y') : 'Sin estado') }}
+                                            </td>
+                                            <td class="border p-2">
+                                                {{ $solicituResidencia->fecha_emision ? $solicituResidencia->fecha_emision->format('d/m/Y') : 'N/A' }}
+                                            </td>
+                                            <td class="border p-2">
+                                                {{ $solicituResidencia->created_at->format('d/m/Y') }}
+                                            </td>
+                                            <td class="border p-2">
+                                                <p>{{ $validacion->notas }}</p>
+                                            </td>
+                                        @endforeach
+
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                @else
+                    <p class="text-gray-600 text-center mt-4">No hay historial disponible.</p>
+                @endif
+            </div>
+        </div>
+    </div>
+
+    {{-- modal para visualizar el historial Avecindamiento --}}
+    <div x-data="{ showModalHistoryAvecindamiento: @entangle('showModalHistoryAvecindamiento') }" x-cloak>
+        <div x-show="showModalHistoryAvecindamiento"
+            class="fixed inset-0 bg-gray-800 bg-opacity-70 flex items-center justify-center">
+            <div
+                class="bg-white w-11/12 sm:max-w-lg md:max-w-3xl lg:max-w-5xl p-6 rounded-lg shadow-lg max-h-screen overflow-y-auto">
+                <div class="flex justify-between items-center mb-2">
+                    <h2 class="text-xl font-bold">
+                        <span>Historial de solicitudes de avecindamiento</span>
+                        <span
+                            class="inline-block bg-green-100 text-green-800 text-sm font-semibold px-3 py-1 rounded-full ml-2">
+                            Avecindamiento
+                        </span>
+                    </h2>
+                    <button @click="showModalHistoryAvecindamiento = false" wire:click="closeModal"
+                        class="text-red-500 hover:text-red-700 text-lg">
+                        &times;
+                    </button>
+                </div>
+
+                @if (session()->has('error'))
+                    <div class="bg-red-200 text-red-800 p-2 rounded mb-4">
+                        {{ session('error') }}
+                    </div>
+                @endif
+
+                <!-- Tabla con el historial de solicitudes -->
+                @if ($historial_avecindamiento->isNotEmpty())
+                    <div class="overflow-x-auto">
+                        <table class="w-full border-collapse border border-gray-300">
+                            <thead class="bg-gray-100">
+                                <tr>
+                                    <th class="border p-2">ID</th>
+                                    <th class="border p-2">Número Identificación</th>
+                                    <th class="border p-2">Certificado</th>
+                                    <th class="border p-2">Estado</th>
+                                    <th class="border p-2">Fecha Emisión</th>
+                                    <th class="border p-2">Fecha de creación</th>
+                                    <th class="border p-2">Notas</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach ($historial_avecindamiento as $solicitud)
                                     <tr class="border-b">
                                         <td class="border p-2">{{ $solicitud->id }}</td>
                                         <td class="border p-2">{{ $solicitud->numeroIdentificacion }}</td>
@@ -161,19 +264,26 @@
                                                 <div class="flex space-x-2">
                                                     {{-- Verifica si el estado es "Emitido" --}}
                                                     @if ($solicitud->estado->nombreEstado === 'Emitido')
-                                                        <button
-                                                            wire:click="$dispatch('generarPDF', { Id: {{ $solicitud->id }} })"
-                                                            class="px-4 py-2 bg-green-500 text-white rounded">
-                                                            <i class="fa-solid fa-file-arrow-down"></i> Descargar
-                                                        </button>
+                                                        <div class="flex flex-col space-y-2">
+                                                            <button
+                                                                wire:click="$dispatch('generarPDFAvecindamiento', { Id: {{ $solicitud->id }} })"
+                                                                class="px-4 py-2 bg-green-500 text-white rounded">
+                                                                Certificado
+                                                            </button>
+                                                            <button
+                                                                wire:click="$dispatch('generarActaAvecindamiento', { Id: {{ $solicitud->id }} })"
+                                                                class="px-4 py-2 bg-blue-500 text-white rounded"> Acta
+                                                            </button>
+                                                        </div>
+
                                                         {{-- Si la solicitud fue "Anulada", mostrar botón para ver detalles --}}
-                                                    @elseif ($solicitud->estado->nombreEstado === 'Anulado'&& $validacion->visible === 1)
+                                                    @elseif ($solicitud->estado->nombreEstado === 'Anulado' && $validacion->visible === 1)
                                                         <button wire:click="verAnulacion({{ $solicitud->id }})"
                                                             class="px-4 py-2 bg-red-600 text-white rounded">
                                                             <i class="fa-solid fa-eye"></i> Ver Anulación
                                                         </button>
-                                                        {{-- Si está "Rechazada" y es visible, mostrar observaciones --}}
-                                                    @elseif($solicitud->estado->nombreEstado === 'Rechazada' && $validacion->visible === 1)
+                                                        {{-- Si está "no completado" y es visible, mostrar observaciones --}}
+                                                    @elseif($solicitud->estado->nombreEstado === 'No completado' && $validacion->visible === 1)
                                                         <p>{{ $solicitud->observaciones }}</p>
                                                     @else
                                                         <span class="text-gray-500">
@@ -220,8 +330,8 @@
                 <!-- Archivo (si existe) -->
                 @if ($archivoAnulacion)
                     <p class="mt-2"><strong>Archivo:</strong>
-                        <a href="{{ asset('storage/' . $archivoAnulacion) }}"
-                            class="text-blue-600 underline" target="_blank">Ver Archivo</a>
+                        <a href="{{ asset('storage/' . $archivoAnulacion) }}" class="text-blue-600 underline"
+                            target="_blank">Ver Archivo</a>
                     </p>
                 @endif
 

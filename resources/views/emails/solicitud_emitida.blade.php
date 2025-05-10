@@ -113,14 +113,14 @@
                         <h1>¡Hola {{ $userName }}!</h1>
                         <p>Nos complace informarte que tu solicitud de Certificado de Residencia ha sido emitida exitosamente.</p>
                         <p>Puedes consultar y descargar tu certificado haciendo clic en el siguiente enlace:</p>
-                        <a href="{{ url('/versolicitudes') }}" class="button">Ver mi certificado</a>
+                        <a href="{{ url('/versolicitudesresidencia') }}" class="button">Ver mi certificado</a>
                         <p>Gracias por usar nuestro sistema. Si tienes alguna pregunta, no dudes en contactarnos.</p>
                     </div>
                 </td>
             </tr>
             <tr>
                 <td class="footer">
-                    Equipo de Certificados de Residencia - Acacías, Meta
+                    Equipo de Certificados - Acacías, Meta
                 </td>
             </tr>
         </table>

@@ -22,7 +22,7 @@
         </a>
     </div>
     <h1 class="text-3xl font-extrabold text-gray-800 text-center mb-6">
-        Validación del Certificado
+        Validación del Certificado de Residencia
     </h1>
 
     <!-- Mensaje de Validación -->
