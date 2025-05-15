@@ -6,14 +6,20 @@
     @livewire('solicitud-datatable')
 
     <!-- Modal con Alpine.js -->
-    <div x-data="{ showModal: @entangle('showForm') }" x-cloak>
+    <div x-data="{ showModal: @entangle('showForm'), showHistorial: @entangle('showHistorial') }" x-cloak>
         <!-- Overlay para el modal -->
         <div x-show="showModal" class="fixed inset-0 bg-gray-800 bg-opacity-70 flex items-center justify-center" x-inz>
             <div
                 class="bg-white w-11/12 sm:max-w-lg md:max-w-3xl lg:max-w-5xl p-6 rounded-lg shadow-lg max-h-screen overflow-y-auto">
                 <!-- Encabezado del modal -->
                 <div class="flex justify-between items-center mb-2">
-                    <h2 class="text-xl font-bold">Información de Usuario</h2>
+                    <h2 class="text-xl font-bold flex items-center space-x-2">
+                        <span>Información de Usuario</span>
+                        <button wire:click="$dispatch('histori' , { Id: {{ $user_id }} })"
+                            class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 text-sm">
+                            Historial
+                        </button>
+                    </h2>
                     <button @click="showModal = false" class="text-gray-500 hover:text-gray-700">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2"
                             stroke="currentColor" class="w-6 h-6">
@@ -114,8 +120,47 @@
                 </div>
             </div>
         </div>
-    </div>
 
+        {{-- modal para ver el historial de la solicitud --}}
+        <!-- Modal Historial -->
+        <div x-show="showHistorial"
+            class="fixed inset-0 bg-gray-800 bg-opacity-70 flex items-center justify-center z-50"
+            style="display: none;" x-cloak>
+            <div class="bg-white w-11/12 sm:max-w-md p-6 rounded-lg shadow-lg max-h-screen overflow-y-auto">
+                <div class="flex justify-between items-center mb-4">
+                    <h3 class="text-lg font-bold">Historial de Solicitudes</h3>
+                    <button @click="showHistorial = false" class="text-gray-500 hover:text-gray-700">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2"
+                            stroke="currentColor" class="w-6 h-6">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    </button>
+                </div>
+
+                @if (count($historialSolicitudes) > 0)
+                    <ul class="space-y-2 max-h-96 overflow-y-auto">
+                        @foreach ($historialSolicitudes as $solicitud)
+                            <li class="border p-2 rounded hover:bg-gray-100">
+                                <strong>ID Solicitud:</strong> {{ $solicitud['id'] }}<br>
+                                <strong>Fecha de solicitud:</strong>
+                                {{ \Carbon\Carbon::parse($solicitud['created_at'])->format('d/m/Y') ?? 'N/A' }}<br>
+                                <strong>Estado:</strong> {{ $solicitud['estado']['nombreEstado'] ?? 'N/A' }}  <br>
+                                {{-- barrio --}}
+                                <strong>Ubicación:</strong>
+                                {{ $solicitud['barrio']['nombreBarrio'] ?? 'N/A' }} <br>
+                                <strong>Dirección:</strong>
+                                {{ $solicitud['direccion'] ?? 'N/A' }} <br>
+                                <!-- Puedes mostrar el nombre si cargas relación Estado -->
+                            </li>
+                        @endforeach
+                    </ul>
+                @else
+                    <p>No hay solicitudes para este usuario.</p>
+                @endif
+            </div>
+        </div>
+
+    </div>
     {{-- modal para validar la solicitud se va a llamar validar , por el momento solo va a tener un select que va a permitir cambien el estado de la solicitud --}}
     <div x-data="validationModal" x-cloak>
         <div x-show="showModal" class="fixed inset-0 bg-gray-800 bg-opacity-70 flex items-center justify-center"

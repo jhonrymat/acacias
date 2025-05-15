@@ -33,7 +33,9 @@ class SolicitudComponent extends Component
     $numeroIdentificacion_id, $fechaActual, $barrio_id, $direccion_id, $ubicacion,
     $accion_comunal, $electoral, $sisben, $cedula, $estado_id, $estado_id2, $JAComunal, $detalles, $visible = false, $showForm = false, $showAdditional = false, $showValidar = false,
     $modalRechazada = false, $validacion1, $validacion2, $notas, $nombre, $validador, $Id, $AllStatus, $nameAll, $observaciones, $anexos;
-
+    public $showHistorial = false;
+    public $user_id;
+    public $historialSolicitudes = [];
 
 
 
@@ -58,7 +60,7 @@ class SolicitudComponent extends Component
 
 
 
-    protected $listeners = ['edit', 'delete', 'view', 'procesar', 'see', 'validar', 'rechazar', 'confirmSave' => 'handleSave'];
+    protected $listeners = ['edit', 'delete', 'view', 'procesar', 'see', 'validar', 'rechazar', 'confirmSave' => 'handleSave', 'histori'];
 
     public function view($Id)
     {
@@ -67,8 +69,8 @@ class SolicitudComponent extends Component
 
         $user = User::find($solicitud->user_id);
         // Concatenando los nombres
+        $this->user_id = $solicitud->user_id;
         $this->nombreCompleto = $solicitud->NombreCompleto;
-        ;
         $this->email = $user->email;
         $this->telefonoContacto = $user->telefonoContacto;
         $this->id_tipoSolicitante = $user->tipoSolicitante->tipoSolicitante;
@@ -81,6 +83,21 @@ class SolicitudComponent extends Component
         $this->id_ocupacion = $user->ocupacion->nombreOcupacion;
         $this->id_poblacion = $user->poblacion->nombrePoblacion;
         $this->showForm = true;
+    }
+
+    public function histori($Id)
+    {
+        // Obtener el usuario
+        $user = User::find($Id);
+        if (!$user) {
+            $this->dispatchBrowserEvent('sweet-alert-good', ['icon' => 'error', 'title' => 'Error', 'text' => 'Usuario no encontrado']);
+            return;
+        }
+
+        // Cargar las solicitudes del usuario con la relación, puedes añadir paginación o filtros si quieres
+        $this->historialSolicitudes = $user->solicitudes()->with('estado', 'barrio')->latest()->get()->toArray();
+
+        $this->showHistorial = true;
     }
 
     public function see($Id)
