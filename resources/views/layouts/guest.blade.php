@@ -15,7 +15,7 @@
             $favicoPath = $siteSetting ? 'storage/' . $siteSetting->favicon_path : 'images/favicon.ico';
         @endphp
         <link rel="icon" href="{{ asset($favicoPath) }}" type="image/x-icon">
-
+        <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
 

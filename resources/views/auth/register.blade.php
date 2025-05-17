@@ -1,6 +1,6 @@
 <x-guest-layout>
-     <!-- Contenedor de los botones -->
-     <div class="flex justify-end space-x-4 p-4 bg-gray-100">
+    <!-- Contenedor de los botones -->
+    <div class="flex justify-end space-x-4 p-4 bg-gray-100">
         <!-- Botón para consultar trámite -->
         <a href="{{ route('consulta.tramite') }}"
             class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition font-bold shadow-md w-full sm:w-auto text-center">
@@ -495,7 +495,8 @@
                 </div>
                 <div class="relative group">
                     <select name="id_ocupacion" id="id_ocupacion"
-                        class="block mt-1 w-full focus:ring focus:ring-indigo-300" required>
+                        class="block mt-1 w-full border border-gray-300 rounded-lg focus:ring focus:ring-indigo-300 select2"
+                        required>
                         <option value="" disabled {{ old('id_ocupacion') == '' ? 'selected' : '' }}>
                             Selecciona una ocupación
                         </option>
@@ -516,6 +517,15 @@
                     <span class="text-red-500">{{ $message }}</span>
                 @enderror
             </div>
+            <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" crossorigin="anonymous"></script>
+            <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
+            <script>
+                $(document).ready(function() {
+                    $('.select2').select2();
+                });
+            </script>
+
             {{-- id_poblacion de la tabla poblacion --}}
 
             <div class="relative mt-4">
