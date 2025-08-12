@@ -99,6 +99,8 @@ class FormularioComponent extends Component
 
         $userId = auth()->id();
 
+        Log::info("El usuario con ID {$userId} está intentando crear una nueva solicitud.");
+
         // Verificar si el usuario puede crear una nueva solicitud
         if (!Solicitud::canCreateRequest($userId)) {
             // los que muestre que no puede crear una nueva solicitud
