@@ -94,7 +94,7 @@ class Solicitud extends Model
     public static function hasActiveRequest($userId)
     {
         return self::where('user_id', $userId)
-            ->whereIn('estado_id', [1, 2, 5]) // Estados restringidos: Pendiente, Procesando, Emitida
+            ->whereIn('estado_id', [1, 2, 5, 4]) // Estados restringidos: Pendiente, Procesando, Emitida, en revisión
             ->exists();
     }
 
