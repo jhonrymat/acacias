@@ -5,17 +5,18 @@ namespace App\Livewire;
 use App\Models\User;
 use App\Models\Barrio;
 use App\Models\Genero;
-use Livewire\Attributes\Title;
 use Livewire\Component;
 use App\Models\Nestudio;
 use App\Models\Solicitud;
 use App\Models\Tdocumento;
 use App\Models\Tsolicitante;
 use Livewire\WithFileUploads;
-use Illuminate\Support\Facades\Storage;
+use Livewire\Attributes\Title;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Http;
-use App\Mail\SolicitudCreadaNotification;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Storage;
+use App\Mail\SolicitudCreadaNotification;
 
 class FormularioComponent extends Component
 {
@@ -98,8 +99,12 @@ class FormularioComponent extends Component
 
         $userId = auth()->id();
 
+        Log::info("El usuario con ID {$userId} está intentando crear una nueva solicitud.");
+
         // Verificar si el usuario puede crear una nueva solicitud
         if (!Solicitud::canCreateRequest($userId)) {
+            // los que muestre que no puede crear una nueva solicitud
+            Log::info("El usuario con ID {$userId} intentó crear una nueva solicitud pero ya tiene una activa.");
             $this->dispatch('sweet-alert-good', icon: 'info', title: 'Solicitud activa.', text: 'No puedes crear una nueva solicitud mientras tengas una activa, procesando o pendiente.', footer: '<a href="versolicitudesresidencia">Ver mis solicitudes</a>');
             return;
         }
