@@ -91,29 +91,29 @@ class Solicitud extends Model
 
 
     // Método para verificar si el usuario tiene una solicitud pendiente
-    public static function hasActiveRequest($userId)
-    {
-        return self::where('user_id', $userId)
-            ->whereIn('estado_id', [1, 2, 5, 4]) // Estados restringidos: Pendiente, Procesando, Emitida, en revisión
-            ->exists();
-    }
+    // public static function hasActiveRequest($userId)
+    // {
+    //     return self::where('user_id', $userId)
+    //         ->whereIn('estado_id', [1, 2, 5, 4]) // Estados restringidos: Pendiente, Procesando, Emitida, en revisión
+    //         ->exists();
+    // }
 
 
     // Método para verificar si la solicitud emitida está a punto de expirar (15 días antes de 6 meses)
-    public static function checkIfExpiring($userId)
-    {
-        $approvedRequest = self::where('user_id', $userId)
-            ->where('estado_id', 5) // Emitida
-            ->latest('fecha_emision')
-            ->first();
+    // public static function checkIfExpiring($userId)
+    // {
+    //     $approvedRequest = self::where('user_id', $userId)
+    //         ->where('estado_id', 5) // Emitida
+    //         ->latest('fecha_emision')
+    //         ->first();
 
-        if ($approvedRequest) {
-            $expiryDate = Carbon::parse($approvedRequest->fecha_emision)->addMonths(6);
-            return Carbon::now()->greaterThanOrEqualTo($expiryDate->subDays(15));
-        }
+    //     if ($approvedRequest) {
+    //         $expiryDate = Carbon::parse($approvedRequest->fecha_emision)->addMonths(6);
+    //         return Carbon::now()->greaterThanOrEqualTo($expiryDate->subDays(15));
+    //     }
 
-        return false;
-    }
+    //     return false;
+    // }
 
     public static function updateToExpiring($userId)
     {
@@ -132,17 +132,42 @@ class Solicitud extends Model
 
     public static function canCreateRequest($userId)
     {
-        // Verificar si el usuario tiene una solicitud activa
-        $hasActiveRequest = self::hasActiveRequest($userId);
+        $now = now();
 
-        // Verificar si alguna solicitud está por vencer
-        $isExpiring = self::checkIfExpiring($userId);
+        // 1) Bloquea si hay cualquier solicitud en estados NO permitidos: 1, 2, 4
+        $hasBlocking = self::where('user_id', $userId)
+            ->whereIn('estado_id', [1, 2, 4])
+            ->exists();
 
-        // Permitir crear una nueva solicitud si:
-        // - No tiene solicitudes activas
-        // - O tiene una solicitud emitida que está por vencer
-        return !$hasActiveRequest || $isExpiring;
+        if ($hasBlocking) {
+            return false;
+        }
+
+        // 2) Revisa la última EMITIDA (5)
+        $lastEmitted = self::where('user_id', $userId)
+            ->where('estado_id', 5) // Emitida
+            ->latest('fecha_emision')
+            ->first();
+
+        // Si no hay emitida ni bloqueos, puede crear
+        if (!$lastEmitted) {
+            return true;
+        }
+
+        // 3) Con emitida: sólo permitir si ya está en ventana de vencimiento o vencida
+        $expiry = Carbon::parse($lastEmitted->fecha_emision)->addMonths(6);
+        $windowFrom = $expiry->copy()->subDays(15);
+
+        // Antes de la ventana -> NO puede
+        if ($now->lt($windowFrom)) {
+            return false;
+        }
+
+        // En ventana o vencida -> SÍ puede (solo una, porque al crear quedará en 1/2 y eso bloquea)
+        return true;
     }
+
+
 
     public function getNumeroIdentificacionOcultoAttribute()
     {

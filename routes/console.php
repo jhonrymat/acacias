@@ -5,6 +5,8 @@ use Illuminate\Support\Facades\Artisan;
 use Illuminate\Console\Scheduling\Schedule;
 use App\Jobs\UpdateExpiringRequests;
 
+$sch = app(Schedule::class);
+
 Artisan::command('inspire', function () {
     $this->comment(Inspiring::quote());
 })->purpose('Display an inspiring quote')->hourly();
@@ -12,4 +14,4 @@ Artisan::command('inspire', function () {
 // Define las tareas programadas
 app(Schedule::class)->call(function () {
     (new UpdateExpiringRequests())->handle();
-})->dailyAt('01:00');
+})->name('update-expiring-requests')->withoutOverlapping();

@@ -36,28 +36,25 @@ class UpdateExpiringRequests implements ShouldQueue
 
     private function processSolicitudes(string $modelClass, int $vigenciaMeses)
     {
-        // 1. Cambiar a "Por vencer"
-        $modelClass::where('estado_id', 5) // Emitido
-            ->chunk(100, function ($solicitudes) use ($vigenciaMeses, $modelClass) {
-                foreach ($solicitudes as $solicitud) {
-                    $fechaVencimiento = Carbon::parse($solicitud->fecha_emision)->addMonths($vigenciaMeses);
-                    if (Carbon::now()->greaterThanOrEqualTo($fechaVencimiento->copy()->subDays(15))) {
-                        $solicitud->update(['estado_id' => 6]); // Por vencer
-                        Log::info(class_basename($modelClass)." ID {$solicitud->id} cambiada a 'Por vencer'.");
-                    }
-                }
-            });
+        $now = now();
+        $expiryThreshold = $now->clone()->subMonths($vigenciaMeses);
+        $windowThreshold = $now->clone()->addDays(15)->subMonths($vigenciaMeses);
 
-        // 2. Cambiar a "Vencido"
-        $modelClass::whereIn('estado_id', [5, 6]) // Emitido o Por vencer
-            ->chunk(100, function ($solicitudes) use ($vigenciaMeses, $modelClass) {
-                foreach ($solicitudes as $solicitud) {
-                    $fechaVencimiento = Carbon::parse($solicitud->fecha_emision)->addMonths($vigenciaMeses);
-                    if (Carbon::now()->greaterThanOrEqualTo($fechaVencimiento)) {
-                        $solicitud->update(['estado_id' => 7]); // Vencido
-                        Log::info(class_basename($modelClass)." ID {$solicitud->id} cambiada a 'Vencido'.");
-                    }
-                }
-            });
+        // 1) Vencidos (7): 5 o 6 con fecha_emision <= expiry
+        $vencidos = $modelClass::whereIn('estado_id', [5, 6])
+            ->whereNotNull('fecha_emision')
+            ->where('fecha_emision', '<=', $expiryThreshold)   // sin whereDate
+            ->update(['estado_id' => 7, 'updated_at' => now()]);
+        Log::info(class_basename($modelClass) . " → Vencidos actualizados: {$vencidos}");
+
+        // 2) Por vencer (6): 5 con fecha_emision en ventana (<= window) y > expiry (no vencidos)
+        $porVencer = $modelClass::where('estado_id', 5)
+            ->whereNotNull('fecha_emision')
+            ->where('fecha_emision', '>', $expiryThreshold)
+            ->where('fecha_emision', '<=', $windowThreshold)
+            ->update(['estado_id' => 6, 'updated_at' => now()]);
+        Log::info(class_basename($modelClass) . " → Por vencer actualizados: {$porVencer}");
     }
+
+
 }
