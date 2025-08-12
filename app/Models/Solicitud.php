@@ -93,8 +93,10 @@ class Solicitud extends Model
     // Método para verificar si el usuario tiene una solicitud pendiente
     public static function hasActiveRequest($userId)
     {
+        if (!$userId)
+            return false;
         return self::where('user_id', $userId)
-            ->whereIn('estado_id', [1, 2, 5]) // Estados restringidos: Pendiente, Procesando, Emitida
+            ->whereIn('estado_id', [1, 2, 5]) // Pendiente, Procesando, Emitida
             ->exists();
     }
 
@@ -102,6 +104,8 @@ class Solicitud extends Model
     // Método para verificar si la solicitud emitida está a punto de expirar (15 días antes de 6 meses)
     public static function checkIfExpiring($userId)
     {
+        if (!$userId) return false;
+
         $approvedRequest = self::where('user_id', $userId)
             ->where('estado_id', 5) // Emitida
             ->latest('fecha_emision')
@@ -132,15 +136,12 @@ class Solicitud extends Model
 
     public static function canCreateRequest($userId)
     {
-        // Verificar si el usuario tiene una solicitud activa
-        $hasActiveRequest = self::hasActiveRequest($userId);
+        if (!$userId)
+            return false; // <- clave
 
-        // Verificar si alguna solicitud está por vencer
+        $hasActiveRequest = self::hasActiveRequest($userId);
         $isExpiring = self::checkIfExpiring($userId);
 
-        // Permitir crear una nueva solicitud si:
-        // - No tiene solicitudes activas
-        // - O tiene una solicitud emitida que está por vencer
         return !$hasActiveRequest || $isExpiring;
     }
 
