@@ -350,6 +350,7 @@ class SolicitudDatatable extends DataTableComponent
                                     <i class="fas fa-star" style="color: #FFC107; font-size: 20px;"></i>
                                 </button>';
                     } else {
+                        
                         return '<button wire:click="toggleFavorito(' . $row->id . ')" class="border-0 bg-transparent">
                                     <i class="far fa-star" style="color: #6c757d; font-size: 20px;"></i>
                                 </button>';
