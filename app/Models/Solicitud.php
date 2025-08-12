@@ -91,6 +91,7 @@ class Solicitud extends Model
 
 
     // Método para verificar si el usuario tiene una solicitud pendiente
+
     // public static function hasActiveRequest($userId)
     // {
     //     return self::where('user_id', $userId)
@@ -106,6 +107,7 @@ class Solicitud extends Model
     //         ->where('estado_id', 5) // Emitida
     //         ->latest('fecha_emision')
     //         ->first();
+
 
     //     if ($approvedRequest) {
     //         $expiryDate = Carbon::parse($approvedRequest->fecha_emision)->addMonths(6);
@@ -165,6 +167,7 @@ class Solicitud extends Model
 
         // En ventana o vencida -> SÍ puede (solo una, porque al crear quedará en 1/2 y eso bloquea)
         return true;
+
     }
 
 
