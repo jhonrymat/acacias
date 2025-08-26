@@ -164,7 +164,7 @@
                                             <td class="border p-2">
                                                 <div class="flex space-x-2">
                                                     {{-- Verifica si el estado es "Emitido" --}}
-                                                    @if ($solicituResidencia->estado->nombreEstado === 'Emitido')
+                                                    @if (in_array($solicituResidencia->estado->nombreEstado, ['Emitido', 'Vencido', 'Por vencer'], true))
                                                         <button
                                                             wire:click="$dispatch('generarPDF', { Id: {{ $solicituResidencia->id }} })"
                                                             class="px-4 py-2 bg-green-500 text-white rounded">
@@ -263,7 +263,7 @@
                                             <td class="border p-2">
                                                 <div class="flex space-x-2">
                                                     {{-- Verifica si el estado es "Emitido" --}}
-                                                    @if ($solicitud->estado->nombreEstado === 'Emitido')
+                                                    @if (in_array($solicitud->estado->nombreEstado, ['Emitido', 'Vencido', 'Por vencer'], true))
                                                         <div class="flex flex-col space-y-2">
                                                             <button
                                                                 wire:click="$dispatch('generarPDFAvecindamiento', { Id: {{ $solicitud->id }} })"

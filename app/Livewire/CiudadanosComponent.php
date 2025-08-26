@@ -242,8 +242,9 @@ class CiudadanosComponent extends Component
         $solicitud = Solicitud::findOrFail($Id);
 
         // Validar el estado de la solicitud
-        if ($solicitud->estado_id !== 5) {
-            session()->flash('error', 'La solicitud no está emitida.');
+        // Permitir Emitido (5), Por vencer (6) y Vencido (7)
+        if (!in_array($solicitud->estado_id, [5, 6, 7], true)) {
+            session()->flash('error', 'La solicitud no está emitida, por vencer o vencida.');
             return;
         }
 
@@ -313,8 +314,8 @@ class CiudadanosComponent extends Component
         }
 
         // Validar el estado de la solicitud
-        if ($solicitud->estado_id !== 5) {
-            session()->flash('error', 'La solicitud no está emitida.');
+        if (!in_array($solicitud->estado_id, [5, 6, 7], true)) {
+            session()->flash('error', 'La solicitud no está emitida, por vencer o vencida.');
             return;
         }
 

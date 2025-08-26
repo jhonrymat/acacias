@@ -32,7 +32,7 @@ class HistorialAvecindamientoDatatable extends DataTableComponent
         $query = SolicitudAvecindamiento::query();
 
         // Verificar el rol del usuario autenticado
-        $query->whereIn('estado_id', [2, 3, 5]);
+        $query->whereIn('estado_id', [2, 3, 5, 6, 7]);
 
         // Filtrar por estados específicos y cargar relaciones necesarias
         return $query->with(['user', 'barrio', 'direccion']);
