@@ -13,7 +13,7 @@
             class="px-4 py-2 bg-green-500 text-white rounded">
             <i class="fa-solid fa-file-arrow-down"></i> Descargar
         </button>
-        <a href="{{ route('solicitud.verPDF', ['id' => $row->id]) }}" target="_blank"
+        <a href="{{ route('solicitud.verPDF.avecindamiento', ['id' => $row->id]) }}" target="_blank"
             class="px-4 py-2 bg-blue-500 text-white rounded">
             <i class="fa-solid fa-eye"></i> Ver
         </a>

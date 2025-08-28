@@ -76,11 +76,11 @@ class SolicitudesComponent extends Component
     {
         $solicitud = Solicitud::findOrFail($Id);
 
-        // Validar el estado de la solicitud
-        if ($solicitud->estado_id !== 5) {
-            session()->flash('error', 'La solicitud no está emitida.');
-            return;
+        // Opción 2 (más limpia)
+        if (!in_array((int) $solicitud->estado_id, [5, 6], true)) {
+            return abort(403, 'La solicitud no está emitida.');
         }
+
 
         // Datos dinámicos para la plantilla
         $data = [

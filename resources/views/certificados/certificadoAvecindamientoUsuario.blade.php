@@ -314,7 +314,7 @@
 
     {{-- codicion si estado es igual a emitido pone en letras verde Certificado valido si no en rojo certificado rechazado --}}
     <div>
-        @if ($estado == 'Emitido')
+        @if ($estado == 'Emitido' || $estado == 'Por vencer')
             <div class="validacion" style="color: green;">
                 <p>Certificado Válido</p> <span>N° {{ $id }}</span>
             </div>
