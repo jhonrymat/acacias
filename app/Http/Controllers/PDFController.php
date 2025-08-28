@@ -15,9 +15,11 @@ class PDFController extends Controller
     {
         $solicitud = Solicitud::findOrFail($Id);
 
-        if ($solicitud->estado_id !== 5) {
+        // Opción 2 (más limpia)
+        if (!in_array((int) $solicitud->estado_id, [5, 6], true)) {
             return abort(403, 'La solicitud no está emitida.');
         }
+
 
         $data = [
             'id' => $solicitud->id,
@@ -80,7 +82,7 @@ class PDFController extends Controller
             return;
         }
 
-        if ($solicitud->estado_id !== 5) {
+        if (!in_array((int) $solicitud->estado_id, [5, 6], true)) {
             return abort(403, 'La solicitud no está emitida.');
         }
 
