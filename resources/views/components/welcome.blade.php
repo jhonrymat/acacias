@@ -31,7 +31,8 @@
     <div class="max-w-3xl mx-auto py-12 px-6">
         <h1 class="text-3xl font-bold mb-8 text-center text-gray-900">Selecciona el tipo de certificado que deseas solicitar</h1>
 
-        <div class="grid grid-cols-1 gap-6 md:grid-cols-2 justify-center">
+        {{-- <div class="grid grid-cols-1 gap-6 md:grid-cols-2 justify-center"> --}}
+        <div class="grid grid-cols-1 gap-6 md:grid-cols-1 justify-center">
             <a href="{{ route('formulario-residencia') }}" class="p-6 border rounded-2xl hover:bg-green-50 text-center shadow-md flex flex-col items-center">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-12 h-12 mb-4">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M3 12l9-9 9 9m0 0v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-9m0 0l9-9 9 9" />
@@ -40,13 +41,13 @@
                 <p class="text-sm text-gray-600">Este certificado valida tu residencia en el municipio.</p>
             </a>
 
-            <a href="{{ route('formulario-avecindamiento') }}" class="p-6 border rounded-2xl hover:bg-blue-50 text-center shadow-md flex flex-col items-center">
+            {{-- <a href="{{ route('formulario-avecindamiento') }}" class="p-6 border rounded-2xl hover:bg-blue-50 text-center shadow-md flex flex-col items-center">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" class="w-12 h-12 mb-4">
                     <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
                   </svg>
                 <h2 class="text-xl font-semibold mb-2">🏡 Certificado de Avecindamiento</h2>
                 <p class="text-sm text-gray-600">Certifica tu periodo reciente de residencia en la comunidad.</p>
-            </a>
+            </a> --}}
         </div>
     </div>
 
