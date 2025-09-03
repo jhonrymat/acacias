@@ -143,9 +143,9 @@
                                 <x-dropdown-link href="{{ route('formulario-residencia') }}">
                                     {{ __('Certificado de residencia') }}
                                 </x-dropdown-link>
-                                <x-dropdown-link href="{{ route('formulario-avecindamiento') }}">
+                                {{-- <x-dropdown-link href="{{ route('formulario-avecindamiento') }}">
                                     {{ __('Certificado de avecindamiento') }}
-                                </x-dropdown-link>
+                                </x-dropdown-link> --}}
                             </x-slot>
                         </x-dropdown>
                     </div>
@@ -172,9 +172,9 @@
                                 <x-dropdown-link href="{{ route('versolicitudesresidencia') }}">
                                     {{ __('Certificado de residencia') }}
                                 </x-dropdown-link>
-                                <x-dropdown-link href="{{ route('versolicitudesavecindamiento') }}">
+                                {{-- <x-dropdown-link href="{{ route('versolicitudesavecindamiento') }}">
                                     {{ __('Certificado de avecindamiento') }}
-                                </x-dropdown-link>
+                                </x-dropdown-link> --}}
                             </x-slot>
                         </x-dropdown>
                     </div>
@@ -468,9 +468,9 @@
                         <x-responsive-nav-link href="{{ route('formulario-residencia') }}" :active="request()->routeIs('formulario-residencia')">
                             Certificado de residencia
                         </x-responsive-nav-link>
-                        <x-responsive-nav-link href="{{ route('formulario-avecindamiento') }}" :active="request()->routeIs('formulario-avecindamiento')">
+                        {{-- <x-responsive-nav-link href="{{ route('formulario-avecindamiento') }}" :active="request()->routeIs('formulario-avecindamiento')">
                             Certificado de avecindamiento
-                        </x-responsive-nav-link>
+                        </x-responsive-nav-link> --}}
                     </div>
                 </div>
                 <div x-data="{ openConfigForm: false }">
@@ -493,9 +493,9 @@
                         <x-responsive-nav-link href="{{ route('versolicitudesresidencia') }}" :active="request()->routeIs('versolicitudesresidencia')">
                             Certificado de residencia
                         </x-responsive-nav-link>
-                        <x-responsive-nav-link href="{{ route('versolicitudesavecindamiento') }}" :active="request()->routeIs('versolicitudesavecindamiento')">
+                        {{-- <x-responsive-nav-link href="{{ route('versolicitudesavecindamiento') }}" :active="request()->routeIs('versolicitudesavecindamiento')">
                             Certificado de avecindamiento
-                        </x-responsive-nav-link>
+                        </x-responsive-nav-link> --}}
                     </div>
                 </div>
             @endrole
