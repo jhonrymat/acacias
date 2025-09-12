@@ -407,6 +407,11 @@
                                 </x-dropdown-link>
                             @endif
 
+                            {{-- ayuda --}}
+                            <x-dropdown-link href="{{ route('ayuda') }}">
+                                {{ __('Ayuda') }}
+                            </x-dropdown-link>
+
                             <div class="border-t border-gray-200"></div>
 
                             <!-- Authentication -->
@@ -764,6 +769,11 @@
                                 {{ __('API Tokens') }}
                             </x-responsive-nav-link>
                         @endif
+
+                        {{-- ayuda --}}
+                        <x-responsive-nav-link href="{{ route('ayuda') }}" :active="request()->routeIs('ayuda')">
+                            {{ __('Ayuda') }}
+                        </x-responsive-nav-link>
 
                         <!-- Authentication -->
                         <form method="POST" action="{{ route('logout') }}" x-data>

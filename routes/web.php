@@ -1,5 +1,6 @@
 <?php
 
+use App\Livewire\AyudaPost;
 use Milon\Barcode\DNS2D;
 use App\Models\Solicitud;
 use App\Models\RoleIframe;
@@ -121,6 +122,9 @@ Route::middleware([
 
     //<livewire:site-settings />
     Route::middleware(['can:roles'])->get('administracion', SiteSettings::class)->name('administracion');
+
+    // ayuda
+    Route::get('ayuda', AyudaPost::class)->name('ayuda');
 
     Route::middleware(['can:user-roles'])->get('fix-qr', function () {
         echo "Iniciando generación de QR...<br>";
