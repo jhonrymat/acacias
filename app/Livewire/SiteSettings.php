@@ -21,10 +21,24 @@ class SiteSettings extends Component
     public function mount()
     {
         $settings = SiteSetting::first();
-        $this->site_name = $settings->site_name;
-        $this->existing_logo = $settings->logo_path;
-        $this->existing_favicon = $settings->favicon_path;
+
+        if ($settings) {
+            $this->site_name = $settings->site_name;
+            $this->existing_logo = $settings->logo_path;
+            $this->existing_favicon = $settings->favicon_path;
+        } else {
+            // Inicializa valores por defecto o crea el registro
+            $this->site_name = '';
+            $this->existing_logo = null;
+            $this->existing_favicon = null;
+
+            // (opcional) crea un registro inicial para evitar el null en el futuro
+            SiteSetting::create([
+                'site_name' => 'Mi Sitio',
+            ]);
+        }
     }
+
 
     public function save()
     {
@@ -38,6 +52,10 @@ class SiteSettings extends Component
         ]);
 
         $settings = SiteSetting::first();
+
+        if (!$settings) {
+            $settings = new SiteSetting();
+        }
 
         if ($this->logo) {
             $logoPath = $this->logo->store('logos', 'public');
