@@ -45,10 +45,10 @@ class SiteSettings extends Component
         $this->validate([
             'site_name' => 'required|string|max:255',
             'logo' => 'nullable|image|mimes:png,jpg,jpeg|max:2048|dimensions:max_width=300,max_height=100',
-            'favicon' => 'nullable|image|mimes:ico,png|max:1024|dimensions:width=64,max_height=82',
+            'favicon' => 'nullable|mimes:ico,png|max:1024',
         ], [
             'logo.dimensions' => 'El logo debe tener al menos 300x100 píxeles.',
-            'favicon.dimensions' => 'El favicon debe tener exactamente 64x64 píxeles.',
+            'favicon.mimes' => 'El favicon debe ser un archivo .ico o .png.'
         ]);
 
         $settings = SiteSetting::first();
@@ -65,6 +65,7 @@ class SiteSettings extends Component
         if ($this->favicon) {
             $faviconPath = $this->favicon->store('favicons', 'public');
             $settings->favicon_path = $faviconPath;
+            $this->existing_favicon = $faviconPath; // ← ACTUALIZA LA PROPIEDAD
         }
 
         $settings->site_name = $this->site_name;
