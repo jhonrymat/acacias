@@ -1,11 +1,11 @@
 <?php
 
-use App\Livewire\AyudaPost;
 use Milon\Barcode\DNS2D;
 use App\Models\Solicitud;
 use App\Models\RoleIframe;
 use App\Models\Validacion;
 use App\Livewire\AccessLog;
+use App\Livewire\AyudaPost;
 use App\Livewire\ValidarQr;
 use App\Livewire\ActivityLog;
 use App\Livewire\SiteSettings;
@@ -32,14 +32,15 @@ use App\Livewire\CertificadoComponent;
 use App\Livewire\SolicitudesComponent;
 use App\Livewire\ValidadoresComponent;
 use App\Http\Controllers\PDFController;
+use App\Livewire\CertificadoResidencia;
 use App\Livewire\EstadisticasValidador;
 use App\Livewire\ValidarQrAvecindamiento;
 use App\Livewire\TipoSolicitanteComponent;
+use App\Livewire\SolicitudesExportComponent;
 use App\Livewire\SolicitudAnulacionComponent;
 use App\Livewire\HistorialAvecindamientoComponent;
 use App\Livewire\SolicitudAvecindamientoComponent;
 use App\Livewire\FormularioAvecindamientoComponent;
-use App\Livewire\SolicitudesExportComponent;
 use App\Livewire\SolicitudesAvecindamientoComponent;
 use App\Livewire\SolicitudAnulacionAvecindamientoComponent;
 
@@ -55,6 +56,12 @@ Route::get('/qr-avecindamiento/{id}/{numeroIdentificacion}', ValidarQrAvecindami
 Route::middleware(['auth', 'can:permisos'])->group(function () {
     Route::get('admin/maintenance', MaintenanceToggle::class)->name('maintenance.toggle');
 });
+
+// ruta para xroad nueva vista para los usuarios
+Route::get('/certificado-residencia', CertificadoResidencia::class)
+    ->name('certificado.residencia');
+
+// fin ruta para xroad nueva vista para los usuarios
 
 
 Route::middleware([
