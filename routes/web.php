@@ -41,6 +41,7 @@ use App\Livewire\SolicitudAnulacionComponent;
 use App\Livewire\HistorialAvecindamientoComponent;
 use App\Livewire\SolicitudAvecindamientoComponent;
 use App\Livewire\FormularioAvecindamientoComponent;
+use App\Http\Controllers\Auth\CustomLoginController;
 use App\Livewire\SolicitudesAvecindamientoComponent;
 use App\Livewire\SolicitudAnulacionAvecindamientoComponent;
 
@@ -60,6 +61,8 @@ Route::middleware(['auth', 'can:permisos'])->group(function () {
 // ruta para xroad nueva vista para los usuarios
 Route::get('/certificado-residencia', CertificadoResidencia::class)
     ->name('certificado.residencia');
+
+
 
 // fin ruta para xroad nueva vista para los usuarios
 
@@ -196,3 +199,55 @@ Route::middleware([
 
 
 
+/*
+|--------------------------------------------------------------------------
+| Rutas Públicas - Certificado de Residencia
+|--------------------------------------------------------------------------
+*/
+
+// Ruta principal del certificado (puede ser accesible para todos o solo autenticados)
+Route::get('/certificado-residencia', CertificadoResidencia::class)
+    ->name('certificado.residencia');
+
+/*
+|--------------------------------------------------------------------------
+| Rutas de Autenticación Personalizadas (AJAX)
+|--------------------------------------------------------------------------
+| Estas rutas NO redireccionan, solo retornan JSON
+*/
+
+Route::middleware('guest')->group(function () {
+    // Login AJAX - Nombre único para evitar colisión con Jetstream
+    Route::post('/certificado-residencia/auth/login', [CustomLoginController::class, 'login'])
+        ->name('certificado.auth.login');
+});
+
+Route::middleware('auth')->group(function () {
+    // Logout AJAX - Nombre único
+    Route::post('/certificado-residencia/auth/logout', [CustomLoginController::class, 'logout'])
+        ->name('certificado.auth.logout');
+
+    // Verificar estado de autenticación (útil para validar sesión)
+    Route::get('/certificado-residencia/auth/check', function () {
+        return response()->json([
+            'authenticated' => true,
+            'user' => [
+                'name' => auth()->user()->name,
+                'email' => auth()->user()->email,
+            ]
+        ]);
+    })->name('certificado.auth.check');
+});
+
+Route::get('/estado-login', function () {
+    return view('components.xroad.paso1')->render();
+});
+
+/*
+|--------------------------------------------------------------------------
+| NOTA: Las rutas de Jetstream siguen funcionando normalmente
+|--------------------------------------------------------------------------
+| Route::get('/login') - Login tradicional de Jetstream
+| Route::post('/login') - Post de Jetstream
+| Estas NO interfieren con tus rutas personalizadas
+*/

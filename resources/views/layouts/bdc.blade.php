@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <title>@yield('title', 'Certificado de Residencia')</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <!-- css bootstrap -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
         integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" rel="stylesheet"
@@ -24,6 +25,16 @@
             content: url('images/logo-web.png');
         }
 
+        .alerta-govco {
+            height: auto;
+            max-height: 240px;
+            padding: 3px !important;
+        }
+
+        .alerta-icon-govco {
+            margin-left: 1.5rem;
+        }
+
 
         .inicio-sesion-govco .container-login-opcion-govco {
             height: auto;
@@ -37,13 +48,23 @@
             z-index: 999;
         }
 
+        .inicio-sesion-govco {
+            padding: 2rem;
+            border-radius: 0.5rem;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+        }
+
+        .govco-data-front {
+            box-shadow: 50px 41px 0px -20px #07892f, -50px 41px 0px -20px #07892f, 0px 20px 0px 0px #e6effd, 50px 50px 0px -30px #e6effd, -50px 50px 0px -30px #e6effd;
+        }
+
 
         @media (min-width: 1280px) {
 
             .govco-data-front {
                 margin: 30px auto !important;
                 width: 60%;
-                -webkit-box-shadow: 300px 40px 0px -40px #e6effd, -300px 40px 0px -40px #e6effd, 0px 25px 0px 0px #e6effd, 120px 70px 0px -40px #e6effd, -120px 70px 0px -40px #e6effd;
+                -webkit-box-shadow: 300px 60px 0px -30px #07892f, -300px 60px 0px -30px #07892f, 0px 25px 0px 0px #e6effd, 120px 70px 0px -40px #e6effd, -120px 70px 0px -40px #e6effd;
             }
         }
     </style>
@@ -86,7 +107,7 @@
             <div class="govco-footer-text">
                 <div class="row govco-nombre-entidad">
                     <div class="col-xs-12 col-lg-6">
-                        <p class="govco-text-header-1">Nombre completo de la Sede electrónica</p>
+                        <p class="govco-text-header-1">Sede electrónica Alcaldía de Acacías</p>
                     </div>
                     <div class="col-xs-12 col-lg-4 govco-logo-div-a">
                         <span class="govco-logo-entidad"></span>
@@ -95,48 +116,52 @@
 
                 <div class="row col-xs-12 col-lg-7 govco-texto-sedes">
                     <p class="govco-text-header-2">Sede principal</p>
-                    Dirección: xxxxxx xxx xxx <br class="govco-mostrar">
-                    Departamento y municipio. <br>
-                    Código Postal: xxxx <br>
-                    Horario de atención: Lunes a viernes xx:xx a.m. - xx:xx p.m. <br>
-                    Teléfono conmutador: +57(xx) xxx xx xx <br>
-                    Línea gratuita: +57(xx) xxx xx xx <br>
-                    Línea anticorrupción: +57(xx) xxx xx xx <br>
+                    Dirección: Calle 14 No. 21-32 Cooperativo - Acacías <br class="govco-mostrar">
+                    Nit: 892.001.457-3 <br>
+                    Meta - Acacías. <br>
+                    Código Postal: 507001 <br>
+                    Horario de atención: Lunes a Viernes de 7:00 a.m. - 12:00 m
+                    y 2:00 p.m. - 5:00 p.m. <br>
+                    Línea gratuita: 01 8000 112 996 <br>
+                    Línea PBX: +57 (608) 3203509652 <br>
+                    Línea anticorrupción: +57 (608) 3203509652
+                    ext. 4106 <br>
                     Correo institucional: <br class="govco-mostrar">
-                    ministerio@ministerio.gov.co <br>
-                    Correo de notificaciones judiciales: <br class="govco-mostrar">
-                    judiciales@gov.co
+                    contactenos@acacias.gov.co <br>
                 </div>
 
-                <div class="row col-xs-12 col-lg-7 govco-network">
-                    <div class="govco-iconContainer">
+                <div class="row govco-network" style="font-size: 13px">
+                    <div class="col-md-3">
                         <span class="icon govco-twitter-square"></span>
-                        <span class="govco-link-modal">@Entidad</span>
+                        <span class="govco-link-modal"><a class="section fa fa-twitter" target="_blank"
+                                href="https://twitter.com/AlcaldiaAcacias" title="">
+                                <strong class="list_enlace_text"> @alcaldiaacacias</strong>
+                            </a>
+                        </span>
                     </div>
-                    <div class="govco-iconContainer">
+                    <div class="col-md-3">
                         <span class="icon govco-instagram-square"></span>
-                        <span class="govco-link-modal">@Entidad</span>
+                        <span class="govco-link-modal"><a class="section fa fa-instagram" target="_blank"
+                                href="https://www.instagram.com/alcaldiaacacias" title="Instagram">
+                                <strong class="list_enlace_text"> @alcaldiaacacias</strong>
+                            </a>
+                        </span>
                     </div>
-                    <div class="govco-iconContainer">
+                    <div class="col-md-3">
                         <span class="icon govco-facebook-square"></span>
-                        <span class="govco-link-modal">@Entidad</span>
+                        <span class="govco-link-modal"><a class="section fa fa-facebook" target="_blank"
+                                href="https://www.facebook.com/AlcaldiaAcaciasMeta/" title="">
+                                <strong class="list_enlace_text"> @AlcaldiaAcaciasMeta</strong>
+                            </a>
+                        </span>
                     </div>
-                </div>
-
-                <div class="row govco-links-directorio">
-                    <a class="govco-link-modal" href="#">Directorio Institucional</a>
                 </div>
 
                 <div class="row govco-links-container">
                     <div class="govco-link-container mt-2">
-                        <a class="govco-link-modal govco-link-modal-bold" href="#">Políticas</a>
-                        <a class="govco-link-modal govco-link-modal-bold" href="#">Mapa del sitio</a>
-                    </div>
-                    <div class="govco-link-container mt-2">
-                        <a class="govco-link-modal govco-link-modal-bold" href="#">Términos y condiciones</a> <br>
-                    </div>
-                    <div class="govco-link-container mt-2">
-                        <a class="govco-link-modal govco-link-modal-bold" href="#">Accesibilidad</a>
+                        <a class="govco-link-modal govco-link-modal-bold" href="https://acacias.gov.co/publicaciones/6412/certificado-de-residencia/9467">Políticas</a>
+                        <a class="govco-link-modal govco-link-modal-bold" href="https://acacias.gov.co/mapa-del-sitio">Mapa del sitio</a>
+                        <a class="govco-link-modal govco-link-modal-bold" href="https://acacias.gov.co/formularios/108">Califica nuestra sede electrónica</a> <br>
                     </div>
                 </div>
             </div>
@@ -370,160 +395,100 @@
                 .setAttribute('style', 'margin-bottom: 0px !important;');
         }
     </script>
-    {{-- Area de login --}}
+    {{-- saltar pasos --}}
     <script>
-        /**
-         * Gov.co (https://www.gov.co) - Gobierno de Colombia
-         *  - Componente: Login Simplificado
-         *  - Version: 4.0.0 - Modificado
-         */
-        window.addEventListener("load", function(event) {
-            initLogin();
-        });
+        function irAlPaso(numeroPaso) {
+            const elementParent = document.querySelector('#lineaAvance1');
+            const headers = elementParent.querySelectorAll('.header-linea-avance-govco');
+            const bodys = elementParent.querySelectorAll('.body-linea-avance-govco');
 
-        function initLogin() {
-            // Inicializar validación de correo
-            const inputCorreo = document.querySelector('input[typeData="mail"]');
-            if (inputCorreo) {
-                inputCorreo.addEventListener("keyup", activeInputCorreo);
-            }
+            if (numeroPaso < 1 || numeroPaso > headers.length) return;
 
-            // Inicializar funcionalidad de contraseña (mostrar/ocultar)
-            initPasswordToggle();
+            headers.forEach(h => h.classList.remove('active-linea-avance-govco', 'inactive-linea-avance-govco'));
+            bodys.forEach(b => b.classList.remove('active-linea-avance-govco'));
 
-            // Inicializar validación del botón continuar
-            initButtonValidation();
-        }
+            headers[numeroPaso - 1].classList.add('active-linea-avance-govco');
+            bodys[numeroPaso - 1].classList.add('active-linea-avance-govco');
 
-        /* -------------------------------- Validación de Correo --------------------------------------- */
-        function activeInputCorreo() {
-            const expresionRegularE = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
-            const textExito = "Correo electrónico válido";
-            const textError = "Correo electrónico no válido";
-            let countWord = this.value.length;
-
-            if (countWord == 0) {
-                this.classList.remove('success');
-                this.classList.remove('error');
-                removeAlertMessage(this);
-            } else {
-                if (expresionRegularE.test(this.value)) {
-                    this.classList.remove('error');
-                    this.classList.add('success');
-                    crearMensaje(this, textExito, 'success');
-                } else {
-                    this.classList.remove('success');
-                    this.classList.add('error');
-                    crearMensaje(this, textError, 'error');
-                }
-            }
-
-            // Validar estado del botón
-            validateButtonState();
-        }
-
-        /* -------------------------------- Funcionalidad Contraseña --------------------------------------- */
-        function initPasswordToggle() {
-            const btnShowPassword = document.querySelector('.eye-slash-entradas-de-texto-govco');
-            const btnHidePassword = document.querySelector('.eye-entradas-de-texto-govco');
-            const inputPassword = document.querySelector('input[typeData="password"]');
-
-            if (btnShowPassword && btnHidePassword && inputPassword) {
-                // Mostrar contraseña
-                btnShowPassword.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    inputPassword.type = 'text';
-                    this.classList.add('none');
-                    btnHidePassword.classList.remove('none');
-                });
-
-                // Ocultar contraseña
-                btnHidePassword.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    inputPassword.type = 'password';
-                    this.classList.add('none');
-                    btnShowPassword.classList.remove('none');
-                });
-
-                // Validar al escribir (opcional - validación básica de longitud)
-                inputPassword.addEventListener('keyup', function() {
-                    validateButtonState();
-                });
-            }
-        }
-
-        /* -------------------------------- Validación del Botón Continuar --------------------------------------- */
-        function initButtonValidation() {
-            const btnContinuar = document.querySelector('button[name="continuar"]');
-            if (btnContinuar) {
-                // Deshabilitar inicialmente
-                btnContinuar.disabled = true;
-            }
-        }
-
-        function validateButtonState() {
-            const inputCorreo = document.querySelector('input[typeData="mail"]');
-            const inputPassword = document.querySelector('input[typeData="password"]');
-            const btnContinuar = document.querySelector('button[name="continuar"]');
-
-            if (inputCorreo && inputPassword && btnContinuar) {
-                // Habilitar solo si el correo es válido y la contraseña tiene al menos 8 caracteres
-                const correoValido = inputCorreo.classList.contains('success');
-                const passwordValida = inputPassword.value.length >= 8;
-
-                btnContinuar.disabled = !(correoValido && passwordValida);
-            }
-        }
-
-        /* -------------------------------- Mensajes de Validación --------------------------------------- */
-        function crearMensaje(input, text, type) {
-            const dataMensajes = {
-                'success': {
-                    'id': 'campoSuccess-correo',
-                    'aria-invalid': 'false',
-                    'class': 'success-texto-govco',
-                    'role': 'status',
-                    'aria-live': 'polite',
-                },
-                'error': {
-                    'id': 'campoWarning-correo',
-                    'aria-invalid': 'true',
-                    'class': 'error-texto-govco',
-                    'role': 'alert',
-                    'aria-live': 'assertive',
-                }
-            };
-
-            const parentInput = input.closest('.entradas-de-texto-govco');
-
-            // Remover mensaje anterior si existe
-            const spanOld = parentInput.querySelector('.alert-entradas-de-texto-govco');
-            if (spanOld) {
-                parentInput.removeChild(spanOld);
-            }
-
-            // Crear nuevo mensaje
-            const newSpan = document.createElement('span');
-            const span = parentInput.appendChild(newSpan);
-
-            input.setAttribute('aria-describedby', dataMensajes[type]['id']);
-            input.setAttribute('aria-invalid', dataMensajes[type]['aria-invalid']);
-
-            span.textContent = text;
-            span.classList.add(dataMensajes[type]['class'], 'alert-entradas-de-texto-govco');
-            span.id = dataMensajes[type]['id'];
-            span.setAttribute('role', dataMensajes[type]['role']);
-            span.setAttribute('aria-live', dataMensajes[type]['aria-live']);
-        }
-
-        function removeAlertMessage(input) {
-            const parentInput = input.closest('.entradas-de-texto-govco');
-            const spanOld = parentInput.querySelector('.alert-entradas-de-texto-govco');
-            if (spanOld) {
-                parentInput.removeChild(spanOld);
-            }
+            updateProgressAdvanceLine(headers, numeroPaso - 1, elementParent, 'width');
+            actualizarMiga();
         }
     </script>
+    {{-- Linea de avance --}}
+    <script>
+        // === CONFIGURACIÓN INICIAL ===
+        document.addEventListener('DOMContentLoaded', function() {
+            actualizarMiga();
+        });
+
+        // Guardamos la referencia original del CDN
+        const originalNextItemAdvance = nextItemAdvanceLineHorizontal;
+
+        // === SOBRESCRIBIMOS EL AVANCE NORMAL ===
+        nextItemAdvanceLineHorizontal = function(e) {
+            originalNextItemAdvance.call(this, e);
+            setTimeout(() => actualizarMiga(), 100);
+        };
+
+        // === ACTUALIZAR MIGA DE PAN ===
+        function actualizarMiga() {
+            const pasoActivo = document.querySelector(
+                '.header-linea-avance-govco.active-linea-avance-govco .title-linea-avance-govco');
+            const textoPaso = pasoActivo ? pasoActivo.textContent.trim() : 'Inicio';
+            const miga1 = document.getElementById('miga-dinamica-1');
+            const migaActual = document.getElementById('miga-actual');
+
+            let textoAnterior = '';
+            let textoActual = '';
+            let pasoNumero = 1;
+
+            switch (textoPaso) {
+                case 'Inicio':
+                    textoAnterior = 'Inicio';
+                    textoActual = 'Inicio del proceso';
+                    pasoNumero = 1;
+                    break;
+                case 'Hago mi solicitud':
+                    textoAnterior = 'Trámite';
+                    textoActual = 'Hago mi solicitud';
+                    pasoNumero = 2;
+                    break;
+                case 'Procesan mi solicitud':
+                    textoAnterior = 'Proceso';
+                    textoActual = 'Procesan mi solicitud';
+                    pasoNumero = 3;
+                    break;
+                case 'Respuesta':
+                    textoAnterior = 'Resultado';
+                    textoActual = 'Respuesta final';
+                    pasoNumero = 4;
+                    break;
+                default:
+                    textoAnterior = 'Inicio';
+                    textoActual = 'Sección actual';
+            }
+
+            // Actualiza contenido y agrega data-step para navegación
+            miga1.innerHTML = `<a href="#" data-step="${pasoNumero - 1}">${textoAnterior}</a>`;
+            migaActual.innerHTML = `<a href="#" data-step="${pasoNumero}">${textoActual}</a>`;
+
+            // Asigna eventos de clic a ambas migas
+            asignarEventosMiga();
+        }
+    </script>
+    {{-- asignarEventosMiga --}}
+    <script>
+        function asignarEventosMiga() {
+            document.querySelectorAll('#breadcrumb-govco a[data-step]').forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const paso = parseInt(this.dataset.step);
+                    if (!isNaN(paso) && paso >= 1) irAlPaso(paso);
+                });
+            });
+        }
+    </script>
+
     @livewireScripts
 </body>
 

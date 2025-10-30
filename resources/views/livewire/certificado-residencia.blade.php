@@ -2,10 +2,10 @@
     <div class="row">
         <div class="col-md-12">
             <nav aria-label="Miga de pan predeterminada de tres niveles" class="breadcrumb-nav-govco">
-                <ul class="breadcrumb-govco">
-                    <li class="breadcrumb-item-govco"><a href="#">Inicio</a></li>
-                    <li class="breadcrumb-item-govco"><a href="#">Miga sección anterior</a></li>
-                    <li class="breadcrumb-item-govco active" aria-current="page">Sección actual</li>
+                <ul class="breadcrumb-govco" id="breadcrumb-govco">
+                    <li class="breadcrumb-item-govco"><a href="#" id="miga-inicio">Inicio</a></li>
+                    <li class="breadcrumb-item-govco" id="miga-dinamica-1"></li>
+                    <li class="breadcrumb-item-govco active" aria-current="page" id="miga-actual"></li>
                 </ul>
             </nav>
         </div>
@@ -20,67 +20,52 @@
                         <div class="progress-bar" role="progressbar" style="width: 15%" aria-valuenow="15"
                             aria-valuemin="0" aria-valuemax="100"></div>
                     </div>
+
+                    <!-- ENCABEZADO -->
                     <div class="items-header-linea-avance-govco">
                         <div class="header-linea-avance-govco active-linea-avance-govco">
                             <div class="indicator-linea-avance-govco" data-la-target="#itemLineaAvance11"
-                                percentage="15">1
-                            </div>
+                                percentage="15">1</div>
                             <span class="title-linea-avance-govco">Inicio</span>
                         </div>
                         <div class="header-linea-avance-govco">
                             <div class="indicator-linea-avance-govco" data-la-target="#itemLineaAvance12"
-                                percentage="50">2
-                            </div>
+                                percentage="50">2</div>
                             <span class="title-linea-avance-govco">Hago mi solicitud</span>
                         </div>
                         <div class="header-linea-avance-govco">
                             <div class="indicator-linea-avance-govco" data-la-target="#itemLineaAvance13"
-                                percentage="80">3
-                            </div>
+                                percentage="80">3</div>
                             <span class="title-linea-avance-govco">Procesan mi solicitud</span>
                         </div>
                         <div class="header-linea-avance-govco">
                             <div class="indicator-linea-avance-govco" data-la-target="#itemLineaAvance14"
-                                percentage="100">4
-                            </div>
+                                percentage="100">4</div>
                             <span class="title-linea-avance-govco">Respuesta</span>
                         </div>
                     </div>
+
+                    <!-- CONTENIDO PASOS -->
                     <div id="itemLineaAvance11" class="body-linea-avance-govco active-linea-avance-govco"
                         data-la-parent="#lineaAvance1">
-                        <!-- Contenido Item -->
-                        @include('components.login')
-                        {{-- <div class="contents-example-linea-avance-govco">
+                        @include('components.xroad.paso1')
+                    </div>
 
+                    <div id="itemLineaAvance12" class="body-linea-avance-govco" data-la-parent="#lineaAvance1">
+                        @include('components.xroad.paso2')
+                    </div>
 
-                            <button type="button" class="btn-govco fill-btn-govco" style="width: 165px; height: 42px;"
-                                onclick="nextItemAdvanceLineHorizontal(event)">Continuar</button>
-                        </div> --}}
+                    <div id="itemLineaAvance13" class="body-linea-avance-govco" data-la-parent="#lineaAvance1">
+                        @include('components.xroad.paso3')
                     </div>
-                    <div id="itemLineaAvance12" class="body-linea-avance-govco" data-la-parent="#lineaAvance1">
-                        <!-- Contenido Item -->
-                        <div class="contents-example-linea-avance-govco">
-                            <button type="button" class="btn-govco fill-btn-govco" style="width: 165px; height: 42px;"
-                                onclick="nextItemAdvanceLineHorizontal(event)">Continuar</button>
-                        </div>
-                    </div>
-                    <div id="itemLineaAvance12" class="body-linea-avance-govco" data-la-parent="#lineaAvance1">
-                        <!-- Contenido Item -->
-                        <div class="contents-example-linea-avance-govco">
-                            <button type="button" class="btn-govco fill-btn-govco" style="width: 165px; height: 42px;"
-                                onclick="nextItemAdvanceLineHorizontal(event)">Continuar</button>
-                        </div>
-                    </div>
+
                     <div id="itemLineaAvance14" class="body-linea-avance-govco" data-la-parent="#lineaAvance1">
-                        <!-- Contenido Item -->
-                        <div class="contents-example-linea-avance-govco">
-                            <button type="button" class="btn-govco fill-btn-govco"
-                                style="width: 165px; height: 42px;">Finalizar</button>
-                        </div>
+                        @include('components.xroad.paso4')
                     </div>
                 </div>
             </div>
         </div>
+
         <div class="col-md-3">
             <div class="aservice-container">
                 <a href="javascript:void(0)" tabindex="-1" class="aservice-spacing" id="aserviceTutorial">
@@ -101,19 +86,21 @@
                                 <a class="aservice-text-govco">¿Tienes dudas sobre este trámite o consulta?</a>
                             </button>
                         </h2>
-                        <div id="collapseOne" class="aservice-collapse collapse" aria-labelledby="headingOne"
+                        <div id="collapseOne" class="aservice-collapse" aria-labelledby="headingOne"
                             data-bs-parent="#aserviceExampleOne">
                             <div class="aservice-body">
                                 <div class="row aservice-row-govco">
                                     <span class="mail-icon-govco"></span>
                                     <div class="aservice-mailto-container">
-                                        <a href="mailto:soporteccc@mintic.gov.co" class="aservice-mailto-govco">Enviar
+                                        <a href="mailto:contactenos@acacias.gov.co" class="aservice-mailto-govco">Enviar
                                             correo electrónico</a>
                                     </div>
                                 </div>
                                 <div class="row aservice-row-govco aservice-row-center-govco">
                                     <span class="headset-icon-govco"></span>
-                                    <p class="aservice-number-govco">(601) 123-45-78<br>01-8000-456-768</p>
+                                    <p class="aservice-number-govco">
+                                        <a href="tel:+018000112996"> 01 8000 112 996</a>
+                                    </p>
                                 </div>
                             </div>
                         </div>
@@ -128,7 +115,7 @@
                                 <a class="aservice-text-govco">¿Cómo fue tu experiencia durante el proceso?</a>
                             </button>
                         </h2>
-                        <div id="collapseTwo" class="aservice-collapse collapse" aria-labelledby="headingTwo"
+                        <div id="collapseTwo" class="aservice-collapse" aria-labelledby="headingTwo"
                             data-bs-parent="#aserviceExampleTwo">
                             <div class="aservice-body aservice-body-two">
                                 <ul class="aservice-item-menu-ul">
