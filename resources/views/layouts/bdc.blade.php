@@ -58,6 +58,10 @@
             box-shadow: 50px 41px 0px -20px #07892f, -50px 41px 0px -20px #07892f, 0px 20px 0px 0px #e6effd, 50px 50px 0px -30px #e6effd, -50px 50px 0px -30px #e6effd;
         }
 
+        .btn-modal-govco {
+            width: auto;
+        }
+
 
         @media (min-width: 1280px) {
 
@@ -131,7 +135,7 @@
                 </div>
 
                 <div class="row govco-network" style="font-size: 13px">
-                    <div class="col-md-3">
+                    <div class="col-md-4">
                         <span class="icon govco-twitter-square"></span>
                         <span class="govco-link-modal"><a class="section fa fa-twitter" target="_blank"
                                 href="https://twitter.com/AlcaldiaAcacias" title="">
@@ -139,7 +143,7 @@
                             </a>
                         </span>
                     </div>
-                    <div class="col-md-3">
+                    <div class="col-md-4">
                         <span class="icon govco-instagram-square"></span>
                         <span class="govco-link-modal"><a class="section fa fa-instagram" target="_blank"
                                 href="https://www.instagram.com/alcaldiaacacias" title="Instagram">
@@ -147,7 +151,7 @@
                             </a>
                         </span>
                     </div>
-                    <div class="col-md-3">
+                    <div class="col-md-4">
                         <span class="icon govco-facebook-square"></span>
                         <span class="govco-link-modal"><a class="section fa fa-facebook" target="_blank"
                                 href="https://www.facebook.com/AlcaldiaAcaciasMeta/" title="">
@@ -159,9 +163,12 @@
 
                 <div class="row govco-links-container">
                     <div class="govco-link-container mt-2">
-                        <a class="govco-link-modal govco-link-modal-bold" href="https://acacias.gov.co/publicaciones/6412/certificado-de-residencia/9467">Políticas</a>
-                        <a class="govco-link-modal govco-link-modal-bold" href="https://acacias.gov.co/mapa-del-sitio">Mapa del sitio</a>
-                        <a class="govco-link-modal govco-link-modal-bold" href="https://acacias.gov.co/formularios/108">Califica nuestra sede electrónica</a> <br>
+                        <a class="govco-link-modal govco-link-modal-bold"
+                            href="https://acacias.gov.co/publicaciones/6412/certificado-de-residencia/9467">Políticas</a>
+                        <a class="govco-link-modal govco-link-modal-bold"
+                            href="https://acacias.gov.co/mapa-del-sitio">Mapa del sitio</a>
+                        <a class="govco-link-modal govco-link-modal-bold"
+                            href="https://acacias.gov.co/formularios/108">Califica nuestra sede electrónica</a> <br>
                     </div>
                 </div>
             </div>
@@ -397,97 +404,172 @@
     </script>
     {{-- saltar pasos --}}
     <script>
+        /* ================================
+                           VARIABLES DE CONTROL
+                        ================================ */
+        let pasosPermitidos = [1];
+        let pasosVisitados = [1];
+
+        /* ================================
+           NAVEGACIÓN ENTRE PASOS
+        ================================ */
         function irAlPaso(numeroPaso) {
+            if (!pasosPermitidos.includes(numeroPaso)) {
+                console.warn(`Intento de acceso no permitido al paso ${numeroPaso}`);
+                return;
+            }
+
             const elementParent = document.querySelector('#lineaAvance1');
             const headers = elementParent.querySelectorAll('.header-linea-avance-govco');
             const bodys = elementParent.querySelectorAll('.body-linea-avance-govco');
 
-            if (numeroPaso < 1 || numeroPaso > headers.length) return;
+            const backdrop = document.getElementById('modal_backdrop_govco');
+            if (backdrop) backdrop.remove();
+            document.body.style.overflow = '';
 
-            headers.forEach(h => h.classList.remove('active-linea-avance-govco', 'inactive-linea-avance-govco'));
+            headers.forEach(h => h.classList.remove('active-linea-avance-govco'));
             bodys.forEach(b => b.classList.remove('active-linea-avance-govco'));
-
             headers[numeroPaso - 1].classList.add('active-linea-avance-govco');
             bodys[numeroPaso - 1].classList.add('active-linea-avance-govco');
 
             updateProgressAdvanceLine(headers, numeroPaso - 1, elementParent, 'width');
-            actualizarMiga();
-        }
-    </script>
-    {{-- Linea de avance --}}
-    <script>
-        // === CONFIGURACIÓN INICIAL ===
-        document.addEventListener('DOMContentLoaded', function() {
-            actualizarMiga();
-        });
 
-        // Guardamos la referencia original del CDN
-        const originalNextItemAdvance = nextItemAdvanceLineHorizontal;
-
-        // === SOBRESCRIBIMOS EL AVANCE NORMAL ===
-        nextItemAdvanceLineHorizontal = function(e) {
-            originalNextItemAdvance.call(this, e);
-            setTimeout(() => actualizarMiga(), 100);
-        };
-
-        // === ACTUALIZAR MIGA DE PAN ===
-        function actualizarMiga() {
-            const pasoActivo = document.querySelector(
-                '.header-linea-avance-govco.active-linea-avance-govco .title-linea-avance-govco');
-            const textoPaso = pasoActivo ? pasoActivo.textContent.trim() : 'Inicio';
-            const miga1 = document.getElementById('miga-dinamica-1');
-            const migaActual = document.getElementById('miga-actual');
-
-            let textoAnterior = '';
-            let textoActual = '';
-            let pasoNumero = 1;
-
-            switch (textoPaso) {
-                case 'Inicio':
-                    textoAnterior = 'Inicio';
-                    textoActual = 'Inicio del proceso';
-                    pasoNumero = 1;
-                    break;
-                case 'Hago mi solicitud':
-                    textoAnterior = 'Trámite';
-                    textoActual = 'Hago mi solicitud';
-                    pasoNumero = 2;
-                    break;
-                case 'Procesan mi solicitud':
-                    textoAnterior = 'Proceso';
-                    textoActual = 'Procesan mi solicitud';
-                    pasoNumero = 3;
-                    break;
-                case 'Respuesta':
-                    textoAnterior = 'Resultado';
-                    textoActual = 'Respuesta final';
-                    pasoNumero = 4;
-                    break;
-                default:
-                    textoAnterior = 'Inicio';
-                    textoActual = 'Sección actual';
+            // Si retrocede, cortamos pasosVisitados a ese punto
+            const indexPaso = pasosVisitados.indexOf(numeroPaso);
+            if (indexPaso !== -1) {
+                pasosVisitados = pasosVisitados.slice(0, indexPaso + 1);
             }
 
-            // Actualiza contenido y agrega data-step para navegación
-            miga1.innerHTML = `<a href="#" data-step="${pasoNumero - 1}">${textoAnterior}</a>`;
-            migaActual.innerHTML = `<a href="#" data-step="${pasoNumero}">${textoActual}</a>`;
+            // 🔹 NUEVO: aseguramos que el paso esté marcado como visitado
+            if (!pasosVisitados.includes(numeroPaso)) pasosVisitados.push(numeroPaso);
 
-            // Asigna eventos de clic a ambas migas
+            console.log(`✅ Cambiado al paso ${numeroPaso}`);
+
+            actualizarMiga();
+        }
+
+
+        /* ================================
+           MIGA DE PAN DINÁMICA
+        ================================ */
+        function actualizarMiga() {
+            const migaContainer = document.getElementById('breadcrumb-govco');
+            if (!migaContainer) return;
+            migaContainer.innerHTML = '';
+
+            // 🟦 1. Siempre agregar "Inicio"
+            const liInicio = document.createElement('li');
+            liInicio.className = 'breadcrumb-item-govco';
+            liInicio.innerHTML = `<a href="#" data-step="1">Inicio</a>`;
+            migaContainer.appendChild(liInicio);
+
+            // 🟦 2. Determinar paso actual y anterior
+            const pasoActual = pasosVisitados[pasosVisitados.length - 1];
+            const pasoAnterior = pasosVisitados.length > 1 ?
+                pasosVisitados[pasosVisitados.length - 2] :
+                1;
+
+            // 🟦 3. Agregar paso anterior (si existe y no es igual al actual)
+            if (pasoAnterior && pasoAnterior !== pasoActual) {
+                const liPrevio = document.createElement('li');
+                liPrevio.className = 'breadcrumb-item-govco';
+                liPrevio.innerHTML = `<a href="#" data-step="${pasoAnterior}">${obtenerTituloPaso(pasoAnterior)}</a>`;
+                migaContainer.appendChild(liPrevio);
+            }
+
+            // 🟦 4. Agregar paso actual
+            if (pasoActual) {
+                const liActual = document.createElement('li');
+                liActual.className = 'breadcrumb-item-govco active';
+                liActual.setAttribute('aria-current', 'page');
+                liActual.textContent = obtenerTituloPaso(pasoActual);
+                migaContainer.appendChild(liActual);
+            }
+
             asignarEventosMiga();
         }
-    </script>
-    {{-- asignarEventosMiga --}}
-    <script>
+
+
+
+        /* ================================
+           REASIGNAR EVENTOS DE CLIC
+        ================================ */
         function asignarEventosMiga() {
+            // Limpiar eventos previos
+            const oldLinks = document.querySelectorAll('#breadcrumb-govco a[data-step]');
+            oldLinks.forEach(link => {
+                const newLink = link.cloneNode(true);
+                link.parentNode.replaceChild(newLink, link);
+            });
+
+            // Reasignar eventos de clic
             document.querySelectorAll('#breadcrumb-govco a[data-step]').forEach(link => {
                 link.addEventListener('click', function(e) {
                     e.preventDefault();
                     const paso = parseInt(this.dataset.step);
-                    if (!isNaN(paso) && paso >= 1) irAlPaso(paso);
+                    if (pasosPermitidos.includes(paso)) {
+                        irAlPaso(paso);
+                    } else {
+                        console.warn(`Intento de acceso no permitido al paso ${paso}`);
+                    }
                 });
             });
         }
+
+        /* ================================
+           OBTENER TÍTULO DEL PASO
+        ================================ */
+        function obtenerTituloPaso(paso) {
+            switch (paso) {
+                case 1:
+                    return 'Inicio';
+                case 2:
+                    return 'Hago mi solicitud';
+                case 3:
+                    return 'Procesan mi solicitud';
+                case 4:
+                    return 'Respuesta';
+                default:
+                    return 'Paso';
+            }
+        }
+
+        /* ================================
+           VALIDAR PASO 2 (lógica principal)
+        ================================ */
+        async function validarYAvanzar(e) {
+            try {
+                const response = await fetch('/verificar-permiso-paso2', {
+                    method: 'GET',
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest'
+                    }
+                });
+                const data = await response.json();
+
+                if (data.permitido) {
+                    pasosPermitidos = [1, 2, 3, 4];
+                    pasosVisitados = [1, 2];
+                    irAlPaso(2);
+                } else {
+                    pasosPermitidos = [1, 4];
+                    pasosVisitados = [1, 4];
+                    irAlPaso(4);
+                }
+
+            } catch (error) {
+                console.error('Error al verificar permiso:', error);
+            }
+        }
+
+        /* ================================
+           EVENTO DE INICIO
+        ================================ */
+        document.addEventListener('DOMContentLoaded', function() {
+            actualizarMiga();
+        });
     </script>
+
 
     @livewireScripts
 </body>

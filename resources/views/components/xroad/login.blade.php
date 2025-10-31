@@ -1,5 +1,5 @@
 {{-- components/login.blade.php --}}
-<div >
+<div>
     <div class="row justify-content-center">
         <div class="col-12 col-md-10 col-lg-10">
             <h2 class="mb-3 mt-3">Certificado de Residencia</h2>
@@ -129,21 +129,100 @@
 
             <!-- Enlaces auxiliares -->
             <div class="container-options-login-govco">
-                @if (Route::has('password.request'))
-                    <div class="mt-3">
-                        <a href="{{ route('password.request') }}">Olvidé mi contraseña</a>
-                    </div>
-                @endif
+                <div class="mt-3">
+                    <a href="#" data-bs-toggle="modal" data-bs-target="#modalRecuperarClave">Olvidé mi
+                        contraseña</a>
+                </div>
 
-                @if (Route::has('register'))
-                    <p class="mt-3">¿No tienes cuenta? &nbsp;
-                        <a class="mt-3" href="{{ route('register') }}">Regístrate aquí</a>
-                    </p>
-                @endif
+                <p class="mt-3">
+                    ¿No tienes cuenta? &nbsp;
+                    <a href="#" data-bs-toggle="modal" data-bs-target="#modalRegistro">Regístrate aquí</a>
+                </p>
             </div>
         </div>
     </div>
 </div>
+
+<div class="modal fade" id="modalRecuperarClave" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-govco">
+        <div class="modal-content modal-content-govco">
+            <div class="modal-header modal-header-govco modal-header-alerts-govco">
+                <h5 class="modal-title-govco">Recuperar contraseña</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                    aria-label="Close"></button>
+            </div>
+
+            <div class="modal-body modal-body-govco">
+                <p>Ingresa tu correo electrónico y te enviaremos un enlace para restablecer tu contraseña.</p>
+
+                <form id="formRecuperarClave">
+                    @csrf
+                    <div class="entradas-de-texto-govco mt-3">
+                        <label for="email_reset">Correo electrónico<span aria-required="true">*</span></label>
+                        <div class="container-input-texto-govco">
+                            <input type="email" id="email_reset" name="email" placeholder="Ej: correo@email.com"
+                                required>
+                        </div>
+                    </div>
+
+                    <div class="mt-4 text-center">
+                        <button type="submit" class="btn-govco fill-btn-govco"
+                            style="width: 165px; height: 42px;">Enviar enlace</button>
+                    </div>
+                </form>
+
+                <div id="mensajeRecuperarClave" class="mt-3 text-center"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="modalRegistro" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-govco">
+        <div class="modal-content modal-content-govco">
+            <div class="modal-header modal-header-govco modal-header-alerts-govco">
+                <h5 class="modal-title-govco">Registro de usuario</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                    aria-label="Close"></button>
+            </div>
+
+            <div class="modal-body modal-body-govco">
+                <form id="formRegistro">
+                    @csrf
+                    <div class="entradas-de-texto-govco mt-3">
+                        <label for="nombre">Nombre completo<span aria-required="true">*</span></label>
+                        <div class="container-input-texto-govco">
+                            <input type="text" id="nombre" name="nombre" required>
+                        </div>
+                    </div>
+
+                    <div class="entradas-de-texto-govco mt-3">
+                        <label for="email_reg">Correo electrónico<span aria-required="true">*</span></label>
+                        <div class="container-input-texto-govco">
+                            <input type="email" id="email_reg" name="email" required>
+                        </div>
+                    </div>
+
+                    <div class="entradas-de-texto-govco mt-3">
+                        <label for="password_reg">Contraseña<span aria-required="true">*</span></label>
+                        <div class="container-input-texto-govco">
+                            <input type="password" id="password_reg" name="password" minlength="8" required>
+                        </div>
+                    </div>
+
+                    <div class="mt-4 text-center">
+                        <button type="submit" class="btn-govco fill-btn-govco"
+                            style="width: 165px; height: 42px;">Registrarme</button>
+                    </div>
+                </form>
+
+                <div id="mensajeRegistro" class="mt-3 text-center"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
 
 <script>
     /**
@@ -395,20 +474,58 @@
         }
     }
 </script>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const csrf = document.querySelector('meta[name="csrf-token"]').content;
 
-{{-- <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        // Escucha el evento de login exitoso (puede venir de tu formulario o API)
-        document.addEventListener('usuarioLogueado', function() {
-            actualizarEstadoLogin();
+        // 🔹 Recuperar contraseña
+        document.getElementById('formRecuperarClave').addEventListener('submit', async e => {
+            e.preventDefault();
+            const form = e.target;
+            const msg = document.getElementById('mensajeRecuperarClave');
+            msg.innerHTML = 'Enviando...';
+
+            const response = await fetch('{{ route('certificado.password.email') }}', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': csrf
+                },
+                body: JSON.stringify({
+                    email: form.email.value
+                })
+            });
+
+            const data = await response.json();
+            msg.innerHTML = data.success ?
+                '<span class="success-texto-govco">¡Revisa tu correo!</span>' :
+                '<span class="error-texto-govco">No se encontró una cuenta con ese correo.</span>';
         });
 
-        function actualizarEstadoLogin() {
-            fetch('/estado-login')
-                .then(response => response.text())
-                .then(html => {
-                    document.querySelector('#itemLineaAvance11').innerHTML = html;
-                });
-        }
+        // 🔹 Registro
+        document.getElementById('formRegistro').addEventListener('submit', async e => {
+            e.preventDefault();
+            const form = e.target;
+            const msg = document.getElementById('mensajeRegistro');
+            msg.innerHTML = 'Registrando...';
+
+            const response = await fetch('{{ route('certificado.auth.register') }}', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': csrf
+                },
+                body: JSON.stringify({
+                    nombre: form.nombre.value,
+                    email: form.email.value,
+                    password: form.password.value
+                })
+            });
+
+            const data = await response.json();
+            msg.innerHTML = data.success ?
+                '<span class="success-texto-govco">¡Cuenta creada exitosamente!</span>' :
+                '<span class="error-texto-govco">Hubo un error en el registro.</span>';
+        });
     });
-</script> --}}
+</script>

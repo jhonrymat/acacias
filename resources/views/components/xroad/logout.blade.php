@@ -72,7 +72,13 @@
             const btnCancelar = document.getElementById('btn-cancelar-modal');
             const btnCerrar = document.getElementById('btn-cerrar-modal');
 
-            function mostrarModal() {
+            let accionActualModal = null; // 🔹 guardará qué acción debe ejecutar el botón Confirmar
+
+            function mostrarModal(accion = null) {
+                // Eliminar backdrop previo si existe
+                const oldBackdrop = document.getElementById('modal_backdrop_govco');
+                if (oldBackdrop) oldBackdrop.remove();
+
                 // Crear fondo atenuado
                 const backdrop = document.createElement('div');
                 backdrop.classList.add('modal-backdrop-govco');
@@ -81,57 +87,89 @@
 
                 // Mostrar modal centrado
                 modal.style.display = 'flex';
+                modal.classList.add('show');
                 document.body.style.overflow = 'hidden';
+
+                // Registrar la acción del botón confirmar
+                accionActualModal = accion;
             }
 
             function ocultarModal() {
                 modal.style.display = 'none';
+                modal.classList.remove('show');
                 document.body.style.overflow = '';
                 const backdrop = document.getElementById('modal_backdrop_govco');
                 if (backdrop) backdrop.remove();
             }
 
+            // 🔹 Acción genérica para el botón Confirmar (según contexto)
+            btnConfirmar.onclick = function() {
+                if (typeof accionActualModal === 'function') {
+                    accionActualModal(); // ejecuta la acción actual
+                }
+                ocultarModal();
+            };
+
+            // Cerrar modal en cancelar o “X”
+            btnCancelar.onclick = ocultarModal;
+            btnCerrar.onclick = ocultarModal;
+
+            // === Caso 1: Logout (acción fija) ===
             if (btnLogout) {
-                btnLogout.addEventListener('click', mostrarModal);
+                btnLogout.addEventListener('click', () => {
+                    // Configura modal con el texto de cerrar sesión
+                    document.getElementById('modal_titulo').textContent = 'Confirmar acción';
+                    document.getElementById('modal_mensaje').textContent =
+                        '¿Estás seguro de que deseas cerrar sesión?';
+                    document.getElementById('btn-confirmar-modal').textContent = 'Sí';
+                    document.getElementById('btn-cancelar-modal').textContent = 'Cancelar';
+
+                    // Mostrar modal y definir acción
+                    mostrarModal(() => {
+                        btnLogout.disabled = true;
+                        btnLogout.textContent = 'Cerrando sesión...';
+                        const csrfToken = document.querySelector('meta[name="csrf-token"]')
+                        ?.content;
+
+                        fetch('http://127.0.0.1:8000/certificado-residencia/auth/logout', {
+                                method: 'POST',
+                                headers: {
+                                    'X-Requested-With': 'XMLHttpRequest',
+                                    'Accept': 'application/json',
+                                    'X-CSRF-TOKEN': csrfToken
+                                },
+                                credentials: 'same-origin'
+                            })
+                            .then(response => response.json())
+                            .then(data => {
+                                if (data.success) {
+                                    btnLogout.textContent = '¡Sesión cerrada!';
+                                    setTimeout(() => window.location.reload(), 1000);
+                                } else {
+                                    btnLogout.disabled = false;
+                                    btnLogout.textContent = 'Cerrar sesión';
+                                    alert('Error al cerrar sesión. Intenta nuevamente.');
+                                }
+                            })
+                            .catch(error => {
+                                console.error('Error:', error);
+                                btnLogout.disabled = false;
+                                btnLogout.textContent = 'Cerrar sesión';
+                                alert('Ocurrió un error. Intenta nuevamente.');
+                            });
+                    });
+                });
             }
 
-            btnCancelar.addEventListener('click', ocultarModal);
-            btnCerrar.addEventListener('click', ocultarModal);
-
-            btnConfirmar.addEventListener('click', function() {
-                ocultarModal();
-                btnLogout.disabled = true;
-                btnLogout.textContent = 'Cerrando sesión...';
-
-                const csrfToken = document.querySelector('meta[name="csrf-token"]')?.content;
-
-                fetch('{{ route('certificado.auth.logout') }}', {
-                        method: 'POST',
-                        headers: {
-                            'X-Requested-With': 'XMLHttpRequest',
-                            'Accept': 'application/json',
-                            'X-CSRF-TOKEN': csrfToken
-                        },
-                        credentials: 'same-origin'
-                    })
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data.success) {
-                            btnLogout.textContent = '¡Sesión cerrada!';
-                            setTimeout(() => window.location.reload(), 1000);
-                        } else {
-                            btnLogout.disabled = false;
-                            btnLogout.textContent = 'Cerrar sesión';
-                            alert('Error al cerrar sesión. Intenta nuevamente.');
-                        }
-                    })
-                    .catch(error => {
-                        console.error('Error:', error);
-                        btnLogout.disabled = false;
-                        btnLogout.textContent = 'Cerrar sesión';
-                        alert('Ocurrió un error. Intenta nuevamente.');
-                    });
-            });
+            // === Caso 2: Validación de paso (se llama desde validarYAvanzar) ===
+            window.configurarModalAdvertencia = function(titulo, mensaje, textoConfirmar, textoCancelar,
+                accionConfirmar) {
+                document.getElementById('modal_titulo').textContent = titulo;
+                document.getElementById('modal_mensaje').textContent = mensaje;
+                document.getElementById('btn-confirmar-modal').textContent = textoConfirmar || 'Aceptar';
+                document.getElementById('btn-cancelar-modal').textContent = textoCancelar || 'Cancelar';
+                mostrarModal(accionConfirmar);
+            };
         });
     </script>
 

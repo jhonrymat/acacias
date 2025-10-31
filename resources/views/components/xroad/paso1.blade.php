@@ -96,7 +96,7 @@
                 {{-- centrar el contenido del div --}}
                 <div class="col-md-6 mb-3" style="text-align: center;">
                     <a type="button" class="module-tarjeta-govco" title="descripción donde redirige el enlace"
-                        onclick="nextItemAdvanceLineHorizontal(event)">
+                        onclick="pasosPermitidos = [1,2]; irAlPaso(2);">
                         <div class="header-tarjeta-govco">
                             <h5>Crear Solicitud</h5>
                         </div>
@@ -109,7 +109,7 @@
                 </div>
                 <div class="col-md-6 mb-3" style="text-align: center;">
                     <a type="button" class="module-tarjeta-govco" title="descripción donde redirige el enlace"
-                        onclick="irAlPaso(4)">
+                        onclick="pasosPermitidos = [1,4]; irAlPaso(4);">
                         <div class="header-tarjeta-govco">
                             <h5>Consultar Solicitud</h5>
                         </div>

@@ -34,6 +34,7 @@ use App\Livewire\ValidadoresComponent;
 use App\Http\Controllers\PDFController;
 use App\Livewire\CertificadoResidencia;
 use App\Livewire\EstadisticasValidador;
+use App\Http\Controllers\XroadController;
 use App\Livewire\ValidarQrAvecindamiento;
 use App\Livewire\TipoSolicitanteComponent;
 use App\Livewire\SolicitudesExportComponent;
@@ -215,33 +216,53 @@ Route::get('/certificado-residencia', CertificadoResidencia::class)
 |--------------------------------------------------------------------------
 | Estas rutas NO redireccionan, solo retornan JSON
 */
+Route::prefix('certificado-residencia')->group(function () {
+    //
 
-Route::middleware('guest')->group(function () {
-    // Login AJAX - Nombre único para evitar colisión con Jetstream
-    Route::post('/certificado-residencia/auth/login', [CustomLoginController::class, 'login'])
-        ->name('certificado.auth.login');
+    Route::middleware('guest')->group(function () {
+        Route::post('/auth/login', [CustomLoginController::class, 'login'])
+            ->name('certificado.auth.login');
+
+        Route::post('/auth/register', [CustomLoginController::class, 'register'])
+            ->name('certificado.auth.register');
+
+        Route::post('/password/email', [CustomLoginController::class, 'sendResetLink'])
+            ->name('certificado.password.email');
+
+        Route::get('/password/reset/{token}', [CustomLoginController::class, 'showResetForm'])
+            ->name('certificado.password.reset');
+
+        Route::post('/password/reset', [CustomLoginController::class, 'resetPassword'])
+            ->name('certificado.password.update');
+    });
+
+    Route::middleware('auth')->group(function () {
+        // Logout AJAX - Nombre único
+        Route::post('/auth/logout', [CustomLoginController::class, 'logout'])
+            ->name('certificado.auth.logout');
+
+        // Verificar estado de autenticación (útil para validar sesión)
+        Route::get('/auth/check', function () {
+            return response()->json([
+                'authenticated' => true,
+                'user' => [
+                    'name' => auth()->user()->name,
+                    'email' => auth()->user()->email,
+                ]
+            ]);
+        })->name('certificado.auth.check');
+    });
 });
 
-Route::middleware('auth')->group(function () {
-    // Logout AJAX - Nombre único
-    Route::post('/certificado-residencia/auth/logout', [CustomLoginController::class, 'logout'])
-        ->name('certificado.auth.logout');
-
-    // Verificar estado de autenticación (útil para validar sesión)
-    Route::get('/certificado-residencia/auth/check', function () {
-        return response()->json([
-            'authenticated' => true,
-            'user' => [
-                'name' => auth()->user()->name,
-                'email' => auth()->user()->email,
-            ]
-        ]);
-    })->name('certificado.auth.check');
-});
 
 Route::get('/estado-login', function () {
     return view('components.xroad.paso1')->render();
 });
+
+Route::get('/verificar-permiso-paso2', [XroadController::class, 'verificarPermisoPaso2'])
+    ->name('verificarPermisoPaso2')
+    ->middleware('auth');
+
 
 /*
 |--------------------------------------------------------------------------
