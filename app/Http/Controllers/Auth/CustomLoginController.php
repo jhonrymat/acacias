@@ -4,9 +4,11 @@ namespace App\Http\Controllers\Auth;
 
 use App\Models\User;
 use Illuminate\Http\Request;
+use App\Mail\ResetPasswordMailable;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Validation\ValidationException;
 
@@ -75,8 +77,52 @@ class CustomLoginController extends Controller
     public function sendResetLink(Request $request)
     {
         $request->validate(['email' => 'required|email']);
-        $status = Password::sendResetLink($request->only('email'));
-        return response()->json(['success' => $status === Password::RESET_LINK_SENT]);
+
+        $user = User::where('email', $request->email)->first();
+
+        if (!$user) {
+            return response()->json(['success' => false, 'message' => 'Usuario no encontrado']);
+        }
+
+        // Generar token manualmente
+        $token = Password::createToken($user);
+
+        // Enviar correo con plantilla personalizada
+        Mail::to($user->email)->send(new ResetPasswordMailable($token, $user->email));
+
+        return response()->json(['success' => true, 'message' => 'Correo de recuperación enviado']);
+    }
+
+    public function showResetForm(Request $request, $token)
+    {
+        return view('xroad.auth.reset-password', [
+            'token' => $token,
+            'email' => $request->query('email'),
+        ]);
+    }
+
+    public function resetPassword(Request $request)
+    {
+        $request->validate([
+            'token' => 'required',
+            'email' => 'required|email',
+            'password' => 'required|min:8|confirmed',
+        ]);
+
+        $status = Password::reset(
+            $request->only('email', 'password', 'password_confirmation', 'token'),
+            function ($user, $password) {
+                $user->forceFill([
+                    'password' => Hash::make($password),
+                ])->save();
+
+                Auth::login($user);
+            }
+        );
+
+        return $status === Password::PASSWORD_RESET
+            ? redirect()->to('/certificado-residencia#')->with('status', '¡Contraseña actualizada correctamente!')
+            : back()->withErrors(['email' => __($status)]);
     }
 
     public function register(Request $request)

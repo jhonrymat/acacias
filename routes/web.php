@@ -229,7 +229,8 @@ Route::prefix('certificado-residencia')->group(function () {
         Route::post('/password/email', [CustomLoginController::class, 'sendResetLink'])
             ->name('certificado.password.email');
 
-        Route::get('/password/reset/{token}', [CustomLoginController::class, 'showResetForm'])
+        // Mostrar formulario de restablecimiento
+        Route::get('/reset-password/{token}', [CustomLoginController::class, 'showResetForm'])
             ->name('certificado.password.reset');
 
         Route::post('/password/reset', [CustomLoginController::class, 'resetPassword'])

@@ -569,8 +569,6 @@
             actualizarMiga();
         });
     </script>
-
-
     @livewireScripts
 </body>
 
