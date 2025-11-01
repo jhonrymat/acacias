@@ -223,8 +223,8 @@ Route::prefix('certificado-residencia')->group(function () {
         Route::post('/auth/login', [CustomLoginController::class, 'login'])
             ->name('certificado.auth.login');
 
-        Route::post('/auth/register', [CustomLoginController::class, 'register'])
-            ->name('certificado.auth.register');
+        // Route::post('/auth/register', [CustomLoginController::class, 'register'])
+        //     ->name('certificado.auth.register');
 
         Route::post('/password/email', [CustomLoginController::class, 'sendResetLink'])
             ->name('certificado.password.email');

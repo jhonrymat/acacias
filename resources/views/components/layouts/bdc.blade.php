@@ -6,12 +6,35 @@
     <title>@yield('title', 'Certificado de Residencia')</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <!-- css bootstrap -->
+    {{-- <!-- css bootstrap --> --}}
+
+    {{-- <!-- jQuery (requerido para Select2) --> --}}
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
+    {{-- bootstrap --}}
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
         integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" rel="stylesheet"
         crossorigin="anonymous">
-    <!-- css BDC -->
+
+    {{-- <!-- css BDC --> --}}
     <link href="https://cdn.www.gov.co/layout/v4/all.css" rel="stylesheet">
+
+    {{-- <!-- Select2 CSS --> --}}
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+
+    {{-- <!-- Select2 JS --> --}}
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
+    {{-- <!-- Select2 Español (opcional pero recomendado) --> --}}
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/i18n/es.js"></script>
+
+    {{-- Leaflet --}}
+    <!-- Leaflet CSS (si no lo tienes en el layout) -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+
+    <!-- Leaflet JS (si no lo tienes en el layout) -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
     <style>
         .govco-co {
             content: url('https://cdn.www.gov.co/v4/logo-colombia.svg');
@@ -62,21 +85,45 @@
             width: auto;
         }
 
+        .select2-container--default .select2-selection--single {
+            height: 38px;
+            border: 1px solid #ced4da;
+            border-radius: 0.375rem;
+        }
+
+        .select2-container--default .select2-selection--single .select2-selection__rendered {
+            line-height: 36px;
+            color: #495057;
+        }
+
+        .select2-container--default .select2-selection--single .select2-selection__arrow {
+            height: 36px;
+        }
+
+
+
+        /* Fix para que Leaflet cargue correctamente */
+        .leaflet-container {
+            height: 100%;
+            width: 100%;
+        }
+
 
         @media (min-width: 1280px) {
 
-            .govco-data-front {
-                margin: 30px auto !important;
-                width: 60%;
-                -webkit-box-shadow: 300px 60px 0px -30px #07892f, -300px 60px 0px -30px #07892f, 0px 25px 0px 0px #e6effd, 120px 70px 0px -40px #e6effd, -120px 70px 0px -40px #e6effd;
-            }
+            /* .govco-data-front {
+    margin: 30px auto !important;
+    width: 60%;
+    -webkit-box-shadow: 300px 60px 0px -30px #07892f, -300px 60px 0px -30px #07892f, 0px 25px 0px 0px #e6effd, 120px
+    70px 0px -40px #e6effd, -120px 70px 0px -40px #e6effd;
+    } */
         }
     </style>
     @livewireStyles
 </head>
 
 <body>
-    <!-- Barra Superior -->
+    {{-- <!-- Barra Superior --> --}}
     <nav class="navbar navbar-expand-lg barra-superior-govco" aria-label="Barra superior">
         <a href="https://www.gov.co/" target="_blank" aria-label="Portal del Estado Colombiano - GOV.CO"></a>
     </nav>
@@ -135,7 +182,7 @@
                 </div>
 
                 <div class="row govco-network" style="font-size: 13px">
-                    <div class="col-md-4">
+                    <div class="col-md-3">
                         <span class="icon govco-twitter-square"></span>
                         <span class="govco-link-modal"><a class="section fa fa-twitter" target="_blank"
                                 href="https://twitter.com/AlcaldiaAcacias" title="">
@@ -143,7 +190,7 @@
                             </a>
                         </span>
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-md-3">
                         <span class="icon govco-instagram-square"></span>
                         <span class="govco-link-modal"><a class="section fa fa-instagram" target="_blank"
                                 href="https://www.instagram.com/alcaldiaacacias" title="Instagram">
@@ -151,7 +198,7 @@
                             </a>
                         </span>
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-md-3">
                         <span class="icon govco-facebook-square"></span>
                         <span class="govco-link-modal"><a class="section fa fa-facebook" target="_blank"
                                 href="https://www.facebook.com/AlcaldiaAcaciasMeta/" title="">
@@ -405,8 +452,8 @@
     {{-- saltar pasos --}}
     <script>
         /* ================================
-                           VARIABLES DE CONTROL
-                        ================================ */
+                                                                                                   VARIABLES DE CONTROL
+                                                                                                ================================ */
         let pasosPermitidos = [1];
         let pasosVisitados = [1];
 
@@ -569,6 +616,74 @@
             actualizarMiga();
         });
     </script>
+    {{-- select --}}
+    <script>
+        $(document).ready(function() {
+            $('#id_barrio').select2({
+                allowClear: true,
+                language: 'es',
+                width: '100%'
+            });
+        });
+    </script>
+    {{-- mapa --}}
+    <script>
+        var map;
+        var marker;
+        var mapInitialized = false;
+
+        function initMap() {
+            if (mapInitialized) {
+                map.invalidateSize();
+                return;
+            }
+
+            map = L.map('map').setView([3.988604, -73.767509], 13);
+
+            L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                maxZoom: 19,
+                attribution: '&copy; <a href="https://www.nomaddi.com">Nomaddi</a> 2025'
+            }).addTo(map);
+
+            setTimeout(function() {
+                map.invalidateSize();
+            }, 100);
+
+            // Cargar coordenadas previas si existen
+            var oldLat = document.getElementById('lat').value;
+            var oldLng = document.getElementById('lng').value;
+
+            if (oldLat && oldLng) {
+                marker = L.marker([oldLat, oldLng])
+                    .addTo(map)
+                    .bindPopup('📍 Ubicación seleccionada')
+                    .openPopup();
+                map.setView([oldLat, oldLng], 15);
+            }
+
+            map.on('click', function(e) {
+                const lat = e.latlng.lat.toFixed(6);
+                const lng = e.latlng.lng.toFixed(6);
+
+                if (marker) {
+                    marker.setLatLng(e.latlng);
+                } else {
+                    marker = L.marker(e.latlng)
+                        .addTo(map)
+                        .bindPopup('📍 Ubicación seleccionada')
+                        .openPopup();
+                }
+
+                document.getElementById('lat').value = lat;
+                document.getElementById('lng').value = lng;
+                document.getElementById('display-lat').textContent = lat;
+                document.getElementById('display-lng').textContent = lng;
+            });
+
+            mapInitialized = true;
+        }
+    </script>
+    @yield('scripts')
     @livewireScripts
 </body>
 

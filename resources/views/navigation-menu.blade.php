@@ -120,7 +120,7 @@
                     </x-nav-link>
                 @endrole
                 @role('user')
-                    <div class="hidden sm:flex sm:items-center sm:ml-6 mx-auto my-auto mr-6">
+                    {{-- <div class="hidden sm:flex sm:items-center sm:ml-6 mx-auto my-auto mr-6">
                         <x-dropdown width="48">
                             <x-slot name="trigger">
                                 <span class="inline-flex rounded-md">
@@ -143,13 +143,13 @@
                                 <x-dropdown-link href="{{ route('formulario-residencia') }}">
                                     {{ __('Certificado de residencia') }}
                                 </x-dropdown-link>
-                                {{-- <x-dropdown-link href="{{ route('formulario-avecindamiento') }}">
+                                <x-dropdown-link href="{{ route('formulario-avecindamiento') }}">
                                     {{ __('Certificado de avecindamiento') }}
-                                </x-dropdown-link> --}}
+                                </x-dropdown-link>
                             </x-slot>
                         </x-dropdown>
-                    </div>
-                    <div class="hidden sm:flex sm:items-center sm:ml-6 mx-auto my-auto mr-6">
+                    </div> --}}
+                    {{-- <div class="hidden sm:flex sm:items-center sm:ml-6 mx-auto my-auto mr-6">
                         <x-dropdown width="48">
                             <x-slot name="trigger">
                                 <span class="inline-flex rounded-md">
@@ -172,12 +172,12 @@
                                 <x-dropdown-link href="{{ route('versolicitudesresidencia') }}">
                                     {{ __('Certificado de residencia') }}
                                 </x-dropdown-link>
-                                {{-- <x-dropdown-link href="{{ route('versolicitudesavecindamiento') }}">
+                                <x-dropdown-link href="{{ route('versolicitudesavecindamiento') }}">
                                     {{ __('Certificado de avecindamiento') }}
-                                </x-dropdown-link> --}}
+                                </x-dropdown-link>
                             </x-slot>
                         </x-dropdown>
-                    </div>
+                    </div> --}}
                 @endrole
                 @hasanyrole('validador1|validador2')
                     <div class="hidden sm:flex sm:items-center sm:ml-6 mx-auto my-auto mr-6">
@@ -453,7 +453,7 @@
 
         @role('user')
             <div :class="{ 'block': open, 'hidden': !open }" class="hidden sm:hidden">
-                <div x-data="{ openConfigForm: false }">
+                {{-- <div x-data="{ openConfigForm: false }">
                     <x-responsive-nav-link class="mb-1 flex items-center" @click="openConfigForm = !openConfigForm"
                         :active="request()->routeIs('configForm.*')">
                         <span>Crear solicitud</span>
@@ -473,12 +473,12 @@
                         <x-responsive-nav-link href="{{ route('formulario-residencia') }}" :active="request()->routeIs('formulario-residencia')">
                             Certificado de residencia
                         </x-responsive-nav-link>
-                        {{-- <x-responsive-nav-link href="{{ route('formulario-avecindamiento') }}" :active="request()->routeIs('formulario-avecindamiento')">
+                        <x-responsive-nav-link href="{{ route('formulario-avecindamiento') }}" :active="request()->routeIs('formulario-avecindamiento')">
                             Certificado de avecindamiento
-                        </x-responsive-nav-link> --}}
+                        </x-responsive-nav-link>
                     </div>
-                </div>
-                <div x-data="{ openConfigForm: false }">
+                </div> --}}
+                {{-- <div x-data="{ openConfigForm: false }">
                     <x-responsive-nav-link class="mb-1 flex items-center" @click="openConfigForm = !openConfigForm"
                         :active="request()->routeIs('configForm.*')">
                         <span>Ver solicitudes</span>
@@ -498,11 +498,11 @@
                         <x-responsive-nav-link href="{{ route('versolicitudesresidencia') }}" :active="request()->routeIs('versolicitudesresidencia')">
                             Certificado de residencia
                         </x-responsive-nav-link>
-                        {{-- <x-responsive-nav-link href="{{ route('versolicitudesavecindamiento') }}" :active="request()->routeIs('versolicitudesavecindamiento')">
+                        <x-responsive-nav-link href="{{ route('versolicitudesavecindamiento') }}" :active="request()->routeIs('versolicitudesavecindamiento')">
                             Certificado de avecindamiento
-                        </x-responsive-nav-link> --}}
+                        </x-responsive-nav-link>
                     </div>
-                </div>
+                </div> --}}
             @endrole
 
             @role('admin')

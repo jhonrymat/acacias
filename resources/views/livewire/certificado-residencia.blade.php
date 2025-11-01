@@ -21,7 +21,7 @@
                             aria-valuemin="0" aria-valuemax="100"></div>
                     </div>
 
-                    <!-- ENCABEZADO -->
+                    {{-- <!-- ENCABEZADO --> --}}
                     <div class="items-header-linea-avance-govco">
                         <div class="header-linea-avance-govco active-linea-avance-govco">
                             <div class="indicator-linea-avance-govco" data-la-target="#itemLineaAvance11"
@@ -45,7 +45,7 @@
                         </div>
                     </div>
 
-                    <!-- CONTENIDO PASOS -->
+                    {{-- <!-- CONTENIDO PASOS --> --}}
                     <div id="itemLineaAvance11" class="body-linea-avance-govco active-linea-avance-govco"
                         data-la-parent="#lineaAvance1">
                         @include('components.xroad.paso1')

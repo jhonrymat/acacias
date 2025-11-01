@@ -27,6 +27,7 @@
             }
         </style>
         <!-- Styles -->
+        @yield('styles')
         @livewireStyles
     </head>
     <body class="font-sans antialiased">
@@ -34,7 +35,7 @@
 
         <div class="min-h-screen bg-gray-100">
             @livewire('navigation-menu')
-            <livewire:notification-banner position="navbar" /> 
+            <livewire:notification-banner position="navbar" />
 
             <!-- Page Heading -->
             @if (isset($header))

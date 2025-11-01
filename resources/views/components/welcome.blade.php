@@ -1,102 +1,79 @@
 <livewire:notification-banner position="welcome" />
 @role('user')
-    <script>
-        // Mostrar el mensaje automáticamente al cargar la página
-        document.addEventListener("DOMContentLoaded", () => {
-            Swal.fire({
-                toast: true, // Activa el modo "toast"
-                position: 'top-end', // Ubicación en la parte superior derecha
-                icon: 'success', // Icono de éxito
-                title: '¡Éxito!',
-                text: 'Su correo esta verificado correctamente.',
-                timer: 4000, // Duración en milisegundos
-                timerProgressBar: true, // Barra de progreso para el tiempo
-                showConfirmButton: false, // Oculta el botón de confirmación
-            });
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        Swal.fire({
+            toast: true,
+            position: 'top-end',
+            icon: 'success',
+            title: '¡Éxito!',
+            text: 'Tu correo fue verificado correctamente.',
+            timer: 4000,
+            timerProgressBar: true,
+            showConfirmButton: false,
         });
-    </script>
-    <div class="p-6 lg:p-8 bg-white border-b border-gray-200">
-        <x-application-logo class="" /> {{-- las clases aca no me quieren funcionar --}}
+    });
+</script>
 
-        <h1 class="mt-8 text-2xl font-medium text-gray-900">
-            Bienvenido!
-        </h1>
+<div class="p-6 lg:p-10 bg-white border-b border-gray-200 text-center">
+    <x-application-logo class="mx-auto mb-6" />
 
-        <p class="mt-6 text-gray-500 leading-relaxed">
-            Nos alegra que estén aquí. En esta plataforma, podrán gestionar y obtener sus certificados de una
-            manera rápida, sencilla y sin complicaciones. Nuestro objetivo es hacer el proceso lo más eficiente posible,
-            para que puedan dedicar su tiempo a lo que realmente importa.
-        </p>
-    </div>
-    <div class="max-w-3xl mx-auto py-12 px-6">
-        <h1 class="text-3xl font-bold mb-8 text-center text-gray-900">Selecciona el tipo de certificado que deseas solicitar</h1>
+    <h1 class="text-3xl font-bold text-gray-900">Certificado de Residencia</h1>
+    <p class="mt-4 text-gray-700 leading-relaxed max-w-3xl mx-auto">
+        Nos alegra darte la bienvenida 👋. Hemos renovado esta plataforma para que puedas realizar tus trámites de forma más rápida y sencilla.
+    </p>
+    <p class="mt-2 text-gray-700 leading-relaxed max-w-3xl mx-auto">
+        Ahora, el trámite para solicitar tu <strong>Certificado de Residencia</strong> se realiza desde un nuevo espacio diseñado especialmente para ti.
+    </p>
 
-        {{-- <div class="grid grid-cols-1 gap-6 md:grid-cols-2 justify-center"> --}}
-        <div class="grid grid-cols-1 gap-6 md:grid-cols-1 justify-center">
-            <a href="{{ route('formulario-residencia') }}" class="p-6 border rounded-2xl hover:bg-green-50 text-center shadow-md flex flex-col items-center">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-12 h-12 mb-4">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M3 12l9-9 9 9m0 0v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-9m0 0l9-9 9 9" />
-                </svg>
-                <h2 class="text-xl font-semibold mb-2">🏠 Certificado de Residencia</h2>
-                <p class="text-sm text-gray-600">Este certificado valida tu residencia en el municipio.</p>
-            </a>
-
-            {{-- <a href="{{ route('formulario-avecindamiento') }}" class="p-6 border rounded-2xl hover:bg-blue-50 text-center shadow-md flex flex-col items-center">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" class="w-12 h-12 mb-4">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-                  </svg>
-                <h2 class="text-xl font-semibold mb-2">🏡 Certificado de Avecindamiento</h2>
-                <p class="text-sm text-gray-600">Certifica tu periodo reciente de residencia en la comunidad.</p>
-            </a> --}}
-        </div>
+    <div class="mt-6">
+        <a href="{{ url('/certificado-residencia') }}"
+           class="inline-block bg-green-600 hover:bg-green-700 text-white font-semibold px-6 py-3 rounded-full shadow-md transition">
+           🏠 Ir al nuevo formulario
+        </a>
     </div>
 
-    <div
-        class="bg-gray-200 bg-opacity-25 border-t-2 border-green-custom grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8 p-6 lg:p-8">
-        <div class="md:border-r-2 max-md:border-b-2 border-green-custom">
-            <div class="flex items-center">
-                <svg xmlns="/" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
-                    <path stroke-linecap="round" stroke-linejoin="round"
-                        d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" />
-                </svg>
+    <p class="mt-3 text-sm text-gray-500 max-w-3xl mx-auto">
+        Allí podrás registrar tu solicitud, hacer seguimiento y descargar tu certificado una vez esté listo.
+    </p>
+</div>
 
+<div class="max-w-5xl mx-auto py-10 px-6">
+    <div class="bg-gray-50 rounded-2xl shadow-sm p-8 md:p-10 border border-gray-200">
+        <h2 class="text-2xl font-semibold text-gray-800 mb-6 text-center">
+            🧭 ¿Qué encontrarás en el nuevo formulario?
+        </h2>
 
-                <h2 class="ml-3 text-xl font-semibold text-gray-900">
-                    <a href="/">Primero que todo</a>
-                </h2>
+        <div class="space-y-5 text-gray-700 leading-relaxed">
+            <div class="flex items-start gap-3">
+                <div class="flex-shrink-0 text-green-600 text-2xl">✅</div>
+                <p><strong>Pasos guiados:</strong> el sistema te acompaña durante todo el proceso para que no te pierdas en ningún paso.</p>
             </div>
 
-            <p class="mt-4 text-gray-500 text-sm leading-relaxed">
-                El primer paso para obtener su certificado es realizar una solicitud. Diríjanse al encabezado de esta
-                página, donde encontrarán el campo 'Solicitud'. Hagan clic allí para iniciar el proceso y llenar la
-                información requerida.
-            </p>
-
-        </div>
-
-        <div class="max-md:border-b-2 max-md:border-green-custom">
-            <div class="flex items-center">
-                <svg xmlns="/" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
-                    class="size-6">
-                    <path stroke-linecap="round" stroke-linejoin="round"
-                        d="M3.75 12h16.5m-16.5 3.75h16.5M3.75 19.5h16.5M5.625 4.5h12.75a1.875 1.875 0 0 1 0 3.75H5.625a1.875 1.875 0 0 1 0-3.75Z" />
-                </svg>
-                <h2 class="ml-3 text-xl font-semibold text-gray-900">
-                    <a href="/">Segundo</a>
-                </h2>
+            <div class="flex items-start gap-3">
+                <div class="flex-shrink-0 text-green-600 text-2xl">📄</div>
+                <p><strong>Formulario sencillo:</strong> solo deberás ingresar tus datos personales y de residencia. Nada más.</p>
             </div>
 
-            <p class="mt-4 text-gray-500 text-sm leading-relaxed">
-                Una vez que hayan completado su solicitud, podrán hacer un seguimiento del estado de todas sus solicitudes.
-                Para ello, diríjanse nuevamente al encabezado y seleccionen el campo 'Solicitudes'. Allí verán el progreso y
-                los detalles de cada una de sus solicitudes.
-            </p>
+            <div class="flex items-start gap-3">
+                <div class="flex-shrink-0 text-green-600 text-2xl">🔍</div>
+                <p><strong>Consulta en línea:</strong> podrás verificar el estado de tu solicitud sin necesidad de desplazarte.</p>
+            </div>
 
+            <div class="flex items-start gap-3">
+                <div class="flex-shrink-0 text-green-600 text-2xl">📬</div>
+                <p><strong>Descarga rápida:</strong> al finalizar el trámite, podrás descargar tu certificado directamente desde la plataforma.</p>
+            </div>
         </div>
-
-
     </div>
+</div>
+
+<footer class="bg-gray-50 border-t border-green-200 mt-12 py-6 text-center text-gray-600 text-sm">
+    <p>💡 Recuerda: si necesitas tu certificado, haz clic en el botón <strong>“Ir al nuevo formulario”</strong> para iniciar tu trámite.</p>
+    <p class="mt-2">Este servicio es completamente en línea, fácil y seguro 🛡️</p>
+</footer>
 @endrole
+
 
 @role('admin')
     <div class="p-6 lg:p-8 bg-white border-b border-gray-200">
