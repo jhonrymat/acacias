@@ -109,6 +109,7 @@
         }
 
 
+
         @media (min-width: 1280px) {
 
             /* .govco-data-front {
@@ -452,8 +453,8 @@
     {{-- saltar pasos --}}
     <script>
         /* ================================
-                                                                                                   VARIABLES DE CONTROL
-                                                                                                ================================ */
+                                                                                                                                               VARIABLES DE CONTROL
+                                                                                                                                            ================================ */
         let pasosPermitidos = [1];
         let pasosVisitados = [1];
 
@@ -491,6 +492,11 @@
             if (!pasosVisitados.includes(numeroPaso)) pasosVisitados.push(numeroPaso);
 
             console.log(`✅ Cambiado al paso ${numeroPaso}`);
+
+            // hacer scroll al inicio de la línea de avance
+            elementParent.scrollIntoView({
+                behavior: 'smooth'
+            });
 
             actualizarMiga();
         }
@@ -682,6 +688,350 @@
 
             mapInitialized = true;
         }
+    </script>
+
+    {{-- formulario del paso 2 --}}
+    {{-- inputs files --}}
+    <script>
+        // Mostrar nombre del archivo seleccionado
+        const inputs = ['Electoral', 'Sisben', 'JAC'];
+        inputs.forEach(id => {
+            const input = document.getElementById('file' + id);
+            const label = document.getElementById('name' + id);
+            input.addEventListener('change', function() {
+                if (this.files && this.files.length > 0) {
+                    label.textContent = this.files[0].name;
+                    label.classList.remove('text-secondary');
+                    label.classList.add('text-success');
+                } else {
+                    label.textContent = 'No seleccionado';
+                    label.classList.remove('text-success');
+                    label.classList.add('text-secondary');
+                }
+            });
+        });
+    </script>
+    <script>
+        // Configurar validaciones GOVCO para los inputs file
+        window.addEventListener('load', function() {
+            // Configurar para cédula: PDF/JPG hasta 10MB
+            setValidationParameters('fotocopia_cedula', ['pdf', 'jpg', 'jpeg', 'png'], 10485760, 1);
+
+            // Configurar para recibo: PDF/JPG hasta 10MB
+            setValidationParameters('recibo_servicios', ['pdf', 'jpg', 'jpeg', 'png'], 10485760, 1);
+        });
+
+        // 🔧 FUNCIONES AUXILIARES (agregar al final del script)
+
+        /**
+         * Limpia completamente un input file de GOVCO
+         */
+        function limpiarInputGovco(inputId) {
+            const input = document.getElementById(inputId);
+            if (!input) return;
+
+            // Limpiar el input file
+            input.value = '';
+
+            // Limpiar attachmentList
+            if (window.attachmentList && window.attachmentList[inputId]) {
+                window.attachmentList[inputId] = [];
+            }
+
+            // Limpiar selectedFiles
+            if (window.selectedFiles && window.selectedFiles[inputId]) {
+                window.selectedFiles[inputId] = [];
+            }
+
+            // Limpiar el nombre del archivo mostrado
+            const parent = input.parentNode;
+            const fileNameSpan = parent.querySelector('.file-name-carga-de-archivo-govco');
+            if (fileNameSpan) {
+                fileNameSpan.textContent = 'Ningún archivo seleccionado';
+            }
+
+            // Limpiar archivos adjuntos visibles
+            const containerParent = input.closest('.container-carga-de-archivo-govco');
+            if (containerParent) {
+                const attachedContainer = containerParent.querySelector('.attached-files-carga-de-archivo-govco');
+                if (attachedContainer) {
+                    attachedContainer.innerHTML = '';
+                }
+
+                const detailContainer = containerParent.querySelector('.container-detail-carga-de-archivo-govco');
+                if (detailContainer) {
+                    detailContainer.style.display = 'none';
+                }
+            }
+
+            // Deshabilitar botón de carga
+            const button = containerParent?.querySelector('.button-loader-carga-de-archivo-govco');
+            if (button) {
+                button.disabled = true;
+            }
+
+            // Limpiar errores
+            input.setAttribute('data-error', '0');
+            const alertSpan = containerParent?.querySelector('.alert-carga-de-archivo-govco');
+            if (alertSpan) {
+                alertSpan.classList.add('visually-hidden');
+                alertSpan.textContent = '';
+            }
+        }
+
+        /**
+         * Limpia archivos opcionales (que no usan GOVCO)
+         */
+        function limpiarArchivoOpcional(inputId, spanId) {
+            const input = document.getElementById(inputId);
+            const span = document.getElementById(spanId);
+
+            if (input) {
+                input.value = '';
+            }
+
+            if (span) {
+                span.textContent = 'No seleccionado';
+                span.classList.remove('text-success');
+                span.classList.add('text-secondary');
+            }
+        }
+        // Script completo con manejo de archivos GOVCO
+        document.getElementById('solicitudForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+
+            const form = e.target;
+            const formData = new FormData(form);
+
+            // Limpiar alertas y errores previos
+            document.querySelectorAll('.container-alerta-govco').forEach(a => a.remove());
+            document.querySelectorAll('.is-invalid').forEach(el => el.classList.remove('is-invalid'));
+            document.querySelectorAll('.invalid-feedback').forEach(el => el.remove());
+
+            // ✅ SOLUCIÓN: Agregar archivos desde attachmentList de GOVCO
+            const govInputs = [{
+                    id: 'fotocopia_cedula',
+                    name: 'cedula'
+                },
+                {
+                    id: 'recibo_servicios',
+                    name: 'recibo'
+                }
+            ];
+
+            govInputs.forEach(({
+                id,
+                name
+            }) => {
+                // Acceder a los archivos almacenados por el componente GOVCO
+                if (window.attachmentList && window.attachmentList[id] && window.attachmentList[id]
+                    .length > 0) {
+                    // Agregar el primer archivo de la lista
+                    formData.append(name, window.attachmentList[id][0]);
+                    console.log(`✅ Archivo ${name} agregado:`, window.attachmentList[id][0].name);
+                } else {
+                    console.warn(`⚠️ No hay archivos en attachmentList para ${id}`);
+                }
+            });
+
+            // 🔍 DEBUG: Ver contenido del FormData
+            console.log('=== Contenido del FormData ===');
+            for (let [key, value] of formData.entries()) {
+                if (value instanceof File) {
+                    console.log(`${key}: ${value.name} (${value.size} bytes)`);
+                } else {
+                    console.log(`${key}: ${value}`);
+                }
+            }
+
+            try {
+                const response = await fetch(form.action, {
+                    method: 'POST',
+                    body: formData,
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest',
+                        'Accept': 'application/json'
+                    }
+                });
+
+                if (!response.ok) {
+                    if (response.status === 422) {
+                        const errorData = await response.json();
+
+                        // Mostrar errores específicos en cada campo
+                        Object.keys(errorData.errors).forEach(field => {
+                            const messages = errorData.errors[field];
+                            highlightFieldError(field, messages[0]);
+                        });
+
+                        // Alerta general
+                        showGovcoAlert('error', 'Por favor corrige los errores marcados en el formulario.');
+
+                        // Scroll al primer error
+                        const firstError = document.querySelector('.is-invalid');
+                        if (firstError) {
+                            firstError.scrollIntoView({
+                                behavior: 'smooth',
+                                block: 'center'
+                            });
+                        }
+                        return;
+                    } else {
+                        throw new Error('Error inesperado (' + response.status + ')');
+                    }
+                }
+
+                const result = await response.json();
+
+                if (result.status === 'success') {
+                    showGovcoAlert('success', result.message, result.link);
+
+                    // 1️⃣ Reset básico del formulario
+                    form.reset();
+
+                    // 2️⃣ Limpiar archivos GOVCO (obligatorios)
+                    limpiarInputGovco('fotocopia_cedula');
+                    limpiarInputGovco('recibo_servicios');
+
+                    // 3️⃣ Limpiar archivos opcionales
+                    limpiarArchivoOpcional('fileElectoral', 'nameElectoral');
+                    limpiarArchivoOpcional('fileSisben', 'nameSisben');
+                    limpiarArchivoOpcional('fileJAC', 'nameJAC');
+
+                    // 4️⃣ Limpiar coordenadas del mapa
+                    document.getElementById('lat').value = '';
+                    document.getElementById('lng').value = '';
+                    document.getElementById('display-lat').textContent = 'No seleccionada';
+                    document.getElementById('display-lng').textContent = 'No seleccionada';
+
+                    // 5️⃣ Limpiar select2 (si lo usas para barrio)
+                    const selectBarrio = document.getElementById('id_barrio');
+                    if (selectBarrio) {
+                        selectBarrio.value = '';
+                        // Si usas Select2, también debes limpiarlo así:
+                        if (typeof $(selectBarrio).select2 !== 'undefined') {
+                            $(selectBarrio).val('').trigger('change');
+                        }
+                    }
+
+
+                    // 🎯 PASAR AUTOMÁTICAMENTE AL PASO 3
+                    // 2️⃣ Ir al paso 3
+                    if (typeof pasosPermitidos !== 'undefined' && typeof irAlPaso !== 'undefined') {
+                        pasosPermitidos = [1, 2, 3];
+                        irAlPaso(3);
+                    }
+
+                } else if (result.status === 'info') {
+                    showGovcoAlert('info', result.message, result.link);
+                } else {
+                    showGovcoAlert('error', result.message);
+                }
+
+            } catch (error) {
+                console.error(error);
+                showGovcoAlert('error', 'Ocurrió un error inesperado al enviar la solicitud.');
+            }
+        });
+
+        // Función para resaltar campos con error
+        function highlightFieldError(fieldName, errorMessage) {
+            const fieldMap = {
+                'cedula': 'fotocopia_cedula',
+                'recibo': 'recibo_servicios',
+                'id_barrio': 'id_barrio',
+                'direccion': 'direccion',
+                'terminos': 'acepto_terminos'
+            };
+
+            const fieldId = fieldMap[fieldName] || fieldName;
+            const input = document.getElementById(fieldId) || document.querySelector(`[name="${fieldName}"]`);
+
+            if (!input) return;
+
+            input.classList.add('is-invalid');
+
+            if (input.type === 'file') {
+                const container = input.closest('.container-carga-de-archivo-govco');
+                if (container) {
+                    container.style.borderLeft = '4px solid #dc3545';
+                    container.style.backgroundColor = '#fff5f5';
+                }
+            }
+
+            const errorDiv = document.createElement('div');
+            errorDiv.classList.add('invalid-feedback', 'd-block');
+            errorDiv.innerHTML = `<strong>⚠️ ${errorMessage}</strong>`;
+
+            if (input.type === 'file') {
+                const container = input.closest('.container-carga-de-archivo-govco');
+                if (container) {
+                    container.appendChild(errorDiv);
+                }
+            } else if (input.type === 'checkbox') {
+                input.parentElement.appendChild(errorDiv);
+            } else {
+                const parent = input.closest('.container-input-texto-govco') || input.parentElement;
+                parent.appendChild(errorDiv);
+            }
+        }
+
+        // Función para mostrar alertas GOVCO
+        function showGovcoAlert(type, message, link = null) {
+            const icons = {
+                success: 'alerta-icon-success-govco asuccess',
+                error: 'alerta-icon-error-govco aerror',
+                info: 'alerta-icon-notificacion-govco anotificacion'
+            };
+
+            const classes = {
+                success: 'alerta-success-govco asuccess',
+                error: 'alerta-error-govco aerror',
+                info: 'anotificacion'
+            };
+
+            const alertDiv = document.createElement('div');
+            alertDiv.classList.add('container-alerta-govco');
+            alertDiv.style.position = 'fixed';
+            alertDiv.style.top = '20px';
+            alertDiv.style.right = '20px';
+            alertDiv.style.zIndex = '9999';
+            alertDiv.style.maxWidth = '500px';
+
+            alertDiv.innerHTML = `
+        <div class="alert alerta-govco ${classes[type]}" role="alert">
+            <span class="alerta-icon-govco ${icons[type]}"></span>
+            <p class="alerta-content-text">
+                ${message}
+                ${link ? `<br><a href="${link}" class="alert-link alerta-link ${classes[type]}">Ver mis solicitudes</a>` : ''}
+            </p>
+            <button type="button" class="btn-close" onclick="this.closest('.container-alerta-govco').remove()"></button>
+        </div>
+    `;
+
+            document.body.prepend(alertDiv);
+
+            setTimeout(() => {
+                if (alertDiv.parentElement) {
+                    alertDiv.remove();
+                }
+            }, 8000);
+        }
+
+        // Limpiar errores al interactuar con los campos
+        document.querySelectorAll('input, select, textarea').forEach(input => {
+            input.addEventListener('change', function() {
+                this.classList.remove('is-invalid');
+                const feedback = this.parentElement.querySelector('.invalid-feedback');
+                if (feedback) feedback.remove();
+
+                const container = this.closest('.container-carga-de-archivo-govco');
+                if (container) {
+                    container.style.borderLeft = '';
+                    container.style.backgroundColor = '';
+                }
+            });
+        });
     </script>
     @yield('scripts')
     @livewireScripts

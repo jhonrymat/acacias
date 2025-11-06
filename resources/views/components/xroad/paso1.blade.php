@@ -16,6 +16,7 @@
                 Ahora puedes crear tu solicitud de certificado de residencia.
             </div>
 
+
             <div class="row mb-4">
                 <div class="col-md-12" style="text-align: justify;">
                     El <strong>Certificado de Residencia</strong> es un documento oficial que acredita el lugar donde una

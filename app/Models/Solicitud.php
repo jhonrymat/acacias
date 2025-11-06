@@ -34,6 +34,7 @@ class Solicitud extends Model
         'fecha_emision',
         'observaciones',
         'terminos',
+        'tratamiento_datos',
         'es_favorito',
     ];
 

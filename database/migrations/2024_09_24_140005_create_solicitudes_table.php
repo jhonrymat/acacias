@@ -39,6 +39,7 @@ return new class extends Migration
             // Observaciones
             $table->text('observaciones')->nullable();
             $table->boolean('terminos');
+            $table->boolean('tratamiento_datos')->default(true);
             $table->timestamps();
 
             // Relación con otras tablas

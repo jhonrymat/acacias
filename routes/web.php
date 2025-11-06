@@ -38,6 +38,7 @@ use App\Http\Controllers\XroadController;
 use App\Livewire\ValidarQrAvecindamiento;
 use App\Livewire\TipoSolicitanteComponent;
 use App\Livewire\SolicitudesExportComponent;
+use App\Http\Controllers\SolicitudController;
 use App\Livewire\SolicitudAnulacionComponent;
 use App\Livewire\HistorialAvecindamientoComponent;
 use App\Livewire\SolicitudAvecindamientoComponent;
@@ -235,6 +236,8 @@ Route::prefix('certificado-residencia')->group(function () {
 
         Route::post('/password/reset', [CustomLoginController::class, 'resetPassword'])
             ->name('certificado.password.update');
+
+
     });
 
     Route::middleware('auth')->group(function () {
@@ -252,6 +255,18 @@ Route::prefix('certificado-residencia')->group(function () {
                 ]
             ]);
         })->name('certificado.auth.check');
+
+        // Mostrar el formulario de solicitud
+        Route::get('/solicitud/crear', function () {
+            return view('solicitud.crear'); // cambia 'solicitud.crear' por el nombre real de tu vista
+        })->name('solicitud.crear');
+
+        // Enviar (guardar) la solicitud al controlador
+        Route::post('/solicitud/crear', [SolicitudController::class, 'store'])->name('solicitud.store');
+
+        // Ver solicitudes (ya lo tienes, pero por si acaso)
+        Route::get('/versolicitudesresidencia', [SolicitudController::class, 'index'])
+            ->name('versolicitudesresidencia');
     });
 });
 
