@@ -108,14 +108,20 @@ class SolicitudController extends Controller
                 'estado_id' => 1,
             ]);
 
-            Mail::to(Auth::user()->email)->send(new SolicitudCreadaNotification($solicitud->id, Auth::user()->name));
+            try {
+                Mail::to(Auth::user()->email)
+                    ->send(new SolicitudCreadaNotification($solicitud->id, Auth::user()->name));
+            } catch (\Throwable $e) {
+                Log::error("Error al enviar correo de solicitud creada: " . $e->getMessage());
+            }
+
             Log::info("Solicitud creada exitosamente por el usuario ID {$userId}.");
 
             return $request->ajax()
                 ? response()->json([
                     'status' => 'success',
                     'message' => 'Tu solicitud fue enviada correctamente.',
-                    'link' => route('versolicitudesresidencia')
+                    'solicitud' => $solicitud
                 ])
                 : redirect()->route('versolicitudesresidencia')->with('success', 'Solicitud creada exitosamente.');
 

@@ -820,9 +820,6 @@
 
         map.on('click', function(e) {
             const lat = e.latlng.lat;
-            const lng = e.latlng.lng;
-
-            // Mueve o crea el marcador
             if (marker) {
                 marker.setLatLng(e.latlng);
             } else {
@@ -840,6 +837,9 @@
             });
         });
     </script>
+            const lng = e.latlng.lng;
+
+            // Mueve o crea el marcador
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <script>

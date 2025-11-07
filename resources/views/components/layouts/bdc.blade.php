@@ -453,8 +453,8 @@
     {{-- saltar pasos --}}
     <script>
         /* ================================
-                                                                                                                                               VARIABLES DE CONTROL
-                                                                                                                                            ================================ */
+                                                                                                                                                                       VARIABLES DE CONTROL
+                                                                                                                                                                    ================================ */
         let pasosPermitidos = [1];
         let pasosVisitados = [1];
 
@@ -884,7 +884,7 @@
                 const result = await response.json();
 
                 if (result.status === 'success') {
-                    showGovcoAlert('success', result.message, result.link);
+                    showGovcoAlert('success', result.message);
 
                     // 1️⃣ Reset básico del formulario
                     form.reset();
@@ -920,10 +920,11 @@
                     if (typeof pasosPermitidos !== 'undefined' && typeof irAlPaso !== 'undefined') {
                         pasosPermitidos = [1, 2, 3];
                         irAlPaso(3);
+                        mostrarPaso3(result.solicitud);
                     }
 
                 } else if (result.status === 'info') {
-                    showGovcoAlert('info', result.message, result.link);
+                    showGovcoAlert('info', result.message);
                 } else {
                     showGovcoAlert('error', result.message);
                 }
@@ -933,6 +934,7 @@
                 showGovcoAlert('error', 'Ocurrió un error inesperado al enviar la solicitud.');
             }
         });
+
 
         // Función para resaltar campos con error
         function highlightFieldError(fieldName, errorMessage) {

@@ -32,7 +32,6 @@
             icon-position="left" style="width: 165px; height: 42px;" id="btn-logout-govco"> Cerrar sesión
         </button>
     </div>
-
     <!-- Alerta Modal Warning -->
     <div class="modal fade show" id="modal_advertencia" tabindex="-1" aria-hidden="true" style="display:none;">
         <div class="modal-dialog modal-dialog-centered modal-dialog-govco">
@@ -129,7 +128,7 @@
                         btnLogout.disabled = true;
                         btnLogout.textContent = 'Cerrando sesión...';
                         const csrfToken = document.querySelector('meta[name="csrf-token"]')
-                        ?.content;
+                            ?.content;
 
                         fetch('http://127.0.0.1:8000/certificado-residencia/auth/logout', {
                                 method: 'POST',
