@@ -109,15 +109,14 @@
                     </a>
                 </div>
                 <div class="col-md-6 mb-3" style="text-align: center;">
-                    <a type="button" class="module-tarjeta-govco" title="descripción donde redirige el enlace"
-                        onclick="pasosPermitidos = [1,4]; irAlPaso(4);">
+                    <a type="button" class="module-tarjeta-govco"
+                        onclick="pasosPermitidos = [1,4]; irAlPaso(4); setTimeout(() => inicializarPaso4?.(), 150);">
                         <div class="header-tarjeta-govco">
                             <h5>Consultar Solicitud</h5>
                         </div>
                         <hr>
                         <div class="body-tarjeta-govco">
-                            <p>Verifica el estado de tu trámite y descarga tu certificado ingresando tu número de documento.
-                            </p>
+                            <p>Verifica el estado de tu trámite y descarga tu certificado.</p>
                         </div>
                     </a>
                 </div>

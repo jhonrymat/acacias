@@ -69,8 +69,6 @@
                                 No puedes crear una nueva hasta que esta sea resuelta.
                                 <a type="button" class="alert-link alerta-link aerror"
                                 onclick="pasosPermitidos = [1,2,4]; irAlPaso(4);">Ver solicitudes</a>
-                                <button type="button" class="btn-govco fill-btn-govco" style="width: 165px; height: 42px;"
-                                    onclick="pasosPermitidos = [1,2,4]; irAlPaso(4);">Ver solicitudes</button>
                             </p>
                         </div>
                     </div>

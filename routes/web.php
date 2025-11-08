@@ -264,9 +264,24 @@ Route::prefix('certificado-residencia')->group(function () {
         // Enviar (guardar) la solicitud al controlador
         Route::post('/solicitud/crear', [SolicitudController::class, 'store'])->name('solicitud.store');
 
-        // Ver solicitudes (ya lo tienes, pero por si acaso)
-        Route::get('/versolicitudesresidencia', [SolicitudController::class, 'index'])
-            ->name('versolicitudesresidencia');
+        // Rutas AJAX para cargar datos
+        Route::get('/solicitudes/get', [SolicitudController::class, 'getSolicitudes'])
+            ->name('solicitudes.get');
+
+        Route::get('/solicitudes/datos-usuario', [SolicitudController::class, 'getDatosUsuario'])
+            ->name('solicitudes.datos-usuario');
+
+        Route::get('/solicitudes/notas/{id}', [SolicitudController::class, 'getNotas'])
+            ->name('solicitudes.notas');
+
+        Route::get('/solicitudes/anulacion/{id}', [SolicitudController::class, 'getAnulacion'])
+            ->name('solicitudes.anulacion');
+
+        // Ruta para generar y descargar PDF
+        Route::get('/solicitudes/pdf/{id}', [SolicitudController::class, 'generarPDF'])
+            ->name('solicitudes.pdf');
+
+
     });
 });
 

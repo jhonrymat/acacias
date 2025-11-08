@@ -2,12 +2,17 @@
 
 namespace App\Http\Controllers;
 
+use Carbon\Carbon;
+use App\Models\User;
+use App\Models\Anulacion;
 use App\Models\Solicitud;
-use App\Mail\SolicitudCreadaNotification;
+use App\Models\Validacion;
 use Illuminate\Http\Request;
+use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
-use Illuminate\Support\Facades\Log;
+use App\Mail\SolicitudCreadaNotification;
 use Illuminate\Validation\ValidationException;
 
 class SolicitudController extends Controller
@@ -147,5 +152,229 @@ class SolicitudController extends Controller
                 ], 500)
                 : back()->with('error', 'Ocurrió un error al procesar la solicitud.');
         }
+    }
+
+     /**
+     * Obtiene las solicitudes del usuario autenticado (AJAX)
+     */
+    public function getSolicitudes(Request $request)
+    {
+        try {
+            $userId = auth()->id();
+            $solicitudes = Solicitud::with(['user', 'barrio', 'estado', 'validaciones'])
+                ->where('user_id', $userId)
+                ->orderBy('id', 'desc')
+                ->get();
+
+            // Formatear datos para la vista
+            $solicitudesFormateadas = $solicitudes->map(function ($solicitud) {
+                $validacion = $solicitud->validaciones->where('id_solicitud', $solicitud->id)->first();
+                $anulacion = Anulacion::where('solicitud_id', $solicitud->id)->first();
+
+                return [
+                    'id' => $solicitud->id,
+                    'numeroIdentificacion' => $solicitud->numeroIdentificacion,
+                    'direccion' => $solicitud->direccion,
+                    'barrio' => strtolower($solicitud->barrio->zona) . ' ' .
+                               ucfirst($solicitud->barrio->nombreBarrio) . ' - ' .
+                               $solicitud->barrio->tipoUnidad . ' ' .
+                               $solicitud->barrio->codigoNumero,
+                    'created_at' => $solicitud->created_at->format('Y-m-d H:i'),
+                    'estado' => $solicitud->estado->nombreEstado,
+                    'estado_clase' => $this->getEstadoClase($solicitud->estado->nombreEstado),
+                    'validacion_id' => $validacion?->id,
+                    'validacion_visible' => $validacion?->visible ?? 0,
+                    'anulacion_visible' => $anulacion?->visible ?? 0,
+                    'tiene_anulacion' => $anulacion ? true : false,
+                ];
+            });
+
+            return response()->json([
+                'success' => true,
+                'solicitudes' => $solicitudesFormateadas,
+                'usuario' => auth()->user()->name
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error al cargar las solicitudes: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+
+    /**
+     * Obtiene los datos del usuario actual (AJAX)
+     */
+    public function getDatosUsuario(Request $request)
+    {
+        try {
+            $user = User::with(['tipoSolicitante', 'tipoDocumento', 'nivelEstudio', 'genero', 'ocupacion', 'poblacion'])
+                ->find(auth()->id());
+
+            $datos = [
+                'nombreCompleto' => trim($user->name . ' ' .
+                                       ($user->nombre_2 ?? '') . ' ' .
+                                       $user->apellido_1 . ' ' .
+                                       ($user->apellido_2 ?? '')),
+                'email' => $user->email,
+                'telefonoContacto' => $user->telefonoContacto,
+                'tipoSolicitante' => $user->tipoSolicitante->tipoSolicitante,
+                'tipoDocumento' => $user->tipoDocumento->tipoDocumento,
+                'numeroIdentificacion' => $user->numeroIdentificacion,
+                'ciudadExpedicion' => $user->ciudadExpedicion,
+                'fechaNacimiento' => $user->fechaNacimiento,
+                'nivelEstudio' => $user->nivelEstudio->nivelEstudio,
+                'genero' => $user->genero->nombreGenero,
+                'ocupacion' => $user->ocupacion->nombreOcupacion,
+                'poblacion' => $user->poblacion->nombrePoblacion,
+            ];
+
+            return response()->json([
+                'success' => true,
+                'datos' => $datos
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error al cargar los datos del usuario'
+            ], 500);
+        }
+    }
+
+    /**
+     * Obtiene las notas de validación (AJAX)
+     */
+    public function getNotas(Request $request, $id)
+    {
+        try {
+            $validacion = Validacion::find($id);
+
+            if (!$validacion) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'No se encontraron las notas.'
+                ], 404);
+            }
+
+            return response()->json([
+                'success' => true,
+                'notas' => $validacion->notas
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error al cargar las notas'
+            ], 500);
+        }
+    }
+
+    /**
+     * Obtiene información de anulación (AJAX)
+     */
+    public function getAnulacion(Request $request, $id)
+    {
+        try {
+            $anulacion = Anulacion::where('solicitud_id', $id)->first();
+
+            if (!$anulacion) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'No se encontró información de anulación.'
+                ], 404);
+            }
+
+            return response()->json([
+                'success' => true,
+                'anulacion' => [
+                    'descripcion' => $anulacion->descripcion,
+                    'archivo' => $anulacion->archivo,
+                    'archivo_url' => $anulacion->archivo ? asset('storage/' . $anulacion->archivo) : null,
+                    'visible' => $anulacion->visible
+                ]
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error al cargar la anulación'
+            ], 500);
+        }
+    }
+
+    /**
+     * Genera y descarga el PDF del certificado
+     */
+    public function generarPDF($id)
+    {
+        try {
+            $solicitud = Solicitud::findOrFail($id);
+
+            if (!in_array((int) $solicitud->estado_id, [5, 6], true)) {
+                abort(403, 'La solicitud no está emitida.');
+            }
+
+            $data = [
+                'id' => $solicitud->id,
+                'solicitante' => trim(
+                    $solicitud->user->name . ' ' .
+                    ($solicitud->user->nombre_2 ?? '') . ' ' .
+                    $solicitud->user->apellido_1 . ' ' .
+                    ($solicitud->user->apellido_2 ?? '')
+                ),
+                'tipoDocumento' => $solicitud->user->tipoDocumento->tipoDocumento,
+                'cedula' => $solicitud->numeroIdentificacion,
+                'direccion' => $solicitud->direccion,
+                'cargo' => $solicitud->validador2->cargo,
+                'validador' => trim(
+                    $solicitud->validador2->name . ' ' .
+                    ($solicitud->validador2->nombre_2 ?? '') . ' ' .
+                    $solicitud->validador2->apellido_1 . ' ' .
+                    ($solicitud->validador2->apellido_2 ?? '')
+                ),
+                'codigo_validador1' => $solicitud->actualizador->codigo,
+                'firma' => $solicitud->validador2->firma,
+                'ciudad_expedicion' => $solicitud->user->ciudadExpedicion,
+                'barrio_vereda' => $solicitud->barrio->nombreBarrio,
+                'tipo_unidad' => $solicitud->barrio->tipoUnidad,
+                'codigo_numero' => $solicitud->barrio->codigoNumero,
+                'zona' => $solicitud->barrio->zona,
+                'estado' => $solicitud->estado->nombreEstado,
+                'numero_certificado' => $solicitud->numeroIdentificacion,
+                'fecha_emision' => $solicitud->fecha_emision
+                    ? Carbon::parse($solicitud->fecha_emision)->translatedFormat('d \\de F \\de Y')
+                    : 'N/A',
+                'vigencia_inicio' => $solicitud->fecha_emision
+                    ? Carbon::parse($solicitud->fecha_emision)->translatedFormat('d \\de F \\de Y')
+                    : 'N/A',
+                'vigencia_fin' => $solicitud->VigenciaFormateada,
+                'verificacion_url' => env('APP_URL') . '/consulta-tramite',
+                'qr' => public_path('storage/' . $solicitud->validaciones->first()->qr_url),
+            ];
+
+            $pdf = Pdf::loadView('certificados.certificado', $data);
+
+            return response()->streamDownload(function () use ($pdf) {
+                echo $pdf->output();
+            }, $solicitud->id . '_' . $solicitud->numeroIdentificacion . '_certificadoResidencia.pdf');
+        } catch (\Exception $e) {
+            return back()->with('error', 'Error al generar el PDF: ' . $e->getMessage());
+        }
+    }
+
+    /**
+     * Retorna la clase CSS según el estado
+     */
+    private function getEstadoClase($estado)
+    {
+        $clases = [
+            'Pendiente' => 'warning',
+            'Procesando' => 'success',
+            'No completado' => 'danger',
+            'En proceso' => 'info',
+            'Emitido' => 'success',
+            'Por vencer' => 'warning',
+            'Anulado' => 'danger'
+        ];
+
+        return $clases[$estado] ?? 'secondary';
     }
 }
