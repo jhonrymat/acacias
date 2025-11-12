@@ -68,7 +68,7 @@
                                 creada el {{ $solicitudBloqueante->created_at->format('d/m/Y') }}.
                                 No puedes crear una nueva hasta que esta sea resuelta.
                                 <a type="button" class="alert-link alerta-link aerror"
-                                onclick="pasosPermitidos = [1,2,4]; irAlPaso(4);">Ver solicitudes</a>
+                                    onclick="pasosPermitidos = [1,2,4]; irAlPaso(4);">Ver solicitudes</a>
                             </p>
                         </div>
                     </div>
@@ -159,7 +159,7 @@
                         <!-- Correo electrónico -->
                         <div class="col-md-6">
                             <div class="entradas-de-texto-govco">
-                                <label for="email" class="form-label">E-Mail <span aria-required="true">*</span></label>
+                                <label for="email" class="form-label">E-Mail</label>
                                 <div class="container-input-texto-govco">
                                     <input type="email" id="email" name="email" class="form-control"
                                         value="{{ auth()->user()->email ?? 'FREDYPARRAGUEVARA@GMAIL.COM' }}" disabled>
@@ -214,7 +214,8 @@
 
                         <!-- Dirección -->
                         <div class="col-md-6">
-                            <label for="direccion" class="form-label">Dirección*</label>
+                            <label for="direccion" class="form-label">Dirección <span
+                                    aria-required="true">*</span></label>
                             <div class="input-group">
                                 <input type="text" class="form-control" name="direccion" id="direccion" readonly
                                     placeholder="Seleccione su dirección" required>
@@ -233,7 +234,8 @@
 
                         <!-- Barrio o Vereda -->
                         <div class="col-md-6">
-                            <label for="id_barrio" class="block text-sm font-medium form-label">Barrio o Vereda*</label>
+                            <label for="id_barrio" class="block text-sm font-medium form-label">Barrio o Vereda <span
+                                    aria-required="true">*</span></label>
                             <select name="id_barrio" id="id_barrio" class="form-select select2" required>
                                 <option value="">Selecciona un barrio o vereda</option>
                                 @foreach ($barrios as $barrio)
@@ -256,9 +258,11 @@
                                     <div class="all-input-carga-de-archivo-govco">
                                         <input type="file" name="cedula" id="fotocopia_cedula"
                                             class="input-carga-de-archivo-govco active" accept=".pdf,.jpg,.jpeg,.png"
-                                            data-error="0" data-action="uploadFile" data-action-delete="deleteFile" />
+                                            data-error="0" data-action="uploadFile" data-action-delete="deleteFile"
+                                            required />
                                         <label for="fotocopia_cedula" class="label-carga-de-archivo-govco">
                                             Subir Fotocopia de la Cédula
+                                            <span aria-required="true">*</span>
                                         </label>
                                         <label for="fotocopia_cedula" class="container-input-carga-de-archivo-govco">
                                             <span class="button-file-carga-de-archivo-govco">Seleccionar archivo</span>
@@ -297,9 +301,11 @@
                                     <div class="all-input-carga-de-archivo-govco">
                                         <input type="file" name="recibo" id="recibo_servicios"
                                             class="input-carga-de-archivo-govco active" accept=".pdf,.jpg,.jpeg,.png"
-                                            data-error="0" data-action="uploadFile" data-action-delete="deleteFile" />
+                                            data-error="0" data-action="uploadFile" data-action-delete="deleteFile"
+                                            required />
                                         <label for="fotocopia_cedula" class="label-carga-de-archivo-govco">
                                             Subir Recibo de servicios públicos
+                                            <span aria-required="true">*</span>
                                         </label>
                                         <label for="recibo_servicios" class="container-input-carga-de-archivo-govco">
                                             <span class="button-file-carga-de-archivo-govco">Seleccionar archivo</span>
@@ -426,8 +432,7 @@
                                     <div
                                         class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
                                         <div>
-                                            <strong>Certificación de la Junta de Acción Comunal <span
-                                                    class="text-danger">*</span></strong>
+                                            <strong>Certificación de la Junta de Acción Comunal</strong>
                                             <div class="small text-muted">Formato PDF o JPG (máx. 10MB)</div>
                                         </div>
                                         <div class="d-flex align-items-center gap-2">
@@ -458,6 +463,7 @@
                                                 class="link-primary text-decoration-underline">
                                                 tratamiento de datos personales
                                             </a>
+                                            <span aria-required="true">*</span>
                                         </label>
                                     </div>
 
@@ -469,6 +475,7 @@
                                                 class="link-primary text-decoration-underline">
                                                 términos y condiciones
                                             </a>
+                                            <span aria-required="true">*</span>
                                         </label>
                                     </div>
                                 </div>

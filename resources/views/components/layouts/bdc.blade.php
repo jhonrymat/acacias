@@ -453,8 +453,8 @@
     {{-- saltar pasos --}}
     <script>
         /* ================================
-                                                                                                                                                                       VARIABLES DE CONTROL
-                                                                                                                                                                    ================================ */
+                                                                                                                                                                                   VARIABLES DE CONTROL
+                                                                                                                                                                                ================================ */
         let pasosPermitidos = [1];
         let pasosVisitados = [1];
 
@@ -801,6 +801,30 @@
             e.preventDefault();
 
             const form = e.target;
+            const direccion = document.getElementById('direccion'); // Campo dirección
+            const direccionValue = direccion.value
+                .trim(); // Obtener el valor de la dirección y eliminar espacios en blanco
+
+            // Verificar si la dirección está vacía
+            if (!direccionValue) {
+                // Si está vacío, mostrar un error
+                const errorMessage = 'Por favor, seleccione o ingrese su dirección.';
+
+                // Mostrar mensaje de error (puedes personalizar este paso según cómo se muestren los errores en tu UI)
+                showGovcoAlert('error', errorMessage);
+
+                // Resaltar el campo de dirección con un borde rojo (o aplicar la clase is-invalid si usas Bootstrap)
+                direccion.classList.add('is-invalid');
+
+                // Desplazar la página hacia el campo de dirección
+                direccion.scrollIntoView({
+                    behavior: 'smooth', // Desplazamiento suave
+                    block: 'center' // Centrar el campo en la vista
+                });
+
+                // Detener el envío del formulario
+                return;
+            }
             const formData = new FormData(form);
 
             // Limpiar alertas y errores previos

@@ -68,12 +68,11 @@
                                     aria-invalid="{{ $errors->has('password') ? 'true' : 'false' }}"
                                     placeholder="Ingrese su contraseña" minlength="8" typeData="password"
                                     aria-required="true" required autocomplete="current-password" />
-                                <button type="button"
-                                    class="icon-entradas-de-texto-govco eye-entradas-de-texto-govco none"
-                                    aria-label="Ocultar contraseña"></button>
+                                <button type="button" class="icon-entradas-de-texto-govco eye-entradas-de-texto-govco none"
+                                    aria-label="Mostrar contraseña"></button>
                                 <button type="button"
                                     class="icon-entradas-de-texto-govco eye-slash-entradas-de-texto-govco"
-                                    aria-label="Mostrar contraseña"></button>
+                                    aria-label="Ocultar contraseña"></button>
                             </div>
                             <span class="info-entradas-de-texto-govco alert-entradas-de-texto-govco"
                                 id="nota-contrasenia">
@@ -361,26 +360,32 @@
     }
 
     function initPasswordToggleGovco() {
-        const btnShowPassword = document.querySelector('.eye-slash-entradas-de-texto-govco');
-        const btnHidePassword = document.querySelector('.eye-entradas-de-texto-govco');
-        const inputPassword = document.querySelector('input[name="password"]');
+        const btnShowPassword = document.querySelector('.eye-entradas-de-texto-govco'); // Botón de mostrar contraseña
+        const btnHidePassword = document.querySelector(
+        '.eye-slash-entradas-de-texto-govco'); // Botón de ocultar contraseña
+        const inputPassword = document.querySelector('input[name="password"]'); // Campo de contraseña
 
+        // Verificar si ambos botones y el campo de contraseña existen antes de agregar los eventos
         if (btnShowPassword && btnHidePassword && inputPassword) {
+            // Mostrar la contraseña (primer clic)
             btnShowPassword.addEventListener('click', function(e) {
-                e.preventDefault();
-                inputPassword.type = 'text';
-                this.classList.add('none');
-                btnHidePassword.classList.remove('none');
+                e.preventDefault(); // Evitar el comportamiento por defecto (si lo hubiera)
+                inputPassword.type = 'text'; // Cambiar el tipo de input a 'text' para mostrar la contraseña
+                btnShowPassword.classList.add('none'); // Ocultar el botón de mostrar
+                btnHidePassword.classList.remove('none'); // Mostrar el botón de ocultar
             });
 
+            // Ocultar la contraseña (segundo clic)
             btnHidePassword.addEventListener('click', function(e) {
-                e.preventDefault();
-                inputPassword.type = 'password';
-                this.classList.add('none');
-                btnShowPassword.classList.remove('none');
+                e.preventDefault(); // Evitar el comportamiento por defecto (si lo hubiera)
+                inputPassword.type =
+                'password'; // Cambiar el tipo de input a 'password' para ocultar la contraseña
+                btnHidePassword.classList.add('none'); // Ocultar el botón de ocultar
+                btnShowPassword.classList.remove('none'); // Mostrar el botón de mostrar
             });
         }
     }
+
 
     function crearMensajeGovco(input, text, type) {
         const dataMensajes = {
