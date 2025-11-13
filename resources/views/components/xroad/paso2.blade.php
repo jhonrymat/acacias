@@ -16,99 +16,21 @@
             @php
                 $userId = auth()->id();
                 $canCreateRequest = \App\Models\Solicitud::canCreateRequest($userId);
-
-                // Obtener solicitud que está bloqueando (estados 1, 2, 4)
-                $solicitudBloqueante = null;
-                $solicitudEmitida = null;
-                $mensajeBloqueo = '';
-
-                if (!$canCreateRequest) {
-                    // Buscar solicitud en estados bloqueantes
-                    $solicitudBloqueante = \App\Models\Solicitud::where('user_id', $userId)
-                        ->whereIn('estado_id', [1, 2, 4]) // Pendiente, En Revisión, Aprobada
-                        ->latest()
-                        ->first();
-
-                    // Si no hay bloqueante, entonces es por la emitida (5) que aún no está en ventana
-                    if (!$solicitudBloqueante) {
-                        $solicitudEmitida = \App\Models\Solicitud::where('user_id', $userId)
-                            ->where('estado_id', 5) // Emitida
-                            ->latest('fecha_emision')
-                            ->first();
-
-                        if ($solicitudEmitida) {
-                            $fechaEmision = \Carbon\Carbon::parse($solicitudEmitida->fecha_emision);
-                            $fechaVencimiento = $fechaEmision->copy()->addMonths(6);
-                            $ventanaDesde = $fechaVencimiento->copy()->subDays(15);
-                            $diasRestantes = now()->diffInDays($ventanaDesde, false);
-
-                            $mensajeBloqueo =
-                                'Tu certificado actual vence el ' .
-                                $fechaVencimiento->format('d/m/Y') .
-                                '. Podrás solicitar uno nuevo a partir del ' .
-                                $ventanaDesde->format('d/m/Y') .
-                                ' (faltan ' .
-                                abs($diasRestantes) .
-                                ' días).';
-                        }
-                    }
-                }
             @endphp
             @if (!$canCreateRequest)
-                {{-- ⚠️ MENSAJE: No puede crear solicitud --}}
-                @if ($solicitudBloqueante)
-                    {{-- Caso 1: Tiene solicitud en proceso (1, 2, 4) - Alerta Negativa --}}
-                    <div class="container-alerta-govco mb-4">
-                        <div class="alert alerta-govco alerta-error-govco aerror" role="alert">
-                            <span class="alerta-icon-govco alerta-icon-error-govco aerror"></span>
-                            <p class="alerta-content-text">
-                                <strong>Ya tienes una solicitud en proceso.</strong><br>
-                                Actualmente tienes una solicitud activa (N° #{{ $solicitudBloqueante->id }})
-                                en estado: <strong>{{ $solicitudBloqueante->estado->nombre ?? 'Pendiente' }}</strong>,
-                                creada el {{ $solicitudBloqueante->created_at->format('d/m/Y') }}.
-                                No puedes crear una nueva hasta que esta sea resuelta.
-                                <a type="button" class="alert-link alerta-link aerror"
-                                    onclick="pasosPermitidos = [1,2,4]; irAlPaso(4);">Ver solicitudes</a>
-                            </p>
-                        </div>
-                    </div>
-                @elseif($solicitudEmitida)
-                    {{-- Caso 2: Tiene certificado emitido pero aún no está en ventana - Alerta Informativa --}}
-                    <div class="container-alerta-govco mb-4">
-                        <div class="alert alerta-govco anotificacion" role="alert">
-                            <span class="alerta-icon-govco alerta-icon-notificacion-govco anotificacion"></span>
-                            <p class="alerta-content-text">
-                                <strong>Tu certificado de residencia está vigente.</strong><br>
-                                {{ $mensajeBloqueo }}
-                                Tu certificado fue emitido el
-                                {{ \Carbon\Carbon::parse($solicitudEmitida->fecha_emision)->format('d/m/Y') }}.
-                                <a href="{{ route('versolicitudesresidencia') }}"
-                                    class="alert-link alerta-link anotificacion">Ver mis certificados</a>
-                            </p>
-                        </div>
-                    </div>
-                @else
-                    {{-- Caso genérico - Alerta Negativa --}}
-                    <div class="container-alerta-govco mb-4">
-                        <div class="alert alerta-govco alerta-error-govco aerror" role="alert">
-                            <span class="alerta-icon-govco alerta-icon-error-govco aerror"></span>
-                            <p class="alerta-content-text">
-                                <strong>No puedes crear una nueva solicitud en este momento.</strong><br>
-                                Por favor verifica el estado de tus solicitudes existentes.
-                                <a href="{{ route('versolicitudesresidencia') }}" class="alert-link alerta-link aerror">Ver
-                                    mis solicitudes</a>
-                            </p>
-                        </div>
-                    </div>
-                @endif
+                <script>
+                    window.inicializarPaso2 = function() {
+                        pasosPermitidos = [1, 2, 3, 4];
+                        irAlPaso(3);
+                    };
+                </script>
             @else
                 <p class="text-muted mb-4 small">
                     Todos los campos marcados con el símbolo asterisco (<span aria-required="true">*</span>) son
                     obligatorios.
                 </p>
 
-                <form id="solicitudForm" action="{{ route('solicitud.store') }}" method="POST"
-                    enctype="multipart/form-data">
+                <form id="solicitudForm" action="{{ route('solicitud.store') }}" method="POST" enctype="multipart/form-data">
                     @csrf
                     <div class="row">
                         <!-- Número de Documento -->
@@ -214,8 +136,7 @@
 
                         <!-- Dirección -->
                         <div class="col-md-6">
-                            <label for="direccion" class="form-label">Dirección <span
-                                    aria-required="true">*</span></label>
+                            <label for="direccion" class="form-label">Dirección <span aria-required="true">*</span></label>
                             <div class="input-group">
                                 <input type="text" class="form-control" name="direccion" id="direccion" readonly
                                     placeholder="Seleccione su dirección" required>

@@ -7,229 +7,325 @@
     @endguest
 
     @auth
-        @include('components.xroad.logout')
-        <div class="container my-4">
-            <!-- Spinner de carga personalizado -->
-            <div id="spinnerPaso3" style="display: none; padding: 60px 0; text-align: center;">
-                <div style="display: inline-block;">
-                    <!-- Spinner personalizado estilo GOV.CO -->
-                    <div class="custom-spinner-govco" role="status" aria-hidden="true">
-                        <span class="visually-hidden">Cargando...</span>
+        @php
+            $userId = auth()->id();
+            $canCreateRequest = \App\Models\Solicitud::canCreateRequest($userId);
+
+            // Obtener solicitud que está bloqueando (estados 1, 2, 4)
+            $solicitudBloqueante = null;
+            $solicitudEmitida = null;
+            $mensajeBloqueo = '';
+
+            if (!$canCreateRequest) {
+                // Buscar solicitud en estados bloqueantes
+                $solicitudBloqueante = \App\Models\Solicitud::where('user_id', $userId)
+                    ->whereIn('estado_id', [1, 2, 4]) // Pendiente, En Revisión, Aprobada
+                    ->latest()
+                    ->first();
+
+                // Si no hay bloqueante, entonces es por la emitida (5) que aún no está en ventana
+                if (!$solicitudBloqueante) {
+                    $solicitudEmitida = \App\Models\Solicitud::where('user_id', $userId)
+                        ->where('estado_id', 5) // Emitida
+                        ->latest('fecha_emision')
+                        ->first();
+
+                    if ($solicitudEmitida) {
+                        $fechaEmision = \Carbon\Carbon::parse($solicitudEmitida->fecha_emision);
+                        $fechaVencimiento = $fechaEmision->copy()->addMonths(6);
+                        $ventanaDesde = $fechaVencimiento->copy()->subDays(15);
+                        $diasRestantes = now()->diffInDays($ventanaDesde, false);
+
+                        $mensajeBloqueo =
+                            'Tu certificado actual vence el ' .
+                            $fechaVencimiento->format('d/m/Y') .
+                            '. Podrás solicitar uno nuevo a partir del ' .
+                            $ventanaDesde->format('d/m/Y') .
+                            ' (faltan ' .
+                            abs($diasRestantes) .
+                            ' días).';
+                    }
+                }
+            }
+        @endphp
+
+        @if (!$canCreateRequest)
+            {{-- ⚠️ MENSAJE: No puede crear solicitud --}}
+            @if ($solicitudBloqueante)
+                {{-- Caso 1: Tiene solicitud en proceso (1, 2, 4) - Alerta Negativa --}}
+                <div class="container-alerta-govco mb-4">
+                    <div class="alert alerta-govco alerta-error-govco aerror" role="alert">
+                        <span class="alerta-icon-govco alerta-icon-error-govco aerror"></span>
+                        <p class="alerta-content-text">
+                            <strong>Ya tienes una solicitud en proceso.</strong><br>
+                            Actualmente tienes una solicitud activa (N° #{{ $solicitudBloqueante->id }})
+                            en estado: <strong>{{ $solicitudBloqueante->estado->nombre ?? 'Pendiente' }}</strong>,
+                            creada el {{ $solicitudBloqueante->created_at->format('d/m/Y') }}.
+                            No puedes crear una nueva hasta que esta sea resuelta.
+                            <a type="button" class="alert-link alerta-link aerror"
+                                onclick="pasosPermitidos = [1,2,4]; irAlPaso(4); setTimeout(() => inicializarPaso4?.(), 150);">Ver
+                                solicitudes</a>
+                        </p>
                     </div>
-                    <p style="margin-top: 20px; color: #3366CC; font-size: 16px; font-weight: 500;">Procesando tu
-                        solicitud...</p>
+                </div>
+            @elseif($solicitudEmitida)
+                {{-- Caso 2: Tiene certificado emitido pero aún no está en ventana - Alerta Informativa --}}
+                <div class="container-alerta-govco mb-4">
+                    <div class="alert alerta-govco anotificacion" role="alert">
+                        <span class="alerta-icon-govco alerta-icon-notificacion-govco anotificacion"></span>
+                        <p class="alerta-content-text">
+                            <strong>Tu certificado de residencia está vigente.</strong><br>
+                            {{ $mensajeBloqueo }}
+                            Tu certificado fue emitido el
+                            {{ \Carbon\Carbon::parse($solicitudEmitida->fecha_emision)->format('d/m/Y') }}.
+                            <a type="button" class="alert-link alerta-link aerror"
+                                onclick="pasosPermitidos = [1,2,4]; irAlPaso(4); setTimeout(() => inicializarPaso4?.(), 150);">Ver
+                                solicitudes</a>
+                        </p>
+                    </div>
+                </div>
+            @else
+                {{-- Caso genérico - Alerta Negativa --}}
+                <div class="container-alerta-govco mb-4">
+                    <div class="alert alerta-govco alerta-error-govco aerror" role="alert">
+                        <span class="alerta-icon-govco alerta-icon-error-govco aerror"></span>
+                        <p class="alerta-content-text">
+                            <strong>No puedes crear una nueva solicitud en este momento.</strong><br>
+                            Por favor verifica el estado de tus solicitudes existentes.
+                            <a type="button" class="alert-link alerta-link aerror"
+                                onclick="pasosPermitidos = [1,2,4]; irAlPaso(4); setTimeout(() => inicializarPaso4?.(), 150);">Ver
+                                solicitudes</a>
+                        </p>
+                    </div>
+                </div>
+            @endif
+        @else
+            {{-- ✅ Puede crear solicitud: Mostrar contenido del Paso 3 --}}
+            @include('components.xroad.logout')
+            <div class="container my-4">
+                <!-- Spinner de carga personalizado -->
+                <div id="spinnerPaso3" style="display: none; padding: 60px 0; text-align: center;">
+                    <div style="display: inline-block;">
+                        <!-- Spinner personalizado estilo GOV.CO -->
+                        <div class="custom-spinner-govco" role="status" aria-hidden="true">
+                            <span class="visually-hidden">Cargando...</span>
+                        </div>
+                        <p style="margin-top: 20px; color: #3366CC; font-size: 16px; font-weight: 500;">Procesando tu
+                            solicitud...</p>
+                    </div>
+                </div>
+
+                <!-- Contenido del Paso 3 -->
+                <div id="contenidoPaso3" style="display: none;">
+                    <!-- Mensaje de éxito estilo GOV.CO -->
+                    <div class="alert alert-success d-flex align-items-center" role="alert"
+                        style="background-color: #d4edda; border: 1px solid #c3e6cb; border-radius: 4px; padding: 15px 20px;">
+                        <svg style="width: 24px; height: 24px; margin-right: 12px; flex-shrink: 0;" viewBox="0 0 24 24"
+                            fill="none">
+                            <circle cx="12" cy="12" r="10" fill="#28a745" />
+                            <path d="M9 12l2 2 4-4" stroke="white" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round" />
+                        </svg>
+                        <div style="flex: 1;">
+                            <strong style="display: block; margin-bottom: 8px;">Su solicitud se ha registrado
+                                exitosamente</strong>
+                            <p style="margin: 0; font-size: 14px;">Por favor verifique su mensaje de confirmación en su
+                                correo
+                                electrónico, para hacerle seguimiento a este trámite no olvide anotar el ID del radicado
+                                descrito a continuación. Muchas Gracias por utilizar nuestros servicios</p>
+                        </div>
+                    </div>
+
+                    <!-- Número de radicado y Tiempo estimado -->
+                    <div style="margin: 30px 0;">
+                        <h3 style="font-size: 18px; font-weight: 600; margin-bottom: 8px;">Número de radicado</h3>
+                        <p id="numeroRadicado" style="font-size: 16px; color: #666; margin-bottom: 30px;">—</p>
+
+                        <h3 style="font-size: 18px; font-weight: 600; margin-bottom: 8px;">Tiempo estimado de respuesta</h3>
+                        <p style="font-size: 14px; color: #666; margin-bottom: 40px;">7 días hábiles, una vez se emita una
+                            respuesta recibirá una copia al correo registrado</p>
+                    </div>
+
+                    <!-- Título de Anidamiento -->
+                    <h4 style="color: #3366CC; font-size: 20px; font-weight: 600; margin-bottom: 20px;">Anidamiento</h4>
+
+                    <!-- Tabla anidada con información de la solicitud -->
+                    <div class="contenedor-tabla">
+                        <h4 class="modal-title-tables" id="tableDescSolicitud">Resumen de Solicitud</h4>
+                        <table class="table-externa" aria-describedby="tableDescSolicitud">
+                            <thead class="encabezado-tabla-externa">
+                                <tr>
+                                    <th scope="col">Campo</th>
+                                    <th scope="col">Información</th>
+                                    <th scope="col">Estado</th>
+                                    <th scope="col">Detalles</th>
+                                </tr>
+                            </thead>
+                            <tbody class="contenido-tablas">
+                                <!-- Fila de Información General -->
+                                <tr>
+                                    <td><strong>Información General</strong></td>
+                                    <td>
+                                        <span>Radicado N° <strong id="numeroRadicado">—</strong></span>
+                                    </td>
+                                    <td>
+                                        <span id="estadoSolicitud" class="badge bg-warning text-dark">Pendiente</span>
+                                    </td>
+                                    <td>Solicitud registrada exitosamente</td>
+                                </tr>
+
+                                <!-- Tabla interna con detalles de la solicitud -->
+                                <tr class="contenedor-tabla-interna">
+                                    <td colspan="4">
+                                        <table class="table-interna">
+                                            <caption class="caption-top">
+                                                <span class="caption-1">Detalles de la Solicitud</span>
+                                                <span class="caption-2">Información completa de tu solicitud de
+                                                    residencia</span>
+                                            </caption>
+                                            <thead class="encabezado-tabla-interna">
+                                                <tr>
+                                                    <th scope="col">Tipo de Dato</th>
+                                                    <th scope="col">Valor</th>
+                                                    <th scope="col">Observaciones</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody class="contenido-tablas-interno">
+                                                <tr>
+                                                    <td><strong>Dirección</strong></td>
+                                                    <td id="direccionSolicitud">—</td>
+                                                    <td>Dirección de residencia</td>
+                                                </tr>
+                                                <tr>
+                                                    <td><strong>Barrio</strong></td>
+                                                    <td id="barrioSolicitud">—</td>
+                                                    <td>Barrio seleccionado</td>
+                                                </tr>
+                                                <tr>
+                                                    <td><strong>Coordenadas</strong></td>
+                                                    <td>
+                                                        Lat: <span id="latitudSolicitud">—</span> /
+                                                        Lng: <span id="longitudSolicitud">—</span>
+                                                    </td>
+                                                    <td>Ubicación en mapa</td>
+                                                </tr>
+                                                <tr>
+                                                    <td><strong>Observaciones</strong></td>
+                                                    <td id="observacionesSolicitud">—</td>
+                                                    <td>Comentarios adicionales</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </td>
+                                </tr>
+
+                                <!-- Fila de Documentos Adjuntos -->
+                                <tr>
+                                    <td><strong>Documentos</strong></td>
+                                    <td>
+                                        <span id="contadorDocumentos">5 documentos</span>
+                                    </td>
+                                    <td>
+                                        <span class="badge bg-success">Completo</span>
+                                    </td>
+                                    <td>Archivos cargados</td>
+                                </tr>
+
+                                <!-- Tabla interna con documentos -->
+                                <tr class="contenedor-tabla-interna">
+                                    <td colspan="4">
+                                        <table class="table-interna">
+                                            <caption class="caption-top">
+                                                <span class="caption-1">Documentos Adjuntos</span>
+                                                <span class="caption-2">Lista de archivos cargados en tu solicitud</span>
+                                            </caption>
+                                            <thead class="encabezado-tabla-interna">
+                                                <tr>
+                                                    <th scope="col">Tipo de Documento</th>
+                                                    <th scope="col">Estado</th>
+                                                    <th scope="col">Tipo</th>
+                                                    <th scope="col">Observaciones</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody class="contenido-tablas-interno">
+                                                <!-- Documentos obligatorios -->
+                                                <tr>
+                                                    <td><strong>Fotocopia de Cédula</strong></td>
+                                                    <td>
+                                                        <span class="badge bg-success">✓ Adjunto</span>
+                                                    </td>
+                                                    <td>
+                                                        <span class="badge bg-danger">Obligatorio</span>
+                                                    </td>
+                                                    <td id="docCedula">Archivo cargado correctamente</td>
+                                                </tr>
+                                                <tr>
+                                                    <td><strong>Recibo de Servicios</strong></td>
+                                                    <td>
+                                                        <span class="badge bg-success">✓ Adjunto</span>
+                                                    </td>
+                                                    <td>
+                                                        <span class="badge bg-danger">Obligatorio</span>
+                                                    </td>
+                                                    <td id="docRecibo">Archivo cargado correctamente</td>
+                                                </tr>
+
+                                                <!-- Documentos opcionales (se muestran dinámicamente) -->
+                                                <tr id="rowElectoral" style="display: none;">
+                                                    <td><strong>Certificado Electoral</strong></td>
+                                                    <td>
+                                                        <span class="badge bg-success">✓ Adjunto</span>
+                                                    </td>
+                                                    <td>
+                                                        <span class="badge bg-info">Opcional</span>
+                                                    </td>
+                                                    <td id="docElectoral">Archivo cargado correctamente</td>
+                                                </tr>
+                                                <tr id="rowSisben" style="display: none;">
+                                                    <td><strong>Certificado SISBEN</strong></td>
+                                                    <td>
+                                                        <span class="badge bg-success">✓ Adjunto</span>
+                                                    </td>
+                                                    <td>
+                                                        <span class="badge bg-info">Opcional</span>
+                                                    </td>
+                                                    <td id="docSisben">Archivo cargado correctamente</td>
+                                                </tr>
+                                                <tr id="rowJAC" style="display: none;">
+                                                    <td><strong>Carta Acción Comunal</strong></td>
+                                                    <td>
+                                                        <span class="badge bg-success">✓ Adjunto</span>
+                                                    </td>
+                                                    <td>
+                                                        <span class="badge bg-info">Opcional</span>
+                                                    </td>
+                                                    <td id="docJAC">Archivo cargado correctamente</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Botones de acción -->
+                    <div class="mt-4 d-flex gap-3 justify-content-center flex-wrap">
+                        <button type="button"
+                            class="btn-govco fill-btn-govco symbol-btn-govco mixed-btn-govco left-arrow-btn-govco"
+                            onclick="window.print()" icon-position="left" style="width: 220px; height: 42px;">
+                            <span>Imprimir Resumen</span>
+                        </button>
+                        <button type="button"
+                            class="btn-govco no-fill-btn-govco symbol-btn-govco mixed-btn-govco left-arrow-btn-govco"
+                            icon-position="left" style="width: 290px; height: 32px;"
+                            onclick="pasosPermitidos = [1,2,4]; irAlPaso(4); setTimeout(() => inicializarPaso4?.(), 150);">
+                            <span class="sub-btn-govco">Ver mis solicitudes</span>
+                        </button>
+                    </div>
                 </div>
             </div>
-
-            <!-- Contenido del Paso 3 -->
-            <div id="contenidoPaso3" style="display: none;">
-                <!-- Mensaje de éxito estilo GOV.CO -->
-                <div class="alert alert-success d-flex align-items-center" role="alert"
-                    style="background-color: #d4edda; border: 1px solid #c3e6cb; border-radius: 4px; padding: 15px 20px;">
-                    <svg style="width: 24px; height: 24px; margin-right: 12px; flex-shrink: 0;" viewBox="0 0 24 24"
-                        fill="none">
-                        <circle cx="12" cy="12" r="10" fill="#28a745" />
-                        <path d="M9 12l2 2 4-4" stroke="white" stroke-width="2" stroke-linecap="round"
-                            stroke-linejoin="round" />
-                    </svg>
-                    <div style="flex: 1;">
-                        <strong style="display: block; margin-bottom: 8px;">Su solicitud se ha registrado
-                            exitosamente</strong>
-                        <p style="margin: 0; font-size: 14px;">Por favor verifique su mensaje de confirmación en su correo
-                            electrónico, para hacerle seguimiento a este trámite no olvide anotar el ID del radicado
-                            descrito a continuación. Muchas Gracias por utilizar nuestros servicios</p>
-                    </div>
-                </div>
-
-                <!-- Número de radicado y Tiempo estimado -->
-                <div style="margin: 30px 0;">
-                    <h3 style="font-size: 18px; font-weight: 600; margin-bottom: 8px;">Número de radicado</h3>
-                    <p id="numeroRadicado" style="font-size: 16px; color: #666; margin-bottom: 30px;">—</p>
-
-                    <h3 style="font-size: 18px; font-weight: 600; margin-bottom: 8px;">Tiempo estimado de respuesta</h3>
-                    <p style="font-size: 14px; color: #666; margin-bottom: 40px;">7 días hábiles, una vez se emita una
-                        respuesta recibirá una copia al correo registrado</p>
-                </div>
-
-                <!-- Título de Anidamiento -->
-                <h4 style="color: #3366CC; font-size: 20px; font-weight: 600; margin-bottom: 20px;">Anidamiento</h4>
-
-                <!-- Tabla anidada con información de la solicitud -->
-                <div class="contenedor-tabla">
-                    <h4 class="modal-title-tables" id="tableDescSolicitud">Resumen de Solicitud</h4>
-                    <table class="table-externa" aria-describedby="tableDescSolicitud">
-                        <thead class="encabezado-tabla-externa">
-                            <tr>
-                                <th scope="col">Campo</th>
-                                <th scope="col">Información</th>
-                                <th scope="col">Estado</th>
-                                <th scope="col">Detalles</th>
-                            </tr>
-                        </thead>
-                        <tbody class="contenido-tablas">
-                            <!-- Fila de Información General -->
-                            <tr>
-                                <td><strong>Información General</strong></td>
-                                <td>
-                                    <span>Radicado N° <strong id="numeroRadicado">—</strong></span>
-                                </td>
-                                <td>
-                                    <span id="estadoSolicitud" class="badge bg-warning text-dark">Pendiente</span>
-                                </td>
-                                <td>Solicitud registrada exitosamente</td>
-                            </tr>
-
-                            <!-- Tabla interna con detalles de la solicitud -->
-                            <tr class="contenedor-tabla-interna">
-                                <td colspan="4">
-                                    <table class="table-interna">
-                                        <caption class="caption-top">
-                                            <span class="caption-1">Detalles de la Solicitud</span>
-                                            <span class="caption-2">Información completa de tu solicitud de
-                                                residencia</span>
-                                        </caption>
-                                        <thead class="encabezado-tabla-interna">
-                                            <tr>
-                                                <th scope="col">Tipo de Dato</th>
-                                                <th scope="col">Valor</th>
-                                                <th scope="col">Observaciones</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody class="contenido-tablas-interno">
-                                            <tr>
-                                                <td><strong>Dirección</strong></td>
-                                                <td id="direccionSolicitud">—</td>
-                                                <td>Dirección de residencia</td>
-                                            </tr>
-                                            <tr>
-                                                <td><strong>Barrio</strong></td>
-                                                <td id="barrioSolicitud">—</td>
-                                                <td>Barrio seleccionado</td>
-                                            </tr>
-                                            <tr>
-                                                <td><strong>Coordenadas</strong></td>
-                                                <td>
-                                                    Lat: <span id="latitudSolicitud">—</span> /
-                                                    Lng: <span id="longitudSolicitud">—</span>
-                                                </td>
-                                                <td>Ubicación en mapa</td>
-                                            </tr>
-                                            <tr>
-                                                <td><strong>Observaciones</strong></td>
-                                                <td id="observacionesSolicitud">—</td>
-                                                <td>Comentarios adicionales</td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </td>
-                            </tr>
-
-                            <!-- Fila de Documentos Adjuntos -->
-                            <tr>
-                                <td><strong>Documentos</strong></td>
-                                <td>
-                                    <span id="contadorDocumentos">5 documentos</span>
-                                </td>
-                                <td>
-                                    <span class="badge bg-success">Completo</span>
-                                </td>
-                                <td>Archivos cargados</td>
-                            </tr>
-
-                            <!-- Tabla interna con documentos -->
-                            <tr class="contenedor-tabla-interna">
-                                <td colspan="4">
-                                    <table class="table-interna">
-                                        <caption class="caption-top">
-                                            <span class="caption-1">Documentos Adjuntos</span>
-                                            <span class="caption-2">Lista de archivos cargados en tu solicitud</span>
-                                        </caption>
-                                        <thead class="encabezado-tabla-interna">
-                                            <tr>
-                                                <th scope="col">Tipo de Documento</th>
-                                                <th scope="col">Estado</th>
-                                                <th scope="col">Tipo</th>
-                                                <th scope="col">Observaciones</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody class="contenido-tablas-interno">
-                                            <!-- Documentos obligatorios -->
-                                            <tr>
-                                                <td><strong>Fotocopia de Cédula</strong></td>
-                                                <td>
-                                                    <span class="badge bg-success">✓ Adjunto</span>
-                                                </td>
-                                                <td>
-                                                    <span class="badge bg-danger">Obligatorio</span>
-                                                </td>
-                                                <td id="docCedula">Archivo cargado correctamente</td>
-                                            </tr>
-                                            <tr>
-                                                <td><strong>Recibo de Servicios</strong></td>
-                                                <td>
-                                                    <span class="badge bg-success">✓ Adjunto</span>
-                                                </td>
-                                                <td>
-                                                    <span class="badge bg-danger">Obligatorio</span>
-                                                </td>
-                                                <td id="docRecibo">Archivo cargado correctamente</td>
-                                            </tr>
-
-                                            <!-- Documentos opcionales (se muestran dinámicamente) -->
-                                            <tr id="rowElectoral" style="display: none;">
-                                                <td><strong>Certificado Electoral</strong></td>
-                                                <td>
-                                                    <span class="badge bg-success">✓ Adjunto</span>
-                                                </td>
-                                                <td>
-                                                    <span class="badge bg-info">Opcional</span>
-                                                </td>
-                                                <td id="docElectoral">Archivo cargado correctamente</td>
-                                            </tr>
-                                            <tr id="rowSisben" style="display: none;">
-                                                <td><strong>Certificado SISBEN</strong></td>
-                                                <td>
-                                                    <span class="badge bg-success">✓ Adjunto</span>
-                                                </td>
-                                                <td>
-                                                    <span class="badge bg-info">Opcional</span>
-                                                </td>
-                                                <td id="docSisben">Archivo cargado correctamente</td>
-                                            </tr>
-                                            <tr id="rowJAC" style="display: none;">
-                                                <td><strong>Carta Acción Comunal</strong></td>
-                                                <td>
-                                                    <span class="badge bg-success">✓ Adjunto</span>
-                                                </td>
-                                                <td>
-                                                    <span class="badge bg-info">Opcional</span>
-                                                </td>
-                                                <td id="docJAC">Archivo cargado correctamente</td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-
-                <!-- Botones de acción -->
-                <div class="mt-4 d-flex gap-3 justify-content-center flex-wrap">
-                    <button type="button"
-                        class="btn-govco fill-btn-govco symbol-btn-govco mixed-btn-govco left-arrow-btn-govco"
-                        onclick="window.print()" icon-position="left" style="width: 165px; height: 42px;">
-                        <span>Imprimir Resumen</span>
-                    </button>
-                    <button type="button"
-                        class="btn-govco no-fill-btn-govco symbol-btn-govco mixed-btn-govco left-arrow-btn-govco"
-                        icon-position="left" style="width: 123px; height: 32px;"
-                        onclick="pasosPermitidos = [1,3,4]; irAlPaso(4);">
-                        <span class="sub-btn-govco">Ver todas mis solicitudes</span>
-                    </button>
-                </div>
-            </div>
-        </div>
+        @endif
 
         <style>
             /* Spinner personalizado estilo GOV.CO */

@@ -942,7 +942,7 @@
                     // 🎯 PASAR AUTOMÁTICAMENTE AL PASO 3
                     // 2️⃣ Ir al paso 3
                     if (typeof pasosPermitidos !== 'undefined' && typeof irAlPaso !== 'undefined') {
-                        pasosPermitidos = [1, 2, 3];
+                        pasosPermitidos = [1, 2, 3, 4];
                         irAlPaso(3);
                         mostrarPaso3(result.solicitud);
                     }
