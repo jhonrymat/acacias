@@ -9,7 +9,6 @@
     @endguest
 
     @auth
-        @include('components.xroad.logout')
         <div class="container my-4">
             {{-- Usuario autenticado: verificar si puede crear solicitud --}}
             {{-- Usuario autenticado: verificar si puede crear solicitud --}}

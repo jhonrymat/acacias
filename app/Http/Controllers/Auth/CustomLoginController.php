@@ -23,7 +23,7 @@ class CustomLoginController extends Controller
         // Validar credenciales
         $credentials = $request->validate([
             'email' => ['required', 'email'],
-            'password' => ['required', 'string', 'min:6'],
+            'password' => ['required', 'string', 'min:4'],
         ], [
             'email.required' => 'El correo electrónico es obligatorio.',
             'email.email' => 'Debes ingresar un correo electrónico válido.',
@@ -35,14 +35,26 @@ class CustomLoginController extends Controller
         if (Auth::attempt($credentials, $request->filled('remember'))) {
             $request->session()->regenerate();
 
-            // SIEMPRE retornar JSON (nunca redirigir)
+            $user = Auth::user();
+
+            // 🔍 Verificar el rol del usuario
+            $redirectUrl = '/dashboard'; // Por defecto, redirigir a la raíz
+
+            // Si el usuario tiene el rol 'user', mantener en la página actual
+            if ($user->hasRole('user')) {
+                $redirectUrl = null; // null = no redirigir, solo recargar
+            }
+
+            // SIEMPRE retornar JSON
             return response()->json([
                 'success' => true,
                 'message' => 'Inicio de sesión exitoso',
+                'redirect_url' => $redirectUrl, // 🎯 Incluir URL de redirección
                 'user' => [
-                    'id' => Auth::user()->id,
-                    'name' => Auth::user()->name,
-                    'email' => Auth::user()->email,
+                    'id' => $user->id,
+                    'name' => $user->name,
+                    'email' => $user->email,
+                    'role' => $user->getRoleNames()->first() // Opcional: enviar el rol
                 ]
             ]);
         }
@@ -106,7 +118,7 @@ class CustomLoginController extends Controller
         $request->validate([
             'token' => 'required',
             'email' => 'required|email',
-            'password' => 'required|min:8|confirmed',
+            'password' => 'required|min:4|confirmed',
         ]);
 
         $status = Password::reset(
@@ -130,7 +142,7 @@ class CustomLoginController extends Controller
         $validated = $request->validate([
             'nombre' => 'required|string|max:255',
             'email' => 'required|email|unique:users',
-            'password' => 'required|min:8',
+            'password' => 'required|min:4',
         ]);
 
         $user = User::create([

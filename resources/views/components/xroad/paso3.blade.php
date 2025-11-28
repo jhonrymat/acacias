@@ -101,7 +101,6 @@
             @endif
         @else
             {{-- ✅ Puede crear solicitud: Mostrar contenido del Paso 3 --}}
-            @include('components.xroad.logout')
             <div class="container my-4">
                 <!-- Spinner de carga personalizado -->
                 <div id="spinnerPaso3" style="display: none; padding: 60px 0; text-align: center;">

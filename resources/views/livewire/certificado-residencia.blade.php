@@ -68,6 +68,8 @@
 
         <div class="col-md-3">
             <div class="aservice-container">
+                @include('components.xroad.logout')
+                <br>
                 <a href="javascript:void(0)" tabindex="-1" class="aservice-spacing" id="aserviceTutorial">
                     <div class="aservice" tabindex="0">
                         <div class="aservice-item link-card">

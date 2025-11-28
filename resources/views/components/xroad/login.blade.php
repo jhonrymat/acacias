@@ -66,9 +66,10 @@
                                 <input type="password" id="password" name="password"
                                     aria-describedby="nota-contrasenia"
                                     aria-invalid="{{ $errors->has('password') ? 'true' : 'false' }}"
-                                    placeholder="Ingrese su contraseña" minlength="8" typeData="password"
-                                    aria-required="true" required autocomplete="current-password" />
-                                <button type="button" class="icon-entradas-de-texto-govco eye-entradas-de-texto-govco none"
+                                    placeholder="Ingrese su contraseña" aria-required="true" required
+                                    autocomplete="current-password" />
+                                <button type="button"
+                                    class="icon-entradas-de-texto-govco eye-entradas-de-texto-govco none"
                                     aria-label="Mostrar contraseña"></button>
                                 <button type="button"
                                     class="icon-entradas-de-texto-govco eye-slash-entradas-de-texto-govco"
@@ -255,9 +256,15 @@
                     btnContinuar.textContent = '¡Ingresando!';
                     limpiarErroresVisuales();
 
-                    // 🔁 Recargar toda la página para reflejar el estado logueado
+                    // 🎯 Verificar si hay redirección específica
                     setTimeout(() => {
-                        window.location.reload();
+                        if (data.redirect_url) {
+                            // Redirigir a la URL especificada (roles diferentes a 'user')
+                            window.location.href = data.redirect_url;
+                        } else {
+                            // Recargar la página actual (rol 'user')
+                            window.location.reload();
+                        }
                     }, 800);
 
                 } else {
@@ -353,16 +360,16 @@
 
         if (inputCorreo && inputPassword && btnContinuar) {
             const correoValido = inputCorreo.classList.contains('success');
-            const passwordValida = inputPassword.value.length >= 8;
+            const passwordIngresada = inputPassword.value.length > 0; // ✅ Solo verifica que no esté vacío
 
-            btnContinuar.disabled = !(correoValido && passwordValida);
+            btnContinuar.disabled = !(correoValido && passwordIngresada);
         }
     }
 
     function initPasswordToggleGovco() {
         const btnShowPassword = document.querySelector('.eye-entradas-de-texto-govco'); // Botón de mostrar contraseña
         const btnHidePassword = document.querySelector(
-        '.eye-slash-entradas-de-texto-govco'); // Botón de ocultar contraseña
+            '.eye-slash-entradas-de-texto-govco'); // Botón de ocultar contraseña
         const inputPassword = document.querySelector('input[name="password"]'); // Campo de contraseña
 
         // Verificar si ambos botones y el campo de contraseña existen antes de agregar los eventos
@@ -379,7 +386,7 @@
             btnHidePassword.addEventListener('click', function(e) {
                 e.preventDefault(); // Evitar el comportamiento por defecto (si lo hubiera)
                 inputPassword.type =
-                'password'; // Cambiar el tipo de input a 'password' para ocultar la contraseña
+                    'password'; // Cambiar el tipo de input a 'password' para ocultar la contraseña
                 btnHidePassword.classList.add('none'); // Ocultar el botón de ocultar
                 btnShowPassword.classList.remove('none'); // Mostrar el botón de mostrar
             });

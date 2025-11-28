@@ -1,6 +1,5 @@
 {{-- Paso 1: Contenido condicional según autenticación --}}
 <div>
-    @include('components.xroad.logout')
     @guest
         {{-- Usuario NO autenticado: Mostrar formulario de login --}}
         @include('components.xroad.login')

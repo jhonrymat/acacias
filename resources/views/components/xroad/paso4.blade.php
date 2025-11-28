@@ -5,7 +5,6 @@
     @endguest
 
     @auth
-        @include('components.xroad.logout')
         <div class="container my-4">
             <link rel="stylesheet" href="https://cdn.www.gov.co/v4/general">
             <style>
