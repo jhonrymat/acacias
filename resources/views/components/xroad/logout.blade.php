@@ -130,7 +130,7 @@
                         const csrfToken = document.querySelector('meta[name="csrf-token"]')
                             ?.content;
 
-                        fetch('http://127.0.0.1:8000/certificado-residencia/auth/logout', {
+                        fetch('certificado-residencia/auth/logout', {
                                 method: 'POST',
                                 headers: {
                                     'X-Requested-With': 'XMLHttpRequest',
