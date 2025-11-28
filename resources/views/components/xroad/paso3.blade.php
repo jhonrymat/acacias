@@ -146,9 +146,6 @@
                             respuesta recibirá una copia al correo registrado</p>
                     </div>
 
-                    <!-- Título de Anidamiento -->
-                    <h4 style="color: #3366CC; font-size: 20px; font-weight: 600; margin-bottom: 20px;">Anidamiento</h4>
-
                     <!-- Tabla anidada con información de la solicitud -->
                     <div class="contenedor-tabla">
                         <h4 class="modal-title-tables" id="tableDescSolicitud">Resumen de Solicitud</h4>
@@ -319,7 +316,7 @@
                         <button type="button"
                             class="btn-govco no-fill-btn-govco symbol-btn-govco mixed-btn-govco left-arrow-btn-govco"
                             icon-position="left" style="width: 290px; height: 32px;"
-                            onclick="pasosPermitidos = [1,2,4]; irAlPaso(4); setTimeout(() => inicializarPaso4?.(), 150);">
+                            onclick="pasosPermitidos = [1,3,4]; irAlPaso(4); setTimeout(() => inicializarPaso4?.(), 150);">
                             <span class="sub-btn-govco">Ver mis solicitudes</span>
                         </button>
                     </div>

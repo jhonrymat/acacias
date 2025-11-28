@@ -19,7 +19,6 @@ class SolicitudController extends Controller
 {
     public function store(Request $request)
     {
-        // dd(request()->all());
         $userId = Auth::id();
         Log::info("El usuario con ID {$userId} está intentando crear una nueva solicitud.");
 
@@ -247,7 +246,8 @@ class SolicitudController extends Controller
     public function getNotas(Request $request, $id)
     {
         try {
-            $validacion = Validacion::find($id);
+            $validacion = Validacion::where('id_solicitud', $id)
+                ->first();
 
             if (!$validacion) {
                 return response()->json([

@@ -109,6 +109,31 @@
         }
 
 
+        .contenedor-tabla {
+            width: 100%;
+            /* Ajustar el contenedor al 100% */
+            margin: 0 auto;
+            overflow-x: auto;
+            /* Permite el desplazamiento horizontal */
+        }
+
+        /* Para deshabilitar las flechitas en la mayoría de los navegadores */
+        input[type="number"]::-webkit-outer-spin-button,
+        input[type="number"]::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+
+        input[type="number"] {
+            -moz-appearance: textfield;
+        }
+
+        button[type="submit"]:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+
 
         @media (min-width: 1280px) {
 
@@ -453,8 +478,7 @@
     {{-- saltar pasos --}}
     <script>
         /* ================================
-                                                                                                                                                                                   VARIABLES DE CONTROL
-                                                                                                                                                                                ================================ */
+                                                                                                                                                                                            VARIABLES DE CONTROL                                                                                                                                                                                ================================ */
         let pasosPermitidos = [1];
         let pasosVisitados = [1];
 
@@ -801,30 +825,28 @@
             e.preventDefault();
 
             const form = e.target;
-            const direccion = document.getElementById('direccion'); // Campo dirección
-            const direccionValue = direccion.value
-                .trim(); // Obtener el valor de la dirección y eliminar espacios en blanco
+            const submitButton = form.querySelector('button[type="submit"]');
+            const direccion = document.getElementById('direccion');
+            const direccionValue = direccion.value.trim();
 
             // Verificar si la dirección está vacía
             if (!direccionValue) {
-                // Si está vacío, mostrar un error
                 const errorMessage = 'Por favor, seleccione o ingrese su dirección.';
-
-                // Mostrar mensaje de error (puedes personalizar este paso según cómo se muestren los errores en tu UI)
                 showGovcoAlert('error', errorMessage);
-
-                // Resaltar el campo de dirección con un borde rojo (o aplicar la clase is-invalid si usas Bootstrap)
                 direccion.classList.add('is-invalid');
-
-                // Desplazar la página hacia el campo de dirección
                 direccion.scrollIntoView({
-                    behavior: 'smooth', // Desplazamiento suave
-                    block: 'center' // Centrar el campo en la vista
+                    behavior: 'smooth',
+                    block: 'center'
                 });
-
-                // Detener el envío del formulario
                 return;
             }
+
+            // 🔒 BLOQUEAR EL BOTÓN
+            submitButton.disabled = true;
+            const textoOriginal = submitButton.innerHTML;
+            submitButton.innerHTML =
+                '<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>Enviando...';
+
             const formData = new FormData(form);
 
             // Limpiar alertas y errores previos
@@ -832,7 +854,7 @@
             document.querySelectorAll('.is-invalid').forEach(el => el.classList.remove('is-invalid'));
             document.querySelectorAll('.invalid-feedback').forEach(el => el.remove());
 
-            // ✅ SOLUCIÓN: Agregar archivos desde attachmentList de GOVCO
+            // Agregar archivos desde attachmentList de GOVCO
             const govInputs = [{
                     id: 'fotocopia_cedula',
                     name: 'cedula'
@@ -847,10 +869,8 @@
                 id,
                 name
             }) => {
-                // Acceder a los archivos almacenados por el componente GOVCO
                 if (window.attachmentList && window.attachmentList[id] && window.attachmentList[id]
                     .length > 0) {
-                    // Agregar el primer archivo de la lista
                     formData.append(name, window.attachmentList[id][0]);
                     console.log(`✅ Archivo ${name} agregado:`, window.attachmentList[id][0].name);
                 } else {
@@ -858,7 +878,7 @@
                 }
             });
 
-            // 🔍 DEBUG: Ver contenido del FormData
+            // DEBUG: Ver contenido del FormData
             console.log('=== Contenido del FormData ===');
             for (let [key, value] of formData.entries()) {
                 if (value instanceof File) {
@@ -882,16 +902,13 @@
                     if (response.status === 422) {
                         const errorData = await response.json();
 
-                        // Mostrar errores específicos en cada campo
                         Object.keys(errorData.errors).forEach(field => {
                             const messages = errorData.errors[field];
                             highlightFieldError(field, messages[0]);
                         });
 
-                        // Alerta general
                         showGovcoAlert('error', 'Por favor corrige los errores marcados en el formulario.');
 
-                        // Scroll al primer error
                         const firstError = document.querySelector('.is-invalid');
                         if (firstError) {
                             firstError.scrollIntoView({
@@ -910,37 +927,34 @@
                 if (result.status === 'success') {
                     showGovcoAlert('success', result.message);
 
-                    // 1️⃣ Reset básico del formulario
+                    // Reset del formulario
                     form.reset();
 
-                    // 2️⃣ Limpiar archivos GOVCO (obligatorios)
+                    // Limpiar archivos GOVCO
                     limpiarInputGovco('fotocopia_cedula');
                     limpiarInputGovco('recibo_servicios');
 
-                    // 3️⃣ Limpiar archivos opcionales
+                    // Limpiar archivos opcionales
                     limpiarArchivoOpcional('fileElectoral', 'nameElectoral');
                     limpiarArchivoOpcional('fileSisben', 'nameSisben');
                     limpiarArchivoOpcional('fileJAC', 'nameJAC');
 
-                    // 4️⃣ Limpiar coordenadas del mapa
+                    // Limpiar coordenadas
                     document.getElementById('lat').value = '';
                     document.getElementById('lng').value = '';
                     document.getElementById('display-lat').textContent = 'No seleccionada';
                     document.getElementById('display-lng').textContent = 'No seleccionada';
 
-                    // 5️⃣ Limpiar select2 (si lo usas para barrio)
+                    // Limpiar select2
                     const selectBarrio = document.getElementById('id_barrio');
                     if (selectBarrio) {
                         selectBarrio.value = '';
-                        // Si usas Select2, también debes limpiarlo así:
                         if (typeof $(selectBarrio).select2 !== 'undefined') {
                             $(selectBarrio).val('').trigger('change');
                         }
                     }
 
-
-                    // 🎯 PASAR AUTOMÁTICAMENTE AL PASO 3
-                    // 2️⃣ Ir al paso 3
+                    // Pasar al paso 3
                     if (typeof pasosPermitidos !== 'undefined' && typeof irAlPaso !== 'undefined') {
                         pasosPermitidos = [1, 2, 3, 4];
                         irAlPaso(3);
@@ -956,9 +970,12 @@
             } catch (error) {
                 console.error(error);
                 showGovcoAlert('error', 'Ocurrió un error inesperado al enviar la solicitud.');
+            } finally {
+                // 🔓 DESBLOQUEAR EL BOTÓN (en caso de error)
+                submitButton.disabled = false;
+                submitButton.innerHTML = textoOriginal;
             }
         });
-
 
         // Función para resaltar campos con error
         function highlightFieldError(fieldName, errorMessage) {

@@ -49,7 +49,7 @@
                             </select>
                         </div>
                         <div class="col-md-2">
-                            <input type="text" class="form-control" id="numero1" placeholder="Número">
+                            <input type="number" min="0" max="999" class="form-control" id="numero1" placeholder="Número">
                         </div>
                         <div class="col-md-2">
                             <select class="form-select" id="letra1">
@@ -111,7 +111,7 @@
                             <label class="form-label">Vía Secundaria:</label>
                             <div class="row g-2">
                                 <div class="col-6">
-                                    <input type="text" class="form-control" id="numSecundaria" placeholder="No.">
+                                    <input type="number" min="0" max="999" class="form-control" id="numSecundaria" placeholder="No.">
                                 </div>
                                 <div class="col-6">
                                     <select class="form-select" id="letraSecundaria">
@@ -150,7 +150,7 @@
                             <label class="form-label">Vía Complemento:</label>
                             <div class="row g-2">
                                 <div class="col-6">
-                                    <input type="text" class="form-control" id="numPlaca"
+                                    <input type="number" min="0" max="999" class="form-control" id="numPlaca"
                                         placeholder="Número placa">
                                 </div>
                                 <div class="col-6">
@@ -244,7 +244,7 @@
         const letraSecundaria = document.getElementById('letraSecundaria').value;
 
         if (numSecundaria) {
-            direccion.push('#' + numSecundaria);
+            direccion.push('# ' + numSecundaria);
             if (letraSecundaria) direccion.push(letraSecundaria);
         }
 
@@ -253,7 +253,7 @@
         const sectorComplemento = document.getElementById('sectorComplemento').value;
 
         if (numPlaca) {
-            direccion.push('-' + numPlaca);
+            direccion.push('- ' + numPlaca);
             if (sectorComplemento) direccion.push(sectorComplemento);
         }
 

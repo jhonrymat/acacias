@@ -405,18 +405,30 @@
                 function generarAcciones(sol) {
                     if (sol.estado === 'Emitido' || sol.estado === 'Por vencer') {
                         return `
-                        <button onclick="descargarPDF(${sol.id})" class="btn-action btn-success">
-                            <i class="fas fa-file-arrow-down"></i> Descargar
-                        </button>
-                        <a href="{{ url('solicitud/pdf') }}/${sol.id}" target="_blank" class="btn-action btn-primary">
-                            <i class="fas fa-eye"></i> Ver
-                        </a>
+                        <div style="display: flex; gap: 8px;">
+                            <button onclick="descargarPDF(${sol.id})" class="btn-action btn-success">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                                    <polyline points="7 10 12 15 17 10"></polyline>
+                                    <line x1="12" y1="15" x2="12" y2="3"></line>
+                                </svg>
+                            </button>
+                            <a href="{{ url('solicitud/pdf') }}/${sol.id}" target="_blank" class="btn-action btn-primary">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                                    <circle cx="12" cy="12" r="3"></circle>
+                                </svg>
+                            </a>
+                        </div>
                     `;
                     } else if (sol.estado === 'Anulado') {
                         if (sol.anulacion_visible === 1) {
                             return `
                             <button onclick="verAnulacion(${sol.id})" class="btn-action btn-danger">
-                                <i class="fas fa-eye"></i> Ver Anulación
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                                    <circle cx="12" cy="12" r="3"></circle>
+                                </svg>
                             </button>
                         `;
                         } else {
@@ -424,8 +436,11 @@
                         }
                     } else if (sol.estado === 'No completado' && sol.validacion_visible === 1) {
                         return `
-                        <button onclick="verNotas(${sol.validacion_id})" class="btn-action btn-primary">
-                            <i class="fas fa-eye"></i> Ver detalles
+                        <button onclick="verNotas(${sol.id})" class="btn-action btn-primary">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                                <circle cx="12" cy="12" r="3"></circle>
+                            </svg>
                         </button>
                     `;
                     } else {
@@ -435,7 +450,7 @@
 
                 // Descargar PDF
                 function descargarPDF(id) {
-                    window.location.href = `{{ url('solicitudes/pdf') }}/${id}`;
+                    window.location.href = `{{ url('certificado-residencia/solicitudes/pdf') }}/${id}`;
                 }
 
                 // Abrir modal de datos del usuario
@@ -484,7 +499,7 @@
                     $('#contenidoNotas').hide();
 
                     $.ajax({
-                        url: `{{ url('solicitudes/notas') }}/${id}`,
+                        url: `{{ url('certificado-residencia/solicitudes/notas') }}/${id}`,
                         method: 'GET',
                         success: function(response) {
                             if (response.success) {
@@ -509,7 +524,7 @@
                     $('#contenidoAnulacion').hide();
 
                     $.ajax({
-                        url: `{{ url('solicitudes/anulacion') }}/${id}`,
+                        url: `{{ url('certificado-residencia/solicitudes/anulacion') }}/${id}`,
                         method: 'GET',
                         success: function(response) {
                             if (response.success) {
