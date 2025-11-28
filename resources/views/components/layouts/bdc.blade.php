@@ -153,6 +153,8 @@
     <nav class="navbar navbar-expand-lg barra-superior-govco" aria-label="Barra superior">
         <a href="https://www.gov.co/" target="_blank" aria-label="Portal del Estado Colombiano - GOV.CO"></a>
     </nav>
+    <livewire:notification-banner position="welcome" />
+
 
     <div class="content-example-barra ">
         <div class="barra-accesibilidad-govco">
@@ -478,7 +480,7 @@
     {{-- saltar pasos --}}
     <script>
         /* ================================
-                                                                                                                                                                                            VARIABLES DE CONTROL                                                                                                                                                                                ================================ */
+                                                                                                                                                                                                VARIABLES DE CONTROL                                                                                                                                                                                ================================ */
         let pasosPermitidos = [1];
         let pasosVisitados = [1];
 

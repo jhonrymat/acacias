@@ -35,7 +35,7 @@
                 </div>
                 <div class="col-md-6 mb-4">
                     <h5><strong>¿Cuánto tarda el proceso?</strong></h5>
-                    <p>El certificado se genera en un plazo máximo de <strong>72 horas hábiles</strong> una vez verificada
+                    <p>El certificado se genera en un plazo máximo de <strong>15 días hábiles</strong> una vez verificada
                         la información.</p>
                 </div>
             </div>
