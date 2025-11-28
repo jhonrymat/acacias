@@ -171,6 +171,30 @@
                             </span>
                         </div>
 
+                        <div class="col-md-12">
+                            <div class="container my-3">
+                                <div class="alert alert-light border shadow-sm p-4 d-flex flex-column flex-md-row align-items-start gap-3"
+                                    style="box-shadow: 0px 0rem .25rem rgb(0 88 255) !important; background-color: #ffffff;">
+                                    <div class="flex-shrink-0">
+                                        <span
+                                            class="alerta-icon-govco alerta-icon-notificacion-govco anotificacion"></span>
+                                    </div>
+                                    <div class="flex-grow-1">
+                                        <p class="mb-0 text-primary lh-base" style="text-align: justify;">
+                                            <strong class="text-uppercase text-primary">Importante:</strong> El recibo de
+                                            servicio público (agua, luz, gas, aseo) máximo 30 días de antigüedad, la
+                                            dirección
+                                            del formulario debe coincidir con el recibo de servicio público, adjunte una
+                                            FOTO NITIDA Y A
+                                            COLOR de un recibo de servicios públicos de su domicilio, la plataforma NO
+                                            admite recibos
+                                            digitales generados por los servicios web de las empresas.
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
                         <!-- Fotocopia de la Cédula -->
                         <div class="col-md-6 mt-4">
                             <div class="container-carga-de-archivo-govco">
@@ -214,6 +238,7 @@
                             </div>
                         </div>
 
+
                         <!-- Recibo de servicios públicos (sin label superior) -->
                         <div class="col-md-6 mt-4">
                             <div class="container-carga-de-archivo-govco">
@@ -234,7 +259,8 @@
                                         </label>
                                         <span class="text-validation-carga-de-archivo-govco">
                                             Por favor adjunte una <b>FOTO NÍTIDA Y A COLOR</b>
-                                            de su domicilio (agua, energía, gas o aseo). recibo público no mayor a 30 días y No web<br>
+                                            de su domicilio (agua, energía, gas o aseo). recibo público no mayor a 30 días y
+                                            No web<br>
                                             PDF, JPG (MAX. 10 MB)
                                         </span>
                                     </div>
