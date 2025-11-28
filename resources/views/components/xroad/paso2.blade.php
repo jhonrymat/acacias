@@ -39,7 +39,7 @@
                                         aria-required="true"></span></label>
                                 <div class="container-input-texto-govco">
                                     <input type="text" id="numero_documento" name="numero_documento" class="form-control"
-                                        value="{{ auth()->user()->documento ?? '17357997' }}" disabled>
+                                        value="{{ auth()->user()->numeroIdentificacion ?? '17357997' }}" disabled>
                                     <span id="campo-nota-general" class="info-entradas-de-texto-govco">
                                         Este campo se completa automáticamente.
                                     </span>
@@ -234,7 +234,7 @@
                                         </label>
                                         <span class="text-validation-carga-de-archivo-govco">
                                             Por favor adjunte una <b>FOTO NÍTIDA Y A COLOR</b>
-                                            de su domicilio (únicamente agua, energía, gas o aseo).<br>
+                                            de su domicilio (agua, energía, gas o aseo). recibo público no mayor a 30 días y No web<br>
                                             PDF, JPG (MAX. 10 MB)
                                         </span>
                                     </div>

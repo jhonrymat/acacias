@@ -49,7 +49,8 @@
                             </select>
                         </div>
                         <div class="col-md-2">
-                            <input type="number" min="0" max="999" class="form-control" id="numero1" placeholder="Número">
+                            <input type="number" min="0" max="999" class="form-control" id="numero1"
+                                placeholder="Número">
                         </div>
                         <div class="col-md-2">
                             <select class="form-select" id="letra1">
@@ -111,7 +112,8 @@
                             <label class="form-label">Vía Secundaria:</label>
                             <div class="row g-2">
                                 <div class="col-6">
-                                    <input type="number" min="0" max="999" class="form-control" id="numSecundaria" placeholder="No.">
+                                    <input type="number" min="0" max="999" class="form-control"
+                                        id="numSecundaria" placeholder="No.">
                                 </div>
                                 <div class="col-6">
                                     <select class="form-select" id="letraSecundaria">
@@ -150,8 +152,8 @@
                             <label class="form-label">Vía Complemento:</label>
                             <div class="row g-2">
                                 <div class="col-6">
-                                    <input type="number" min="0" max="999" class="form-control" id="numPlaca"
-                                        placeholder="Número placa">
+                                    <input type="number" min="0" max="999" class="form-control"
+                                        id="numPlaca" placeholder="Número placa">
                                 </div>
                                 <div class="col-6">
                                     <select class="form-select" id="sectorComplemento">
@@ -174,27 +176,76 @@
                     <label class="form-label">Adicionar otro complemento:</label>
                     <div class="row g-2">
                         <div class="col-md-4">
-                            <select class="form-select" id="otroComplementoTipo">
-                                <option value="">Selecciona</option>
-                                <option value="AP">Apartamento</option>
-                                <option value="AG">Agrupación</option>
-                                <option value="BL">Bloque</option>
-                                <option value="BG">Bodega</option>
-                                <option value="CS">Casa</option>
-                                <option value="CO">Conjunto</option>
-                                <option value="DE">Depósito</json>
-                                <option value="ED">Edificio</option>
-                                <option value="ET">Etapa</option>
-                                <option value="IN">Interior</option>
-                                <option value="LO">Local</option>
-                                <option value="OF">Oficina</option>
-                                <option value="PA">Parcela</option>
-                                <option value="PI">Piso</option>
-                                <option value="SA">Salón</option>
-                                <option value="SE">Sector</option>
-                                <option value="SU">Suite</option>
-                                <option value="TZ">Torre</option>
-                                <option value="UN">Unidad</option>
+                            <select class="form-select" id="otroComplementoTipo" name="otroComplementoTipo">
+                                <option value="">Selecciona el tipo de complemento</option>
+
+                                <!-- URBANO - Complementos de vivienda/edificio -->
+                                <optgroup label="Complementos urbanos (edificios, conjuntos, etc.)">
+                                    <option value="AP">Apartamento</option>
+                                    <option value="CS">Casa</option>
+                                    <option value="BL">Bloque</option>
+                                    <option value="TZ">Torre</option>
+                                    <option value="ED">Edificio</option>
+                                    <option value="IN">Interior</option>
+                                    <option value="PI">Piso</option>
+                                    <option value="UN">Unidad</option>
+                                    <option value="SU">Suite</option>
+                                    <option value="OF">Oficina</option>
+                                    <option value="LO">Local</option>
+                                    <option value="SA">Salón</option>
+                                    <option value="BG">Bodega</option>
+                                    <option value="DE">Depósito</option>
+                                    <option value="CO">Conjunto</option>
+                                    <option value="ET">Etapa</option>
+                                    <option value="AG">Agrupación</option>
+                                </optgroup>
+
+                                <!-- URBANO - Vías y nomenclatura -->
+                                <optgroup label="Tipo de vía">
+                                    <option value="AV">Avenida</option>
+                                    <option value="AC">Avenida Calle</option>
+                                    <option value="AK">Avenida Carrera</option>
+                                    <option value="CL">Calle</option>
+                                    <option value="CR">Carrera</option>
+                                    <option value="DG">Diagonal</option>
+                                    <option value="TV">Transversal</option>
+                                    <option value="CQ">Callejón</option>
+                                    <option value="CRA">Circunvalar</option>
+                                    <option value="TR">Tramo</option>
+                                </optgroup>
+
+                                <!-- URBANO/RURAL - Manzana, lote, parcela -->
+                                <optgroup label="Manzana / Lote / Parcela">
+                                    <option value="MZ">Manzana</option>
+                                    <option value="LT">Lote</option>
+                                    <option value="PA">Parcela</option>
+                                    <option value="PD">Predio</option>
+                                </optgroup>
+
+                                <!-- RURAL - Muy útiles para fincas, veredas, corregimientos -->
+                                <optgroup label="Complementos rurales (fincas, veredas, etc.)">
+                                    <option value="FIN">Finca</option>
+                                    <option value="HJ">Hacienda</option>
+                                    <option value="PD">Predio</option>
+                                    <option value="VR">Vereda</option>
+                                    <option value="COR">Corregimiento</option>
+                                    <option value="KM">Kilómetro</option>
+                                    <option value="CA">Casas de Campo</option>
+                                    <option value="GL">Globo de Terreno</option>
+                                    <option value="PAR">Parcelación</option>
+                                    <option value="ZN">Zona</option>
+                                    <option value="SEC">Sector Rural</option>
+                                </optgroup>
+
+                                <!-- OTROS / GENÉRICOS -->
+                                <optgroup label="Otros">
+                                    <option value="SE">Sector</option>
+                                    <option value="BAR">Barrio</option>
+                                    <option value="URB">Urbanización</option>
+                                    <option value="CJ">Conjunto Cerrado</option>
+                                    <option value="MF">Manzana Fiscal</option>
+                                    <option value="OT">Otro</option>
+                                </optgroup>
                             </select>
                         </div>
                         <div class="col-md-8">

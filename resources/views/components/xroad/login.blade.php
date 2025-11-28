@@ -182,7 +182,7 @@
 
 <script>
     /**
-     * Login GOV.CO con integración a línea de avance horizontal
+     * Login GOV.CO con validaciones mejoradas
      */
     window.addEventListener("load", function(event) {
         initLoginGovco();
@@ -201,23 +201,35 @@
                 validateButtonLoginState();
             });
 
+            inputCorreo.addEventListener("blur", function() {
+                validateEmailGovco(this);
+            });
+
             // Validar errores del servidor
             if (inputCorreo.getAttribute('aria-invalid') === 'true') {
                 inputCorreo.classList.add('error');
             }
         }
 
-        // Inicializar funcionalidad de contraseña
-        initPasswordToggleGovco();
-
+        // ✅ Inicializar validación de contraseña
         if (inputPassword) {
-            inputPassword.addEventListener('keyup', validateButtonLoginState);
+            inputPassword.addEventListener('keyup', function() {
+                validatePasswordGovco(this);
+                validateButtonLoginState();
+            });
+
+            inputPassword.addEventListener('blur', function() {
+                validatePasswordGovco(this);
+            });
 
             // Validar errores del servidor
             if (inputPassword.getAttribute('aria-invalid') === 'true') {
                 inputPassword.closest('.entradas-de-texto-govco').classList.add('error');
             }
         }
+
+        // Inicializar funcionalidad de contraseña
+        initPasswordToggleGovco();
 
         // Interceptar envío del formulario
         if (form) {
@@ -226,6 +238,58 @@
 
         // Validación inicial
         validateButtonLoginState();
+    }
+
+    // ✅ Nueva función de validación de contraseña
+    function validatePasswordGovco(input) {
+        // Validación simple: mínimo 4 caracteres
+        const textExito = "Contraseña válida";
+        const textError = "La contraseña debe tener mínimo 4 caracteres";
+
+        if (input.value.length == 0) {
+            input.classList.remove('success', 'error');
+            removeAlertMessageGovco(input);
+        } else if (input.value.length >= 4) {
+            input.classList.remove('error');
+            input.classList.add('success');
+            crearMensajeGovco(input, textExito, 'success');
+        } else {
+            input.classList.remove('success');
+            input.classList.add('error');
+            crearMensajeGovco(input, textError, 'error');
+        }
+    }
+
+    function validateEmailGovco(input) {
+        const expresionRegularE = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+        const textExito = "Correo electrónico válido";
+        const textError = "Correo electrónico no válido";
+
+        if (input.value.length == 0) {
+            input.classList.remove('success', 'error');
+            removeAlertMessageGovco(input);
+        } else if (expresionRegularE.test(input.value)) {
+            input.classList.remove('error');
+            input.classList.add('success');
+            crearMensajeGovco(input, textExito, 'success');
+        } else {
+            input.classList.remove('success');
+            input.classList.add('error');
+            crearMensajeGovco(input, textError, 'error');
+        }
+    }
+
+    function validateButtonLoginState() {
+        const inputCorreo = document.querySelector('input[name="email"]');
+        const inputPassword = document.querySelector('input[name="password"]');
+        const btnContinuar = document.getElementById('btn-login-continuar');
+
+        if (inputCorreo && inputPassword && btnContinuar) {
+            const correoValido = inputCorreo.classList.contains('success');
+            const passwordValida = inputPassword.classList.contains('success');
+
+            btnContinuar.disabled = !(correoValido && passwordValida);
+        }
     }
 
     function handleLoginSubmit(e) {
@@ -259,10 +323,8 @@
                     // 🎯 Verificar si hay redirección específica
                     setTimeout(() => {
                         if (data.redirect_url) {
-                            // Redirigir a la URL especificada (roles diferentes a 'user')
                             window.location.href = data.redirect_url;
                         } else {
-                            // Recargar la página actual (rol 'user')
                             window.location.reload();
                         }
                     }, 800);
@@ -285,7 +347,6 @@
                 btnContinuar.textContent = 'Continuar';
             });
     }
-
 
     function limpiarErroresVisuales() {
         // Limpiar clases de error
@@ -334,77 +395,39 @@
         }
     }
 
-    function validateEmailGovco(input) {
-        const expresionRegularE = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
-        const textExito = "Correo electrónico válido";
-        const textError = "Correo electrónico no válido";
-
-        if (input.value.length == 0) {
-            input.classList.remove('success', 'error');
-            removeAlertMessageGovco(input);
-        } else if (expresionRegularE.test(input.value)) {
-            input.classList.remove('error');
-            input.classList.add('success');
-            crearMensajeGovco(input, textExito, 'success');
-        } else {
-            input.classList.remove('success');
-            input.classList.add('error');
-            crearMensajeGovco(input, textError, 'error');
-        }
-    }
-
-    function validateButtonLoginState() {
-        const inputCorreo = document.querySelector('input[name="email"]');
-        const inputPassword = document.querySelector('input[name="password"]');
-        const btnContinuar = document.getElementById('btn-login-continuar');
-
-        if (inputCorreo && inputPassword && btnContinuar) {
-            const correoValido = inputCorreo.classList.contains('success');
-            const passwordIngresada = inputPassword.value.length > 0; // ✅ Solo verifica que no esté vacío
-
-            btnContinuar.disabled = !(correoValido && passwordIngresada);
-        }
-    }
-
     function initPasswordToggleGovco() {
-        const btnShowPassword = document.querySelector('.eye-entradas-de-texto-govco'); // Botón de mostrar contraseña
-        const btnHidePassword = document.querySelector(
-            '.eye-slash-entradas-de-texto-govco'); // Botón de ocultar contraseña
-        const inputPassword = document.querySelector('input[name="password"]'); // Campo de contraseña
+        const btnShowPassword = document.querySelector('.eye-entradas-de-texto-govco');
+        const btnHidePassword = document.querySelector('.eye-slash-entradas-de-texto-govco');
+        const inputPassword = document.querySelector('input[name="password"]');
 
-        // Verificar si ambos botones y el campo de contraseña existen antes de agregar los eventos
         if (btnShowPassword && btnHidePassword && inputPassword) {
-            // Mostrar la contraseña (primer clic)
             btnShowPassword.addEventListener('click', function(e) {
-                e.preventDefault(); // Evitar el comportamiento por defecto (si lo hubiera)
-                inputPassword.type = 'text'; // Cambiar el tipo de input a 'text' para mostrar la contraseña
-                btnShowPassword.classList.add('none'); // Ocultar el botón de mostrar
-                btnHidePassword.classList.remove('none'); // Mostrar el botón de ocultar
+                e.preventDefault();
+                inputPassword.type = 'text';
+                btnShowPassword.classList.add('none');
+                btnHidePassword.classList.remove('none');
             });
 
-            // Ocultar la contraseña (segundo clic)
             btnHidePassword.addEventListener('click', function(e) {
-                e.preventDefault(); // Evitar el comportamiento por defecto (si lo hubiera)
-                inputPassword.type =
-                    'password'; // Cambiar el tipo de input a 'password' para ocultar la contraseña
-                btnHidePassword.classList.add('none'); // Ocultar el botón de ocultar
-                btnShowPassword.classList.remove('none'); // Mostrar el botón de mostrar
+                e.preventDefault();
+                inputPassword.type = 'password';
+                btnHidePassword.classList.add('none');
+                btnShowPassword.classList.remove('none');
             });
         }
     }
-
 
     function crearMensajeGovco(input, text, type) {
         const dataMensajes = {
             'success': {
-                'id': 'campoSuccess-correo-login',
+                'id': `campoSuccess-${input.name}-login`,
                 'aria-invalid': 'false',
                 'class': 'success-texto-govco',
                 'role': 'status',
                 'aria-live': 'polite',
             },
             'error': {
-                'id': 'campoWarning-correo-login',
+                'id': `campoWarning-${input.name}-login`,
                 'aria-invalid': 'true',
                 'class': 'error-texto-govco',
                 'role': 'alert',
