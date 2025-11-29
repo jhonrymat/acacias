@@ -56,11 +56,11 @@ class WsServicioController extends Controller
             return response()->json([
                 'datoconsultado' => [
                     [
-                        'campoDato' => 'Tipo Identificación',
+                        'campoDato' => 'Tipo de Documento',
                         'valorDato' => strtoupper($tipoDocumento)
                     ],
                     [
-                        'campoDato' => 'Número Identificación',
+                        'campoDato' => 'Número de Documento',
                         'valorDato' => $numeroIdentificacion
                     ],
                     [
@@ -84,11 +84,11 @@ class WsServicioController extends Controller
                         'valorDato' => $usuario->email ?? ''
                     ],
                     [
-                        'campoDato' => 'Teléfono',
+                        'campoDato' => 'Número Teléfono',
                         'valorDato' => $usuario->telefonoContacto ?? ''
                     ],
                     [
-                        'campoDato' => 'Estado',
+                        'campoDato' => 'Estado Solicitud',
                         'valorDato' => $solicitud->estado->nombreEstado ?? 'Pendiente'
                     ],
                     [
