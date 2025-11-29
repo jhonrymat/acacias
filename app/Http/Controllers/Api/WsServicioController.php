@@ -9,6 +9,7 @@ use Barryvdh\DomPDF\Facade\Pdf;
 use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Cache;
+use Log;
 
 class WsServicioController extends Controller
 {
@@ -27,6 +28,7 @@ class WsServicioController extends Controller
 
             // Si no existe el usuario, retornar respuesta vacía
             if (!$usuario) {
+                Log::info("WsServicioController: Usuario no encontrado para tipoDocumento={$tipoDocumento}, numeroIdentificacion={$numeroIdentificacion}");
                 return $this->respuestaVacia();
             }
 
@@ -35,17 +37,19 @@ class WsServicioController extends Controller
 
             // Verificar que el tipo de documento coincida
             if (strtoupper($siglaBD) !== strtoupper($tipoDocumento)) {
+                Log::info("WsServicioController: Tipo de documento no coincide para numeroIdentificacion={$numeroIdentificacion}. Esperado={$siglaBD}, Recibido={$tipoDocumento}");
                 return $this->respuestaVacia();
             }
 
-            // Buscar la solicitud más reciente con estados válidos (5=Emitido, 6=Por vencer, 7=Vencido)
+            // Buscar la solicitud más reciente con estados válidos (5=Emitido, 6=Por vencer)
             $solicitud = Solicitud::where('numeroIdentificacion', $numeroIdentificacion)
-                ->whereIn('estado_id', [5, 6, 7])
+                ->whereIn('estado_id', [5, 6])
                 ->orderBy('fecha_emision', 'desc')
                 ->first();
 
             // Si no hay solicitud válida, retornar respuesta vacía
             if (!$solicitud) {
+                Log::info("WsServicioController: Solicitud no encontrada o no válida para numeroIdentificacion={$numeroIdentificacion}");
                 return $this->respuestaVacia();
             }
 
