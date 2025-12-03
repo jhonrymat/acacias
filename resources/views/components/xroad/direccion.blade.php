@@ -312,8 +312,13 @@
         const otroTipo = document.getElementById('otroComplementoTipo').value;
         const otroValor = document.getElementById('otroComplementoValor').value.trim();
 
-        if (otroTipo && otroValor) {
-            direccion.push(otroTipo + ' ' + otroValor);
+        // Otro complemento: permitir texto sin seleccionar nada
+        if (otroValor) {
+            if (otroTipo) {
+                direccion.push(otroTipo + ' ' + otroValor);
+            } else {
+                direccion.push(otroValor);
+            }
         }
 
         const direccionFinal = direccion.join(' ');

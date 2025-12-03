@@ -141,8 +141,9 @@
                         <p id="numeroRadicado" style="font-size: 16px; color: #666; margin-bottom: 30px;">—</p>
 
                         <h3 style="font-size: 18px; font-weight: 600; margin-bottom: 8px;">Tiempo estimado de respuesta</h3>
-                        <p style="font-size: 14px; color: #666; margin-bottom: 40px;">7 días hábiles, una vez se emita una
-                            respuesta recibirá una copia al correo registrado</p>
+                        <p style="font-size: 14px; color: #666; margin-bottom: 40px;">Su solicitud será procesada dentro de
+                            los quince (15) días siguientes a su recepción, según lo estipulado en el Decreto 1158 de 2019
+                            Art. 2.3.2.3.4</p>
                     </div>
 
                     <!-- Tabla anidada con información de la solicitud -->
