@@ -96,7 +96,7 @@ class WsServicioController extends Controller
                         'valorDato' => $solicitud->estado->nombreEstado ?? 'Pendiente'
                     ],
                     [
-                        'nombreArchivo' => 'certificado-residencia.pdf',
+                        'nombreArchivo' => 'certificado-residencia',
                         'valorDato' => $pdfBase64,
                         'descripcionArchivo' => 'certificado de Residencia',
                         'tipoArchivo' => 'PDF',
