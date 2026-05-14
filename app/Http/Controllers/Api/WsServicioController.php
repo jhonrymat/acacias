@@ -188,7 +188,7 @@ class WsServicioController extends Controller
     private function respuestaVacia(): JsonResponse
     {
         return response()->json([
-            'datoConsultado' => '',
+            'datoConsultado' => [],
             'urlDescarga' => ''
         ]);
     }
