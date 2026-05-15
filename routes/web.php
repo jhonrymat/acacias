@@ -5,6 +5,7 @@ use App\Models\Solicitud;
 use App\Models\RoleIframe;
 use App\Models\Validacion;
 use App\Livewire\AccessLog;
+use App\Livewire\AyudaPost;
 use App\Livewire\ValidarQr;
 use App\Livewire\ActivityLog;
 use App\Livewire\SiteSettings;
@@ -31,14 +32,18 @@ use App\Livewire\CertificadoComponent;
 use App\Livewire\SolicitudesComponent;
 use App\Livewire\ValidadoresComponent;
 use App\Http\Controllers\PDFController;
+use App\Livewire\CertificadoResidencia;
 use App\Livewire\EstadisticasValidador;
+use App\Http\Controllers\XroadController;
 use App\Livewire\ValidarQrAvecindamiento;
 use App\Livewire\TipoSolicitanteComponent;
+use App\Livewire\SolicitudesExportComponent;
+use App\Http\Controllers\SolicitudController;
 use App\Livewire\SolicitudAnulacionComponent;
 use App\Livewire\HistorialAvecindamientoComponent;
 use App\Livewire\SolicitudAvecindamientoComponent;
 use App\Livewire\FormularioAvecindamientoComponent;
-use App\Livewire\SolicitudesExportComponent;
+use App\Http\Controllers\Auth\CustomLoginController;
 use App\Livewire\SolicitudesAvecindamientoComponent;
 use App\Livewire\SolicitudAnulacionAvecindamientoComponent;
 
@@ -54,6 +59,14 @@ Route::get('/qr-avecindamiento/{id}/{numeroIdentificacion}', ValidarQrAvecindami
 Route::middleware(['auth', 'can:permisos'])->group(function () {
     Route::get('admin/maintenance', MaintenanceToggle::class)->name('maintenance.toggle');
 });
+
+// ruta para xroad nueva vista para los usuarios
+Route::get('/certificado-residencia', CertificadoResidencia::class)
+    ->name('certificado.residencia');
+
+
+
+// fin ruta para xroad nueva vista para los usuarios
 
 
 Route::middleware([
@@ -122,6 +135,9 @@ Route::middleware([
     //<livewire:site-settings />
     Route::middleware(['can:roles'])->get('administracion', SiteSettings::class)->name('administracion');
 
+    // ayuda
+    Route::get('ayuda', AyudaPost::class)->name('ayuda');
+
     Route::middleware(['can:user-roles'])->get('fix-qr', function () {
         echo "Iniciando generación de QR...<br>";
 
@@ -185,3 +201,105 @@ Route::middleware([
 
 
 
+/*
+|--------------------------------------------------------------------------
+| Rutas Públicas - Certificado de Residencia
+|--------------------------------------------------------------------------
+*/
+
+// Ruta principal del certificado (puede ser accesible para todos o solo autenticados)
+Route::get('/certificado-residencia', CertificadoResidencia::class)
+    ->name('certificado.residencia');
+
+/*
+|--------------------------------------------------------------------------
+| Rutas de Autenticación Personalizadas (AJAX)
+|--------------------------------------------------------------------------
+| Estas rutas NO redireccionan, solo retornan JSON
+*/
+Route::prefix('certificado-residencia')->group(function () {
+    //
+
+    Route::middleware('guest')->group(function () {
+        Route::post('/auth/login', [CustomLoginController::class, 'login'])
+            ->name('certificado.auth.login');
+
+        // Route::post('/auth/register', [CustomLoginController::class, 'register'])
+        //     ->name('certificado.auth.register');
+
+        Route::post('/password/email', [CustomLoginController::class, 'sendResetLink'])
+            ->name('certificado.password.email');
+
+        // Mostrar formulario de restablecimiento
+        Route::get('/reset-password/{token}', [CustomLoginController::class, 'showResetForm'])
+            ->name('certificado.password.reset');
+
+        Route::post('/password/reset', [CustomLoginController::class, 'resetPassword'])
+            ->name('certificado.password.update');
+
+
+    });
+
+    Route::middleware('auth')->group(function () {
+        // Logout AJAX - Nombre único
+        Route::post('/auth/logout', [CustomLoginController::class, 'logout'])
+            ->name('certificado.auth.logout');
+
+        // Verificar estado de autenticación (útil para validar sesión)
+        Route::get('/auth/check', function () {
+            return response()->json([
+                'authenticated' => true,
+                'user' => [
+                    'name' => auth()->user()->name,
+                    'email' => auth()->user()->email,
+                ]
+            ]);
+        })->name('certificado.auth.check');
+
+        // Mostrar el formulario de solicitud
+        Route::get('/solicitud/crear', function () {
+            return view('solicitud.crear'); // cambia 'solicitud.crear' por el nombre real de tu vista
+        })->name('solicitud.crear');
+
+        // Enviar (guardar) la solicitud al controlador
+        Route::post('/solicitud/crear', [SolicitudController::class, 'store'])->name('solicitud.store');
+
+        // Rutas AJAX para cargar datos
+        Route::get('/solicitudes/get', [SolicitudController::class, 'getSolicitudes'])
+            ->name('solicitudes.get');
+
+        Route::get('/solicitudes/datos-usuario', [SolicitudController::class, 'getDatosUsuario'])
+            ->name('solicitudes.datos-usuario');
+
+        Route::get('/solicitudes/notas/{id}', [SolicitudController::class, 'getNotas'])
+            ->name('solicitudes.notas');
+
+        Route::get('/solicitudes/anulacion/{id}', [SolicitudController::class, 'getAnulacion'])
+            ->name('solicitudes.anulacion');
+
+        // Ruta para generar y descargar PDF
+        Route::get('/solicitudes/pdf/{id}', [SolicitudController::class, 'generarPDF'])
+            ->name('solicitudes.pdf');
+
+
+    });
+});
+
+
+Route::get('/estado-login', function () {
+    return view('components.xroad.paso1')->render();
+});
+
+Route::get('/verificar-permiso-paso2', [XroadController::class, 'verificarPermisoPaso2'])
+    ->name('verificarPermisoPaso2')
+    ->middleware('auth');
+
+
+/*
+|--------------------------------------------------------------------------
+| NOTA: Las rutas de Jetstream siguen funcionando normalmente
+|--------------------------------------------------------------------------
+| Route::get('/login') - Login tradicional de Jetstream
+| Route::post('/login') - Post de Jetstream
+| Estas NO interfieren con tus rutas personalizadas
+*/

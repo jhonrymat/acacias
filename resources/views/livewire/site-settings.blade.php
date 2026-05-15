@@ -43,12 +43,15 @@
             <input type="file" wire:model="favicon" class="block w-full">
             @php
                 $siteSetting = App\Models\SiteSetting::first();
-                $favicoPath =
-                    $siteSetting && \Illuminate\Support\Facades\Storage::exists('public/' . $siteSetting->favico_path)
-                        ? 'storage/' . $siteSetting->favico_path
-                        : 'images/favicon.ico';
             @endphp
-            <img src="{{ asset($favicoPath) }}" alt="Favicon" class="mt-2 h-8">
+
+            @if ($existing_favicon)
+                <img src="{{ Storage::url($existing_favicon) }}" alt="Favicon" class="mt-2 h-8">
+            @else
+                <img src="{{ asset('images/favicon.ico') }}" alt="Favicon" class="mt-2 h-8">
+            @endif
+
+
             @error('favicon')
                 <span class="text-red-500 text-sm">{{ $message }}</span>
             @enderror
