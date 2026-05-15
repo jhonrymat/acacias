@@ -58,7 +58,7 @@ class WsServicioController extends Controller
 
             // Construir respuesta exitosa
             return response()->json([
-                'datoconsultado' => [
+                'datoConsultado' => [
                     [
                         'campoDato' => 'Tipo de Documento',
                         'valorDato' => strtoupper($tipoDocumento)
