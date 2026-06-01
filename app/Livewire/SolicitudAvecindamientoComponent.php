@@ -64,9 +64,9 @@ class SolicitudAvecindamientoComponent extends Component
         'detalles' => 'required|string',
         'visible' => 'nullable|boolean',
         'fotosFrente' => 'nullable|array',
-        'fotosFrente.*' => 'nullable|image|mimes:jpeg,png,jpg|max:5120',
+        'fotosFrente.*' => 'nullable|file|mimes:jpeg,png,jpg,heic,heif|max:5120',
         'fotosMatricula' => 'nullable|array',
-        'fotosMatricula.*' => 'nullable|image|mimes:jpeg,png,jpg|max:5120',
+        'fotosMatricula.*' => 'nullable|file|mimes:jpeg,png,jpg,heic,heif|max:5120',
         'evidencia_residencia' => 'required|boolean',
         'tiempo_residencia_anios' => 'required|integer|min:0',
         'tiempo_residencia_meses' => 'required|integer|min:0|max:11',
@@ -86,6 +86,12 @@ class SolicitudAvecindamientoComponent extends Component
         'tiempo_residencia_meses.required' => 'El campo "Meses de residencia" es obligatorio.',
         'tiempo_residencia_meses.integer' => 'El campo "Meses de residencia" debe ser un número entero.',
         'tiempo_residencia_meses.min' => 'El campo "Meses de residencia" debe ser al menos 0.',
+        'fotosFrente.*.file' => 'Cada archivo en "Fotos del frente" debe ser una imagen válida.',
+        'fotosFrente.*.mimes' => 'Solo se permiten imágenes en formato JPEG, PNG o JPG en "Fotos del frente".',
+        'fotosFrente.*.max' => 'Cada archivo en "Fotos del frente" no debe ser mayor a 5MB.',
+        'fotosMatricula.*.file' => 'Cada archivo en "Fotos de matrícula" debe ser una imagen válida.',
+        'fotosMatricula.*.mimes' => 'Solo se permiten imágenes en formato JPEG, PNG o JPG en "Fotos de matrícula".',
+        'fotosMatricula.*.max' => 'Cada archivo en "Fotos de matrícula" no debe ser mayor a 5MB.',
     ];
 
 
@@ -530,6 +536,7 @@ class SolicitudAvecindamientoComponent extends Component
             $this->dispatch('updated');
         } catch (\Illuminate\Validation\ValidationException $e) {
             Log::error('Validation error: ' . $e->getMessage());
+            throw $e; // Re-lanzar para que Livewire lo muestre en pantalla
         }
     }
 

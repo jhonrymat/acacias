@@ -389,15 +389,8 @@ class SolicitudAvecindamientoDatatable extends DataTableComponent
                 ->searchable()
                 ->collapseAlways(),
 
-            Column::make("Electoral", "electoral")
-                ->format(fn($value, $row) => $this->formatFileLink($row->electoral))
-                ->html() // Permite la interpretación del HTML en la columna
-                ->sortable()
-                ->searchable()
-                ->collapseAlways(),
-
-            Column::make("_Sisben_", "sisben")
-                ->format(fn($value, $row) => $this->formatFileLink($row->sisben))
+            Column::make("Libertad y Tradición", "libertad_tradicion")
+                ->format(fn($value, $row) => $this->formatFileLink($row->libertad_tradicion))
                 ->html() // Permite la interpretación del HTML en la columna
                 ->sortable()
                 ->searchable()

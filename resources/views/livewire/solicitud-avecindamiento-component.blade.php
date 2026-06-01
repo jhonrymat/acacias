@@ -207,15 +207,19 @@
                     </div>
 
                     <div class="mb-4">
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Tiempo en el que lleva viviendo el peticionario en el inmueble:</label>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Tiempo en el que lleva viviendo el
+                            peticionario en el inmueble:</label>
                         <div class="flex space-x-4">
                             <div>
                                 <label class="block text-xs">Años</label>
-                                <input type="number" min="0" wire:model="tiempo_residencia_anios" class="border-gray-300 rounded px-2 py-1 text-sm w-24">
+                                <input type="number" min="0" wire:model="tiempo_residencia_anios"
+                                    class="border-gray-300 rounded px-2 py-1 text-sm w-24">
                             </div>
                             <div>
                                 <label class="block text-xs">Meses</label>
-                                <input type="number" min="0" max="11" wire:model="tiempo_residencia_meses" class="border-gray-300 rounded px-2 py-1 text-sm w-24">
+                                <input type="number" min="0" max="11"
+                                    wire:model="tiempo_residencia_meses"
+                                    class="border-gray-300 rounded px-2 py-1 text-sm w-24">
                             </div>
                         </div>
                         @error('tiempo_residencia_anios')
@@ -259,6 +263,10 @@
                         <input type="file" multiple accept="image/*" capture="environment"
                             wire:model="fotosFrente" @change="previews = Array.from($event.target.files)"
                             class="mb-2 block w-full text-sm border border-gray-300 rounded px-2 py-1 bg-white shadow-sm">
+
+                        @error('fotosFrente.*')
+                            <span class="text-red-500 text-sm block mt-1">{{ $message }}</span>
+                        @enderror
 
                         <template x-if="lat && lng">
                             <p class="text-xs text-gray-600 mb-2">
@@ -314,6 +322,10 @@
                         <input type="file" multiple accept="image/*" capture="environment"
                             wire:model="fotosMatricula" @change="previews = Array.from($event.target.files)"
                             class="mb-2 block w-full text-sm border border-gray-300 rounded px-2 py-1 bg-white shadow-sm">
+
+                        @error('fotosMatricula.*')
+                            <span class="text-red-500 text-sm block mt-1">{{ $message }}</span>
+                        @enderror
 
                         <!-- Coordenadas capturadas -->
                         <template x-if="lat && lng">

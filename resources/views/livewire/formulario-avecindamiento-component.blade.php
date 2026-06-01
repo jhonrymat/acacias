@@ -641,184 +641,114 @@
 
             <!-- Contenedor para los Archivos Adjuntos Opcionales -->
             <div class="p-6 mb-8 border border-blue-300 rounded-lg bg-blue-50">
-                <h3 class="text-lg font-semibold text-blue-800 mb-4">Archivos Adjuntos </h3>
+                <h3 class="text-lg font-semibold text-blue-800 mb-4">Archivos Adjuntos</h3>
                 <p class="text-sm text-blue-700 mb-6">
-                    Los siguientes anexos pueden ayudar a agilizar el proceso de su solicitud. Si no
-                    tiene estos documentos, aún puede completar y enviar el formulario.
+                    Los campos marcados con <span class="text-red-600 font-bold">*</span> son obligatorios.
                 </p>
 
-                <!-- Subir Acción Comunal -->
-                <div class="mb-4">
-                    <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                        for="accion_comunal_input">
-                        Subir Certificación de la Junta de Acción Comunal
+                {{-- 1. Certificado Junta de Acción Comunal (Opcional) --}}
+                <div class="mb-6">
+                    <label class="block mb-2 text-sm font-medium text-gray-900" for="accion_comunal_input">
+                        Certificación de la Junta de Acción Comunal
+                        <span class="text-gray-500 font-normal">(Opcional)</span>
                     </label>
                     <div class="relative group">
                         <input wire:model="accion_comunal"
-                            class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50
-            dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+                            class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 focus:outline-none"
                             id="accion_comunal_input" type="file" accept="application/pdf,image/jpeg,image/jpg">
-
-                        <!-- Tooltip -->
                         <div
-                            class="absolute left-0 hidden p-2 mt-1 text-xs text-white bg-gray-900 rounded-lg shadow-md group-hover:block dark:bg-gray-800">
-                            Asegúrese de que el archivo sea legible y no borroso. Los documentos PDF deben ser
-                            originales,
-                            emitidos por la respectiva entidad, y no deben contener modificaciones.
-                            Solo se aceptarán archivos PDF o JPG.
+                            class="absolute left-0 hidden p-2 mt-1 text-xs text-white bg-gray-900 rounded-lg shadow-md group-hover:block">
+                            Archivo legible y sin modificaciones. Se aceptan PDF o JPG.
                         </div>
-                        <p class="mt-1 text-xs text-gray-500 dark:text-gray-300" id="sisben_input_help">PDF, JPG
-                            (MAX. 10MB).</p>
                     </div>
-
-                    <!-- Indicador de carga -->
-                    <div wire:loading wire:target="accion_comunal"
-                        class="mt-2 text-sm text-blue-600 dark:text-blue-400">
+                    <p class="mt-1 text-xs text-gray-500">PDF, JPG (MAX. 10MB).</p>
+                    <div wire:loading wire:target="accion_comunal" class="mt-2 text-sm text-blue-600">
                         Subiendo archivo, por favor espere...
                     </div>
-
-                    <!-- Botón para limpiar archivo -->
                     @if ($accion_comunal)
                         <div class="flex items-center mt-2">
                             <span class="text-green-600 text-sm">Archivo seleccionado:
                                 {{ $accion_comunal->getClientOriginalName() }}</span>
                             <button type="button" wire:click="$set('accion_comunal', null)"
-                                class="ml-2 px-2 py-1 text-xs text-white bg-red-500 rounded hover:bg-red-600">
-                                Quitar
-                            </button>
+                                class="ml-2 px-2 py-1 text-xs text-white bg-red-500 rounded hover:bg-red-600">Quitar</button>
                         </div>
                     @endif
-
                     @error('accion_comunal')
                         <span class="text-red-500 text-sm mt-2 block">{{ $message }}</span>
                     @enderror
                 </div>
 
-                <!-- Subir Certificado Electoral -->
-                <div class="mb-4">
-                    <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" for="electoral_input">
-                        Subir Certificado Electoral (Antigüedad mínima de 12 meses)
+                {{-- 2. Certificado de Libertad y Tradición o Contrato de Arrendamiento (Obligatorio) --}}
+                <div class="mb-6">
+                    <label class="block mb-2 text-sm font-medium text-gray-900" for="libertad_tradicion_input">
+                        Certificado de Libertad y Tradición del inmueble o Contrato de Arrendamiento
+                        <span class="text-red-600 font-bold">*</span>
                     </label>
                     <div class="relative group">
-                        <input wire:model="electoral"
-                            class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50
-            dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
-                            id="electoral_input" type="file" accept="application/pdf,image/jpeg,image/jpg">
-
+                        <input wire:model="libertad_tradicion"
+                            class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 focus:outline-none"
+                            id="libertad_tradicion_input" type="file"
+                            accept="application/pdf,image/jpeg,image/jpg" required>
                         <div
-                            class="absolute left-0 hidden p-2 mt-1 text-xs text-white bg-gray-900 rounded-lg shadow-md group-hover:block dark:bg-gray-800">
-                            Asegúrese de que el certificado electoral sea emitido por la entidad oficial
-                            correspondiente, con una antigüedad mínima de 12 meses. No se aceptarán documentos
-                            con enmiendas o modificaciones. Solo se admiten formatos PDF o JPG.
+                            class="absolute left-0 hidden p-2 mt-1 text-xs text-white bg-gray-900 rounded-lg shadow-md group-hover:block">
+                            Adjunte el certificado de libertad y tradición o el contrato de arrendamiento vigente.
+                            Solo se aceptan PDF o JPG.
                         </div>
-                        <p class="mt-1 text-xs text-gray-500 dark:text-gray-300" id="sisben_input_help">PDF, JPG
-                            (MAX. 10MB).</p>
                     </div>
-
-                    <div wire:loading wire:target="electoral" class="mt-2 text-sm text-blue-600 dark:text-blue-400">
+                    <p class="mt-1 text-xs text-gray-500">PDF, JPG (MAX. 10MB).</p>
+                    <div wire:loading wire:target="libertad_tradicion" class="mt-2 text-sm text-blue-600">
                         Subiendo archivo, por favor espere...
                     </div>
-
-                    @if ($electoral)
+                    @if ($libertad_tradicion)
                         <div class="flex items-center mt-2">
                             <span class="text-green-600 text-sm">Archivo seleccionado:
-                                {{ $electoral->getClientOriginalName() }}</span>
-                            <button type="button" wire:click="$set('electoral', null)"
-                                class="ml-2 px-2 py-1 text-xs text-white bg-red-500 rounded hover:bg-red-600">
-                                Quitar
-                            </button>
+                                {{ $libertad_tradicion->getClientOriginalName() }}</span>
+                            <button type="button" wire:click="$set('libertad_tradicion', null)"
+                                class="ml-2 px-2 py-1 text-xs text-white bg-red-500 rounded hover:bg-red-600">Quitar</button>
                         </div>
                     @endif
-
-                    @error('electoral')
+                    @error('libertad_tradicion')
                         <span class="text-red-500 text-sm mt-2 block">{{ $message }}</span>
                     @enderror
                 </div>
 
-                <!-- Subir Constancia de Sisben -->
-                <div class="mb-4">
-                    <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" for="sisben_input">
-                        Subir Constancia de Sisben
-                    </label>
-                    <div class="relative group">
-                        <input wire:model="sisben"
-                            class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50
-            dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
-                            id="sisben_input" type="file" accept="application/pdf,image/jpeg,image/jpg">
-
-                        <div
-                            class="absolute left-0 hidden p-2 mt-1 text-xs text-white bg-gray-900 rounded-lg shadow-md group-hover:block dark:bg-gray-800">
-                            Asegúrese de que la constancia de Sisben esté emitida por la entidad oficial correspondiente
-                            y
-                            sea completamente legible. No se aceptarán documentos con tachaduras, enmiendas o copias
-                            modificadas.
-                            Solo se admitirán formatos PDF o JPG.
-                        </div>
-                        <p class="mt-1 text-xs text-gray-500 dark:text-gray-300" id="sisben_input_help">PDF, JPG
-                            (MAX. 10MB).</p>
-                    </div>
-
-                    <div wire:loading wire:target="sisben" class="mt-2 text-sm text-blue-600 dark:text-blue-400">
-                        Subiendo archivo, por favor espere...
-                    </div>
-
-                    @if ($sisben)
-                        <div class="flex items-center mt-2">
-                            <span class="text-green-600 text-sm">Archivo seleccionado:
-                                {{ $sisben->getClientOriginalName() }}</span>
-                            <button type="button" wire:click="$set('sisben', null)"
-                                class="ml-2 px-2 py-1 text-xs text-white bg-red-500 rounded hover:bg-red-600">
-                                Quitar
-                            </button>
-                        </div>
-                    @endif
-
-                    @error('sisben')
-                        <span class="text-red-500 text-sm mt-2 block">{{ $message }}</span>
-                    @enderror
-                </div>
-
-                <!-- Subir Fotocopia de Cédula -->
-                <div class="mb-4">
-                    <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" for="cedula_input">
-                        Subir Fotocopia de Cédula
+                {{-- 3. Cédula de Ciudadanía o Tarjeta de Identidad (Obligatorio) --}}
+                <div class="mb-6">
+                    <label class="block mb-2 text-sm font-medium text-gray-900" for="cedula_input">
+                        Cédula de Ciudadanía o Tarjeta de Identidad
+                        <span class="text-red-600 font-bold">*</span>
                     </label>
                     <div class="relative group">
                         <input wire:model="cedula"
-                            class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50
-            dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+                            class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 focus:outline-none"
                             id="cedula_input" type="file" accept="application/pdf,image/jpeg,image/jpg" required>
-
                         <div
-                            class="absolute left-0 hidden p-2 mt-1 text-xs text-white bg-gray-900 rounded-lg shadow-md group-hover:block dark:bg-gray-800">
-                            Asegúrese de que la fotocopia sea completamente legible, sin tachaduras ni áreas borrosas.
-                            El archivo debe ser escaneado en alta calidad y contener ambos lados de la cédula si es
-                            necesario.
-                            Solo se aceptan formatos PDF o JPG.
+                            class="absolute left-0 hidden p-2 mt-1 text-xs text-white bg-gray-900 rounded-lg shadow-md group-hover:block">
+                            Archivo legible, sin tachaduras ni áreas borrosas. Incluya ambas caras si es necesario.
+                            Solo se aceptan PDF o JPG.
                         </div>
-                        <p class="mt-1 text-xs text-gray-500 dark:text-gray-300" id="sisben_input_help">PDF, JPG
-                            (MAX. 10MB).</p>
                     </div>
-
-                    <div wire:loading wire:target="cedula" class="mt-2 text-sm text-blue-600 dark:text-blue-400">
+                    <p class="mt-1 text-xs text-gray-500">PDF, JPG (MAX. 10MB).</p>
+                    <div wire:loading wire:target="cedula" class="mt-2 text-sm text-blue-600">
                         Subiendo archivo, por favor espere...
                     </div>
-
                     @if ($cedula)
                         <div class="flex items-center mt-2">
                             <span class="text-green-600 text-sm">Archivo seleccionado:
                                 {{ $cedula->getClientOriginalName() }}</span>
                             <button type="button" wire:click="$set('cedula', null)"
-                                class="ml-2 px-2 py-1 text-xs text-white bg-red-500 rounded hover:bg-red-600">
-                                Quitar
-                            </button>
+                                class="ml-2 px-2 py-1 text-xs text-white bg-red-500 rounded hover:bg-red-600">Quitar</button>
                         </div>
                     @endif
-
                     @error('cedula')
                         <span class="text-red-500 text-sm mt-2 block">{{ $message }}</span>
                     @enderror
                 </div>
+
+                {{-- 4. El bloque del recibo ya está fuera de este contenedor, no se mueve --}}
+                <p class="text-xs text-gray-500 italic">
+                    ℹ️ El recibo de servicios públicos se adjunta en la sección superior del formulario.
+                </p>
             </div>
 
 

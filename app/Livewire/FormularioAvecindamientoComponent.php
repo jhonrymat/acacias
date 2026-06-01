@@ -46,8 +46,10 @@ class FormularioAvecindamientoComponent extends Component
     public $lat; // Latitud seleccionada
     public $lng; // Longitud seleccionada
     public $accion_comunal = '';
-    public $electoral = '';
-    public $sisben = '';
+    // public $electoral = '';
+    // public $sisben = '';
+
+    public $libertad_tradicion = '';
     public $cedula = '';
     public $recibo = '';
 
@@ -73,11 +75,10 @@ class FormularioAvecindamientoComponent extends Component
         'direccion' => 'required|string|min:3',
         'lat' => 'nullable|numeric',
         'lng' => 'nullable|numeric',
-        'accion_comunal' => 'file|mimes:pdf,jpeg,jpg|max:10240', // Valida cada archivo individualmente
-        'electoral' => 'file|mimes:pdf,jpeg,jpg|max:10240', // Valida cada archivo individualmente
-        'sisben' => 'file|mimes:pdf,jpeg,jpg|max:10240', // Valida cada archivo individualmente
-        'cedula' => 'required|file|mimes:pdf,jpeg,jpg|max:10240', // Valida cada archivo individualmente
-        'recibo' => 'required|file|mimes:pdf,jpeg,jpg|max:10240', // Valida cada archivo individualmente
+        'accion_comunal' => 'nullable|file|mimes:pdf,jpeg,jpg|max:10240',         // Opcional
+        'libertad_tradicion' => 'required|file|mimes:pdf,jpeg,jpg|max:10240',     // Nuevo obligatorio
+        'cedula' => 'required|file|mimes:pdf,jpeg,jpg|max:10240',
+        'recibo' => 'required|file|mimes:pdf,jpeg,jpg|max:10240',
         'terminos' => 'required',
         'observaciones' => 'nullable|string',
     ];
@@ -89,20 +90,19 @@ class FormularioAvecindamientoComponent extends Component
         'direccion.min' => 'El campo dirección debe tener al menos 3 caracteres.',
         'lat.numeric' => 'El campo latitud debe ser un número.',
         'lng.numeric' => 'El campo longitud debe ser un número.',
-        'accion_comunal.mimes' => 'El campo evidencia debe ser un archivo de tipo: pdf, jpeg, jpg',
-        'accion_comunal.max' => 'El campo evidencia no debe ser mayor a 10MB.',
-        'electoral.mimes' => 'El campo evidencia debe ser un archivo de tipo: pdf, jpeg, jpg',
-        'electoral.max' => 'El campo evidencia no debe ser mayor a 10MB.',
-        'sisben.mimes' => 'El campo evidencia debe ser un archivo de tipo: pdf, jpeg, jpg',
-        'sisben.max' => 'El campo evidencia no debe ser mayor a 10MB.',
-        'cedula.mimes' => 'El campo evidencia debe ser un archivo de tipo: pdf, jpeg, jpg',
-        'cedula.max' => 'El campo evidencia no debe ser mayor a 10MB.',
-        'cedula.required' => 'El campo cédula es necesario.',
-        'recibo.mimes' => 'El campo evidencia debe ser un archivo de tipo: pdf, jpeg, jpg',
-        'recibo.max' => 'El campo evidencia no debe ser mayor a 10MB.',
-        'recibo.required' => 'El campo recibo es necesario.',
-        'terminos.required' => 'El campo términos es obligatorio.',
-        'observaciones.string' => 'El campo observaciones debe ser una cadena de texto.',
+        'accion_comunal.mimes' => 'El archivo debe ser de tipo: pdf, jpeg, jpg.',
+        'accion_comunal.max' => 'El archivo no debe ser mayor a 10MB.',
+        'libertad_tradicion.required' => 'El certificado de libertad y tradición o contrato de arrendamiento es obligatorio.',
+        'libertad_tradicion.mimes' => 'El archivo debe ser de tipo: pdf, jpeg, jpg.',
+        'libertad_tradicion.max' => 'El archivo no debe ser mayor a 10MB.',
+        'cedula.required' => 'La cédula de ciudadanía o tarjeta de identidad es obligatoria.',
+        'cedula.mimes' => 'El archivo debe ser de tipo: pdf, jpeg, jpg.',
+        'cedula.max' => 'El archivo no debe ser mayor a 10MB.',
+        'recibo.required' => 'El recibo de servicios públicos es obligatorio.',
+        'recibo.mimes' => 'El archivo debe ser de tipo: pdf, jpeg, jpg.',
+        'recibo.max' => 'El archivo no debe ser mayor a 10MB.',
+        'terminos.required' => 'Debe aceptar los términos y condiciones.',
+        'observaciones.string' => 'El campo observaciones debe ser texto.',
     ];
 
     public function save()
@@ -150,8 +150,7 @@ class FormularioAvecindamientoComponent extends Component
         // Procesar los archivos
         $files = [
             'accion_comunal' => $this->accion_comunal,
-            'electoral' => $this->electoral,
-            'sisben' => $this->sisben,
+            'libertad_tradicion' => $this->libertad_tradicion,  // Nuevo
             'cedula' => $this->cedula,
             'recibo' => $this->recibo,
         ];
@@ -180,8 +179,7 @@ class FormularioAvecindamientoComponent extends Component
             'lat' => $this->lat ? rtrim(rtrim($this->lat, '0'), '.') : null,
             'lng' => $this->lng ? rtrim(rtrim($this->lng, '0'), '.') : null,
             'accion_comunal' => $filePaths['accion_comunal'],
-            'electoral' => $filePaths['electoral'],
-            'sisben' => $filePaths['sisben'],
+            'libertad_tradicion' => $filePaths['libertad_tradicion'],
             'cedula' => $filePaths['cedula'],
             'recibo' => $filePaths['recibo'],
             'observaciones' => $this->observaciones ?? null,
