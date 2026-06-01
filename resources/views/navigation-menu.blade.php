@@ -120,7 +120,7 @@
                     </x-nav-link>
                 @endrole
                 @role('user')
-                    {{-- <div class="hidden sm:flex sm:items-center sm:ml-6 mx-auto my-auto mr-6">
+                    <div class="hidden sm:flex sm:items-center sm:ml-6 mx-auto my-auto mr-6">
                         <x-dropdown width="48">
                             <x-slot name="trigger">
                                 <span class="inline-flex rounded-md">
@@ -140,16 +140,16 @@
                                 <div class="block px-4 py-2 text-xs text-gray-400">
                                     {{ __('Seleccionables') }}
                                 </div>
-                                <x-dropdown-link href="{{ route('formulario-residencia') }}">
+                                {{-- <x-dropdown-link href="{{ route('formulario-residencia') }}">
                                     {{ __('Certificado de residencia') }}
-                                </x-dropdown-link>
+                                </x-dropdown-link> --}}
                                 <x-dropdown-link href="{{ route('formulario-avecindamiento') }}">
                                     {{ __('Certificado de avecindamiento') }}
                                 </x-dropdown-link>
                             </x-slot>
                         </x-dropdown>
-                    </div> --}}
-                    {{-- <div class="hidden sm:flex sm:items-center sm:ml-6 mx-auto my-auto mr-6">
+                    </div>
+                    <div class="hidden sm:flex sm:items-center sm:ml-6 mx-auto my-auto mr-6">
                         <x-dropdown width="48">
                             <x-slot name="trigger">
                                 <span class="inline-flex rounded-md">
@@ -169,15 +169,15 @@
                                 <div class="block px-4 py-2 text-xs text-gray-400">
                                     {{ __('Seleccionables') }}
                                 </div>
-                                <x-dropdown-link href="{{ route('versolicitudesresidencia') }}">
+                                {{-- <x-dropdown-link href="{{ route('versolicitudesresidencia') }}">
                                     {{ __('Certificado de residencia') }}
-                                </x-dropdown-link>
+                                </x-dropdown-link> --}}
                                 <x-dropdown-link href="{{ route('versolicitudesavecindamiento') }}">
                                     {{ __('Certificado de avecindamiento') }}
                                 </x-dropdown-link>
                             </x-slot>
                         </x-dropdown>
-                    </div> --}}
+                    </div>
                 @endrole
                 @hasanyrole('validador1|validador2')
                     <div class="hidden sm:flex sm:items-center sm:ml-6 mx-auto my-auto mr-6">
