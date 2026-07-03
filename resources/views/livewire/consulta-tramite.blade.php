@@ -165,6 +165,12 @@
                         </span>
                     </p>
 
+                    <!-- Tipo de unidad -->
+                    <p class="text-gray-600 flex items-center">
+                        <span class="font-semibold text-gray-800 w-48">Tipo de Unidad:</span>
+                        <span class="text-gray-700">{{ $resultados->barrio->tipoUnidad }}</span>
+                    </p>
+
                     <!-- Fecha de Creación -->
                     <p class="text-gray-600 flex items-center">
                         <span class="font-semibold text-gray-800 w-48">Fecha de Creación:</span>

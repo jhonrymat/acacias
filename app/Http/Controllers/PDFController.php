@@ -122,6 +122,9 @@ class PDFController extends Controller
             'fecha_emision' => $solicitud->fecha_emision
                 ? Carbon::parse($solicitud->fecha_emision)->translatedFormat('d \\de F \\de Y')
                 : 'N/A',
+            'hora_emision' => $solicitud->updated_at
+                ? Carbon::parse($solicitud->updated_at)->format('h:i A')
+                : 'N/A',
             'vigencia_inicio' => $solicitud->fecha_emision
                 ? Carbon::parse($solicitud->fecha_emision)->translatedFormat('d \\de F \\de Y')
                 : 'N/A',
