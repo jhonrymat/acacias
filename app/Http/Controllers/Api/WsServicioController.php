@@ -104,7 +104,7 @@ class WsServicioController extends Controller
                     ]
                 ],
                 'urlDescarga' => ''
-            ]);
+            ], 200, [], JSON_UNESCAPED_UNICODE);
 
         } catch (\Exception $e) {
             // En caso de error, retornar respuesta vacía
