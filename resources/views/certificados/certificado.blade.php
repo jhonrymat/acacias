@@ -38,14 +38,14 @@
         }
 
         .certificado-box {
-    position: relative;
-    border: 1.5px solid #000;
-    padding: 5px 5px;
-    margin-top: 10px;
-    margin-right: 1cm;
-    margin-left: 1cm;
-    overflow: hidden;
-}
+            position: relative;
+            border: 1.5px solid #000;
+            padding: 5px 5px;
+            margin-top: 10px;
+            margin-right: 1cm;
+            margin-left: 1cm;
+            overflow: hidden;
+        }
 
         .escudo-marca-agua {
             position: absolute;
@@ -72,7 +72,7 @@
 
         .content {
             margin: 10px 0;
-            font-size: 15px;
+            font-size: 13px;
         }
 
         .certificate {
@@ -104,10 +104,10 @@
         }
 
         .verification {
-    font-size: 16px;
-    text-align: left;
-    line-height: 0.1;
-}
+            font-size: 13px;
+            text-align: center;
+            line-height: 0.1;
+        }
 
         .firma {
             text-align: center;
@@ -308,7 +308,8 @@
                     <strong>{{ $cedula }}</strong> expedida en <strong>{{ $ciudad_expedicion }}</strong>, con
                     dirección de
                     residencia <strong>{{ $direccion }}</strong>{{ $articulo }} {{ $zona }}
-                    <strong>{{ $barrio_vereda }}</strong> - Zona {{ $tipo_unidad }} <strong>{{ $codigo_numero }}</strong>.
+                    <strong>{{ $barrio_vereda }}</strong> - Zona {{ $tipo_unidad }}
+                    <strong>{{ $codigo_numero }}</strong>.
                 </p>
                 <p>Es residente en el Municipio de Acacías, Meta.</p>
             </div>
