@@ -14,102 +14,71 @@
             margin-top: 0.5cm;
             margin-right: 1.0cm;
             margin-bottom: 0.5cm;
-            /* Ajusta esta propiedad para el margen inferior */
             margin-left: 1.0cm;
+            font-family: Arial, sans-serif;
         }
-
 
         .header {
             width: 100%;
-            /* Asegura que ocupe todo el ancho */
             font-family: Arial, sans-serif;
-            font-size: 10pt;
-            /* Línea separadora */
-        }
-
-        .header-content {
-            display: table;
-            width: 100%;
-            height: auto;
-            /* Deja que el contenido determine la altura */
-            box-sizing: border-box;
-            margin-bottom: 10px;
-            /* Espacio entre el texto y la imagen */
-        }
-
-        .left,
-        .right {
-            display: table-cell;
-            /* Emula columnas de tabla */
-            vertical-align: middle;
-            /* Alinea el contenido verticalmente */
-            padding: 5px 10px;
-            /* Espaciado interno */
-        }
-
-
-        .left {
-            text-align: left;
-            /* Alinea el texto a la izquierda */
-        }
-
-        .right {
-            text-align: right;
-            /* Alinea el texto a la derecha */
+            font-size: 12pt;
         }
 
         .header-image-container {
-            text-align: right;
-            /* Alinea la imagen hacia la derecha */
+            text-align: center;
             width: 100%;
-            /* Asegura que ocupe todo el ancho */
-            height: 80px;
-            /* Altura del contenedor */
-            margin-bottom: 20px;
-            /* Espaciado inferior */
+            height: 70px;
+            margin-bottom: -15px;
         }
 
         .header-image {
             display: inline-block;
-            /* Necesario para que respete el text-align */
-            max-height: 60px;
-            /* Altura máxima de la imagen */
+            max-height: 50px;
             width: auto;
-            /* Mantiene la proporción */
-            margin-right: 20px;
-            /* Ajusta manualmente el espacio hacia la derecha */
-            margin-top: 5px;
-            /* Ajusta manualmente el espacio hacia abajo */
         }
 
-        .left2 {
-            font-weight: bold;
-            text-align: left;
-            font-size: 14px;
-            /* quitar paddin y margin */
-            padding: 0;
-            margin: 0;
+        .certificado-box {
+    position: relative;
+    border: 1.5px solid #000;
+    padding: 5px 5px;
+    margin-top: 10px;
+    margin-right: 1cm;
+    margin-left: 1cm;
+    overflow: hidden;
+}
+
+        .escudo-marca-agua {
+            position: absolute;
+            top: 30%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 500px;
+            /* opacity: 0.18; */
+            z-index: 0;
         }
 
-
+        .certificado-content {
+            position: relative;
+            z-index: 1;
+        }
 
         .title {
             text-align: center;
             font-size: 15px;
             font-weight: bold;
             text-transform: uppercase;
-            margin: 10px 0;
+            margin: -2px 10px 0 0;
         }
 
         .content {
             margin: 10px 0;
-            font-size: 13px;
+            font-size: 15px;
         }
 
         .certificate {
             text-align: center;
-            font-size: 15px;
-            font-weight: bold;
+            font-size: 17px;
+            font-weight: 400;
         }
 
         .validacion {
@@ -132,26 +101,19 @@
             font-size: 12px;
             color: black;
             z-index: 3;
-
-        }
-
-        .signature {
-            margin-top: 50px;
-            text-align: center;
         }
 
         .verification {
-            font-size: 12px;
-            text-align: center;
-            line-height: 0.5;
-        }
+    font-size: 16px;
+    text-align: left;
+    line-height: 0.1;
+}
 
         .firma {
             text-align: center;
             font-family: Arial, sans-serif;
             position: relative;
             overflow: hidden;
-            /* Asegura que la marca de agua no desborde el contenedor */
         }
 
         .marca-agua {
@@ -174,11 +136,9 @@
             font-size: 14px;
             font-family: Arial, sans-serif;
             color: rgba(0, 0, 0, 0.1);
-            /* Transparencia */
             white-space: nowrap;
             display: inline-block;
             margin: 5px 0;
-            /* Espaciado entre textos */
         }
 
         .firma-container {
@@ -186,7 +146,6 @@
             z-index: 2;
             display: inline-block;
             width: 200px;
-            /* Ajustar según la firma */
             height: auto;
         }
 
@@ -200,53 +159,86 @@
 
         .firma p:first-of-type {
             margin-top: -5px;
-            /* Ajusta el valor negativo para acercar la línea */
         }
 
+        /* Fila de Firma + QR lado a lado */
+        .firma-qr-table {
+            width: 100%;
+            margin-top: 10px;
+            border-collapse: collapse;
+        }
 
+        .firma-cell {
+            width: 70%;
+            vertical-align: bottom;
+        }
+
+        .qr-cell {
+            width: 30%;
+            text-align: center;
+            vertical-align: bottom;
+        }
+
+        .qr-image {
+            width: 85px;
+            height: 85px;
+            border: 1px solid #000;
+            padding: 4px;
+        }
+
+        .control-documental {
+            font-size: 8px;
+            font-family: Arial, sans-serif;
+            margin-top: 20px;
+        }
 
         .footer {
             position: fixed;
-            /* Fija el footer en la parte inferior */
             bottom: 0;
-            /* Ubica el footer al final de la página */
-            left: 0;
-            width: 100%;
-            /* Asegura que ocupe todo el ancho de la página */
-            text-align: center;
-            /* Centra todo el contenido */
+            left: 1cm;
+            right: 1cm;
+            width: auto;
             font-family: Arial, sans-serif;
             font-size: 7pt;
-            /* Tamaño pequeño para texto de pie de página */
             line-height: 1.4;
-            /* Espaciado entre líneas */
-            color: gray;
-            padding: 10px 0;
-        }
-
-        .footer hr {
-            border: 0;
+            color: #333;
+            padding: 8px 0 0 0;
             border-top: 1px solid #000;
-            /* Línea horizontal superior */
-            margin-bottom: 10px;
         }
 
-        .footer p {
-            margin: 0 10px;
-            /* Espacio interno para el texto */
+        .footer-table {
+            width: 100%;
+            table-layout: fixed;
+            border-collapse: collapse;
+        }
+
+        .footer-table td {
+            vertical-align: top;
             padding: 0;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+        }
+
+        .footer-left {
+            text-align: left;
+            width: 12cm;
+        }
+
+        .footer-right {
+            text-align: right;
+            width: 6cm;
+            font-style: italic;
         }
 
         .footer a {
-            color: #000;
-            /* Asegura que los enlaces tengan el color negro */
+            color: #333;
+            font-weight: bold;
             text-decoration: none;
-            /* Quita el subrayado */
         }
 
-        .footer a:hover {
-            text-decoration: underline;
-            /* Subrayado en hover */
+        .footer-page {
+            text-align: center;
+            margin-top: 4px;
         }
     </style>
 </head>
@@ -254,158 +246,182 @@
 <body>
     <!-- Encabezado -->
     <div class="header">
-        <div class="header-content">
-            <div class="left">
-                <p>Página: 1 de 1</p>
-            </div>
-            <div class="right">
-                <p>Número de folios: 1</p>
-            </div>
-        </div>
         <div class="header-image-container">
-            <img class="header-image" src="{{ public_path('images/imagen_header.jpg') }}" alt="Encabezado">
+            <img class="header-image" src="{{ public_path('images/logo-web.png') }}" alt="Encabezado">
         </div>
     </div>
 
+    <div class="certificado-box">
+        <img class="escudo-marca-agua" src="{{ public_path('images/marca-agua.png') }}" alt="">
 
-    <div class="left2">
-        1020-7.10
-    </div>
-
-    <!-- Título -->
-    <div class="title">
-        LA SECRETARIA PRIVADA MUNICIPAL DE ACACÍAS – META
-    </div>
-
-    <!-- Contenido -->
-    <div class="content" style="text-align: justify;">
-        <p>
-            En virtud de lo previsto en el artículo 315 de la Constitución Política, el articulo 29 literal f numeral 6
-            de la Ley 1551 de 2012, los artículos 2.3.2.3.2 del Decreto
-            1158 de 2019 pormedio del cual se adiciona el capítulo 3 al título 2 de la parte 3 del libro 2 del decreto
-            1066 de 2015, los alcaldes municipales son las únicas
-            autoridades competentes para expedir los certificados de residencia, en las áreas de influencia de los
-            proyectos de exploración y explotación petrolera y minera, que
-            aspiren acceder a labores como mano de obra no calificada.
-            Los alcaldes expedirán dichos certificados con
-            base en: Censo electoral, Sistema de identificación de
-            potenciales beneficiarios de programas sociales Sisben y libros de afiliados a juntas de acción comunal,
-            debidamente registrados ante el ente de control y vigilancia,
-            siempre y cuando el ciudadano lleve más de un año inscrito en los mismos.
-            Que conforme a lo expuesto
-            anteriormente procede el Alcalde Municipal bajo el
-            DECRETO 100 DEL 17 DE SEPTIEMBRE DE 2024, delegar en el titular de la <strong> Secretaría Privada</strong> o
-            su
-            encargado, o quien haga sus veces la facultad de expedir los
-            certificados de residencia del Municipio de Acacías, concordante con el artículo 209 de la Constitución
-            Política de Colombia y el artículo 92 de la Ley 136 de 1994
-            modificado por el artículo 30 de la Ley 1551 de 2012.
-        </p>
-    </div>
-
-    <!-- Certificado -->
-    <div class="certificate">
-        <u>CERTIFICA</u>
-    </div>
-    @php
-        $articulo =
-            str_contains(strtolower($zona), 'vereda') || str_contains(strtolower($zona), 'barrio') ? ' del' : ' de la';
-    @endphp
-
-    <div class="content">
-        <p>Que, <strong>{{ $solicitante }}</strong>, identificado(a) con {{ $tipoDocumento }} No
-            <strong>{{ $cedula }}</strong> expedida en <strong>{{ $ciudad_expedicion }}</strong>, con dirección de
-            residencia <strong>{{ $direccion }}</strong>{{ $articulo }} {{ $zona }}
-            <strong>{{ $barrio_vereda }}</strong>, {{ $tipo_unidad }} <strong>{{ $codigo_numero }}</strong>.
-        </p>
-        <p>Es residente en el Municipio de Acacías, Meta.</p>
-    </div>
-
-    {{-- codicion si estado es igual a emitido pone en letras verde Certificado valido si no en rojo certificado rechazado --}}
-    <div>
-        @if ($estado == 'Emitido' || $estado == 'Por vencer')
-            <div class="validacion" style="color: green;">
-                <p>Certificado Válido</p> <span>N° {{ $id }}</span>
+        <div class="certificado-content">
+            <!-- Título -->
+            <div class="title">
+                LA SECRETARIA PRIVADA MUNICIPAL DE ACACÍAS – META
             </div>
-        @else
-            <div class="validacion" style="color: red;">
-                <p>Certificado No completado</p> <span>N° {{ $id }}</span>
-            </div>
-        @endif
-    </div>
 
-    <!-- Vigencia -->
-    <div class="fechas">
-        <p>La presente certificación se expide a solicitud escrita del interesado(a).</p>
-        <p><strong>Dada en Acacías, Meta, a los {{ $fecha_emision }}</strong></p>
-        <p>Vigencia: Desde el {{ $vigencia_inicio }} {{ $vigencia_fin }}.</p>
-    </div>
-
-    <br>
-    <br>
-
-    <!-- Firma -->
-    <!-- Firma -->
-    <div class="firma">
-        @if ($firma)
-            <!-- Contenedor general de la firma con la marca de agua -->
-            <div class="marca-agua">
-                <span>Trámite No. {{ $id }} Trámite No. {{ $id }} Trámite No.
-                    {{ $id }}</span>
-                <span>No. {{ $id }} Trámite No. {{ $id }} Trámite No. {{ $id }}</span>
-                <span>Trámite No. {{ $id }} Trámite No. {{ $id }} Trámite No.
-                    {{ $id }}</span>
-                <span>No. {{ $id }} Trámite No. {{ $id }} Trámite No. {{ $id }}</span>
-                <span>Trámite No. {{ $id }} Trámite No. {{ $id }} Trámite No.
-                    {{ $id }}</span>
-                <span>No. {{ $id }} Trámite No. {{ $id }} Trámite No. {{ $id }}</span>
-                <span>Trámite No. {{ $id }} Trámite No. {{ $id }} Trámite No.
-                    {{ $id }}</span>
-                <span>No. {{ $id }} Trámite No. {{ $id }} Trámite No. {{ $id }}</span>
-                <span>Trámite No. {{ $id }} Trámite No. {{ $id }} Trámite No.
-                    {{ $id }}</span>
-                <span>No. {{ $id }} Trámite No. {{ $id }} Trámite No. {{ $id }}</span>
-                <span>Trámite No. {{ $id }} Trámite No. {{ $id }} Trámite No.
-                    {{ $id }}</span>
+            <!-- Contenido -->
+            <div class="content" style="text-align: justify;">
+                <p>
+                    En virtud de lo previsto en el artículo 315 de la Constitución Política, el articulo 29 literal f
+                    numeral 6
+                    de la Ley 1551 de 2012, los artículos 2.3.2.3.2 del Decreto
+                    1158 de 2019 pormedio del cual se adiciona el capítulo 3 al título 2 de la parte 3 del libro 2 del
+                    decreto
+                    1066 de 2015, los alcaldes municipales son las únicas
+                    autoridades competentes para expedir los certificados de residencia, en las áreas de influencia de
+                    los
+                    proyectos de exploración y explotación petrolera y minera, que
+                    aspiren acceder a labores como mano de obra no calificada. Los alcaldes expedirán dichos
+                    certificados con
+                    base en: Censo electoral, Sistema de identificación de
+                    potenciales beneficiarios de programas sociales Sisben y libros de afiliados a juntas de acción
+                    comunal,
+                    debidamente registrados ante el ente de control y vigilancia,
+                    siempre y cuando el ciudadano lleve más de un año inscrito en los mismos.
+                    Que conforme a lo expuesto
+                    anteriormente procede el Alcalde Municipal bajo el
+                    DECRETO 100 DEL 17 DE SEPTIEMBRE DE 2024, delegar en el titular de la <strong> Secretaría
+                        Privada</strong> o
+                    su
+                    encargado, o quien haga sus veces la facultad de expedir los
+                    certificados de residencia del Municipio de Acacías, concordante con el artículo 209 de la
+                    Constitución
+                    Política de Colombia y el artículo 92 de la Ley 136 de 1994
+                    modificado por el artículo 30 de la Ley 1551 de 2012.
+                </p>
             </div>
-            <div class="firma-container">
-                <!-- Imagen de la firma -->
-                <img src="{{ public_path('storage/' . $firma) }}" alt="Firma">
+
+            <!-- Certificado -->
+            <div class="certificate">
+                <p>CERTIFICA</p>
             </div>
-        @endif
-        <!-- Datos adicionales -->
-        <div class="validador">
-            <p><strong>_________________________<strong></p>
-            <p><strong>{{ $validador }}</strong></p>
-            <p>{{ $cargo }}</p>
+            @php
+                $articulo =
+                    str_contains(strtolower($zona), 'vereda') || str_contains(strtolower($zona), 'barrio')
+                        ? ' del'
+                        : ' de la';
+            @endphp
+
+            <div class="content">
+                <p>Que, <strong>{{ $solicitante }}</strong>, identificado(a) con {{ $tipoDocumento }} No
+                    <strong>{{ $cedula }}</strong> expedida en <strong>{{ $ciudad_expedicion }}</strong>, con
+                    dirección de
+                    residencia <strong>{{ $direccion }}</strong>{{ $articulo }} {{ $zona }}
+                    <strong>{{ $barrio_vereda }}</strong> - Zona {{ $tipo_unidad }} <strong>{{ $codigo_numero }}</strong>.
+                </p>
+                <p>Es residente en el Municipio de Acacías, Meta.</p>
+            </div>
+
+            {{-- codicion si estado es igual a emitido pone en letras verde Certificado valido si no en rojo certificado rechazado --}}
+            <div>
+                @if ($estado == 'Emitido' || $estado == 'Por vencer')
+                    <div class="validacion" style="color: green;">
+                        <p>Certificado Válido</p> <span>N° {{ $id }}</span>
+                    </div>
+                @else
+                    <div class="validacion" style="color: red;">
+                        <p>Certificado No completado</p> <span>N° {{ $id }}</span>
+                    </div>
+                @endif
+            </div>
+
+            <!-- Vigencia -->
+            <div class="fechas">
+                <p>La presente certificación se expide a solicitud escrita del interesado(a).</p>
+                <p><strong>Dada en Acacías, Meta, a los {{ $fecha_emision }}</strong></p>
+                <p>Vigencia: Desde el {{ $vigencia_inicio }} {{ $vigencia_fin }}.</p>
+            </div>
+
+            <br>
+
+            <!-- Firma + QR en la misma fila -->
+            <table class="firma-qr-table">
+                <tr>
+                    <td class="firma-cell">
+                        <div class="firma">
+                            @if ($firma)
+                                <div class="marca-agua">
+                                    <span>Trámite No. {{ $id }} Trámite No. {{ $id }} Trámite No.
+                                        {{ $id }}</span>
+                                    <span>No. {{ $id }} Trámite No. {{ $id }} Trámite No.
+                                        {{ $id }}</span>
+                                    <span>Trámite No. {{ $id }} Trámite No. {{ $id }} Trámite No.
+                                        {{ $id }}</span>
+                                    <span>No. {{ $id }} Trámite No. {{ $id }} Trámite No.
+                                        {{ $id }}</span>
+                                    <span>Trámite No. {{ $id }} Trámite No. {{ $id }} Trámite No.
+                                        {{ $id }}</span>
+                                    <span>No. {{ $id }} Trámite No. {{ $id }} Trámite No.
+                                        {{ $id }}</span>
+                                    <span>Trámite No. {{ $id }} Trámite No. {{ $id }} Trámite No.
+                                        {{ $id }}</span>
+                                    <span>No. {{ $id }} Trámite No. {{ $id }} Trámite No.
+                                        {{ $id }}</span>
+                                    <span>Trámite No. {{ $id }} Trámite No. {{ $id }} Trámite No.
+                                        {{ $id }}</span>
+                                    <span>No. {{ $id }} Trámite No. {{ $id }} Trámite No.
+                                        {{ $id }}</span>
+                                    <span>Trámite No. {{ $id }} Trámite No. {{ $id }} Trámite No.
+                                        {{ $id }}</span>
+                                </div>
+                                <div class="firma-container">
+                                    <img src="{{ public_path('storage/' . $firma) }}" alt="Firma">
+                                </div>
+                            @endif
+                            <div class="validador">
+                                <p><strong>_________________________</strong></p>
+                                <p><strong>{{ $validador }}</strong></p>
+                                <p>{{ $cargo }}</p>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="qr-cell">
+                        <img class="qr-image" src="{{ $qr }}" alt="Código QR">
+                    </td>
+                </tr>
+            </table>
+
+            <!-- Verificación -->
+            <div class="verification">
+                <p>Para verificar la integridad e inalterabilidad del presente documento consulte en el sitio:</p>
+                <p><a href="{{ $verificacion_url }}" target="_blank">{{ $verificacion_url }}</a>, digita el siguiente
+                    numero de certificado:
+                    <strong>{{ $id }}</strong>
+                </p>
+                <p>o escaneado el código QR impreso en este certificado</p>
+                <p>Fecha de descarga del certificado: {{ now()->format('d/m/Y h:i A') }}</p>
+            </div>
         </div>
     </div>
 
-    <!-- Verificación -->
-    <div class="verification">
-        <p>Para verificar la integridad e inalterabilidad del presente documento consulte en el sitio:</p>
-        <p><a href="{{ $verificacion_url }}" target="_blank">{{ $verificacion_url }}</a>, digita el siguiente numero
-            de certificado:
-            <strong>{{ $id }}</strong>
-        </p>
-        <p>o escaneado el código QR impreso en este certificado</p>
-        <img src="{{ $qr }}" alt="Código QR" width="100" height="100">
+    <!-- Control documental (fuera del recuadro) -->
+    <div class="control-documental">
+        <p>Proyectó Nombre Cargo Firma: {{ $codigo_validador1 }}</p>
+        <p>Revisó Nombre Cargo Firma: {{ $codigo_validador2 }}</p>
     </div>
 
     <!-- Pie de página -->
     <div class="footer">
-        <hr>
-        <p>Calle 13 No. 13-31 Barrio Juan Mellao. Código Postal: 507001 PBX: 3203509652. Celular: 3214904867, Inspección
-            Policía Uno 3214904872, Inspección Policía Dos 3214904871, Inspección Policía Tres 3115249434, Comisaría de
-            Familia 3214904873, Víctimas 323224640 – 3214761116, Bienestar Animal 3214760076, Certificados de residencia
-            3214761108. Línea de Atención al Usuario: 01 8000 112 996</p>
-        <p>Correo Electrónico: <a href="mailto:contactenos@acacias.gov.co">contactenos@acacias.gov.co</a>, <a
-                href="mailto:gobierno@acacias.gov.co">gobierno@acacias.gov.co</a></p>
-        <p>Página Web: <a href="http://www.acacias.gov.co">www.acacias.gov.co</a> Twitter: <a
-                href="https://twitter.com/Alcaldiaacacias">@Alcaldiaacacias</a> Facebook: <a
-                href="https://www.facebook.com/alcaldiadeacacias">Alcaldía de Acacías</a> Instagram: <a
-                href="https://www.instagram.com/alcaldiadeacacias">@alcaldiadeacacias</a></p>
-        <p>Validado por: {{ $codigo_validador1 }}</p>
+        <table class="footer-table">
+            <tr>
+                <td class="footer-left">
+                    Sede Principal Calle 14 No. 21-32 - Barrio Cooperativo. Línea PBX: 3203509652. Línea Gratuita:
+                    018000112996.<br>
+                    Correo Electrónico: <a href="mailto:contactenos@acacias.gov.co">contactenos@acacias.gov.co</a>
+                    Código postal: 507001. Página Web:
+                    <a href="http://www.acacias.gov.co">www.acacias.gov.co</a>.
+                </td>
+                <td class="footer-right">
+                    <em>1070.05.06</em><br>
+                    PROCESO GESTIÓN GOBIERNO<br>
+                    CERTIFICADO DE RESIDENCIA<br>
+                    GGOB – F – 71 V11<br>
+                    17/12/2024
+                </td>
+            </tr>
+        </table>
+        <p class="footer-page">Página 1 de 1</p>
     </div>
 
 </body>
