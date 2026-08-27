@@ -108,6 +108,7 @@ class SolicitudesComponent extends Component
                 . ($solicitud->validador2->apellido_2 ?? '')
             ),
             'codigo_validador1' => $solicitud->actualizador->codigo,
+            'codigo_validador2' => $solicitud->validador2->codigo,
             'firma' => $solicitud->validador2->firma,
             'ciudad_expedicion' => $solicitud->user->ciudadExpedicion,
             'barrio_vereda' => $solicitud->barrio->nombreBarrio,
